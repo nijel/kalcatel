@@ -24,7 +24,7 @@ ldadd=\s$(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
 ldflags=
 
 [General]
-AMChanged=true
+AMChanged=false
 author=Michal Cihar
 configure_args=--prefix=/usr
 email=cihar@email.cz
@@ -38,7 +38,7 @@ project_type=normal_kde2
 sgml_file=/work/alcatel/kalcatel/doc/en/index.docbook
 short_info=This application allows you to manage calls\\, messages\\, contacs\\, todos,and calendar in your Alcatel One Touch 50x and 70x mobile.,,Protocol used by this phone is binary and not documented\\, so this,program could not guarantee any functionality in your case\\, but it works well for me.
 sub_dir=kalcatel/
-version=0.1-prerelease
+version=0.1
 version_control=CVS
 workspace=1
 
@@ -47,6 +47,15 @@ dist=true
 install=false
 install_location=
 type=DATA
+
+[KPP]
+kpp_appgrp=Applications
+kpp_bldroot=
+kpp_icon=0
+kpp_license=5
+kpp_summary=
+kpp_url=http://cihar.liten.cz
+kpp_version=0.1-prerelease
 
 [LFV Groups]
 GNU=AUTHORS,COPYING,ChangeLog,INSTALL,README,TODO,NEWS
@@ -58,7 +67,7 @@ User Interface=*.kdevdlg,*.ui,*.rc
 groups=Headers,Sources,User Interface,Translations,GNU,Others
 
 [Makefile.am]
-files=kalcatel.kdevprj,admin,AUTHORS,COPYING,ChangeLog,INSTALL,README,TODO,kalcatel.lsm
+files=kalcatel.kdevprj,admin,AUTHORS,COPYING,ChangeLog,INSTALL,README,TODO,kalcatel.lsm,kalcatel.spec
 sub_dirs=kalcatel,po,doc
 type=normal
 
@@ -102,6 +111,12 @@ install_location=
 type=DATA
 
 [kalcatel.lsm]
+dist=true
+install=false
+install_location=
+type=DATA
+
+[kalcatel.spec]
 dist=true
 install=false
 install_location=

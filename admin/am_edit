@@ -1447,7 +1447,7 @@ sub tag_DIST () {
     my %foundfiles = ();
     opendir (THISDIR, ".");
     foreach $entry (readdir(THISDIR)) {
-        next if ($entry eq "CVS" || $entry =~ /^\./  || $entry =~ /^Makefile$$/ || $entry =~ /~$/ || $entry =~ /^\#.*\#$/);
+        next if ($entry eq "CVS" || $entry =~ /^\./  || $entry =~ /^Makefile$/ || $entry =~ /~$/ || $entry =~/\.tar\.gz$/ || $entry =~ /^\#.*\#$/);
         next if (! -f $entry);
         next if ($entry =~ /\.moc/ || $entry =~ /\.lo$/ || $entry =~ /\.la$/ || $entry =~ /\.o/);
         $foundfiles{$entry} = 1;

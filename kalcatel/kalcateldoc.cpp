@@ -63,65 +63,54 @@
 
 QList<KAlcatelView> *KAlcatelDoc::pViewList = 0L;
 
-KAlcatelDoc::KAlcatelDoc(QWidget *parent, const char *name) : QObject(parent, name)
-{
-  if(!pViewList)
-  {
-    pViewList = new QList<KAlcatelView>();
-  }
+KAlcatelDoc::KAlcatelDoc(QWidget *parent, const char *name) : QObject(parent, name) {
+    if(!pViewList) {
+        pViewList = new QList<KAlcatelView>();
+    }
 
-  pViewList->setAutoDelete(true);
+    pViewList->setAutoDelete(true);
 
-  todo_cats = new AlcatelCategoryList();
-  contact_cats = new AlcatelCategoryList();
+    todo_cats = new AlcatelCategoryList();
+    contact_cats = new AlcatelCategoryList();
 
-  contacts = new AlcatelContactList();
-  calendar = new AlcatelCalendarList();
-  todos = new AlcatelTodoList();
-  messages = new AlcatelMessageList();
+    contacts = new AlcatelContactList();
+    calendar = new AlcatelCalendarList();
+    todos = new AlcatelTodoList();
+    messages = new AlcatelMessageList();
 
-  calls = new AlcatelCallList();
+    calls = new AlcatelCallList();
 
 /* I hope that phone doesn't support more than 1000 contacts, which should allways have original ID */
-  pcStorageCounter = 1000;
+    pcStorageCounter = 1000;
 }
 
-KAlcatelDoc::~KAlcatelDoc()
-{
+KAlcatelDoc::~KAlcatelDoc() {
 }
 
-void KAlcatelDoc::addView(KAlcatelView *view)
-{
-  pViewList->append(view);
+void KAlcatelDoc::addView(KAlcatelView *view) {
+    pViewList->append(view);
 }
 
-void KAlcatelDoc::removeView(KAlcatelView *view)
-{
-  pViewList->remove(view);
+void KAlcatelDoc::removeView(KAlcatelView *view) {
+    pViewList->remove(view);
 }
 
-void KAlcatelDoc::setURL(const KURL &url)
-{
-  doc_url=url;
+void KAlcatelDoc::setURL(const KURL &url) {
+    doc_url=url;
 }
 
-const KURL& KAlcatelDoc::URL() const
-{
-  return doc_url;
+const KURL& KAlcatelDoc::URL() const {
+    return doc_url;
 }
 
-void KAlcatelDoc::slotUpdateAllViews(KAlcatelView *sender)
-{
-  KAlcatelView *w;
-  if(pViewList)
-  {
-    for(w=pViewList->first(); w!=0; w=pViewList->next())
-    {
-      if(w!=sender)
-        w->repaint();
+void KAlcatelDoc::slotUpdateAllViews(KAlcatelView *sender) {
+    KAlcatelView *w;
+    if(pViewList) {
+        for(w=pViewList->first(); w!=0; w=pViewList->next()) {
+            if(w!=sender)
+                w->repaint();
+        }
     }
-  }
-
 }
 
 bool KAlcatelDoc::saveModified() {

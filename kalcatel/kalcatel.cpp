@@ -551,6 +551,10 @@ bool KAlcatelApp::modemConnect() {
                 KMessageBox::error(this, i18n("Modem locked."), i18n("Error"));
                 modem_close();
                 return false;
+            case ERR_MDM_LOCK_OPEN:
+                KMessageBox::error(this, i18n("Can not create modem lock. Try disabling locking in configuration."), i18n("Error"));
+                modem_close();
+                return false;
             default:
                 KMessageBox::error(this, i18n("Failed opening modem.\nUnknown error (%1).").arg(modem_errno), i18n("Error"));
                 modem_close();

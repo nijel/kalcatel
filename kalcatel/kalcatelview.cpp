@@ -135,19 +135,19 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : QWidget(parent, 
     messages_item = new KAlcatelTreeViewItem(kalcatel_item, i18n("Messages"), SmallIcon("kalcatel-message.png"), ID_MESSAGES );
 
     widgetstack->addWidget( messages_unsent_list = createListView( widgetstack, alc_messages_out ), ID_MESSAGES_UNSENT );
-    connect( messages_unsent_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotUnsentMessageChanged(QListViewItem *) ) );
+    connect( messages_unsent_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotMessageChanged(QListViewItem *) ) );
     messages_unsent_item = new KAlcatelTreeViewItem(messages_item, i18n("Unsent"), SmallIcon("kalcatel-message-unsent.png"), ID_MESSAGES_UNSENT );
 
     widgetstack->addWidget( messages_sent_list = createListView( widgetstack, alc_messages_out ), ID_MESSAGES_SENT );
-    connect( messages_sent_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotSentMessageChanged(QListViewItem *) ) );
+    connect( messages_sent_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotMessageChanged(QListViewItem *) ) );
     messages_sent_item = new KAlcatelTreeViewItem(messages_item, i18n("Sent"), SmallIcon("kalcatel-message-sent.png"), ID_MESSAGES_SENT );
 
     widgetstack->addWidget( messages_read_list = createListView( widgetstack, alc_messages_in ), ID_MESSAGES_READ );
-    connect( messages_read_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotReadMessageChanged(QListViewItem *) ) );
+    connect( messages_read_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotMessageChanged(QListViewItem *) ) );
     messages_read_item = new KAlcatelTreeViewItem(messages_item, i18n("Read"), SmallIcon("kalcatel-message-read.png"), ID_MESSAGES_READ );
 
     widgetstack->addWidget( messages_unread_list = createListView( widgetstack, alc_messages_in ), ID_MESSAGES_UNREAD );
-    connect( messages_unread_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotUnreadMessageChanged(QListViewItem *) ) );
+    connect( messages_unread_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotMessageChanged(QListViewItem *) ) );
     messages_unread_item = new KAlcatelTreeViewItem(messages_item, i18n("Unread"), SmallIcon("kalcatel-message-unread.png"), ID_MESSAGES_UNREAD );
 
     widgetstack->addWidget( calls_list = createListView( widgetstack, alc_calls ), ID_CALLS );
@@ -155,15 +155,15 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : QWidget(parent, 
     calls_item = new KAlcatelTreeViewItem(kalcatel_item, i18n("Calls"), SmallIcon("kalcatel-call.png"), ID_CALLS );
 
     widgetstack->addWidget( calls_outgoing_list = createListView( widgetstack, alc_calls_type ), ID_CALLS_OUTGOING );
-    connect( calls_outgoing_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotCallCatChanged(QListViewItem *) ) );
+    connect( calls_outgoing_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotCallChanged(QListViewItem *) ) );
     calls_outgoing_item = new KAlcatelTreeViewItem(calls_item, i18n("Outgoing"), SmallIcon("kalcatel-call-outgoing.png"), ID_CALLS_OUTGOING );
 
     widgetstack->addWidget( calls_received_list = createListView( widgetstack, alc_calls_type ), ID_CALLS_RECEIVED );
-    connect( calls_received_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotCallCatChanged(QListViewItem *) ) );
+    connect( calls_received_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotCallChanged(QListViewItem *) ) );
     calls_received_item = new KAlcatelTreeViewItem(calls_item, i18n("Received"), SmallIcon("kalcatel-call-received.png"), ID_CALLS_RECEIVED );
 
     widgetstack->addWidget( calls_missed_list = createListView( widgetstack, alc_calls_type ), ID_CALLS_MISSED );
-    connect( calls_missed_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotCallCatChanged(QListViewItem *) ) );
+    connect( calls_missed_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotCallChanged(QListViewItem *) ) );
     calls_missed_item = new KAlcatelTreeViewItem(calls_item, i18n("Missed"), SmallIcon("kalcatel-call-missed.png"), ID_CALLS_MISSED );
 
     widgetstack->addWidget( contacts_list = createListView( widgetstack, alc_contacts ), ID_CONTACTS );
@@ -257,14 +257,14 @@ KListView *KAlcatelView::createListView(QWidget *parent, AlcListType type) {
             break;
         case alc_calls_type:
             list->addColumn(i18n("Number"));
-            list->addColumn(i18n("Name (from mobile)"));
             list->addColumn(i18n("Name"));
+            list->addColumn(i18n("Contact"));
             list->addColumn(i18n("Position"));
             break;
         case alc_calls:
             list->addColumn(i18n("Number"));
-            list->addColumn(i18n("Name (from mobile)"));
             list->addColumn(i18n("Name"));
+            list->addColumn(i18n("Contact"));
             list->addColumn(i18n("Type"));
             list->addColumn(i18n("Position"));
             break;
@@ -342,7 +342,7 @@ void KAlcatelView::repaint() {
                 AlcatelContact *cont = getContactByPhone(doc->contacts, &((* it).Sender), &(((KAlcatelApp *)parent())->phone_prefix));
                 new KAlcatelMessageViewItem (messages_list, &(* it),
                         QString((* it).Sender),
-                        cont == NULL? QString("") : cont->Name(),
+                        cont == NULL? i18n("Unknown") : cont->Name(),
                         type,
                         (* it).Date.date().toString(),
                         (* it).Date.time().toString(),
@@ -351,7 +351,7 @@ void KAlcatelView::repaint() {
 
                 new KAlcatelMessageCatViewItem (list, &(* it),
                         QString((* it).Sender),
-                        cont == NULL? QString("") : cont->Name(),
+                        cont == NULL? i18n("Unknown") : cont->Name(),
                         (* it).Date.date().toString(),
                         (* it).Date.time().toString(),
                         QString((* it).Text),
@@ -464,7 +464,7 @@ void KAlcatelView::repaint() {
             AlcatelCallList::Iterator it;
             for( it = doc->calls->begin(); it != doc->calls->end(); ++it ) {
                 AlcatelContact *cont = getContactByPhone(doc->contacts, &((* it).Number), &(((KAlcatelApp *)parent())->phone_prefix));
-                new QListViewItem (calls_list,
+                new KAlcatelCallViewItem (calls_list, &(* it),
                         (* it).Number,
                         (* it).Name,
                         cont == NULL? QString("") : cont->Name(),
@@ -472,7 +472,7 @@ void KAlcatelView::repaint() {
                         QString("%1").arg((* it).Id));
                 switch ((* it).Type) {
                     case CallDialled:
-                        new QListViewItem (calls_outgoing_list,
+                        new KAlcatelCallCatViewItem (calls_outgoing_list, &(* it),
                                 (* it).Number,
                                 (* it).Name,
                                 cont == NULL? QString("") : cont->Name(),
@@ -480,14 +480,14 @@ void KAlcatelView::repaint() {
                         break;
                     case CallMissed:
                         missed++;
-                        new QListViewItem (calls_missed_list,
+                        new KAlcatelCallCatViewItem (calls_missed_list, &(* it),
                                 (* it).Number,
                                 (* it).Name,
                                 cont == NULL? QString("") : cont->Name(),
                                 QString("%1").arg((* it).Id));
                         break;
                     case CallReceived:
-                        new QListViewItem (calls_received_list,
+                        new KAlcatelCallCatViewItem (calls_received_list, &(* it),
                                 (* it).Number,
                                 (* it).Name,
                                 cont == NULL? QString("") : cont->Name(),
@@ -639,23 +639,7 @@ void KAlcatelView::repaint() {
 }
 
 void KAlcatelView::slotMessageChanged(QListViewItem *item) {
-    if (item != NULL) slotShowMessage(getMessageById(getDocument()->messages, item->text(6).toInt(), StorageSIM)); /*TODO: detect storage*/
-}
-
-void KAlcatelView::slotReadMessageChanged(QListViewItem *item) {
-    if (item != NULL) slotShowMessage(getMessageById(getDocument()->messages, item->text(5).toInt(), StorageSIM)); /*TODO: detect storage*/
-}
-
-void KAlcatelView::slotUnreadMessageChanged(QListViewItem *item) {
-    if (item != NULL) slotShowMessage(getMessageById(getDocument()->messages, item->text(5).toInt(), StorageSIM)); /*TODO: detect storage*/
-}
-
-void KAlcatelView::slotSentMessageChanged(QListViewItem *item) {
-    if (item != NULL) slotShowMessage(getMessageById(getDocument()->messages, item->text(5).toInt(), StorageSIM)); /*TODO: detect storage*/
-}
-
-void KAlcatelView::slotUnsentMessageChanged(QListViewItem *item) {
-    if (item != NULL) slotShowMessage(getMessageById(getDocument()->messages, item->text(5).toInt(), StorageSIM)); /*TODO: detect storage*/
+    if (item != NULL) slotShowMessage((AlcatelMessage *)(((KAlcatelDataItem *) item)->alcatelData));
 }
 
 void KAlcatelView::slotShowMessage(AlcatelMessage *what) {
@@ -877,15 +861,10 @@ void KAlcatelView::slotTreeChanged(QListViewItem *item) {
             else if (num == ID_CONTACTS) slotContactChanged (currentitem);
             else if (num == ID_CONTACTS_SIM) slotContactSimChanged  (currentitem);
             else if (num == ID_CONTACTS_MOBILE ) slotContactMobileChanged (currentitem);
-            else if (num == ID_CALLS) slotCallChanged (currentitem);
-            else if (num == ID_CALLS_OUTGOING) slotCallCatChanged (currentitem);
-            else if (num == ID_CALLS_MISSED) slotCallCatChanged (currentitem);
-            else if (num == ID_CALLS_RECEIVED) slotCallCatChanged (currentitem);
-            else if (num == ID_MESSAGES) slotMessageChanged (currentitem);
-            else if (num == ID_MESSAGES_SENT) slotSentMessageChanged (currentitem);
-            else if (num == ID_MESSAGES_UNSENT) slotUnsentMessageChanged (currentitem);
-            else if (num == ID_MESSAGES_READ) slotReadMessageChanged (currentitem);
-            else if (num == ID_MESSAGES_UNREAD) slotUnreadMessageChanged (currentitem);
+            else if (num == ID_CALLS || num == ID_CALLS_OUTGOING || num == ID_CALLS_MISSED || num == ID_CALLS_RECEIVED)
+                slotCallChanged (currentitem);
+            else if (num == ID_MESSAGES || num == ID_MESSAGES_SENT || num == ID_MESSAGES_UNSENT || num == ID_MESSAGES_READ || num == ID_MESSAGES_UNREAD)
+                slotMessageChanged (currentitem);
             else if (num >= ID_CONTACTS_CAT && num < ID_CONTACTS_CAT + ALC_MAX_CATEGORIES) slotContactMobileCatChanged (currentitem);
             else if (num >= ID_TODOS_CAT && num < ID_TODOS_CAT + ALC_MAX_CATEGORIES) slotTodoCatChanged (currentitem);
         }
@@ -929,11 +908,21 @@ void KAlcatelView::slotSetTitle( int num ) {
     if (num != ID_KALCATEL) textview->show();
 }
 
-void KAlcatelView::slotCallCatChanged(QListViewItem *item) {
-}
-
 void KAlcatelView::slotCallChanged(QListViewItem *item) {
+    if (item != NULL) slotShowCall((AlcatelCall *)(((KAlcatelDataItem *) item)->alcatelData));
 }
 
 void KAlcatelView::slotShowCall(AlcatelCall *what) {
+    if (what == NULL) {
+        textview->setText( i18n("Failed reading call!"));
+        return;
+    }
+    AlcatelContact *cont = getContactByPhone(getDocument()->contacts, &(what->Number), &(((KAlcatelApp *)parent())->phone_prefix));
+    QString text;
+    text.append(i18n("<b>From:</b> %1 (%2)<br>").arg(what->Name).arg(what->Number));
+    if (cont != NULL) text.append(i18n("<b>Contact:</b> %3<br>").arg(cont->Name()));
+    text.append(i18n( "<b>Type:</b> %4<br><b>Position:</b> %6").arg(CallTypes[what->Type]).arg(what->Id));
+    textview->setText(text);
+    textview->setMinimumHeight(textview->contentsHeight()); /* resize to show all contents*/
+    vsplitter->setResizeMode( textview, QSplitter::FollowSizeHint );
 }

@@ -128,10 +128,6 @@ class KAlcatelView : public QWidget {
     void slotSetTitle( int num );
 
     void slotMessageChanged(QListViewItem *item);
-    void slotReadMessageChanged(QListViewItem *item);
-    void slotUnreadMessageChanged(QListViewItem *item);
-    void slotSentMessageChanged(QListViewItem *item);
-    void slotUnsentMessageChanged(QListViewItem *item);
     void slotTodoChanged(QListViewItem *item);
     void slotTodoCatChanged(QListViewItem *item);
     void slotCalendarChanged(QListViewItem *item);
@@ -139,8 +135,8 @@ class KAlcatelView : public QWidget {
     void slotContactSimChanged(QListViewItem *item);
     void slotContactMobileChanged(QListViewItem *item);
     void slotContactMobileCatChanged(QListViewItem *item);
-    void slotCallCatChanged(QListViewItem *item);
     void slotCallChanged(QListViewItem *item);
+
     void slotShowCall(AlcatelCall *what);
     void slotShowMessage(AlcatelMessage *what);
     void slotShowContact(AlcatelContact *what);

@@ -143,6 +143,9 @@ class KAlcatelDoc : public QObject
     /** updates some part (or whole) document
      */
     void updateDocument(AlcDataType which);
+    /** commits changes to mobile
+     */
+    void commitChanges();
 
   public slots:
     /** calls repaint() on all views connected to the document object and is called by the view by which the document has been changed.
@@ -192,8 +195,6 @@ class KAlcatelDoc : public QObject
     QTime readDomTime(QDomElement el);
     QDate readDomDate(QDomElement el);
     QDateTime readDomDateTime(QDomElement el);
-
-
 
     /** reads categories from mobile
       */

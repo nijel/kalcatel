@@ -440,7 +440,7 @@ install_location=$$(kde_icondir)/hicolor/48x48/apps/kalcatel.png
 type=DATA
 
 [kalcatel/images/items-16x16/Makefile.am]
-files=kalcatel/images/items-16x16/calendar.png,kalcatel/images/items-16x16/call-missed.png,kalcatel/images/items-16x16/call-outgoing.png,kalcatel/images/items-16x16/call-received.png,kalcatel/images/items-16x16/call.png,kalcatel/images/items-16x16/contact-mobile.png,kalcatel/images/items-16x16/contact-sim.png,kalcatel/images/items-16x16/contact.png,kalcatel/images/items-16x16/message-read.png,kalcatel/images/items-16x16/message-sent.png,kalcatel/images/items-16x16/message-unread.png,kalcatel/images/items-16x16/message-unsent.png,kalcatel/images/items-16x16/message.png,kalcatel/images/items-16x16/todo.png,kalcatel/images/items-16x16/mobile.png,kalcatel/images/items-16x16/deleted.png,kalcatel/images/items-16x16/modified.png,kalcatel/images/items-16x16/computer.png,kalcatel/images/items-16x16/created.png
+files=kalcatel/images/items-16x16/calendar.png,kalcatel/images/items-16x16/call-missed.png,kalcatel/images/items-16x16/call-outgoing.png,kalcatel/images/items-16x16/call-received.png,kalcatel/images/items-16x16/call.png,kalcatel/images/items-16x16/contact-mobile.png,kalcatel/images/items-16x16/contact-sim.png,kalcatel/images/items-16x16/contact.png,kalcatel/images/items-16x16/message-read.png,kalcatel/images/items-16x16/message-sent.png,kalcatel/images/items-16x16/message-unread.png,kalcatel/images/items-16x16/message-unsent.png,kalcatel/images/items-16x16/message.png,kalcatel/images/items-16x16/todo.png,kalcatel/images/items-16x16/mobile.png,kalcatel/images/items-16x16/deleted.png,kalcatel/images/items-16x16/modified.png,kalcatel/images/items-16x16/computer.png,kalcatel/images/items-16x16/created.png,kalcatel/images/items-16x16/commit.png
 sub_dirs=
 type=normal
 
@@ -472,6 +472,12 @@ type=DATA
 dist=true
 install=true
 install_location=$$(kde_icondir)/hicolor/16x16/actions/kalcatel-call.png
+type=DATA
+
+[kalcatel/images/items-16x16/commit.png]
+dist=true
+install=true
+install_location=$$(kde_icondir)/hicolor/16x16/actions/kalcatel-commit.png
 type=DATA
 
 [kalcatel/images/items-16x16/computer.png]
@@ -559,7 +565,7 @@ install_location=$$(kde_icondir)/hicolor/16x16/actions/kalcatel-todo.png
 type=DATA
 
 [kalcatel/images/items-22x22/Makefile.am]
-files=kalcatel/images/items-22x22/calendar.png,kalcatel/images/items-22x22/call.png,kalcatel/images/items-22x22/contact.png,kalcatel/images/items-22x22/message.png,kalcatel/images/items-22x22/mobile.png,kalcatel/images/items-22x22/todo.png,kalcatel/images/items-22x22/contact-mobile.png,kalcatel/images/items-22x22/contact-sim.png
+files=kalcatel/images/items-22x22/calendar.png,kalcatel/images/items-22x22/call.png,kalcatel/images/items-22x22/contact.png,kalcatel/images/items-22x22/message.png,kalcatel/images/items-22x22/mobile.png,kalcatel/images/items-22x22/todo.png,kalcatel/images/items-22x22/contact-mobile.png,kalcatel/images/items-22x22/contact-sim.png,kalcatel/images/items-22x22/commit.png
 sub_dirs=
 type=normal
 
@@ -573,6 +579,12 @@ type=DATA
 dist=true
 install=true
 install_location=$$(kde_icondir)/hicolor/22x22/actions/kalcatel-call.png
+type=DATA
+
+[kalcatel/images/items-22x22/commit.png]
+dist=true
+install=true
+install_location=$$(kde_icondir)/hicolor/22x22/actions/kalcatel-commit.png
 type=DATA
 
 [kalcatel/images/items-22x22/contact-mobile.png]

@@ -20,10 +20,16 @@
   <Menu name="mobile"><text>&amp;Mobile</text>
     <Action name="mobile_info"/>
     <Separator/>
+    <Action name="mobile_commit"/>
+    <Separator/>
     <Action name="mobile_connect"/>
     <Action name="mobile_disconnect"/>
   </Menu>
 </MenuBar>
+<ToolBar name="mainToolBar" fullWidth="false" >
+    <Separator/>
+    <Action name="mobile_commit"/>
+</ToolBar>
 <ToolBar fullWidth="false" name="readToolBar" newline="false"><text>Fetch</text>
     <Action name="fetch_all"/>
     <Separator/>

@@ -1,7 +1,7 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 
 
-EXTRA_DIST = calendar.png call-missed.png call-outgoing.png call-received.png call.png contact-mobile.png contact-sim.png contact.png message-read.png message-sent.png message-unread.png message-unsent.png message.png todo.png mobile.png deleted.png modified.png computer.png created.png 
+EXTRA_DIST = calendar.png call-missed.png call-outgoing.png call-received.png call.png contact-mobile.png contact-sim.png contact.png message-read.png message-sent.png message-unread.png message-unsent.png message.png todo.png mobile.png deleted.png modified.png computer.png created.png commit.png 
 
 install-data-local:
 	$(mkinstalldirs) $(kde_icondir)/hicolor/16x16/actions/
@@ -42,6 +42,8 @@ install-data-local:
 	$(INSTALL_DATA) $(srcdir)/computer.png $(kde_icondir)/hicolor/16x16/actions/kalcatel-computer.png
 	$(mkinstalldirs) $(kde_icondir)/hicolor/16x16/actions/
 	$(INSTALL_DATA) $(srcdir)/created.png $(kde_icondir)/hicolor/16x16/actions/kalcatel-created.png
+	$(mkinstalldirs) $(kde_icondir)/hicolor/16x16/actions/
+	$(INSTALL_DATA) $(srcdir)/commit.png $(kde_icondir)/hicolor/16x16/actions/kalcatel-commit.png
 
 uninstall-local:
 	-rm -f $(kde_icondir)/hicolor/16x16/actions/kalcatel-calendar.png
@@ -63,5 +65,6 @@ uninstall-local:
 	-rm -f $(kde_icondir)/hicolor/16x16/actions/kalcatel-modified.png
 	-rm -f $(kde_icondir)/hicolor/16x16/actions/kalcatel-computer.png
 	-rm -f $(kde_icondir)/hicolor/16x16/actions/kalcatel-created.png
+	-rm -f $(kde_icondir)/hicolor/16x16/actions/kalcatel-commit.png
 
 ####### kdevelop will overwrite this part!!! (end)############

@@ -2075,3 +2075,69 @@ void KAlcatelDoc::updateDocument(AlcDataType which) {
 
     slotUpdateAllViews(NULL);
 }
+
+void KAlcatelDoc::commitChanges() {
+    {
+        AlcatelCategoryList::Iterator it;
+        for( it = todo_cats->begin(); it != todo_cats->end(); ++it ) {
+            if ((*it).Deleted) ::message(MSG_INFO, "Deleted: %s", (*it).getName().latin1());
+            else if ((*it).Created) ::message(MSG_INFO, "Created: %s", (*it).getName().latin1());
+            else if ((*it).Modified) ::message(MSG_INFO, "Modified: %s", (*it).getName().latin1());
+       }
+    }
+
+    {
+        AlcatelCategoryList::Iterator it;
+        for( it = contact_cats->begin(); it != contact_cats->end(); ++it ) {
+            if ((*it).Deleted) ::message(MSG_INFO, "Deleted: %s", (*it).getName().latin1());
+            else if ((*it).Created) ::message(MSG_INFO, "Created: %s", (*it).getName().latin1());
+            else if ((*it).Modified) ::message(MSG_INFO, "Modified: %s", (*it).getName().latin1());
+       }
+    }
+
+    {
+        AlcatelTodoList::Iterator it;
+        for( it = todos->begin(); it != todos->end(); ++it ) {
+            if ((*it).Deleted) ::message(MSG_INFO, "Deleted: %s", (*it).getName().latin1());
+            else if ((*it).Created) ::message(MSG_INFO, "Created: %s", (*it).getName().latin1());
+            else if ((*it).Modified) ::message(MSG_INFO, "Modified: %s", (*it).getName().latin1());
+       }
+    }
+
+    {
+        AlcatelCallList::Iterator it;
+        for( it = calls->begin(); it != calls->end(); ++it ) {
+            if ((*it).Deleted) ::message(MSG_INFO, "Deleted: %s", (*it).getName().latin1());
+            else if ((*it).Created) ::message(MSG_INFO, "Created: %s", (*it).getName().latin1());
+            else if ((*it).Modified) ::message(MSG_INFO, "Modified: %s", (*it).getName().latin1());
+       }
+    }
+
+    {
+        AlcatelCalendarList::Iterator it;
+        for( it = calendar->begin(); it != calendar->end(); ++it ) {
+            if ((*it).Deleted) ::message(MSG_INFO, "Deleted: %s", (*it).getName().latin1());
+            else if ((*it).Created) ::message(MSG_INFO, "Created: %s", (*it).getName().latin1());
+            else if ((*it).Modified) ::message(MSG_INFO, "Modified: %s", (*it).getName().latin1());
+       }
+    }
+
+    {
+        AlcatelContactList::Iterator it;
+        for( it = contacts->begin(); it != contacts->end(); ++it ) {
+            if ((*it).Deleted) ::message(MSG_INFO, "Deleted: %s", (*it).getName().latin1());
+            else if ((*it).Created) ::message(MSG_INFO, "Created: %s", (*it).getName().latin1());
+            else if ((*it).Modified) ::message(MSG_INFO, "Modified: %s", (*it).getName().latin1());
+       }
+    }
+
+    {
+        AlcatelTodoList::Iterator it;
+        for( it = todos->begin(); it != todos->end(); ++it ) {
+            if ((*it).Deleted) ::message(MSG_INFO, "Deleted: %s", (*it).getName().latin1());
+            else if ((*it).Created) ::message(MSG_INFO, "Created: %s", (*it).getName().latin1());
+            else if ((*it).Modified) ::message(MSG_INFO, "Modified: %s", (*it).getName().latin1());
+       }
+    }
+
+}

@@ -296,6 +296,9 @@ class KAlcatelApp : public KMainWindow
     /** toggle connection status (connected/disconnected)
      */
     void connectionToggle();
+    /** commits changes into mobile
+     */
+    void slotMobileCommit();
 
   private:
     /** the configuration object of the application */
@@ -329,7 +332,9 @@ class KAlcatelApp : public KMainWindow
     KAction *newEvent;
     KAction *newContact;
     KAction *newTodo;
+
     KAction *mobileInfo;
+    KAction *mobileCommit;
     KAction *mobileManualDisconnect;
     KAction *mobileManualConnect;
 

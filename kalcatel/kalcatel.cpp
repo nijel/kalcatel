@@ -157,7 +157,10 @@ void KAlcatelApp::initActions() {
     mobileInfo = new KAction(i18n("&Information"), QIconSet(SmallIcon("kalcatel-mobile.png"), BarIcon("kalcatel-mobile.png")), 0, this, SLOT(slotMobileInfo()), actionCollection(),"mobile_info");
     mobileInfo->setToolTip(i18n("Mobile information"));
 
-    mobileManualConnect = new KAction(i18n("&Connect"), QIconSet(SmallIcon("connect_established.png"), BarIcon("connect_established.png")), 0, this, SLOT(modemConnect()), actionCollection(),"mobile_connect");
+    mobileCommit = new KAction(i18n("&Commit"), QIconSet(SmallIcon("kalcatel-commit.png"), BarIcon("kalcatel-commit.png")), 0, this, SLOT(slotMobileCommit()), actionCollection(),"mobile_commit");
+    mobileCommit->setToolTip(i18n("Commit all changes into mobile. Delete records marked for deleting, modify changed records."));
+
+    mobileManualConnect = new KAction(i18n("C&onnect"), QIconSet(SmallIcon("connect_established.png"), BarIcon("connect_established.png")), 0, this, SLOT(modemConnect()), actionCollection(),"mobile_connect");
     mobileManualDisconnect = new KAction(i18n("&Disconnect"), QIconSet(SmallIcon("connect_no.png"), BarIcon("connect_no.png")), 0, this, SLOT(slotModemDisconnect()), actionCollection(),"mobile_disconnect");
 
     fileNew = KStdAction::openNew(this, SLOT(slotFileNew()), actionCollection());
@@ -1050,4 +1053,12 @@ void KAlcatelApp::slotNewContact() {
 }
 
 void KAlcatelApp::slotNewEvent() {
+}
+
+void KAlcatelApp::slotMobileCommit() {
+    slotStatusMsg(i18n("Commiting changes..."), ID_STATUS_MSG);
+
+    doc->commitChanges();
+
+    slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }

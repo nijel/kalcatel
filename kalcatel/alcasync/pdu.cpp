@@ -65,7 +65,7 @@ int str2pdu(const char *str, char *pdu, int charset_conv) {
     pdu[0]=0;
     for (character=0;character<=pdubyteposition; character++) {
         sprintf(octett,"%02X",(unsigned char) numb[character]);
-        strncat(pdu,octett,sizeof(pdu)-1-strlen(pdu));
+        strcat(pdu,octett);
     }
     return pdubyteposition;
 }
@@ -168,7 +168,7 @@ int split_pdu(const char *pdu, char *sendr, time_t *date, char *ascii, char *sms
             case NUM_TYPE_CHR:
                 sprintf (buf, "%02X", (Length+padding)/2);
                 strncpy(smsc,Pointer,Length+padding);
-                strncat(buf, smsc,sizeof(buf)-1-strlen(buf));
+                strcat(buf, smsc);
                 pdu2str(buf, smsc, 1);
                 break;
         }
@@ -191,7 +191,7 @@ int split_pdu(const char *pdu, char *sendr, time_t *date, char *ascii, char *sms
             case NUM_TYPE_CHR:
                 sprintf (buf, "%02X", (Length+padding)/2);
                 strncpy(sendr,Pointer,Length+padding);
-                strncat(buf, sendr,sizeof(buf)-1-strlen(buf));
+                strcat(buf, sendr);
                 pdu2str(buf, sendr, 1);
                 break;
         }
@@ -214,7 +214,7 @@ int split_pdu(const char *pdu, char *sendr, time_t *date, char *ascii, char *sms
             case NUM_TYPE_CHR:
                 sprintf (buf, "%02X", (Length+padding)/2);
                 strncpy(sendr,Pointer,Length+padding);
-                strncat(buf, sendr,sizeof(buf)-1-strlen(buf));
+                strcat(buf, sendr);
                 pdu2str(buf, sendr, 1);
                 break;
         }
@@ -266,7 +266,7 @@ char *make_pdu_number(const char *number, int add) {
 
     /* terminate the number with F if the length is odd */
     if (strlen(tmp) % 2)
-        strncat(tmp, "F", sizeof(tmp)-1-strlen(tmp));
+        strcat(tmp, "F");
 
     /* Swap every second character */
     swapchars(tmp);

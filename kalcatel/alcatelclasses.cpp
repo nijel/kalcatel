@@ -23,14 +23,59 @@
  */
 /* $Id$ */
 
+#include <stdlib.h>
+
 #include "alcatelclasses.h"
 
+/*
 AlcatelClasses::AlcatelClasses(){
 }
 AlcatelClasses::~AlcatelClasses(){
 }
+*/
 
 AlcatelContact::AlcatelContact(){
+    Category = -1;
+    Private = -1;
 }
+
 AlcatelContact::~AlcatelContact(){
 }
+
+AlcatelCalendar::AlcatelCalendar(){
+    Private = -1;
+    EventType = -1;
+    ContactID = -1;
+
+    DayOfWeek = -1;
+    Day = -1;
+    WeekOfMonth = -1;
+    Month = -1;
+    Frequency = -1;
+}
+
+AlcatelCalendar::~AlcatelCalendar(){
+}
+
+AlcatelTodo::AlcatelTodo(){
+    Completed = -1;
+    Private = -1;
+    Category = -1;
+    Priority = -1;
+    ContactID = -1;
+}
+
+AlcatelTodo::~AlcatelTodo(){
+}
+
+AlcatelSMS::AlcatelSMS(){
+    Position = -1;
+    Status = -1;
+    Length = -1;
+    Raw = NULL;
+}
+
+AlcatelSMS::~AlcatelSMS(){
+    free( Raw );
+}
+

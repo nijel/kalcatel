@@ -37,6 +37,7 @@
 #include "kalcatelview.h"
 #include "kalcateldoc.h"
 #include "kalcatel.h"
+#include "alcatelclasses.h"
 
 KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : KJanusWidget(parent, name, TreeList/*IconList or Tabbed*/)
 {
@@ -278,6 +279,36 @@ KAlcatelDoc *KAlcatelView::getDocument() const
 
   return theApp->getDocument();
 }
+
+
+void KAlcatelView::repaint() {
+    KAlcatelDoc *doc = getDocument();
+    if (doc->getVersion() != docVersion) {
+        docVersion = doc->getVersion();
+
+        AlcatelSMSList::Iterator it;
+        for( it = doc->sms->begin(); it != doc->sms->end(); ++it ) {
+            QListViewItem *newItem = new QListViewItem (messages_list,
+                    QString((* it).Sender),
+                    QString("name")/*(* it).Name*/,
+                    QString("stat"/*(* it).Status*/),
+                    QString("date"),
+                    QString((* it).Text),
+                    QString("pos"/*(* it).Position*/));
+            messages_list->insertItem(newItem);
+        }
+/*
+            list->addColumn(i18n("Number"));
+            list->addColumn(i18n("Name"));
+            list->addColumn(i18n("Status"));
+            list->addColumn(i18n("Date"));
+            list->addColumn(i18n("Text"));
+            list->addColumn(i18n("Position"));
+  */
+    }
+    KJanusWidget::repaint();
+}
+
 /*
 void KAlcatelView::print(QPrinter *pPrinter)
 {

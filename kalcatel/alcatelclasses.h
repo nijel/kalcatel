@@ -26,26 +26,122 @@
 #ifndef ALCATELCLASSES_H
 #define ALCATELCLASSES_H
 
+#include <time.h>
+
 #include <qstring.h>
 #include <qvaluelist.h>
+#include <qdatetime.h>
+
+#include "alcatool/alcatel.h"
 
 /**
   *@author Michal Cihar
   */
 
+/*
 class AlcatelClasses {
 public: 
 	AlcatelClasses();
 	~AlcatelClasses();
 };
+*/
+
+typedef enum {SIM, Phone} ContactStorage;
 
 class AlcatelContact {
 public:
 	AlcatelContact();
 	~AlcatelContact();
-    QString *Name;
+	
+	ContactStorage Storage;
+	
+    QString LastName;
+    QString FirstName;
+    QString Company;
+    QString JobTitle;
+    QString Note;
+    int Category;
+    int Private;
+    QString WorkNumber;
+    QString MainNumber;
+    QString FaxNumber;
+    QString OtherNumber;
+    QString PagerNumber;
+    QString MobileNumber;
+    QString HomeNumber;
+    QString Email1;
+    QString Email2;
+    QString Address;
+    QString City;
+    QString State;
+    QString Zip;
+    QString Coutry;
+    QString Custom1;
+    QString Custom2;
+    QString Custom3;
+    QString Custom4;
+};
+
+class AlcatelCalendar {
+public:
+	AlcatelCalendar();
+	~AlcatelCalendar();
+	
+    QDate Date;
+    QTime StartTime;
+    QTime EndTime;
+    QDateTime Alarm;
+    QString Subject;
+    int Private;
+    int EventType;
+    int ContactID;
+
+    /* repeating events: */
+    int DayOfWeek;
+    int Day;
+    int WeekOfMonth;
+    int Month;
+    int Frequency;
+    QDate StartDate;
+    QDate StopDate;
+
+    /* Following two were created by IntelliSync, but it couldn't read it back... */
+    QDate UnknownDate;        /* this contains date, probably same as AlarmDate */
+    QTime UnknownTime;        /* this contains time, probably same as AlarmTime */
+};
+
+class AlcatelTodo {
+public:
+	AlcatelTodo();
+	~AlcatelTodo();
+	
+    QDate DueDate;
+    int Completed;
+    QDateTime Alarm;
+    QString Subject;
+    int Private;
+    int Category;
+    int Priority;
+    int ContactID;
+};
+
+class AlcatelSMS{
+public:
+	AlcatelSMS();
+	~AlcatelSMS();
+	
+    int Position;
+    int Status;
+    int Length;
+    char *Raw;
+    QString Sender;
+    time_t Date;
+    QString Text;
+    QString SMSC;
 };
 
 typedef QValueList<AlcatelContact> AlcatelContactList;
-
+typedef QValueList<AlcatelCalendar> AlcatelCalendarList;
+typedef QValueList<AlcatelTodo> AlcatelTodoList;
+typedef QValueList<AlcatelSMS> AlcatelSMSList;
 #endif

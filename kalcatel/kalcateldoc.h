@@ -98,7 +98,9 @@ class KAlcatelDoc : public QObject
     /** returns the KURL of the document */
     const KURL& URL() const;
     /** sets the URL of the document */
-	  void setURL(const KURL& url);
+	void setURL(const KURL& url);
+
+	int getVersion();
 	
   public slots:
     /** calls repaint() on all views connected to the document object and is called by the view by which the document has been changed.
@@ -110,13 +112,21 @@ class KAlcatelDoc : public QObject
     /** the list of the views currently connected to the document */
     static QList<KAlcatelView> *pViewList;	
 
+    QStringList *todo_cats;
+    QStringList *contact_cats;
+
+    AlcatelContactList *contacts;
+    AlcatelCalendarList *caledar;
+    AlcatelTodoList *todo;
+    AlcatelSMSList *sms;
   private:
     /** the modified flag of the current document */
     bool modified;
     KURL doc_url;
-    QStringList todo_cats;
-    QStringList contact_cats;
-    AlcatelContactList contacts;
+
+    int version;
+
+//    AlcatelCallList calls;
 };
 
 #endif // KALCATELDOC_H

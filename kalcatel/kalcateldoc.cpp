@@ -22,6 +22,7 @@
  */
 /* $Id$ */
 
+#include <stdlib.h>
 #include <unistd.h>
 
 // include files for Qt
@@ -63,10 +64,25 @@ KAlcatelDoc::KAlcatelDoc(QWidget *parent, const char *name) : QObject(parent, na
   }
 
   pViewList->setAutoDelete(true);
+
+  todo_cats = new QStringList();
+  contact_cats = new QStringList();
+
+  contacts = new AlcatelContactList();
+  caledar = new AlcatelCalendarList();
+  todo = new AlcatelTodoList();
+  sms = new AlcatelSMSList();
 }
 
 KAlcatelDoc::~KAlcatelDoc()
 {
+  free(todo_cats);
+  free(contact_cats);
+
+  free(contacts);
+  free(caledar);
+  free(todo);
+  free(sms);
 }
 
 void KAlcatelDoc::addView(KAlcatelView *view)
@@ -186,6 +202,7 @@ char default_lock[] = "/var/lock/LCK..%s";
 char default_init[] = "AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0";
 int default_rate = 19200;
 char *devname;
+int i;
 
   KAlcatelApp *win=(KAlcatelApp *) parent();
 
@@ -207,54 +224,83 @@ char *devname;
       case 19200:  baudrate=B19200; break;
       case 38400:  baudrate=B38400; break;
       default:
-          message(MSG_ERROR,"Ivalid baud rate (%d)!", rate);
+          message(MSG_ERROR,"Ivalid baud rate (%d), setting to default (19200)!", rate);
           baudrate=B19200;
   }
 
 
-  if (what == alcatel_read_sms)
+   win->slotStatusMsg(i18n("Opening modem"),ID_DETAIL_MSG);
+   if (!modem_open()) {
+       switch (modem_errno) {
+           case ERR_MDM_OPEN:
+               KMessageBox::error(win, i18n("Failed opening modem for read/write."), i18n("Error"));
+               modem_close();
+               return false;
+           case ERR_MDM_LOCK:
+               KMessageBox::error(win, i18n("Modem locked."), i18n("Error"));
+               modem_close();
+               return false;
+           default:
+               KMessageBox::error(win, i18n("Failed opening modem.\nUnknown error."), i18n("Error"));
+               modem_close();
+               return false;
+       }
+       return false;
+   }
+   win->slotStatusMsg(i18n("Setting serial port"),ID_DETAIL_MSG);
+   modem_setup();
+   win->slotStatusMsg(i18n("Initializing modem"),ID_DETAIL_MSG);
+   if (!modem_init()) {
+       switch (modem_errno) {
+           case ERR_MDM_AT:
+               KMessageBox::error(win, i18n("Modem doesn't react on AT command."), i18n("Error"));
+               modem_close();
+               return false;
+           case ERR_MDM_PDU:
+               KMessageBox::error(win, i18n("Failed selecting PDU mode."), i18n("Error"));
+               modem_close();
+               return false;
+           default:
+               KMessageBox::error(win, i18n("Failed initializing modem.\nUnknown error."), i18n("Error"));
+               modem_close();
+               return false;
+       }
+       return false;
+   }
+
+  if (what == alcatel_read_sms || what == alcatel_read_all)
   {
-    win->slotStatusMsg(i18n("Opening modem"),ID_DETAIL_MSG);
-    if (!modem_open()) {
-        switch (modem_errno) {
-            case ERR_MDM_OPEN:
-                KMessageBox::error(win, i18n("Failed opening modem for read/write."), i18n("Error"));
-                break;
-            case ERR_MDM_LOCK:
-                KMessageBox::error(win, i18n("Modem locked."), i18n("Error"));
-                break;
-            default:
-                KMessageBox::error(win, i18n("Failed opening modem.\nUnknown error."), i18n("Error"));
-        }
-        return false;
-    }
-    win->slotStatusMsg(i18n("Setting serial port"),ID_DETAIL_MSG);
-    modem_setup();
-    win->slotStatusMsg(i18n("Initializing modem"),ID_DETAIL_MSG);
-    if (!modem_init()) {
-        switch (modem_errno) {
-            case ERR_MDM_AT:
-                KMessageBox::error(win, i18n("Modem doesn't react on AT command."), i18n("Error"));
-                break;
-            case ERR_MDM_PDU:
-                KMessageBox::error(win, i18n("Failed selecting PDU mode."), i18n("Error"));
-                break;
-            default:
-                KMessageBox::error(win, i18n("Failed initializing modem.\nUnknown error."), i18n("Error"));
-        }
-        return false;
-    }
-
+    SMS *msg;
     win->slotStatusMsg(i18n("Reading messages"),ID_DETAIL_MSG);
-    get_smss();
+    msg = get_smss();
 
-    modem_close();
+    i = 0;
+    while (msg[i].pos != -1) {
+        AlcatelSMS Msg;
+        Msg.Date = msg[i].date;
+        Msg.Length = msg[i].len;
+        Msg.Position = msg[i].pos;
+        Msg.Raw = strdup(msg[i].raw);
+        Msg.SMSC = QString(msg[i].smsc);
+        Msg.Sender = QString(msg[i].sendr);
+        Msg.Status = msg[i].stat;
+        Msg.Text = QString(msg[i].ascii);
+        sms->append(Msg);
+        i++;
+    }
+    free(msg);
+
     win->slotStatusMsg(i18n("SMS messages read"),ID_DETAIL_MSG);
   }
   else
   {
     KMessageBox::sorry(win, i18n("Not implemented yet..."), i18n("Sorry"));
   }
+  modem_close();
+
+  version++;
+  slotUpdateAllViews(NULL);
+
   return true;
 }
 
@@ -274,4 +320,8 @@ void KAlcatelDoc::deleteContents()
   // TODO: Add implementation to delete the document contents
   /////////////////////////////////////////////////
 
+}
+
+int KAlcatelDoc::getVersion() {
+    return version;
 }

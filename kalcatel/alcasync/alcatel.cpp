@@ -45,6 +45,7 @@
 #include "alcatel.h"
 #include "logging.h"
 #include "common.h"
+#include "charset.h"
 
 #define SLEEP_CHANGE    10000
 #define SLEEP_FAIL      100
@@ -465,6 +466,7 @@ FIELD *decode_field_value(alc_type *buffer) {
     FIELD *field;
     alc_type *s;
     int *i;
+    int j;
 
     field = (FIELD *)malloc(sizeof(FIELD));
     chk(field);
@@ -494,6 +496,9 @@ FIELD *decode_field_value(alc_type *buffer) {
         s = (alc_type *)malloc(buffer[3]+1);
         chk(s);
         memcpy(s, buffer+4, buffer[3]);
+        s[buffer[3]] = 0;
+
+        for (j=0; j<buffer[3]; j++) s[j] = gsm2ascii(s[j]);
         
         field->type = _string;
         field->data = s;
@@ -502,7 +507,10 @@ FIELD *decode_field_value(alc_type *buffer) {
         s = (alc_type *)malloc(buffer[3]+1);
         chk(s);
         memcpy(s, buffer+4, buffer[3]);
+        s[buffer[3]] = 0;
         
+        for (j=0; j<buffer[3]; j++) s[j] = gsm2ascii(s[j]);
+
         field->type = _phone;
         field->data = s;
     } else if (buffer[1] == 0x03 && buffer[2] == 0x3B) {
@@ -576,6 +584,7 @@ char *sync_get_obj_list_item(alc_type type, alc_type list, int item) {
     alc_type *data;
     char *result;
     int len;
+    int j;
 
     alcatel_send_packet(ALC_DATA, buffer, 8); 
     free(alcatel_recv_ack(ALC_ACK));
@@ -588,6 +597,8 @@ char *sync_get_obj_list_item(alc_type type, alc_type list, int item) {
     chk(result);
 
     memcpy(result,data + 15, len);
+
+    for (j=0; j<=len; j++) result[j] = gsm2ascii(result[j]);
 
     free(data);
     
@@ -647,6 +658,7 @@ int sync_update_field(alc_type type, int item, int field, FIELD *data) {
         0x65, 0x00 /* length of remaining part */, (field & 0xff), 0x37 /* here follows data */};
     alc_type *answer;
     int result;
+    int j;
     
     switch (data->type) {
         case _date:
@@ -675,6 +687,7 @@ int sync_update_field(alc_type type, int item, int field, FIELD *data) {
             buffer[14] = 0x3c;
             strncpy((char *)(buffer + 16), (char *)(data->data), 150); /* maximally 150 chars */
             buffer[15] = strlen((char *)(buffer + 16));
+            for (j=0; j<=buffer[15]; j++) buffer[16 + j] = gsm2ascii(buffer[16 + j]);
             buffer[10] = 5 + buffer[15];
             buffer[16 + buffer[15]] = 0x00;
             break;
@@ -683,6 +696,7 @@ int sync_update_field(alc_type type, int item, int field, FIELD *data) {
             buffer[14] = 0x3c;
             strncpy((char *)(buffer + 16), (char *)(data->data), 150); /* maximally 150 chars, maybe here is another limitation... */
             buffer[15] = strlen((char *)(buffer + 16));
+            for (j=0; j<=buffer[15]; j++) buffer[16 + j] = gsm2ascii(buffer[16 + j]);
             buffer[10] = 5 + buffer[15];
             buffer[16 + buffer[15]] = 0x00;
             break;

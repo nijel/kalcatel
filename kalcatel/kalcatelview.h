@@ -77,6 +77,8 @@ class KAlcatelView : public KJanusWidget
 
     /** contains the implementation for printing functionality */
 //    void print(QPrinter *pPrinter);
+  public slots:
+    void repaint();
 	
   private:
     QVBox *todo, *calendar,
@@ -89,6 +91,8 @@ class KAlcatelView : public KJanusWidget
         *messages_list, *msg_read_list, *msg_unread_list, *msg_sent_list, *msg_unsent_list;
 
     KListView *createListView(QVBox *parent, AlcListType type);
+
+    int docVersion;
 
 /*
     QGrid *todo;

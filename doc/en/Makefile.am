@@ -1,7 +1,7 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 
 
-EXTRA_DIST = index.docbook index.cache.bz2 
+EXTRA_DIST = index.docbook 
 
 install-data-local:
 	$(mkinstalldirs) $(kde_docdir)/en/kalcatel/

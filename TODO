@@ -7,10 +7,6 @@ will come is to port (probably write from scratch) KAlcatel to use Gammu as
 backend and use only Qt classes for that to allow compilation also on Win32.
 
 for 0.4-beta:
- - (started) support for KDE/Qt 3
-    * std dialogs cannot probably contain <br> etc. in KDE/Qt 3
-    * QMultiLineEdit causes much problems
- - (DONE) czech translation
  - (started) improve contact/phone number selection dialog
  - after creating of item:
     * focus to it

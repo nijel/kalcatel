@@ -66,11 +66,11 @@ KAlcatelDoc::KAlcatelDoc(QWidget *parent, const char *name) : QObject(parent, na
 
   pViewList->setAutoDelete(true);
 
-  todo_cats = new QStringList();
-  contact_cats = new QStringList();
+  todo_cats = new AlcatelCategoryList();
+  contact_cats = new AlcatelCategoryList();
 
   contacts = new AlcatelContactList();
-  caledar = new AlcatelCalendarList();
+  calendar = new AlcatelCalendarList();
   todo = new AlcatelTodoList();
   sms = new AlcatelSMSList();
 }
@@ -187,121 +187,290 @@ bool KAlcatelDoc::openDocument(const KURL& url, const char *format /*=0*/)
   modified=false;
   return true;
 }
+void KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
+    alc_type *result;
+    int i, j;
+    int *ids, *items;
+    FIELD *field;
+
+    int count;
+
+    switch (sync) {
+        case ALC_SYNC_CALENDAR:
+            count = ALC_CALENDAR_FIELDS;
+            calendar->clear();
+            break;
+        case ALC_SYNC_TODO:
+            count = ALC_TODO_FIELDS;
+            todo->clear();
+            break;
+        case ALC_SYNC_CONTACTS:
+            count = ALC_CONTACTS_FIELDS;
+            contacts->clear();
+            break;
+    }
+
+    alcatel_attach();
+
+    sync_start_session();
+    if (sync_select_type(type) == 0) {
+        sync_begin_read(sync);
+
+        ids = sync_get_ids(type);
+
+        message(MSG_INFO, "Received %d ids", ids[0]);
+
+        for (i = 1; i <= ids[0]; i++) {
+            message(MSG_DEBUG, "Reading id[%d] = %d", i-1, ids[i]);
+            items = sync_get_fields(type, ids[i]);
+            message(MSG_INFO, "Receiving data for item %d (%d fields)", ids[i], items[0]);
+            printf ("Item %d (fields: %d):\n", ids[i], items[0]);
+            AlcatelContact *Contact;
+            AlcatelTodo *Todo;
+            AlcatelCalendar *Calendar;
+            switch (sync) {
+                case ALC_SYNC_CALENDAR:
+                    Calendar = new AlcatelCalendar();
+                    break;
+                case ALC_SYNC_TODO:
+                    Todo = new AlcatelTodo();
+                    break;
+                case ALC_SYNC_CONTACTS:
+                    Contact = new AlcatelContact();
+                    Contact->Storage = AlcatelContact::Phone;
+                    break;
+            }
+            for (j = 1; j <= items[0]; j++) {
+                message(MSG_DEBUG, "items[%d] = %d", j-1, items[j]);
+                result = sync_get_field_value(type, ids[i], items[j]);
+                field = decode_field_value(result);
+                if (items[j] >= count) {
+                    message(MSG_WARNING, "Unknown field %02d, ignoring!",items[j]);
+                }
+                if (field == NULL) {
+                    message(MSG_WARNING, "Unknown field type(%02X %02X), ingnoring", result[1], result[2]);
+                } else {
+                    switch (sync) {
+                        case ALC_SYNC_CALENDAR:
+                            Calendar->setField(items[j], field);
+                            break;
+                        case ALC_SYNC_TODO:
+                            Todo->setField(items[j], field);
+                            break;
+                        case ALC_SYNC_CONTACTS:
+                            Contact->setField(items[j], field);
+                            break;
+                    }
+                }
+                free(result);
+            }
+            free(items);
+            switch (sync) {
+                case ALC_SYNC_CALENDAR:
+                    calendar->append(*Calendar);
+                    break;
+                case ALC_SYNC_TODO:
+                    todo->append(*Todo);
+                    break;
+                case ALC_SYNC_CONTACTS:
+                    contacts->append(*Contact);
+                    break;
+            }
+        }
+        free(ids);
+    } else {
+        message(MSG_ERROR, "Can not open sync session!");
+    }
+
+    sync_close_session(type);
+    alcatel_detach();
+}
+
+int KAlcatelDoc::readMobileCategories(AlcatelCategoryList *strList, alc_type sync, alc_type type, alc_type cat) {
+    int *list;
+    int i;
+    char *result;
+
+    alcatel_attach();
+
+    sync_start_session();
+
+    if (sync_select_type(type) == 0) {
+        sync_begin_read(sync);
+
+        list = sync_get_obj_list(type, cat);
+
+        message(MSG_INFO, "Received %d categories:", list[0]);
+
+        strList->clear();
+
+        for (i = 1; i <= list[0]; i++) {
+            result = sync_get_obj_list_item(type, cat, list[i]);
+            strList->append(AlcatelCategory(result, list[i]));
+            message (MSG_DEBUG, "Read category name: %02d: %s", list[i],  result);
+            free(result);
+        }
+
+        free(list);
+        i = true;
+    } else {
+        message(MSG_ERROR, "Can not open sync session!");
+        i = false;
+    }
+
+    sync_close_session(type);
+    alcatel_detach();
+    return i;
+}
 
 bool KAlcatelDoc::readMobile(AlcReadType what = alcatel_read_all, int category = -1)
 {
-/* TODO: this should be in configuration */
-char default_device[] = "/dev/ttyS1";
-char default_lock[] = "/var/lock/LCK..%s";
-char default_init[] = "AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0";
-int default_rate = 19200;
-char *devname;
-int i;
+    /* TODO: this should be in configuration */
+    char default_device[] = "/dev/ttyS1";
+    char default_lock[] = "/var/lock/LCK..%s";
+    char default_init[] = "AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0";
+    int default_rate = 19200;
+    char *devname;
+    int i;
 
-  KAlcatelApp *win=(KAlcatelApp *) parent();
+    KAlcatelApp *win=(KAlcatelApp *) parent();
 
-//  win->slotStatusMsg(i18n("Reading data from mobile"),ID_STATUS_MSG);
+    msg_level = MSG_DEBUG;
 
-  msg_level = MSG_DEBUG;
+    strcpy(initstring, default_init);
+    strcpy(device, default_device);
+    devname = strrchr(device, '/');
+    devname++;
+    sprintf(lockname, default_lock, devname);
+    rate=default_rate;
 
-  strcpy(initstring, default_init);
-  strcpy(device, default_device);
-  devname = strrchr(device, '/');
-  devname++;
-  sprintf(lockname, default_lock, devname);
-  rate=default_rate;
-
-  switch (rate) {
-      case 2400:   baudrate=B2400; break;
-      case 4800:   baudrate=B4800; break;
-      case 9600:   baudrate=B9600; break;
-      case 19200:  baudrate=B19200; break;
-      case 38400:  baudrate=B38400; break;
-      default:
-          message(MSG_ERROR,"Ivalid baud rate (%d), setting to default (19200)!", rate);
-          baudrate=B19200;
-  }
-
-
-   win->slotStatusMsg(i18n("Opening modem"),ID_DETAIL_MSG);
-   if (!modem_open()) {
-       switch (modem_errno) {
-           case ERR_MDM_OPEN:
-               KMessageBox::error(win, i18n("Failed opening modem for read/write."), i18n("Error"));
-               modem_close();
-               return false;
-           case ERR_MDM_LOCK:
-               KMessageBox::error(win, i18n("Modem locked."), i18n("Error"));
-               modem_close();
-               return false;
-           case ERR_MDM_LOCK_OPEN:
-               KMessageBox::error(win, i18n("Can not open modem lock."), i18n("Error"));
-               modem_close();
-               return false;
-           default:
-               KMessageBox::error(win, i18n("Failed opening modem.\nUnknown error (%1).").arg(modem_errno), i18n("Error"));
-               modem_close();
-               return false;
-       }
-       return false;
-   }
-   win->slotStatusMsg(i18n("Setting serial port"),ID_DETAIL_MSG);
-   modem_setup();
-   win->slotStatusMsg(i18n("Initializing modem"),ID_DETAIL_MSG);
-   if (!modem_init()) {
-       switch (modem_errno) {
-           case ERR_MDM_AT:
-               KMessageBox::error(win, i18n("Modem doesn't react on AT command."), i18n("Error"));
-               modem_close();
-               return false;
-           case ERR_MDM_PDU:
-               KMessageBox::error(win, i18n("Failed selecting PDU mode."), i18n("Error"));
-               modem_close();
-               return false;
-           default:
-               KMessageBox::error(win, i18n("Failed initializing modem.\nUnknown error (%1).").arg(modem_errno), i18n("Error"));
-               modem_close();
-               return false;
-       }
-       return false;
-   }
-
-  if (what == alcatel_read_sms || what == alcatel_read_all)
-  {
-    SMS *msg;
-    win->slotStatusMsg(i18n("Reading messages"),ID_DETAIL_MSG);
-    sms->clear();
-    msg = get_smss();
-
-    i = 0;
-    while (msg[i].pos != -1) {
-        AlcatelSMS *Msg = new AlcatelSMS();
-        Msg->Date = QDateTime();
-        Msg->Date.setTime_t(msg[i].date);
-        Msg->Length = msg[i].len;
-        Msg->Id = msg[i].pos;
-        Msg->Raw = strdup(msg[i].raw);
-        free(msg[i].raw);
-        Msg->SMSC = QString(msg[i].smsc);
-        free(msg[i].smsc);
-        Msg->Sender = QString(msg[i].sendr);
-        free(msg[i].sendr);
-        Msg->Status = msg[i].stat;
-        Msg->Text = QString(msg[i].ascii);
-        free(msg[i].ascii);
-        sms->append(*Msg);
-        i++;
+    switch (rate) {
+        case 2400:   baudrate=B2400; break;
+        case 4800:   baudrate=B4800; break;
+        case 9600:   baudrate=B9600; break;
+        case 19200:  baudrate=B19200; break;
+        case 38400:  baudrate=B38400; break;
+        default:
+            message(MSG_ERROR,"Ivalid baud rate (%d), setting to default (19200)!", rate);
+            baudrate=B19200;
     }
-    free(msg);
 
-    win->slotStatusMsg(i18n("SMS messages read"),ID_DETAIL_MSG);
-    smsVersion++;
-  }
-  else
-  {
-    KMessageBox::sorry(win, i18n("Not implemented yet..."), i18n("Sorry"));
-  }
+
+     win->slotStatusMsg(i18n("Opening modem"),ID_DETAIL_MSG);
+     if (!modem_open()) {
+         switch (modem_errno) {
+             case ERR_MDM_OPEN:
+                 KMessageBox::error(win, i18n("Failed opening modem for read/write."), i18n("Error"));
+                 modem_close();
+                 return false;
+             case ERR_MDM_LOCK:
+                 KMessageBox::error(win, i18n("Modem locked."), i18n("Error"));
+                 modem_close();
+                 return false;
+             case ERR_MDM_LOCK_OPEN:
+                 KMessageBox::error(win, i18n("Can not open modem lock."), i18n("Error"));
+                 modem_close();
+                 return false;
+             default:
+                 KMessageBox::error(win, i18n("Failed opening modem.\nUnknown error (%1).").arg(modem_errno), i18n("Error"));
+                 modem_close();
+                 return false;
+         }
+         return false;
+     }
+     win->slotStatusMsg(i18n("Setting serial port"),ID_DETAIL_MSG);
+     modem_setup();
+     win->slotStatusMsg(i18n("Initializing modem"),ID_DETAIL_MSG);
+     if (!modem_init()) {
+         switch (modem_errno) {
+             case ERR_MDM_AT:
+                 KMessageBox::error(win, i18n("Modem doesn't react on AT command."), i18n("Error"));
+                 modem_close();
+                 return false;
+             case ERR_MDM_PDU:
+                 KMessageBox::error(win, i18n("Failed selecting PDU mode."), i18n("Error"));
+                 modem_close();
+                 return false;
+             default:
+                 KMessageBox::error(win, i18n("Failed initializing modem.\nUnknown error (%1).").arg(modem_errno), i18n("Error"));
+                 modem_close();
+                 return false;
+         }
+         return false;
+     }
+
+    if (what == alcatel_read_sms || what == alcatel_read_all) {
+        SMS *msg;
+        win->slotStatusMsg(i18n("Reading messages"),ID_DETAIL_MSG);
+        sms->clear();
+        msg = get_smss();
+
+        i = 0;
+        while (msg[i].pos != -1) {
+            AlcatelSMS *Msg = new AlcatelSMS();
+            Msg->Date = QDateTime();
+            Msg->Date.setTime_t(msg[i].date);
+            Msg->Length = msg[i].len;
+            Msg->Id = msg[i].pos;
+            Msg->Raw = strdup(msg[i].raw);
+            free(msg[i].raw);
+            Msg->SMSC = QString(msg[i].smsc);
+            free(msg[i].smsc);
+            Msg->Sender = QString(msg[i].sendr);
+            free(msg[i].sendr);
+            Msg->Status = msg[i].stat;
+            Msg->Text = QString(msg[i].ascii);
+            free(msg[i].ascii);
+            sms->append(*Msg);
+            i++;
+        }
+        free(msg);
+
+        win->slotStatusMsg(i18n("SMS messages read"),ID_DETAIL_MSG);
+        smsVersion++;
+    }
+
+    if (what == alcatel_read_calls || what == alcatel_read_all) {
+        KMessageBox::sorry(win, i18n("Reading calls is not implemented yet..."), i18n("Sorry"));
+    }
+
+    if (what == alcatel_read_contacts_sim || what == alcatel_read_all) {
+        KMessageBox::sorry(win, i18n("Reading contacts from SIM is not implemented yet..."), i18n("Sorry"));
+    }
+
+    if (what != alcatel_read_sms || what == alcatel_read_all) {
+        win->slotStatusMsg(i18n("Opening binary mode"),ID_DETAIL_MSG);
+        alcatel_init();
+
+        if (what == alcatel_read_contacts_mobile || what == alcatel_read_all) {
+            /* at first read categories */
+            if (!readMobileCategories(contact_cats, ALC_SYNC_CONTACTS, ALC_SYNC_TYPE_CONTACTS, ALC_LIST_CONTACTS_CAT))
+                KMessageBox::error(win, i18n("Reading contacts categories failed!"), i18n("Error"));
+
+            readMobileItems(ALC_SYNC_CONTACTS, ALC_SYNC_TYPE_CONTACTS);
+
+            contactVersion++;
+        }
+
+        if (what == alcatel_read_calendar || what == alcatel_read_all) {
+            readMobileItems(ALC_SYNC_CALENDAR, ALC_SYNC_TYPE_CALENDAR);
+        }
+
+        if (what == alcatel_read_todo || what == alcatel_read_all) {
+            /* at first read categories */
+            if (!readMobileCategories(todo_cats, ALC_SYNC_TODO, ALC_SYNC_TYPE_TODO, ALC_LIST_TODO_CAT))
+                KMessageBox::error(win, i18n("Reading todo categories failed!"), i18n("Error"));
+
+            readMobileItems(ALC_SYNC_TODO, ALC_SYNC_TYPE_TODO);
+
+            todoVersion++;
+        }
+
+        win->slotStatusMsg(i18n("Closing binary mode"),ID_DETAIL_MSG);
+        alcatel_done();
+    }
   modem_close();
+  win->slotStatusMsg(i18n("Items read"),ID_DETAIL_MSG);
 
   version++;
   modified=true;

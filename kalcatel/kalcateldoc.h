@@ -117,15 +117,17 @@ class KAlcatelDoc : public QObject
     /** the list of the views currently connected to the document */
     static QList<KAlcatelView> *pViewList;	
 
-    QStringList *todo_cats;
-    QStringList *contact_cats;
+    AlcatelCategoryList *todo_cats;
+    AlcatelCategoryList *contact_cats;
 
     AlcatelContactList *contacts;
-    AlcatelCalendarList *caledar;
+    AlcatelCalendarList *calendar;
     AlcatelTodoList *todo;
     AlcatelSMSList *sms;
 //    AlcatelCallList calls; /*TODO: not implemented!*/
   private:
+    int readMobileCategories(AlcatelCategoryList *strList, alc_type sync, alc_type type, alc_type cat);
+    void readMobileItems(alc_type sync, alc_type type);
     /** the modified flag of the current document */
     bool modified;
     KURL doc_url;

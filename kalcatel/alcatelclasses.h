@@ -43,12 +43,14 @@ public:
 
 extern QString SMSTypes[];
 
-typedef enum {SIM, Phone} ContactStorage;
 
 class AlcatelContact : public AlcatelClass {
 public:
+    typedef enum {SIM, Phone} ContactStorage;
 	AlcatelContact();
 	~AlcatelContact();
+	
+	void setField(int number, FIELD *data);
 	
 	ContactStorage Storage;
 	
@@ -84,6 +86,8 @@ public:
 	AlcatelCalendar();
 	~AlcatelCalendar();
 	
+	void setField(int number, FIELD *data);
+	
     QDate Date;
     QTime StartTime;
     QTime EndTime;
@@ -112,6 +116,8 @@ public:
 	AlcatelTodo();
 	~AlcatelTodo();
 	
+	void setField(int number, FIELD *data);
+	
     QDate DueDate;
     int Completed;
     QDateTime Alarm;
@@ -136,10 +142,18 @@ public:
     QString SMSC;
 };
 
+class AlcatelCategory : public AlcatelClass {
+public:
+	AlcatelCategory(char* name, int id);
+	AlcatelCategory();
+    QString Name;
+};
+
 typedef QValueList<AlcatelContact> AlcatelContactList;
 typedef QValueList<AlcatelCalendar> AlcatelCalendarList;
 typedef QValueList<AlcatelTodo> AlcatelTodoList;
 typedef QValueList<AlcatelSMS> AlcatelSMSList;
+typedef QValueList<AlcatelCategory> AlcatelCategoryList;
 
 AlcatelSMS *findAlcatelSMSById(AlcatelSMSList *list, int id);
 

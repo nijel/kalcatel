@@ -27,7 +27,9 @@
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif 
+#endif
+
+#define ALCATEL_MAX_CATEGORIES 255 /* TODO: this should be examined more exactly and moved to alcatel.h */
 
 // include files for Qt
 #include <qvbox.h>
@@ -94,7 +96,7 @@ class KAlcatelView : public KJanusWidget
         *calls, *calls_ld, *calls_mc, *calls_rc,
         *messages, *msg_read, *msg_unread, *msg_sent, *msg_unsent;
     KListView *todo_list, *calendar_list,
-        *contacts_list, *contacts_sim_list, *contacts_mobile_list,
+        *contacts_list, *contacts_sim_list, *contacts_mobile_list, *contacts_cat_list[ALCATEL_MAX_CATEGORIES],
         *calls_list, *calls_ld_list, *calls_mc_list, *calls_rc_list,
         *messages_list, *msg_read_list, *msg_unread_list, *msg_sent_list, *msg_unsent_list;
 

@@ -319,49 +319,49 @@ void KAlcatelApp::slotFileNewWindow()
 void KAlcatelApp::slotFileReadMobileAll()
 {
   slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
-  doc->readMobile(alcatel_read_all,-1);
+  doc->readMobile(alcatel_all,-1);
   slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
 void KAlcatelApp::slotFileReadMobileTodo()
 {
   slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
-  doc->readMobile(alcatel_read_todo,-1);
+  doc->readMobile(alcatel_todo,-1);
   slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
 void KAlcatelApp::slotFileReadMobileContactsSim()
 {
   slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
-  doc->readMobile(alcatel_read_contacts_sim,-1);
+  doc->readMobile(alcatel_contacts_sim,-1);
   slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
 void KAlcatelApp::slotFileReadMobileContactsMobile()
 {
   slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
-  doc->readMobile(alcatel_read_contacts_mobile,-1);
+  doc->readMobile(alcatel_contacts_mobile,-1);
   slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
 void KAlcatelApp::slotFileReadMobileCalendar()
 {
   slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
-  doc->readMobile(alcatel_read_calendar,-1);
+  doc->readMobile(alcatel_calendar,-1);
   slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
 void KAlcatelApp::slotFileReadMobileCalls()
 {
   slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
-  doc->readMobile(alcatel_read_calls,-1);
+  doc->readMobile(alcatel_calls,-1);
   slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
 void KAlcatelApp::slotFileReadMobileSms()
 {
   slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
-  doc->readMobile(alcatel_read_sms,-1);
+  doc->readMobile(alcatel_sms,-1);
   slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 

@@ -348,7 +348,7 @@ int KAlcatelDoc::readMobileCategories(AlcatelCategoryList *strList, alc_type syn
     return i;
 }
 
-bool KAlcatelDoc::readMobile(AlcReadType what = alcatel_read_all, int category = -1)
+bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1)
 {
     char *devname;
     int i;
@@ -419,7 +419,7 @@ bool KAlcatelDoc::readMobile(AlcReadType what = alcatel_read_all, int category =
          return false;
      }
 
-    if (what == alcatel_read_sms || what == alcatel_read_all) {
+    if (what == alcatel_sms || what == alcatel_all) {
         struct SMSData *msg;
         win->slotStatusMsg(i18n("Reading messages"),ID_DETAIL_MSG);
         sms->clear();
@@ -450,7 +450,7 @@ bool KAlcatelDoc::readMobile(AlcReadType what = alcatel_read_all, int category =
         smsVersion++;
     }
 
-    if (what == alcatel_read_calls || what == alcatel_read_all) {
+    if (what == alcatel_calls || what == alcatel_all) {
         struct ContactData *cont;
         win->slotStatusMsg(i18n("Reading calls"),ID_DETAIL_MSG);
         calls->clear();
@@ -501,7 +501,7 @@ bool KAlcatelDoc::readMobile(AlcReadType what = alcatel_read_all, int category =
         callVersion++;
     }
 
-    if (what == alcatel_read_contacts_sim || what == alcatel_read_all) {
+    if (what == alcatel_contacts_sim || what == alcatel_all) {
         struct ContactData *cont;
         win->slotStatusMsg(i18n("Reading SIM contacts"),ID_DETAIL_MSG);
         clearContacts(contacts, StorageSIM);
@@ -524,11 +524,11 @@ bool KAlcatelDoc::readMobile(AlcReadType what = alcatel_read_all, int category =
         contactVersion++;
     }
 
-    if (what == alcatel_read_todo || what == alcatel_read_calendar || what == alcatel_read_contacts_mobile || what == alcatel_read_all) {
+    if (what == alcatel_todo || what == alcatel_calendar || what == alcatel_contacts_mobile || what == alcatel_all) {
         win->slotStatusMsg(i18n("Opening binary mode"),ID_DETAIL_MSG);
         alcatel_init();
 
-        if (what == alcatel_read_contacts_mobile || what == alcatel_read_all) {
+        if (what == alcatel_contacts_mobile || what == alcatel_all) {
             /* at first read categories */
             win->slotStatusMsg(i18n("Reading contact categories"),ID_DETAIL_MSG);
             if (!readMobileCategories(contact_cats, ALC_SYNC_CONTACTS, ALC_SYNC_TYPE_CONTACTS, ALC_LIST_CONTACTS_CAT)) {
@@ -553,7 +553,7 @@ bool KAlcatelDoc::readMobile(AlcReadType what = alcatel_read_all, int category =
             contactVersion++;
         }
 
-        if (what == alcatel_read_calendar || what == alcatel_read_all) {
+        if (what == alcatel_calendar || what == alcatel_all) {
             win->slotStatusMsg(i18n("Reading calendar items"),ID_DETAIL_MSG);
             if (!readMobileItems(ALC_SYNC_CALENDAR, ALC_SYNC_TYPE_CALENDAR)) {
                 KMessageBox::error(win, i18n("Reading calendar items failed!"), i18n("Error"));
@@ -566,7 +566,7 @@ bool KAlcatelDoc::readMobile(AlcReadType what = alcatel_read_all, int category =
             calendarVersion++;
         }
 
-        if (what == alcatel_read_todo || what == alcatel_read_all) {
+        if (what == alcatel_todo || what == alcatel_all) {
             /* at first read categories */
             win->slotStatusMsg(i18n("Reading todo categories"),ID_DETAIL_MSG);
             if (!readMobileCategories(todo_cats, ALC_SYNC_TODO, ALC_SYNC_TYPE_TODO, ALC_LIST_TODO_CAT)) {

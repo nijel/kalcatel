@@ -40,16 +40,16 @@
 
 #include "alcatelclasses.h"
 
-/** Used for selecting which data we can read
+/** Used for selecting which type of mobile data we will work with
   */
-enum AlcReadType {
-    alcatel_read_all,
-    alcatel_read_todo,
-    alcatel_read_sms,
-    alcatel_read_calendar,
-    alcatel_read_calls,
-    alcatel_read_contacts_sim,
-    alcatel_read_contacts_mobile
+enum AlcDataType {
+    alcatel_all,
+    alcatel_todo,
+    alcatel_sms,
+    alcatel_calendar,
+    alcatel_calls,
+    alcatel_contacts_sim,
+    alcatel_contacts_mobile
     };
 
 // forward declaration of the KAlcatel classes
@@ -100,7 +100,7 @@ class KAlcatelDoc : public QObject
     void closeDocument();
     /** reads content from mobile
      */
-    bool readMobile(AlcReadType what = alcatel_read_all, int category = -1);
+    bool readMobile(AlcDataType what = alcatel_all, int category = -1);
     /** loads the document by filename and format and emits the updateViews() signal
      */
     bool openDocument(const KURL& url, const char *format=0);

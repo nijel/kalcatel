@@ -78,13 +78,6 @@ QString MonthNames[] = {
     i18n("November"),
     i18n("December") };
 
-/*
-AlcatelClasses::AlcatelClasses() {
-}
-AlcatelClasses::~AlcatelClasses() {
-}
-*/
-
 AlcatelContact::AlcatelContact() {
     Category = -1;
     Private = -1;

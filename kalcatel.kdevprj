@@ -64,7 +64,7 @@ kpp_icon=0
 kpp_license=5
 kpp_summary=
 kpp_url=http://cihar.liten.cz
-kpp_version=0.3.2
+kpp_version=0.3.3
 
 [LFV Groups]
 GNU=AUTHORS,COPYING,ChangeLog,INSTALL,README,TODO,NEWS

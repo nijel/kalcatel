@@ -29,6 +29,7 @@ for 0.4:
  - try to investigate deleting of items
  - improve contact/phone number selection dialog
  - export/import data from csv (and maybe others - vcard)
+ - czech translation
 
 for 0.5:
  - rewrite reading as separate thread and allow canceling (probably using
@@ -40,7 +41,6 @@ for 1.0:
 sometimes (probably till 1.0, but not planned yet):
  - `grep -rn '/* TODO:' *`
  - verify deleted items by content (optionally)
- - czech translation
  - searching
  - filters
  - synchronisation with kab (and maybe also korganizer)

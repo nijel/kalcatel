@@ -1,3 +1,23 @@
+KAlcatel specific instructions
+==============================
+
+KAlcatel can be installed in following steps:
+
+1.  ./configure --prefix=PATH_WHERE_YOUR_KDE_IS_INSTALLED
+   example:
+    ./configure --prefix=/usr
+   When you don't give that path, some items (icons and ui description
+   will be somewhere else than kde expect and won't be used, so you
+   won't see icons and important part of menu and toolbars.
+
+2. make
+
+3. make install
+   When you ignore this step, you want see icons and information screen,
+   but since 0.2.1 program should work when executed from source tree.
+
+Generic instructions follow.
+
 Basic Installation
 ==================
 

@@ -8,14 +8,17 @@
     <Action name="file_read_mobile_contacts_mobile"/>
     <Action name="file_read_mobile_calendar"/>
     <Action name="file_read_mobile_calls"/>
-    <Action name="file_read_mobile_sms"/>
+    <Action name="file_read_mobile_messages"/>
     <Action name="file_read_mobile_todo"/>
+  </Menu>
+  <Menu name="new"><text>&amp;New</text>
+    <Action name="new_message"/>
   </Menu>
   <Menu name="mobile"><text>&amp;Mobile</text>
     <Action name="mobile_info"/>
   </Menu>
 </MenuBar>
-<ToolBar fullWidth="false" name="readToolBar" newline="true"><text>Read Toolbar</text>
+<ToolBar fullWidth="false" name="readToolBar" newline="true"><text>Read from mobile</text>
     <Action name="file_read_mobile"/>
     <Separator/>
     <Action name="file_read_mobile_contacts_sim"/>
@@ -24,6 +27,9 @@
     <Action name="file_read_mobile_calls"/>
     <Action name="file_read_mobile_sms"/>
     <Action name="file_read_mobile_todo"/>
+</ToolBar>
+<ToolBar fullWidth="false" name="newToolBar" newline="true"><text>Create new</text>
+    <Action name="new_message"/>
 </ToolBar>
 </kpartgui>
 <!-- $Id$ -->

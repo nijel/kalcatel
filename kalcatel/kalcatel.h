@@ -102,6 +102,8 @@ class KAlcatelApp : public KMainWindow
 
     int contact_url;
 
+    bool reread_messages; /* TODO: add in config dialog */
+
     AlcatelContact *solveConflict(AlcatelContact &c1, AlcatelContact &c2);
     AlcatelMessage *solveConflict(AlcatelMessage &c1, AlcatelMessage &c2);
     AlcatelCalendar *solveConflict(AlcatelCalendar &c1, AlcatelCalendar &c2);
@@ -163,7 +165,7 @@ class KAlcatelApp : public KMainWindow
     void slotFileReadMobileTodo();
     /** reads message data from mobile
       */
-    void slotFileReadMobileSms();
+    void slotFileReadMobileMessages();
     /** reads calendar data from mobile
       */
     void slotFileReadMobileCalendar();
@@ -238,6 +240,7 @@ class KAlcatelApp : public KMainWindow
     void slotConfigureKeys();
     void slotPreferencesToolbars();
 
+    void slotNewMessage();
   private:
     /** the configuration object of the application */
     KConfig *config;
@@ -261,11 +264,12 @@ class KAlcatelApp : public KMainWindow
     // KAction pointers to enable/disable actions
     KAction *fileReadMobileAll;
     KAction *fileReadMobileTodo;
-    KAction *fileReadMobileSms;
+    KAction *fileReadMobileMessages;
     KAction *fileReadMobileCalendar;
     KAction *fileReadMobileCalls;
     KAction *fileReadMobileContactsSim;
     KAction *fileReadMobileContactsMobile;
+    KAction *newMessage;
     KAction *mobileInfo;
 
     KAction *fileNew;

@@ -33,7 +33,7 @@ kdevprj_version=1.3
 lfv_open_groups=
 make_options=\s-w -j1
 makefiles=Makefile.am,kalcatel/Makefile.am,doc/Makefile.am,doc/en/Makefile.am,po/Makefile.am,kalcatel/alcatool/Makefile.am,kalcatel/images/Makefile.am,kalcatel/images/items-16x16/Makefile.am,kalcatel/images/items-22x22/Makefile.am,kalcatel/images/items-32x32/Makefile.am,debian/Makefile.am,kalcatel/info/Makefile.am
-modifyMakefiles=false
+modifyMakefiles=true
 project_name=KAlcatel
 project_type=normal_kde2
 sgml_file=/work/alcatel/kalcatel/doc/en/index.docbook
@@ -190,7 +190,7 @@ install_location=
 type=DATA
 
 [kalcatel/Makefile.am]
-files=kalcatel/main.cpp,kalcatel/kalcatel.cpp,kalcatel/kalcatel.h,kalcatel/kalcateldoc.cpp,kalcatel/kalcateldoc.h,kalcatel/kalcatelview.cpp,kalcatel/kalcatelview.h,kalcatel/kalcatelui.rc,kalcatel/kalcatel.desktop,kalcatel/alcatelclasses.cpp,kalcatel/alcatelclasses.h,kalcatel/kalcatelconfigdialog.cpp,kalcatel/kalcatelconfigdialog.h,kalcatel/kalcateltreeviewitem.cpp,kalcatel/kalcateltreeviewitem.h,kalcatel/kalcatelviewitem.cpp,kalcatel/kalcatelviewitem.h,kalcatel/kalcatelmergedialog.cpp,kalcatel/kalcatelmergedialog.h
+files=kalcatel/main.cpp,kalcatel/kalcatel.cpp,kalcatel/kalcatel.h,kalcatel/kalcateldoc.cpp,kalcatel/kalcateldoc.h,kalcatel/kalcatelview.cpp,kalcatel/kalcatelview.h,kalcatel/kalcatelui.rc,kalcatel/kalcatel.desktop,kalcatel/alcatelclasses.cpp,kalcatel/alcatelclasses.h,kalcatel/kalcatelconfigdialog.cpp,kalcatel/kalcatelconfigdialog.h,kalcatel/kalcateltreeviewitem.cpp,kalcatel/kalcateltreeviewitem.h,kalcatel/kalcatelviewitem.cpp,kalcatel/kalcatelviewitem.h,kalcatel/kalcatelmergedialog.cpp,kalcatel/kalcatelmergedialog.h,kalcatel/editmessagedialog.cpp,kalcatel/editmessagedialog.h
 sub_dirs=alcatool,images,info
 type=prog_main
 
@@ -328,6 +328,18 @@ install_location=
 type=HEADER
 
 [kalcatel/alcatool/version.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[kalcatel/editmessagedialog.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[kalcatel/editmessagedialog.h]
 dist=true
 install=false
 install_location=

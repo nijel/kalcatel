@@ -331,6 +331,7 @@ void KAlcatelMergeDialog::slotOK() {
 
     if (strcmp(data1->getClassName(), "AlcatelContact") == 0) {
         AlcatelContact *c = new AlcatelContact(*((AlcatelContact *)data1));
+        c->Modified = true;
         if (((((AlcatelContact *)data1)->LastName.isEmpty() ^ ((AlcatelContact *)data2)->LastName.isEmpty())) || (((AlcatelContact *)data1)->LastName != ((AlcatelContact *)data2)->LastName)) {
             it = itemList.begin();
             switch ((*it).getStatus()) {
@@ -559,6 +560,7 @@ void KAlcatelMergeDialog::slotOK() {
         result = c;
     } else if (strcmp(data1->getClassName(), "AlcatelCategory") == 0) {
         AlcatelCategory *c = new AlcatelCategory(*((AlcatelCategory *)data1));
+        c->Modified = true;
         if (((((AlcatelCategory *)data1)->Name.isEmpty() ^ ((AlcatelCategory *)data2)->Name.isEmpty())) || (((AlcatelCategory *)data1)->Name != ((AlcatelCategory *)data2)->Name)) {
             it = itemList.begin();
             switch ((*it).getStatus()) {
@@ -571,6 +573,7 @@ void KAlcatelMergeDialog::slotOK() {
         result = c;
     } else if (strcmp(data1->getClassName(), "AlcatelCalendar") == 0) {
         AlcatelCalendar *c = new AlcatelCalendar(*((AlcatelCalendar *)data1));
+        c->Modified = true;
         if (((AlcatelCalendar *)data1)->Date != ((AlcatelCalendar *)data2)->Date) {
             it = itemList.begin();
             switch ((*it).getStatus()) {
@@ -733,6 +736,7 @@ void KAlcatelMergeDialog::slotOK() {
         result = c;
     } else if (strcmp(data1->getClassName(), "AlcatelTodo") == 0) {
         AlcatelTodo *c = new AlcatelTodo(*((AlcatelTodo *)data1));
+        c->Modified = true;
         if (((AlcatelTodo *)data1)->DueDate != ((AlcatelTodo *)data2)->DueDate) {
             it = itemList.begin();
             switch ((*it).getStatus()) {
@@ -816,6 +820,7 @@ void KAlcatelMergeDialog::slotOK() {
         result = c;
     } else if (strcmp(data1->getClassName(), "AlcatelMessage") == 0) {
         AlcatelMessage *c = new AlcatelMessage(*((AlcatelMessage*)data1));
+        c->Modified = true;
         if (((AlcatelMessage *)data1)->Status != ((AlcatelMessage *)data2)->Status) {
             it = itemList.begin();
             switch ((*it).getStatus()) {
@@ -958,7 +963,7 @@ MergeItem::MergeItem(QWidget *parent, QString name, QDateTime mobileData, QDateT
     MergeItem_init(parent, name, s1, s2, disableDelete);
 }
 
-MergeItem::MergeItem(QWidget *parent, QString name, int mobileData, int pcData, int diff, bool disableDelete) {
+MergeItem::MergeItem(QWidget *parent, QString name, int mobileData, int pcData, int, bool disableDelete) {
     QString s1, s2;
     if (mobileData==-1) {
         s1 = i18n("Not set");

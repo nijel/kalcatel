@@ -104,7 +104,7 @@ class KAlcatelDoc : public QObject
     void closeDocument();
     /** reads content from mobile
      */
-    bool readMobile(AlcDataType what = alcatel_all, int category = -1);
+    bool readMobile(AlcDataType what = alcatel_all);
     /** loads the document by filename and format and emits the updateViews() signal
      */
     bool openDocument(const KURL& url, const char *format=0);

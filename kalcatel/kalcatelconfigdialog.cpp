@@ -59,7 +59,7 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
     janus = new KJanusWidget(this, "JanusWidget", KJanusWidget::IconList);
 
     mobilePage = janus->addPage (i18n("Mobile"), i18n("Mobile configuration"), DesktopIcon("kalcatel-mobile.png"));
-    QGridLayout *mobileLayout = new QGridLayout( mobilePage, 2, 5);
+    QGridLayout *mobileLayout = new QGridLayout(mobilePage);
 
     mobileLayout->setSpacing( 6 );
     mobileLayout->setMargin( 8 );
@@ -141,7 +141,7 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
     mobileLayout->addWidget(debugEdit, 5, 1);
 
     mergePage = janus->addPage (i18n("Merging"), i18n("Merging configuration"), DesktopIcon("kalcatel-configure.png"));
-    QGridLayout *mergeLayout = new QGridLayout( mergePage, 2, 1);
+    QGridLayout *mergeLayout = new QGridLayout(mergePage);
 
     mergeLayout->setSpacing( 6 );
     mergeLayout->setMargin( 8 );
@@ -161,7 +161,7 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
     mergeLayout->addMultiCellWidget ( conflictBox, 1, 1, 0, 1);
 
     otherPage = janus->addPage (i18n("Other"), i18n("Other configuration"), DesktopIcon("kalcatel-configure.png"));
-    QGridLayout *otherLayout = new QGridLayout( otherPage, 2, 1);
+    QGridLayout *otherLayout = new QGridLayout(otherPage);
 
     otherLayout->setSpacing( 6 );
     otherLayout->setMargin( 8 );

@@ -50,6 +50,7 @@
 #include "kalcateldoc.h"
 #include "kalcatelconfigdialog.h"
 #include "kalcatelmergedialog.h"
+#include "editmessagedialog.h"
 #include "alcatelclasses.h"
 
 #include "alcatool/modem.h"
@@ -96,11 +97,13 @@ void KAlcatelApp::initActions()
 {
   fileReadMobileAll = new KAction(i18n("&Everything"), QIconSet(SmallIcon("kalcatel-mobile.png"), BarIcon("kalcatel-mobile.png")), 0, this, SLOT(slotFileReadMobileAll()), actionCollection(),"file_read_mobile");
   fileReadMobileTodo = new KAction(i18n("&Todos"), QIconSet(SmallIcon("kalcatel-todo.png"), BarIcon("kalcatel-todo.png")), 0, this, SLOT(slotFileReadMobileTodo()), actionCollection(),"file_read_mobile_todo");
-  fileReadMobileSms = new KAction(i18n("Messa&ges"), QIconSet(SmallIcon("kalcatel-message.png"), BarIcon("kalcatel-message.png")), 0, this, SLOT(slotFileReadMobileSms()), actionCollection(),"file_read_mobile_sms");
+  fileReadMobileMessages = new KAction(i18n("Messa&ges"), QIconSet(SmallIcon("kalcatel-message.png"), BarIcon("kalcatel-message.png")), 0, this, SLOT(slotFileReadMobileMessages()), actionCollection(),"file_read_mobile_messages");
   fileReadMobileCalendar = new KAction(i18n("&Calendar"), QIconSet(SmallIcon("kalcatel-calendar.png"), BarIcon("kalcatel-calendar.png")), 0, this, SLOT(slotFileReadMobileCalendar()), actionCollection(),"file_read_mobile_calendar");
   fileReadMobileCalls = new KAction(i18n("Ca&lls"), QIconSet(SmallIcon("kalcatel-call.png"), BarIcon("kalcatel-call.png")), 0, this, SLOT(slotFileReadMobileCalls()), actionCollection(),"file_read_mobile_calls");
   fileReadMobileContactsSim = new KAction(i18n("Contacts from &SIM"), QIconSet(SmallIcon("kalcatel-contact-sim.png"), BarIcon("kalcatel-contact-sim.png")), 0, this, SLOT(slotFileReadMobileContactsSim()), actionCollection(),"file_read_mobile_contacts_sim");
   fileReadMobileContactsMobile = new KAction(i18n("Contacts from &mobile"), QIconSet(SmallIcon("kalcatel-contact-mobile.png"), BarIcon("kalcatel-contact-mobile.png")), 0, this, SLOT(slotFileReadMobileContactsMobile()), actionCollection(),"file_read_mobile_contacts_mobile");
+
+  newMessage = new KAction(i18n("&Message"), QIconSet(SmallIcon("kalcatel-message.png"), BarIcon("kalcatel-message.png")), 0, this, SLOT(slotNewMessage()), actionCollection(),"new_message");
 
   mobileInfo = new KAction(i18n("&Information"), QIconSet(SmallIcon("kalcatel-mobile.png"), BarIcon("kalcatel-mobile.png")), 0, this, SLOT(slotMobileInfo()), actionCollection(),"mobile_info");
 
@@ -166,7 +169,7 @@ void KAlcatelApp::initDocument() {
 }
 
 void KAlcatelApp::initView()
-{ 
+{
   ////////////////////////////////////////////////////////////////////
   // create the main widget here that is managed by KTMainWindow's view-region and
   // connect the widget to your document to display document contents.
@@ -212,6 +215,9 @@ void KAlcatelApp::saveOptions() {
     config->setGroup("Data");
     config->writeEntry("Merge during read", mergeData);
     config->writeEntry("Conflict action", conflictAction);
+
+    config->setGroup("Messages");
+    config->writeEntry("Reread messages", reread_messages);
 
     config->setGroup("Contacts");
     config->writeEntry("Phone Prefix", phone_prefix);
@@ -259,6 +265,10 @@ void KAlcatelApp::readOptions(){
     config->setGroup("Data");
     mergeData = config->readNumEntry("Merge during read", 0);
     conflictAction = config->readNumEntry("Conflict action", 2);
+
+    config->setGroup("Messages");
+    reread_messages = config->readBoolEntry("Reread messages", true);
+
 
     config->setGroup("Contacts");
     phone_prefix = config->readEntry("Phone Prefix", "+420");
@@ -344,50 +354,55 @@ bool KAlcatelApp::queryExit()
 void KAlcatelApp::slotFileReadMobileAll()
 {
   slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
-  doc->readMobile(alcatel_all,-1);
+  doc->readMobile(alcatel_all);
   slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
 void KAlcatelApp::slotFileReadMobileTodo()
 {
   slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
-  doc->readMobile(alcatel_todos,-1);
+  doc->readMobile(alcatel_todos);
   slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
 void KAlcatelApp::slotFileReadMobileContactsSim()
 {
   slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
-  doc->readMobile(alcatel_contacts_sim,-1);
+  doc->readMobile(alcatel_contacts_sim);
   slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
 void KAlcatelApp::slotFileReadMobileContactsMobile()
 {
   slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
-  doc->readMobile(alcatel_contacts_mobile,-1);
+  doc->readMobile(alcatel_contacts_mobile);
   slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
-void KAlcatelApp::slotFileReadMobileCalendar()
-{
-  slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
-  doc->readMobile(alcatel_calendar,-1);
-  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
+void KAlcatelApp::slotFileReadMobileCalendar() {
+    slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
+    doc->readMobile(alcatel_calendar);
+    slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
-void KAlcatelApp::slotFileReadMobileCalls()
-{
-  slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
-  doc->readMobile(alcatel_calls,-1);
-  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
+void KAlcatelApp::slotFileReadMobileCalls() {
+    slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
+    doc->readMobile(alcatel_calls);
+    slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
-void KAlcatelApp::slotFileReadMobileSms()
-{
-  slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
-  doc->readMobile(alcatel_messages,-1);
-  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
+void KAlcatelApp::slotFileReadMobileMessages() {
+    slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
+    doc->readMobile(alcatel_messages);
+    slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
+}
+
+
+void KAlcatelApp::slotNewMessage() {
+    EditMessageDialog dialog;
+    dialog.reread = reread_messages;
+    if (dialog.exec() && dialog.reread)
+        slotFileReadMobileMessages();
 }
 
 void KAlcatelApp::slotMobileInfo() {

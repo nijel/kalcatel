@@ -18,6 +18,11 @@ for 0.3-beta:
  - editing of calendar/contacts/...
  - sending/writing messages
  - write to mobile
+change category behavior in contacts - tree should llok like:
+ - SIM
+ - general
+ - category names...
+reorganise config dialog
 
 for 0.4:
  - fix majority of reported bugs, this should be first "stable" release

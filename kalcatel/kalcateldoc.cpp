@@ -1176,6 +1176,7 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
                                     calendar->remove(*item);
                                     old.PrevStorage = StorageNone;
                                     old.PrevId = -1;
+                                    old.Modified = true;
                                     calendar->append(old);
                                     calendar->append((*it));
                                     it = local_calendar.remove(it);
@@ -1218,6 +1219,7 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
                                     todos->remove(*item);
                                     old.PrevStorage = StorageNone;
                                     old.PrevId = -1;
+                                    old.Modified = true;
                                     todos->append(old);
                                     todos->append((*it));
                                     it = local_todos.remove(it);
@@ -1260,6 +1262,7 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
                                     contacts->remove(*item);
                                     old.PrevStorage = StorageNone;
                                     old.PrevId = -1;
+                                    old.Modified = true;
                                     contacts->append(old);
                                     contacts->append((*it));
                                     it = local_contacts.remove(it);
@@ -1368,7 +1371,7 @@ bool KAlcatelDoc::readMobileCategories(AlcatelCategoryList *strList, alc_type sy
     return i;
 }
 
-bool KAlcatelDoc::readMobile(AlcDataType what, int category) {
+bool KAlcatelDoc::readMobile(AlcDataType what) {
     char *devname;
     int i;
 
@@ -1483,6 +1486,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what, int category) {
                             messages->remove(*item);
                             msg_old.PrevStorage = StorageNone;
                             msg_old.PrevId = -1;
+                            msg_old.Modified = true;
                             messages->append(msg_old);
                             messages->append(Msg);
                         } else {
@@ -1602,6 +1606,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what, int category) {
                             contacts->remove(*item);
                             old.PrevStorage = StorageNone;
                             old.PrevId = -1;
+                            old.Modified = true;
                             contacts->append(old);
                             contacts->append(Cont);
                         } else {

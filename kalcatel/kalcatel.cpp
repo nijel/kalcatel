@@ -45,6 +45,11 @@
 #include "kalcatelview.h"
 #include "kalcateldoc.h"
 
+#include "alcatool/modem.h"
+#include "alcatool/mobile_info.h"
+#include "alcatool/sms.h"
+#include "alcatool/logging.h"
+
 KAlcatelApp::KAlcatelApp(QWidget* , const char* name):KMainWindow(0, name)
 {
   config=kapp->config();
@@ -79,13 +84,13 @@ void KAlcatelApp::initActions()
 {
 //  fileNewWindow = new KAction(i18n("New &Window"), 0, 0, this, SLOT(slotFileNewWindow()), actionCollection(),"file_new_window");
 //MainBarIconSet
-  fileReadMobileAll = new KAction(i18n("&Read everything from mobile"), QIconSet(SmallIcon("kalcatel-mobile.png"), BarIcon("kalcatel-mobile.png")), 0, this, SLOT(slotFileReadMobileAll()), actionCollection(),"file_read_mobile");
-  fileReadMobileTodo = new KAction(i18n("Read &todos from mobile"), QIconSet(SmallIcon("kalcatel-todo.png"), BarIcon("kalcatel-todo.png")), 0, this, SLOT(slotFileReadMobileTodo()), actionCollection(),"file_read_mobile_todo");
-  fileReadMobileSms = new KAction(i18n("Read &SMSs from mobile"), QIconSet(SmallIcon("kalcatel-message.png"), BarIcon("kalcatel-message.png")), 0, this, SLOT(slotFileReadMobileSms()), actionCollection(),"file_read_mobile_sms");
-  fileReadMobileCalendar = new KAction(i18n("Read &calendar from mobile"), QIconSet(SmallIcon("kalcatel-calendar.png"), BarIcon("kalcatel-calendar.png")), 0, this, SLOT(slotFileReadMobileCalendar()), actionCollection(),"file_read_mobile_calendar");
-  fileReadMobileCalls = new KAction(i18n("Read c&alls from mobile"), QIconSet(SmallIcon("kalcatel-call.png"), BarIcon("kalcatel-call.png")), 0, this, SLOT(slotFileReadMobileCalls()), actionCollection(),"file_read_mobile_calls");
-  fileReadMobileContactsSim = new KAction(i18n("Read contacts (S&IM) from mobile"), QIconSet(SmallIcon("kalcatel-contact-sim.png"), BarIcon("kalcatel-contact-sim.png")), 0, this, SLOT(slotFileReadMobileContactsSim()), actionCollection(),"file_read_mobile_contacts_sim");
-  fileReadMobileContactsMobile = new KAction(i18n("Read contacts (m&obile) from mobile"), QIconSet(SmallIcon("kalcatel-contact-mobile.png"), BarIcon("kalcatel-contact-mobile.png")), 0, this, SLOT(slotFileReadMobileContactsMobile()), actionCollection(),"file_read_mobile_contacts_mobile");
+  fileReadMobileAll = new KAction(i18n("&Everything"), QIconSet(SmallIcon("kalcatel-mobile.png"), BarIcon("kalcatel-mobile.png")), 0, this, SLOT(slotFileReadMobileAll()), actionCollection(),"file_read_mobile");
+  fileReadMobileTodo = new KAction(i18n("&Todos"), QIconSet(SmallIcon("kalcatel-todo.png"), BarIcon("kalcatel-todo.png")), 0, this, SLOT(slotFileReadMobileTodo()), actionCollection(),"file_read_mobile_todo");
+  fileReadMobileSms = new KAction(i18n("Messa&ges"), QIconSet(SmallIcon("kalcatel-message.png"), BarIcon("kalcatel-message.png")), 0, this, SLOT(slotFileReadMobileSms()), actionCollection(),"file_read_mobile_sms");
+  fileReadMobileCalendar = new KAction(i18n("&Calendar"), QIconSet(SmallIcon("kalcatel-calendar.png"), BarIcon("kalcatel-calendar.png")), 0, this, SLOT(slotFileReadMobileCalendar()), actionCollection(),"file_read_mobile_calendar");
+  fileReadMobileCalls = new KAction(i18n("Ca&lls"), QIconSet(SmallIcon("kalcatel-call.png"), BarIcon("kalcatel-call.png")), 0, this, SLOT(slotFileReadMobileCalls()), actionCollection(),"file_read_mobile_calls");
+  fileReadMobileContactsSim = new KAction(i18n("Contacts from &SIM"), QIconSet(SmallIcon("kalcatel-contact-sim.png"), BarIcon("kalcatel-contact-sim.png")), 0, this, SLOT(slotFileReadMobileContactsSim()), actionCollection(),"file_read_mobile_contacts_sim");
+  fileReadMobileContactsMobile = new KAction(i18n("Contacts from &mobile"), QIconSet(SmallIcon("kalcatel-contact-mobile.png"), BarIcon("kalcatel-contact-mobile.png")), 0, this, SLOT(slotFileReadMobileContactsMobile()), actionCollection(),"file_read_mobile_contacts_mobile");
 
 /*
   fileReadMobileAll = new KAction(i18n("&Read everything from mobile"), QIconSet(UserIcon("mobile.png")), 0, this, SLOT(slotFileReadMobileAll()), actionCollection(),"file_read_mobile");
@@ -96,6 +101,7 @@ void KAlcatelApp::initActions()
   fileReadMobileContactsSim = new KAction(i18n("Read contacts (S&IM) from mobile"), QIconSet(UserIcon("contact-sim.png")), 0, this, SLOT(slotFileReadMobileContactsSim()), actionCollection(),"file_read_mobile_contacts_sim");
   fileReadMobileContactsMobile = new KAction(i18n("Read contacts (m&obile) from mobile"), QIconSet(UserIcon("contact-mobile.png")), 0, this, SLOT(slotFileReadMobileContactsMobile()), actionCollection(),"file_read_mobile_contacts_mobile");
 */
+  mobileInfo = new KAction(i18n("&Information"), QIconSet(SmallIcon("kalcatel-mobile.png"), BarIcon("kalcatel-mobile.png")), 0, this, SLOT(slotMobileInfo()), actionCollection(),"mobile_info");
 
   fileNew = KStdAction::openNew(this, SLOT(slotFileNew()), actionCollection());
   fileOpen = KStdAction::open(this, SLOT(slotFileOpen()), actionCollection());
@@ -342,6 +348,161 @@ void KAlcatelApp::slotFileReadMobileSms()
   slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
   doc->readMobile(alcatel_read_sms,-1);
   slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
+}
+
+void KAlcatelApp::slotMobileInfo()
+{
+  char manuf[128], model[128], rev[128], sn[128], *s;
+  int bat_percent, bat_state, sign_strength, sign_err;
+  slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
+
+/* TODO: this should be in configuration */
+  char default_device[] = "/dev/ttyS1";
+  char default_lock[] = "/var/lock/LCK..%s";
+  char default_init[] = "AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0";
+  int default_rate = 19200;
+  char *devname;
+
+  msg_level = MSG_DEBUG;
+
+  strcpy(initstring, default_init);
+  strcpy(device, default_device);
+  devname = strrchr(device, '/');
+  devname++;
+  sprintf(lockname, default_lock, devname);
+  rate=default_rate;
+
+  switch (rate) {
+      case 2400:   baudrate=B2400; break;
+      case 4800:   baudrate=B4800; break;
+      case 9600:   baudrate=B9600; break;
+      case 19200:  baudrate=B19200; break;
+      case 38400:  baudrate=B38400; break;
+      default:
+          message(MSG_ERROR,"Ivalid baud rate (%d), setting to default (19200)!", rate);
+          baudrate=B19200;
+  }
+
+
+  this->slotStatusMsg(i18n("Opening modem"),ID_DETAIL_MSG);
+  if (!modem_open()) {
+      switch (modem_errno) {
+          case ERR_MDM_OPEN:
+              KMessageBox::error(this, i18n("Failed opening modem for read/write."), i18n("Error"));
+              modem_close();
+              return;
+          case ERR_MDM_LOCK:
+              KMessageBox::error(this, i18n("Modem locked."), i18n("Error"));
+              modem_close();
+              return;
+          default:
+              KMessageBox::error(this, i18n("Failed opening modem.\nUnknown error."), i18n("Error"));
+              modem_close();
+              return;
+      }
+      return;
+  }
+  this->slotStatusMsg(i18n("Setting serial port"),ID_DETAIL_MSG);
+  modem_setup();
+  this->slotStatusMsg(i18n("Initializing modem"),ID_DETAIL_MSG);
+  if (!modem_init()) {
+      switch (modem_errno) {
+          case ERR_MDM_AT:
+              KMessageBox::error(this, i18n("Modem doesn't react on AT command."), i18n("Error"));
+              modem_close();
+              return;
+          case ERR_MDM_PDU:
+              KMessageBox::error(this, i18n("Failed selecting PDU mode."), i18n("Error"));
+              modem_close();
+              return;
+          default:
+              KMessageBox::error(this, i18n("Failed initializing modem.\nUnknown error."), i18n("Error"));
+              modem_close();
+              return;
+      }
+      return;
+  }
+
+  this->slotStatusMsg(i18n("Reading information"),ID_DETAIL_MSG);
+
+  get_manufacturer(manuf,sizeof(manuf));
+
+  get_model(model,sizeof(model));
+
+  get_revision(rev,sizeof(rev));
+
+  get_sn(sn,sizeof(sn));
+
+  get_battery(&bat_state, &bat_percent);
+
+  get_signal(&sign_strength, &sign_err);
+
+  s = get_smsc();
+
+  modem_close();
+
+  KMessageBox::information(this,
+        i18n("<table border=\"0\">"
+        "<tr><td><b>"
+        "Manufacturer:"
+        "</b></td><td>"
+        "%1"
+        "</td></tr>"
+        "<tr><td><b>"
+        "Model:"
+        "</b></td><td>"
+        "%2"
+        "</td></tr>"
+        "<tr><td><b>"
+        "Revision:"
+        "</b></td><td>"
+        "%3"
+        "</td></tr>"
+        "<tr><td><b>"
+        "Serial number:"
+        "</b></td><td>"
+        "%4"
+        "</td></tr>"
+        "<tr><td><b>"
+        "Battery status:"
+        "</b></td><td>"
+        "%5"
+        "</td></tr>"
+        "<tr><td><b>"
+        "Battery charge:"
+        "</b></td><td>"
+        "%6%"
+        "</td></tr>"
+        "<tr><td><b>"
+        "Signal strength:"
+        "</b></td><td>"
+        "%7"
+        "</td></tr>"
+        "<tr><td><b>"
+        "Signal error rate:"
+        "</b></td><td>"
+        "%8"
+        "</td></tr>"
+        "<tr><td><b>"
+        "SMS Centre:"
+        "</b></td><td>"
+        "%9"
+        "</td></tr>"
+        "</table>"
+        ).
+        arg(manuf).
+        arg(model).
+        arg(rev).
+        arg(sn).
+        arg(bat_state).
+        arg(bat_percent).
+        arg(sign_strength == 99 ? i18n("Unknown") : QString(mobil_signal_info[sign_strength])).
+        arg(sign_err == 99 ? i18n("Unknown") : QString("%1").arg(sign_err)).
+        arg(s)
+        ,
+        i18n("Mobile information"));
+
+  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }
 
 void KAlcatelApp::slotFileNew()

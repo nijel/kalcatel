@@ -138,6 +138,7 @@ class KAlcatelApp : public KMainWindow
     void slotFileReadMobileCalls();
     void slotFileReadMobileContactsSim();
     void slotFileReadMobileContactsMobile();
+    void slotMobileInfo();
     /** clears the document in the actual view to reuse it as the new document */
     void slotFileNew();
     /** open a file and load it into the document*/
@@ -209,6 +210,7 @@ class KAlcatelApp : public KMainWindow
     KAction* fileReadMobileCalls;
     KAction* fileReadMobileContactsSim;
     KAction* fileReadMobileContactsMobile;
+    KAction *mobileInfo;
 
     KAction* fileNew;
     KAction* fileOpen;

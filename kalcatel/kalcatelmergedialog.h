@@ -40,6 +40,10 @@ class QRadioButton;
 class QGrid;
 class QLabel;
 
+class QDate;
+class QDateTime;
+class QTime;
+
 class KAlcatelMergeDialog;
 
 enum MergeStatus {
@@ -52,7 +56,11 @@ class MergeItem : public QObject {
    Q_OBJECT
    friend class KAlcatelMergeDialog;
 public:
-    MergeItem(QWidget *parent, QString name, QString &mobileText, QString &pcText);
+    MergeItem(QWidget *parent, QString name, QString mobileText, QString pcText);
+    MergeItem(QWidget *parent, QString name, QDate mobileData, QDate pcData);
+    MergeItem(QWidget *parent, QString name, QTime mobileData, QTime pcData);
+    MergeItem(QWidget *parent, QString name, QDateTime mobileData, QDateTime pcData);
+    MergeItem(QWidget *parent, QString name, int mobileData, int pcData);
     MergeItem(const MergeItem  &item);
     MergeItem();
 	~MergeItem(void);
@@ -63,6 +71,7 @@ public slots:
     void deleteToggle(bool state);
     void mobileToggle(bool state);
 private:
+    void MergeItem_init(QWidget *parent, QString name, QString mobileText, QString pcText);
     QRadioButton *mobileCheck, *deleteCheck, *pcCheck;
     QLabel *mobileLabel, *pcLabel, *nameLabel;
 };
@@ -102,6 +111,8 @@ private:
     int exec ();
 
     QGrid *conflictGrid;
+
+    QLabel *titleLabel;
 
     QPushButton *buttonOK;
     QPushButton *buttonBoth;

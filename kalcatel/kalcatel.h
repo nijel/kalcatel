@@ -39,10 +39,17 @@
 #include <kaction.h>
 #include <kurl.h>
 
-#define ID_STATUS_MSG 1
-#define ID_DETAIL_MSG 2
+#define STATUSBAR_TEXT  1
+
+#define ID_STATUS_MSG   1
+#define ID_DETAIL_MSG   2
 
 // forward declaration of the KAlcatel classes
+class QLabel;
+class SignalLabel;
+
+class SignalLed;
+
 class KAlcatelDoc;
 class KAlcatelView;
 class KAlcatelConfigDialog;
@@ -118,6 +125,8 @@ class KAlcatelApp : public KMainWindow
     bool saveCalls;
     bool loadCalls;
 
+    int monitorInterval;
+
     AlcatelContact *solveConflict(AlcatelContact &c1, AlcatelContact &c2);
     AlcatelMessage *solveConflict(AlcatelMessage &c1, AlcatelMessage &c2);
     AlcatelCalendar *solveConflict(AlcatelCalendar &c1, AlcatelCalendar &c2);
@@ -133,7 +142,11 @@ class KAlcatelApp : public KMainWindow
     /** read general Options again and initialize all variables like the recent file list
      */
     void readOptions();
-    /** initializes the KActions of the application */
+    /** initializes anything sthat is configured
+     */
+    void initConfig();
+    /** initializes the KActions of the application
+     */
     void initActions();
     /** sets up the statusbar for the main window by initialzing a statuslabel.
      */
@@ -240,7 +253,7 @@ class KAlcatelApp : public KMainWindow
     /** changes the statusbar contents for the standard label permanently, used to indicate current actions.
      * @param text the text that is displayed in the statusbar
      */
-    void slotStatusMsg(const QString &text, int which, int clearDetail = true);
+    void slotStatusMsg(const QString &text, int which, bool clearDetail = true);
     /** sets default details status message
      */
     void slotDefaultDetailMsg();
@@ -268,6 +281,12 @@ class KAlcatelApp : public KMainWindow
     /** manually disconnects from modem = doesn't check whether we want persistent connection
      */
     void slotModemDisconnect();
+    /** updates battery and signal status
+     */
+    void statusUpdate();
+    /** toggle connection status (connected/disconnected)
+     */
+    void connectionToggle();
 
   private:
     /** the configuration object of the application */
@@ -325,6 +344,12 @@ class KAlcatelApp : public KMainWindow
 
     bool modemConnected;
     bool modemLocked;
+
+    SignalLabel *signalLabel;
+    SignalLabel *batteryLabel;
+    SignalLed *statusLed;
+  protected:
+    void  timerEvent( QTimerEvent * );
 };
  
 #endif // KALCATEL_H

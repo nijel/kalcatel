@@ -43,6 +43,8 @@
 #include <kurlrequester.h>
 #include <kcombobox.h>
 
+#include <knuminput.h>
+
 #include "kalcatelconfigdialog.h"
 #include "kalcatel.h"
 
@@ -129,7 +131,7 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
     editPersistent = new QCheckBox(mobilePage);
     mobileLayout->addWidget(editPersistent, 5, 1);
 
-    QWhatsThis::add(editPersistent ,i18n("<b>Persistent connection</b><br>When checked, program will keep opened connection to modem since first connecting to program exit or manual disconnect."));
+    QWhatsThis::add(editPersistent ,i18n("<b>Persistent connection</b><br>When checked, program will keep opened connection to modem since first connecting to program exit or manual disconnect. When this is disabled, some functions (like connect) will not work and some (signal strength and battery monitoring) will take much more time."));
 
     label = new QLabel(i18n("Connect on start:"), mobilePage);
     mobileLayout->addWidget(label, 6, 0);
@@ -246,8 +248,19 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
 
     QWhatsThis::add(editReread ,i18n("<b>Reread messages after sending</b><br>When checked, messages are reread after you send message(s)."));
 
+    label = new QLabel(i18n("Battery and signal monitor refresh:"), otherPage);
+    otherLayout->addWidget(label, 4, 0);
+
+    editMonitor = new KIntNumInput(otherPage);
+    editMonitor->setRange(0,86400,1,false);
+    editMonitor->setSpecialValueText(i18n("Disabled"));
+    editMonitor->setSuffix(i18n("s"));
+    otherLayout->addWidget(editMonitor,4,1);
+
+    QWhatsThis::add(editMonitor ,i18n("<b>Battery and signal monitor refresh</b><br>How often will be updated information about signal strength and battery status. You can always refresh these values just by clicking to indicator in bottom left corner."));
+
     label = new QLabel(i18n("Stderr messages:"), otherPage);
-    otherLayout->addWidget(label, 5, 0);
+    otherLayout->addWidget(label, 6, 0);
 
     debugEdit = new QComboBox(otherPage);
     debugEdit->insertItem(i18n("Debug 2"));
@@ -261,7 +274,7 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
     QWhatsThis::add(debugEdit ,i18n("<b>Stderr messages</b><br>How many messages will be written to standard error output. Messages with lower priority than selected won't be shown. Use debug if there are probles using this program. Debug 2 increases verbosity mostly in binary mode and for most cases is useless."));
     QToolTip::add(debugEdit ,i18n("Do not display messages with lower priority than"));
 
-    otherLayout->addWidget(debugEdit, 5, 1);
+    otherLayout->addWidget(debugEdit, 6, 1);
 
     mainLayout->addWidget( janus, 0, 0);
 
@@ -336,6 +349,8 @@ void KAlcatelConfigDialog::slotOK() {
     theApp->saveCalls = editSaveCalls->isChecked();
     theApp->loadCalls = editLoadCalls->isChecked();
 
+    theApp->monitorInterval = editMonitor->value();
+
     accept();
 }
 
@@ -377,6 +392,8 @@ int KAlcatelConfigDialog::exec () {
     editLoadMessages->setChecked(theApp->loadMessages);
     editSaveCalls->setChecked(theApp->saveCalls);
     editLoadCalls->setChecked(theApp->loadCalls);
+
+    editMonitor->setValue(theApp->monitorInterval);
 
     return KDialog::exec();
 }

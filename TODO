@@ -18,11 +18,11 @@ for 0.3-beta:
  - editing of calendar/contacts/...
  - sending/writing messages
  - write to mobile
-change category behavior in contacts - tree should look like:
- - SIM (include previous sim)
- - general
- - category names...
-
+ - (DONE) signal and battery monitoring
+ - change category behavior in contacts - tree should look like:
+   * SIM (include previous sim)
+   * general
+   * category names...
 
 for 0.4:
  - fix majority of reported bugs, this should be first "stable" release
@@ -37,7 +37,8 @@ sometimes (till 1.0):
  - synchronisation with kab (and maybe also korganizer)
  - save and restore positions and size of interface (splitters, list
    headers, toolbars, ...)
- - read clock, set clock as they are in computer
+ - read clock, set clock as they are in computer, set to + months to remove
+   messages ;-)
  - contacts sim <-> mobile transfer
 
 nice to have features (probable):
@@ -51,9 +52,9 @@ nice to have features (possible):
  - simplier interface for non Alcatel phones (without anything what is Alcatel
    specific)
  - some merge with gnokii - there are currently three possibilities I am
-   thinkink of (I appreciate any help acoording to this):
+   thinking of (I appreciate any help according to this):
     - add alcatel code into gnokii
-    - add support for linkink with knokii in alcatel
+    - add support for linking with gnokii in kalcatel
     - make some more generic library for accessing mobiles and add to that
       library code from gnokii, alcatool and may be some others
  - calendar look for calendar items

@@ -24,6 +24,8 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/ioctl.h>
+#include <asm/ioctls.h>
 #include <fcntl.h>
 #include <termios.h>
 #include <stdio.h>
@@ -57,20 +59,20 @@ int modem_send_raw(unsigned char *buffer,int len) {
     int i=0,fails=0;
     while (i<len){
 
-		if (write(modem,&(buffer[i]),1)!=1) {
-			fails++;
-		} else {
-			fails=0;
-			i++;
-		}
+        if (write(modem,&(buffer[i]),1)!=1) {
+            fails++;
+        } else {
+            fails=0;
+            i++;
+        }
 
         if (fails>0) message(MSG_DEBUG2,"Write failed (%d)", fails);
 
-		if (fails>10) {
+        if (fails>10) {
             message(MSG_ERROR,"Write failed!");
             return 0;
         }
-	}
+    }
 	return len;
 }
 
@@ -91,32 +93,32 @@ int modem_cmd(const char* command,char* answer,int max,int timeout,const char* e
     int counter=0;
     int found=0;
 
-	int len=0,i=0,fails=0;
+    int len=0,i=0,fails=0;
 
     answer[0]=0;
     message(MSG_DEBUG,"AT SEND: %s",reform(command,0));
-	
-	len = strlen(command);
-	while (i<len){
+
+    len = strlen(command);
+    while (i<len){
 //        tcflush(modem, TCIOFLUSH);
 
-		if (write(modem,command+i,1)!=1) {
-			fails++;
-		} else {
-			fails=0;
-			i++;
-		}
+        if (write(modem,command+i,1)!=1) {
+            fails++;
+        } else {
+            fails=0;
+            i++;
+        }
 
         if (fails>0) message(MSG_DEBUG2,"Write failed (%d)\n", fails);
 
-		if (fails>10) {
+        if (fails>10) {
             message(MSG_ERROR,"Write failed!\n");
             return -1;
         }
-		    
+
         tcdrain(modem);
-	}
-	
+    }
+
     /* wait for answer*/
     do {
         counter++;
@@ -158,18 +160,18 @@ int modem_cmd(const char* command,char* answer,int max,int timeout,const char* e
 
 void modem_setup(void) {
     termios newtio;
-	
+
     bzero(&newtio, sizeof(newtio));
     newtio.c_cflag = baudrate|CS8|CREAD|HUPCL|(modem_rtscts ? CRTSCTS : 0); //CRTSCTS;
     newtio.c_iflag = IGNBRK|IGNPAR|(modem_rtscts ? 0 : IXON|IXOFF); //IXON|IXOFF
     newtio.c_oflag = 0;
-	newtio.c_lflag = 0;
+    newtio.c_lflag = 0;
 
     memset(newtio.c_cc,0,sizeof(newtio.c_cc));
     newtio.c_cc[VTIME] = 0;
     newtio.c_cc[VMIN] = 1;
   
-	cfsetispeed(&newtio, baudrate);
+    cfsetispeed(&newtio, baudrate);
 
     if (cfsetospeed(&newtio, baudrate)|cfsetispeed(&newtio, baudrate))
         message(MSG_ERROR,"Setting of termios baudrate failed!");
@@ -200,12 +202,12 @@ int modem_init(void) {
         modem_errno = ERR_MDM_WRITE;
         return 0;
     }
-	
+
     /* perform initialization (if we should do it) */
     if (initstring[0])
     {
         message(MSG_DETAIL,"Sending init: \"%s\"",initstring);
-    	sprintf(command,"%s\r\n",initstring);
+        sprintf(command,"%s\r\n",initstring);
         modem_cmd(command,answer,sizeof(answer),50,NULL);
     }
 
@@ -215,7 +217,7 @@ int modem_init(void) {
         modem_errno = ERR_MDM_AT;
         return 0;
     }
-	modem_initialised = 1;
+    modem_initialised = 1;
 
 // alcatel also supports USC2 but it is used only for contacts on sim card and
 // return values of some commands (at+csca)
@@ -282,22 +284,24 @@ int modem_open(void) {
         return 0;
     }
 
-    ioctl(fd, TIOCEXCL, (char *) 0); /* additional open() calls shall fail */
+#ifdef TIOCEXCL
+    ioctl(modem, TIOCEXCL, (char *) 0); /* additional open() calls shall fail */
+#endif
 
     tcgetattr(modem,&oldtio);
-	oldtio.c_cflag=(oldtio.c_cflag&~(CBAUD|CBAUDEX))|B0|HUPCL;
-	return 1;
+    oldtio.c_cflag=(oldtio.c_cflag&~(CBAUD|CBAUDEX))|B0|HUPCL;
+    return 1;
 }
 
 void modem_close(void) {
     char answer[500];
     /* close modem and remove lockfile */
     if (modem > 0) {
-		if (modem_initialised) {
+        if (modem_initialised) {
             message(MSG_INFO,"Reseting modem");
             modem_cmd("ATZ\r\n",answer,sizeof(answer),100,NULL);
         }
-		tcsetattr(modem,TCSANOW,&oldtio);
+        tcsetattr(modem,TCSANOW,&oldtio);
 
         close(modem);
         modem = 0;

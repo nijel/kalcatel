@@ -190,7 +190,7 @@ install_location=
 type=DATA
 
 [kalcatel/Makefile.am]
-files=kalcatel/main.cpp,kalcatel/kalcatel.cpp,kalcatel/kalcatel.h,kalcatel/kalcateldoc.cpp,kalcatel/kalcateldoc.h,kalcatel/kalcatelview.cpp,kalcatel/kalcatelview.h,kalcatel/kalcatelui.rc,kalcatel/kalcatel.desktop,kalcatel/alcatelclasses.cpp,kalcatel/alcatelclasses.h,kalcatel/kalcatelconfigdialog.cpp,kalcatel/kalcatelconfigdialog.h,kalcatel/kalcateltreeviewitem.cpp,kalcatel/kalcateltreeviewitem.h,kalcatel/kalcatelviewitem.cpp,kalcatel/kalcatelviewitem.h,kalcatel/kalcatelmergedialog.cpp,kalcatel/kalcatelmergedialog.h,kalcatel/editmessagedialog.cpp,kalcatel/editmessagedialog.h
+files=kalcatel/main.cpp,kalcatel/kalcatel.cpp,kalcatel/kalcatel.h,kalcatel/kalcateldoc.cpp,kalcatel/kalcateldoc.h,kalcatel/kalcatelview.cpp,kalcatel/kalcatelview.h,kalcatel/kalcatelui.rc,kalcatel/kalcatel.desktop,kalcatel/alcatelclasses.cpp,kalcatel/alcatelclasses.h,kalcatel/kalcatelconfigdialog.cpp,kalcatel/kalcatelconfigdialog.h,kalcatel/kalcateltreeviewitem.cpp,kalcatel/kalcateltreeviewitem.h,kalcatel/kalcatelviewitem.cpp,kalcatel/kalcatelviewitem.h,kalcatel/kalcatelmergedialog.cpp,kalcatel/kalcatelmergedialog.h,kalcatel/editmessagedialog.cpp,kalcatel/editmessagedialog.h,kalcatel/signallabel.cpp,kalcatel/signallabel.h,kalcatel/signalled.cpp,kalcatel/signalled.h
 sub_dirs=alcatool,images,info
 type=prog_main
 
@@ -705,6 +705,30 @@ dist=true
 install=false
 install_location=
 type=SOURCE
+
+[kalcatel/signallabel.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[kalcatel/signallabel.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[kalcatel/signalled.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[kalcatel/signalled.h]
+dist=true
+install=false
+install_location=
+type=HEADER
 
 [po/Makefile.am]
 files=

@@ -35,6 +35,7 @@ class QComboBox;
 class QCheckBox;
 class QButtonGroup;
 class KURLRequester;
+class KIntNumInput;
 
 /**Configuration dialog for KAlcatel application
   *@author Michal Cihar
@@ -116,6 +117,8 @@ private:
     QCheckBox *editLoadMessages;
     QCheckBox *editSaveCalls;
     QCheckBox *editLoadCalls;
+
+    KIntNumInput *editMonitor;
 };
 
 #endif

@@ -29,6 +29,8 @@
 #include <qdir.h>
 #include <qprinter.h>
 #include <qpainter.h>
+#include <qstatusbar.h>
+#include <qtooltip.h>
 
 // include files for KDE
 #include <kiconloader.h>
@@ -43,6 +45,8 @@
 #include <kio/netaccess.h>
 #include <kkeydialog.h>
 #include <kedittoolbar.h>
+#include <kstddirs.h>
+#include <kled.h>
 
 // application specific includes
 #include "kalcatel.h"
@@ -59,6 +63,9 @@
 #include "alcatool/contacts.h"
 #include "alcatool/logging.h"
 
+#include "signallabel.h"
+#include "signalled.h"
+
 KAlcatelApp::KAlcatelApp(QWidget* , const char* name):KMainWindow(0, name) {
     config=kapp->config();
 
@@ -72,14 +79,14 @@ KAlcatelApp::KAlcatelApp(QWidget* , const char* name):KMainWindow(0, name) {
     initDocument();
     initView();
 
+//    menuBar();
+
+    mobileManualDisconnect->setEnabled(false);
+    mobileManualConnect->setEnabled(true);
     modemConnected = false;
     modemLocked = false;
-  //  menuBar();
-    if (auto_modem) {
-        modemConnect();
-        modemDisconnect();
-    }
-  	
+
+    initConfig();
 
     preferencesDialog = new KAlcatelConfigDialog(this);
 
@@ -102,6 +109,21 @@ KAlcatelApp::~KAlcatelApp() {
         modem_close();
     }
     delete preferencesDialog;
+}
+
+void KAlcatelApp::initConfig() {
+    if (auto_modem) {
+        modemConnect();
+        modemDisconnect();
+        if (monitorInterval != 0) statusUpdate();
+    }
+
+    if (!persistent_modem) {
+        modemDisconnect();
+    }
+
+    killTimers();
+    if (monitorInterval != 0) startTimer( monitorInterval * 1000 );
 }
 
 void KAlcatelApp::initActions()
@@ -160,16 +182,89 @@ void KAlcatelApp::initActions()
 }
 
 
-void KAlcatelApp::initStatusBar()
-{
-  ///////////////////////////////////////////////////////////////////
-  // STATUSBAR
-  // TODO: add your own items you need for displaying current application status.
-/*  KStatusBar *bar = statusBar();
-  bar->insertItem(i18n("Ready."), ID_STATUS_MSG, 1);
-  bar->setItemAlignment(ID_STATUS_MSG, AlignLeft);
-  bar->insertItem(I18N_NOOP("KAlcatel"), ID_DETAIL_MSG, 1);
-  bar->setItemAlignment(ID_DETAIL_MSG, AlignLeft);*/
+void KAlcatelApp::initStatusBar() {
+    QString fname;
+    ///////////////////////////////////////////////////////////////////
+    // STATUSBAR
+    // TODO: add your own items you need for displaying current application status.
+
+    KStatusBar *bar = statusBar();
+
+    bar->insertItem(i18n("Ready."), STATUSBAR_TEXT, 1, true);
+
+    signalLabel = new SignalLabel(bar);
+    fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/signal-_.png");
+    if (!fname.isNull()) signalLabel->setPixmap(QPixmap(fname));
+    bar->addWidget(signalLabel,0,true);
+    QToolTip::add(signalLabel ,i18n("Unknown signal strength, click to refresh"));
+    connect(signalLabel, SIGNAL(clicked()), this, SLOT(statusUpdate()));
+
+    batteryLabel = new SignalLabel(bar);
+    fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/battery-__.png");
+    if (!fname.isNull()) batteryLabel->setPixmap(QPixmap(fname));
+    bar->addWidget(batteryLabel,0,true);
+    QToolTip::add(batteryLabel ,i18n("Unknown battery status, click to refresh"));
+    connect(batteryLabel, SIGNAL(clicked()), this, SLOT(statusUpdate()));
+
+    statusLed = new SignalLed(Qt::red, KLed::On, KLed::Raised, KLed::Circular, bar);
+    statusLed->setMinimumSize(16,16);
+    bar->addWidget(statusLed,0,true);
+    connect(statusLed, SIGNAL(clicked()), this, SLOT(connectionToggle()));
+    QToolTip::add(statusLed ,i18n("Not connected, click to connect"));
+
+
+  /*  KStatusBar *bar = statusBar();
+    bar->insertItem(i18n("Ready."), ID_STATUS_MSG, 1);
+    bar->setItemAlignment(ID_STATUS_MSG, AlignLeft);
+    bar->insertItem(I18N_NOOP("KAlcatel"), ID_DETAIL_MSG, 1);
+    bar->setItemAlignment(ID_DETAIL_MSG, AlignLeft);*/
+}
+
+void KAlcatelApp::statusUpdate() {
+    QString fname;
+    int bat_percent, bat_state, sign_strength, sign_err;
+
+    if (modemConnect()) {
+        get_battery(&bat_state, &bat_percent);
+
+        if (bat_percent >= 61) 
+            fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/battery-99.png");
+        else if (bat_percent >= 41) 
+            fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/battery-66.png");
+        else if (bat_percent >= 21) 
+            fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/battery-33.png");
+        else
+            fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/battery-00.png");
+
+        if (!fname.isNull()) batteryLabel->setPixmap(QPixmap(fname));
+        QToolTip::add(batteryLabel ,i18n("Battery charged at %1%, click to refresh").arg(bat_percent));
+
+        get_signal(&sign_strength, &sign_err);
+
+        if (sign_strength == 99)
+            fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/signal-_.png");
+        else if (sign_strength >= 15) 
+            fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/signal-5.png");
+        else if (sign_strength >= 11) 
+            fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/signal-4.png");
+        else if (sign_strength >= 8) 
+            fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/signal-3.png");
+        else if (sign_strength >= 5) 
+            fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/signal-2.png");
+        else if (sign_strength >= 1) 
+            fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/signal-1.png");
+        else
+            fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/signal-0.png");
+
+        if (!fname.isNull()) signalLabel->setPixmap(QPixmap(fname));
+
+        if (sign_strength == 99)
+             QToolTip::add(signalLabel ,i18n("Unknown signal strength, click to refresh"));
+        else
+             QToolTip::add(signalLabel ,i18n("Signal stregth is %1, click to refresh").arg(QString(mobil_signal_info[sign_strength])));
+
+        modemDisconnect();
+    }
 }
 
 void KAlcatelApp::initDocument() {
@@ -244,8 +339,9 @@ void KAlcatelApp::saveOptions() {
     config->writeEntry("Init", mobile_init);
     config->writeEntry("Baud Rate", mobile_rate);
     config->writeEntry("Use RTSCTS", mobile_rtscts);
-    config->writeEntry("Persistent connection", persistent_modem);
-    config->writeEntry("Auto connection", auto_modem);
+    config->writeEntry("Persistent Connection", persistent_modem);
+    config->writeEntry("Auto Connection", auto_modem);
+    config->writeEntry("Monitoring Interval", monitorInterval);
 
     config->setGroup("Saving and loading");
     config->writeEntry("Save Todos", saveTodos);
@@ -291,6 +387,7 @@ void KAlcatelApp::readOptions(){
     auto_open_last = config->readBoolEntry("Open Last File", false);
     last_file = config->readEntry("Last File", "");
     mobile_debug = config->readNumEntry("Debug", MSG_DETAIL);
+    msg_level = mobile_debug;
 
     config->setGroup("Data");
     mergeData = config->readNumEntry("Merge during read", 0);
@@ -310,9 +407,10 @@ void KAlcatelApp::readOptions(){
     mobile_init = config->readEntry("Init", "AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0");
     mobile_rate = config->readNumEntry("Baud Rate", 19200);
     mobile_rtscts = config->readBoolEntry("Use RTSCTS", true);
-    persistent_modem = config->readBoolEntry("Persistent connection", true);
-    auto_modem = config->readBoolEntry("Auto connection", false);
-    msg_level = mobile_debug;
+    persistent_modem = config->readBoolEntry("Persistent Connection", true);
+    auto_modem = config->readBoolEntry("Auto Connection", false);
+    monitorInterval = config->readNumEntry("Monitoring Interval", 0);
+    if (monitorInterval < 0) monitorInterval = 0;
 
     config->setGroup("Saving and loading");
     saveTodos = config->readBoolEntry("Save Todos", true);
@@ -393,6 +491,14 @@ bool KAlcatelApp::queryExit()
 // SLOT IMPLEMENTATION
 /////////////////////////////////////////////////////////////////////
 
+void KAlcatelApp::connectionToggle() {
+    if (modemConnected) {
+        slotModemDisconnect();
+    } else {
+        modemConnect();
+        modemDisconnect();
+    }
+}
 
 bool KAlcatelApp::modemConnect() {
     if (modemConnected) {
@@ -471,8 +577,11 @@ bool KAlcatelApp::modemConnect() {
     }
     modemLocked = true;
     modemConnected = true;
+    this->slotStatusMsg(i18n("Modem initialized"),ID_DETAIL_MSG);
     mobileManualDisconnect->setEnabled(true);
     mobileManualConnect->setEnabled(false);
+    statusLed->setColor(Qt::green);
+    QToolTip::add(statusLed ,i18n("Connected, click to disconnect"));
     return true;
 }
 
@@ -483,6 +592,8 @@ void KAlcatelApp::slotModemDisconnect() {
         modem_close();
         mobileManualDisconnect->setEnabled(false);
         mobileManualConnect->setEnabled(true);
+        statusLed->setColor(Qt::red);
+        QToolTip::add(statusLed ,i18n("Not connected, click to connect"));
     }
 }
 
@@ -494,6 +605,8 @@ void KAlcatelApp::modemDisconnect() {
             modem_close();
             mobileManualDisconnect->setEnabled(false);
             mobileManualConnect->setEnabled(true);
+            statusLed->setColor(Qt::red);
+            QToolTip::add(statusLed ,i18n("Not connected, click to connect"));
         }
     } else {
         modemLocked = false;
@@ -874,29 +987,31 @@ void KAlcatelApp::slotViewStatusBar()
 
 
 //void KAlcatelApp::slotStatusMsg(const QString &text, int which = ID_STATUS_MSG, int clearDetail = true)
-void KAlcatelApp::slotStatusMsg(const QString &text, int which, int clearDetail) {
+void KAlcatelApp::slotStatusMsg(const QString &text, int which, bool clearDetail) {
   ///////////////////////////////////////////////////////////////////
   // change status message permanently
-  QString *msg = new QString();
+  QString msg;
   setDisabled(true);
   statusBar()->clear();
   if (which == ID_STATUS_MSG) {
         statusText = text;
-        msg->append(text);
+        msg.append(text);
         if (!clearDetail) {
-            msg->append(I18N_NOOP("("));
-            msg->append(detailText);
-            msg->append(I18N_NOOP(")"));
+            msg.append(I18N_NOOP("("));
+            msg.append(detailText);
+            msg.append(I18N_NOOP(")"));
         }
   } else {
         detailText = text;
-        msg->append(statusText);
-        msg->append(I18N_NOOP("("));
-        msg->append(text);
-        msg->append(I18N_NOOP(")"));
+        msg.append(statusText);
+        msg.append(I18N_NOOP("("));
+        msg.append(text);
+        msg.append(I18N_NOOP(")"));
   }
+
 //  statusBar()->changeItem(text, which);
-  statusBar()->message(*msg);
+  statusBar()->changeItem(msg, STATUSBAR_TEXT);
+//  statusBar()->message(msg);
   setEnabled(true);
   setUpdatesEnabled(true);
   update();
@@ -913,6 +1028,7 @@ void KAlcatelApp::slotDefaultDetailMsg()
 
 void KAlcatelApp::slotPreferencesEdit() {
     preferencesDialog->exec();
+    initConfig();
 }
 
 void KAlcatelApp::slotPreferencesSave() {
@@ -952,4 +1068,8 @@ AlcatelTodo *KAlcatelApp::solveConflict(AlcatelTodo &c1, AlcatelTodo &c2) {
 
 AlcatelCategory *KAlcatelApp::solveConflict(AlcatelCategory &c1, AlcatelCategory &c2) {
     return KAlcatelMergeDialog(this).exec(c1,c2);
+}
+
+void KAlcatelApp::timerEvent( QTimerEvent *e ) {
+    statusUpdate();
 }

@@ -117,7 +117,8 @@ configure.in: configure.files $(shell test -f configure.files && cat configure.f
 	cat `cat configure.files | egrep -v "^configure.in.bot"` >> configure.in.new ;\
 	echo "KDE_CREATE_SUBDIRSLIST" >> configure.in.new ;\
 	echo "AC_OUTPUT( \\" >> configure.in.new ;\
-	mfs=`find . -type d -print | fgrep -v "/." | sed -e "s#\./##" -e "/^debian/d" | sort`; \
+	# in next line in sed was:  -e "/^debian/d"
+	mfs=`find . -type d -print | fgrep -v "/." | sed -e "s#\./##" | sort`; \
 	for i in $$mfs; do \
 	  topleveldir=`echo $$i| sed -e "s#/.*##"`; \
 	  if test -f $$topleveldir/configure.in; then \

@@ -1449,7 +1449,7 @@ sub tag_DIST () {
     foreach $entry (readdir(THISDIR)) {
         next if ($entry eq "CVS" || $entry =~ /^\./  || $entry =~ /^Makefile$/ || $entry =~ /~$/ || $entry =~/\.tar\.gz$/ || $entry =~ /^\#.*\#$/);
         next if (! -f $entry);
-        next if ($entry =~ /\.moc/ || $entry =~ /\.lo$/ || $entry =~ /\.la$/ || $entry =~ /\.o/);
+        next if ($entry =~ /\.moc/ || $entry =~ /\.lo$/ || $entry =~ /\.la$/ || $entry =~ /\.o/ || $entry =~ /\.a$/ || $entry =~ /^kalcatel$/);
         $foundfiles{$entry} = 1;
     }
     closedir (THISDIR);

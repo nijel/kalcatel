@@ -1,6 +1,6 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 
-SUBDIRS = kalcatel po doc 
+SUBDIRS = kalcatel po doc debian 
 
 EXTRA_DIST = kalcatel.kdevprj admin AUTHORS COPYING ChangeLog INSTALL README TODO kalcatel.lsm kalcatel.spec 
 

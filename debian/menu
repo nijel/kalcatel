@@ -1,0 +1,7 @@
+?package(kalcatel):\
+   needs=X11\
+   section=Apps/Tools\
+   hints="KDE"\
+   kderemove="y"\
+   title="KAlcatel"\
+   command="/usr/bin/kalcatel"

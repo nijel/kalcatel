@@ -1,0 +1,9 @@
+kalcatel (0.1-1) unstable; urgency=low
+
+  * Initial release.
+
+ -- Michal Cihar <cihar@email.cz>  Sun, 17 Feb 2002 15:11:57 +0100
+
+Local variables:
+mode: debian-changelog
+End:

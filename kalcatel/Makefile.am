@@ -5,20 +5,14 @@ kalcatel_LDADD   = ./alcatool/libalcatool.a  $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDE
 
 SUBDIRS = alcatool images 
 
-EXTRA_DIST = main.cpp kalcatel.cpp kalcatel.h kalcateldoc.cpp kalcateldoc.h kalcatelview.cpp kalcatelview.h kalcatelui.rc kalcatel.desktop lo32-app-kalcatel.png lo16-app-kalcatel.png alcatelclasses.cpp alcatelclasses.h kalcatelconfigdialog.cpp kalcatelconfigdialog.h 
+EXTRA_DIST = main.cpp kalcatel.cpp kalcatel.h kalcateldoc.cpp kalcateldoc.h kalcatelview.cpp kalcatelview.h kalcatelui.rc kalcatel.desktop alcatelclasses.cpp alcatelclasses.h kalcatelconfigdialog.cpp kalcatelconfigdialog.h 
 
 install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Applications/
 	$(INSTALL_DATA) $(srcdir)/kalcatel.desktop $(kde_appsdir)/Applications/kalcatel.desktop
-	$(mkinstalldirs) $(kde_icondir)/locolor/32x32/apps/
-	$(INSTALL_DATA) $(srcdir)/lo32-app-kalcatel.png $(kde_icondir)/locolor/32x32/apps/kalcatel.png
-	$(mkinstalldirs) $(kde_icondir)/locolor/16x16/apps/
-	$(INSTALL_DATA) $(srcdir)/lo16-app-kalcatel.png $(kde_icondir)/locolor/16x16/apps/kalcatel.png
 
 uninstall-local:
 	-rm -f $(kde_appsdir)/Applications/kalcatel.desktop
-	-rm -f $(kde_icondir)/locolor/32x32/apps/kalcatel.png
-	-rm -f $(kde_icondir)/locolor/16x16/apps/kalcatel.png
 
 ####### kdevelop will overwrite this part!!! (end)############
 # this 10 paths are KDE specific. Use them:

@@ -1,3 +1,10 @@
+kalcatel (0.3-2) unstable; urgency=low
+
+  * fixed path for kde documentation (now /usr/share/doc/kde/HTML...)
+  * updated man page, we now have write support...
+
+ -- Michal Cihar <cihar@email.cz>  Tue,  9 Jul 2002 15:33:34 +0200
+
 kalcatel (0.3-1) unstable; urgency=low
 
   * New release

@@ -30,6 +30,9 @@
 class AlcatelClass;
 class AlcatelMessage;
 class AlcatelCall;
+class AlcatelTodo;
+class AlcatelContact;
+class AlcatelCalendar;
 
 /**KAlcatel generic view item
   *@author Michal Cihar
@@ -62,6 +65,48 @@ public:
 class KAlcatelCallCatViewItem : public KAlcatelDataItem  {
 public:
     KAlcatelCallCatViewItem ( QListView * parent, AlcatelCall *data, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null );
+    QString key ( int column, bool ascending ) const;
+};
+
+class KAlcatelTodoViewItem : public KAlcatelDataItem  {
+public:
+    KAlcatelTodoViewItem ( QListView * parent, AlcatelTodo *data, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null );
+    QString key ( int column, bool ascending ) const;
+};
+
+class KAlcatelTodoCatViewItem : public KAlcatelDataItem  {
+public:
+    KAlcatelTodoCatViewItem ( QListView * parent, AlcatelTodo *data, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null );
+    QString key ( int column, bool ascending ) const;
+};
+
+class KAlcatelContactViewItem : public KAlcatelDataItem  {
+public:
+    KAlcatelContactViewItem ( QListView * parent, AlcatelContact *data, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null );
+    QString key ( int column, bool ascending ) const;
+};
+
+class KAlcatelContactMobileViewItem : public KAlcatelDataItem  {
+public:
+    KAlcatelContactMobileViewItem ( QListView * parent, AlcatelContact *data, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null );
+    QString key ( int column, bool ascending ) const;
+};
+
+class KAlcatelContactMobileCatViewItem : public KAlcatelDataItem  {
+public:
+    KAlcatelContactMobileCatViewItem ( QListView * parent, AlcatelContact *data, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null );
+    QString key ( int column, bool ascending ) const;
+};
+
+class KAlcatelContactSIMViewItem : public KAlcatelDataItem  {
+public:
+    KAlcatelContactSIMViewItem ( QListView * parent, AlcatelContact *data, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null );
+    QString key ( int column, bool ascending ) const;
+};
+
+class KAlcatelCalendarViewItem : public KAlcatelDataItem  {
+public:
+    KAlcatelCalendarViewItem ( QListView * parent, AlcatelCalendar *data, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null );
     QString key ( int column, bool ascending ) const;
 };
 

@@ -4,49 +4,49 @@ KAlcatel - Changelog
 
 $Id$
 
-2002-02-25 Michal Cihar <cihar@email.cz>
+2002-02-25 Michal Cihar <cihar@email.nospam.cz>
         * added key configuration
         * added document information
         * corrected sorting by date, time etc.
 
-2002-02-21 Michal Cihar <cihar@email.cz>
+2002-02-21 Michal Cihar <cihar@email.nospam.cz>
         * changed way of creating view, not used KJanusWidget anymore
         * improved behavior when reading of data fails
         * added support for URL in custom fields
 
-2002-02-20 Michal Cihar <cihar@email.cz>
+2002-02-20 Michal Cihar <cihar@email.nospam.cz>
         * added saving support
         * clickable email addresses in contact view
 
-2002-02-19 Michal Cihar <cihar@email.cz>
+2002-02-19 Michal Cihar <cihar@email.nospam.cz>
         * added reading of calls and contacts from SIM
         * in information added own number
         * added documentation of classes
 
-2002-02-18 Michal Cihar <cihar@email.cz>
+2002-02-18 Michal Cihar <cihar@email.nospam.cz>
         * corrected header in todo listing
         * in information added IMSI
 
-2002-02-17 Michal Cihar <cihar@email.cz>
+2002-02-17 Michal Cihar <cihar@email.nospam.cz>
         * released 0.1
 
-2002-02-17 Michal Cihar <cihar@email.cz>
+2002-02-17 Michal Cihar <cihar@email.nospam.cz>
         * added basic configuration
 
-2002-02-16 Michal Cihar <cihar@email.cz>
+2002-02-16 Michal Cihar <cihar@email.nospam.cz>
         * contact, todo and calendar viewing works
 
-2002-02-15 Michal Cihar <cihar@email.cz>
+2002-02-15 Michal Cihar <cihar@email.nospam.cz>
         * added of reading all binary data (shown are only contacts)
         * added phone number lookup (in messages)
 
-2002-02-14 Michal Cihar <cihar@email.cz>
+2002-02-14 Michal Cihar <cihar@email.nospam.cz>
         * now supported text addresses (phone numbers) in pdu decoding
         * corrected behavior when reading messages more than once
 
-2002-02-13 Michal Cihar <cihar@email.cz>
+2002-02-13 Michal Cihar <cihar@email.nospam.cz>
         * reading and listing messages
         * information dialog
 
-2002-02-11 Michal Cihar <cihar@email.cz>
+2002-02-11 Michal Cihar <cihar@email.nospam.cz>
         * initial gui functionality

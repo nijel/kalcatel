@@ -1,5 +1,16 @@
 KAlcatel
 
+
+RELEASE NOTICE
+
+This software is still beta (or alpha) quality, which means that it segfaults
+sometimes and can loose your data. The worst issue is that program looks
+frozen when it works with mobile. For more details look at "PROGRAM LOOKS
+FROZEN" in file BUGS.
+
+
+APPLICATION DESCRIPTION
+
 This application allows you to manage messages, calls, contacts, todos and
 calendar in your Alcatel One Touch 50x and 70x mobile. In fact currently is in
 this gui supported just reading, but full functionality will be coded in near
@@ -7,3 +18,24 @@ future.
 
 Protocol used by this phone is binary and not documented, so this program
 could not guarantee any functionality in your case, but it works well for me.
+
+
+BUGS & NEW FEATURES
+
+Since I currently don't know how to make standard KDE bug report dialog
+working please send bug reports directly to me. List of known bugs is listed
+in file BUGS.
+
+If you would like some feature in KAlcatel, at first look into TODO file which
+contais plans for future versions. If your feature is not listed there or you
+think that it is more important and should be done sooner, please feel free to
+contact author.
+
+
+CONTRIBUTION
+
+Any contributors are welcome. Just to avoid wasting your and my (and possible
+also someone others) time, please announce me that you want to add/rewrite
+some code.
+
+$Id$

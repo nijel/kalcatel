@@ -4,6 +4,14 @@ KAlcatel - Changelog
 
 $Id$
 
+2002-04-30 Michal Cihar <cihar@email.cz>
+        * rewritten commiting of changes
+        * commiting now for *some* items works
+        * tweaks in debug messages
+        * updated documetation
+        * fixed some C++ issues
+        * added support for deleting parts of items
+
 2002-04-15 Michal Cihar <cihar@email.cz>
         * unified listing of contact categories with mobile
         * finished initial framework for commiting changes

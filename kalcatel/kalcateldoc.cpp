@@ -2085,9 +2085,13 @@ bool KAlcatelDoc::commitChanges() {
         ::message(MSG_INFO, "Commiting calls... N/A really yet");
         AlcatelCallList::Iterator it;
         for( it = calls->begin(); it != calls->end(); ++it ) {
-            if ((*it).Deleted) ::message(MSG_WARNING, "NOT IMPLEMENTED ACTION! Deleted call: %s", (*it).getName().latin1());
-            else if ((*it).Created) ::message(MSG_WARNING, "NOT IMPLEMENTED ACTION! Created call: %s", (*it).getName().latin1());
-            else if ((*it).Modified) ::message(MSG_WARNING, "NOT IMPLEMENTED ACTION! Modified call: %s", (*it).getName().latin1());
+            if ((*it).Deleted) {
+                ::message(MSG_WARNING, "NOT IMPLEMENTED ACTION! Deleted call: %s", (*it).getName().latin1());
+            } else if ((*it).Created) {
+                ::message(MSG_WARNING, "NOT IMPLEMENTED ACTION! Created call: %s", (*it).getName().latin1());
+            } else if ((*it).Modified) {
+                ::message(MSG_WARNING, "NOT IMPLEMENTED ACTION! Modified call: %s", (*it).getName().latin1());
+            }
         }
     }
 
@@ -2096,15 +2100,21 @@ bool KAlcatelDoc::commitChanges() {
         AlcatelContactList::Iterator it;
         for( it = contacts->begin(); it != contacts->end(); ++it ) {
             if ((*it).Storage == StorageSIM || ((*it).Storage == StoragePC && (*it).PrevStorage == StorageSIM)) {
-                if ((*it).Deleted) ::message(MSG_INFO, "NOT IMPLEMENTED ACTION! Deleted contact: %s", (*it).getName().latin1());
-                else if ((*it).Created) ::message(MSG_INFO, "NOT IMPLEMENTED ACTION! Created contact: %s", (*it).getName().latin1());
-                else if ((*it).Modified) ::message(MSG_INFO, "NOT IMPLEMENTED ACTION! Modified contact: %s", (*it).getName().latin1());
+                if ((*it).Deleted) {
+                    ::message(MSG_INFO, "NOT IMPLEMENTED ACTION! Deleted contact: %s", (*it).getName().latin1());
+                } else if ((*it).Created) {
+                    ::message(MSG_INFO, "NOT IMPLEMENTED ACTION! Created contact: %s", (*it).getName().latin1());
+                } else if ((*it).Modified) {
+                    ::message(MSG_INFO, "NOT IMPLEMENTED ACTION! Modified contact: %s", (*it).getName().latin1());
+                }
             }
         }
     }
 
     alcatel_init();
 
+/*
+this shouldn't be here because it should be created on the fly
     {
         ::message(MSG_INFO, "Commiting todo categories... N/A really yet");
         AlcatelCategoryList::Iterator it;
@@ -2123,15 +2133,77 @@ bool KAlcatelDoc::commitChanges() {
             else if ((*it).Created) ::message(MSG_WARNING, "NOT IMPLEMENTED ACTION! Created category: %s", (*it).getName().latin1());
             else if ((*it).Modified) ::message(MSG_WARNING, "NOT IMPLEMENTED ACTION! Modified category: %s", (*it).getName().latin1());
         }
-    }
+    }*/
 
     {
         ::message(MSG_INFO, "Commiting todos... N/A really yet");
         AlcatelTodoList::Iterator it;
         for( it = todos->begin(); it != todos->end(); ++it ) {
-            if ((*it).Deleted) ::message(MSG_INFO, "NOT IMPLEMENTED ACTION! Deleted todo: %s", (*it).getName().latin1());
-            else if ((*it).Created) ::message(MSG_INFO, "Created: %s", (*it).getName().latin1());
-            else if ((*it).Modified) ::message(MSG_INFO, "Modified: %s", (*it).getName().latin1());
+            if ((*it).Storage == StorageMobile || ((*it).Storage == StoragePC && (*it).PrevStorage == StorageMobile)) {
+                if ((*it).Deleted) {
+                    ::message(MSG_INFO, "NOT IMPLEMENTED ACTION! Deleted todo: %s", (*it).getName().latin1());
+                    KMessageBox::sorry(win, i18n("Deleting of todos is not yet implemented."), i18n("Sorry"));
+                } else if ((*it).Created) {
+                    if (!alcatel_attach() ||
+                        !alcatel_start_session() ||
+                        !alcatel_select_type(ALC_SYNC_TYPE_TODO)) {
+                        KMessageBox::error(win, i18n("Creating of todo failed!"), i18n("Error"));
+                    } else {
+                        alcatel_begin_transfer(ALC_SYNC_TODO);
+
+                        for (int fieldno = 0; fieldno < (*it).max_field; fieldno++) {
+                            AlcatelFieldStruct *field = (*it).getField(fieldno);
+                            if (field != NULL) {
+                                if (field->data != NULL) {
+                                    alcatel_create_field(ALC_SYNC_TYPE_TODO, fieldno, field);
+                                    free(field->data);
+                                }
+                                free(field);
+                            }
+                        }
+
+                        int num = alcatel_commit(ALC_SYNC_TYPE_TODO);
+                        if (num == -1) {
+                            KMessageBox::error(win, i18n("Creating of todo failed!"), i18n("Error"));
+                        } else {
+                            ::message(MSG_INFO, "Created: %s (id = %d)", (*it).getName().latin1(), num);
+                            (*it).Created = false;
+                            (*it).Modified = false;
+                            (*it).Storage = StorageMobile;
+                            (*it).PrevStorage = StorageNone;
+                            (*it).Id = num;
+                        }
+                    }
+                    alcatel_close_session(ALC_SYNC_TYPE_TODO);
+                } else if ((*it).Modified) {
+                    if (!alcatel_attach() ||
+                        !alcatel_start_session() ||
+                        !alcatel_select_type(ALC_SYNC_TYPE_TODO)) {
+                        KMessageBox::error(win, i18n("Updating of todo failed!"), i18n("Error"));
+                    } else {
+                        alcatel_begin_transfer(ALC_SYNC_TODO);
+
+                        int id = (*it).Storage == StorageMobile ? (*it).Id : (*it).PrevId;
+
+                        for (int fieldno = 0; fieldno < (*it).max_field; fieldno++) {
+                            AlcatelFieldStruct *field = (*it).getField(fieldno);
+                            if (field != NULL) {
+                                alcatel_update_field(ALC_SYNC_TYPE_TODO, id, fieldno, field);
+                                if (field->data!=NULL) free(field->data);
+                                free(field);
+                            }
+                        }
+
+                        alcatel_commit(ALC_SYNC_TYPE_TODO);
+                        ::message(MSG_INFO, "Modified: %s", (*it).getName().latin1());
+                        (*it).Modified = false;
+                        (*it).Storage = StorageMobile;
+                        (*it).PrevStorage = StorageNone;
+                        (*it).Id = id;
+                    }
+                    alcatel_close_session(ALC_SYNC_TYPE_TODO);
+                }
+            }
         }
     }
 
@@ -2139,9 +2211,71 @@ bool KAlcatelDoc::commitChanges() {
         ::message(MSG_INFO, "Commiting events... N/A really yet");
         AlcatelCalendarList::Iterator it;
         for( it = calendar->begin(); it != calendar->end(); ++it ) {
-            if ((*it).Deleted) ::message(MSG_INFO, "NOT IMPLEMENTED ACTION! Deleted event: %s", (*it).getName().latin1());
-            else if ((*it).Created) ::message(MSG_INFO, "Created: %s", (*it).getName().latin1());
-            else if ((*it).Modified) ::message(MSG_INFO, "Modified: %s", (*it).getName().latin1());
+            if ((*it).Storage == StorageMobile || ((*it).Storage == StoragePC && (*it).PrevStorage == StorageMobile)) {
+                if ((*it).Deleted) {
+                    ::message(MSG_INFO, "NOT IMPLEMENTED ACTION! Deleted event: %s", (*it).getName().latin1());
+                    KMessageBox::sorry(win, i18n("Deleting of events is not yet implemented."), i18n("Sorry"));
+                } else if ((*it).Created) {
+                    if (!alcatel_attach() ||
+                        !alcatel_start_session() ||
+                        !alcatel_select_type(ALC_SYNC_TYPE_CALENDAR)) {
+                        KMessageBox::error(win, i18n("Creating of event failed!"), i18n("Error"));
+                    } else {
+                        alcatel_begin_transfer(ALC_SYNC_CALENDAR);
+
+                        for (int fieldno = 0; fieldno < (*it).max_field; fieldno++) {
+                            AlcatelFieldStruct *field = (*it).getField(fieldno);
+                            if (field != NULL) {
+                                if (field->data != NULL) {
+                                    alcatel_create_field(ALC_SYNC_TYPE_CALENDAR, fieldno, field);
+                                    free(field->data);
+                                }
+                                free(field);
+                            }
+                        }
+
+                        int num = alcatel_commit(ALC_SYNC_TYPE_CALENDAR);
+                        if (num == -1) {
+                            KMessageBox::error(win, i18n("Creating of event failed!"), i18n("Error"));
+                        } else {
+                            ::message(MSG_INFO, "Created: %s (id = %d)", (*it).getName().latin1(), num);
+                            (*it).Created = false;
+                            (*it).Modified = false;
+                            (*it).Storage = StorageMobile;
+                            (*it).PrevStorage = StorageNone;
+                            (*it).Id = num;
+                        }
+                    }
+                    alcatel_close_session(ALC_SYNC_TYPE_CALENDAR);
+                } else if ((*it).Modified) {
+                    if (!alcatel_attach() ||
+                        !alcatel_start_session() ||
+                        !alcatel_select_type(ALC_SYNC_TYPE_CALENDAR)) {
+                        KMessageBox::error(win, i18n("Updating of event failed!"), i18n("Error"));
+                    } else {
+                        alcatel_begin_transfer(ALC_SYNC_CALENDAR);
+
+                        int id = (*it).Storage == StorageMobile ? (*it).Id : (*it).PrevId;
+
+                        for (int fieldno = 0; fieldno < (*it).max_field; fieldno++) {
+                            AlcatelFieldStruct *field = (*it).getField(fieldno);
+                            if (field != NULL) {
+                                alcatel_update_field(ALC_SYNC_TYPE_CALENDAR, id, fieldno, field);
+                                if (field->data!=NULL) free(field->data);
+                                free(field);
+                            }
+                        }
+
+                        alcatel_commit(ALC_SYNC_TYPE_CALENDAR);
+                        ::message(MSG_INFO, "Modified: %s", (*it).getName().latin1());
+                        (*it).Modified = false;
+                        (*it).Storage = StorageMobile;
+                        (*it).PrevStorage = StorageNone;
+                        (*it).Id = id;
+                    }
+                    alcatel_close_session(ALC_SYNC_TYPE_CALENDAR);
+                }
+            }
         }
     }
 
@@ -2163,31 +2297,16 @@ bool KAlcatelDoc::commitChanges() {
                     } else {
                         alcatel_begin_transfer(ALC_SYNC_CONTACTS);
 
-                        if (!(*it).LastName.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).LastName.latin1(); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 0, &field);}
-                        if (!(*it).FirstName.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).FirstName.latin1(); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 1, &field);}
-                        if (!(*it).Company.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).Company.latin1(); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 2, &field);}
-                        if (!(*it).JobTitle.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).JobTitle.latin1(); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 3, &field);}
-                        if (!(*it).Note.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).Note.latin1(); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 4, &field);}
-                        if ((*it).Category != -1) {AlcatelFieldStruct field; field.type = _byte; field.data = &((*it).Category); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 5, &field);}
-                        if ((*it).Private != -1) {AlcatelFieldStruct field; field.type = _bool; field.data = &((*it).Private); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 6, &field);}
-                        if (!(*it).WorkNumber.isEmpty()) {AlcatelFieldStruct field; field.type = _phone; field.data = (*it).WorkNumber.latin1(); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 7, &field);}
-                        if (!(*it).MainNumber.isEmpty()) {AlcatelFieldStruct field; field.type = _phone; field.data = (*it).MainNumber.latin1(); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 8, &field);}
-                        if (!(*it).FaxNumber.isEmpty()) {AlcatelFieldStruct field; field.type = _phone; field.data = (*it).FaxNumber.latin1(); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 9, &field);}
-                        if (!(*it).OtherNumber.isEmpty()) {AlcatelFieldStruct field; field.type = _phone; field.data = (*it).OtherNumber.latin1(); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 10, &field);}
-                        if (!(*it).PagerNumber.isEmpty()) {AlcatelFieldStruct field; field.type = _phone; field.data = (*it).PagerNumber.latin1(); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 11, &field);}
-                        if (!(*it).MobileNumber.isEmpty()) {AlcatelFieldStruct field; field.type = _phone; field.data = (*it).MobileNumber.latin1(); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 12, &field);}
-                        if (!(*it).HomeNumber.isEmpty()) {AlcatelFieldStruct field; field.type = _phone; field.data = (*it).HomeNumber.latin1(); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 13, &field);}
-                        if (!(*it).Email1.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).Email1.latin1(); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 14, &field);}
-                        if (!(*it).Email2.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).Email2.latin1(); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 15, &field);}
-                        if (!(*it).Address.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).Address.latin1(); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 16, &field);}
-                        if (!(*it).City.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).City.latin1(); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 17, &field);}
-                        if (!(*it).State.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).State.latin1(); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 18, &field);}
-                        if (!(*it).Zip.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).Zip.latin1(); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 19, &field);}
-                        if (!(*it).Country.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).Country.latin1(); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 20, &field);}
-                        if (!(*it).Custom1.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).Custom1.latin1(); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 21, &field);}
-                        if (!(*it).Custom2.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).Custom2.latin1(); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 22, &field);}
-                        if (!(*it).Custom3.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).Custom3.latin1(); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 23, &field);}
-                        if (!(*it).Custom4.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).Custom4.latin1(); alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, 24, &field);}
+                        for (int fieldno = 0; fieldno < (*it).max_field; fieldno++) {
+                            AlcatelFieldStruct *field = (*it).getField(fieldno);
+                            if (field != NULL) {
+                                if (field->data != NULL) {
+                                    alcatel_create_field(ALC_SYNC_TYPE_CONTACTS, fieldno, field);
+                                    free(field->data);
+                                }
+                                free(field);
+                            }
+                        }
 
                         int num = alcatel_commit(ALC_SYNC_TYPE_CONTACTS);
                         if (num == -1) {
@@ -2212,31 +2331,14 @@ bool KAlcatelDoc::commitChanges() {
 
                         int id = (*it).Storage == StorageMobile ? (*it).Id : (*it).PrevId;
 
-                        if (!(*it).LastName.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).LastName.latin1(); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 0, &field);}
-                        if (!(*it).FirstName.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).FirstName.latin1(); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 1, &field);}
-                        if (!(*it).Company.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).Company.latin1(); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 2, &field);}
-                        if (!(*it).JobTitle.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).JobTitle.latin1(); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 3, &field);}
-                        if (!(*it).Note.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).Note.latin1(); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 4, &field);}
-                        if ((*it).Category != -1) {AlcatelFieldStruct field; field.type = _byte; field.data = &((*it).Category); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 5, &field);}
-                        if ((*it).Private != -1) {AlcatelFieldStruct field; field.type = _bool; field.data = &((*it).Private); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 6, &field);}
-                        if (!(*it).WorkNumber.isEmpty()) {AlcatelFieldStruct field; field.type = _phone; field.data = (*it).WorkNumber.latin1(); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 7, &field);}
-                        if (!(*it).MainNumber.isEmpty()) {AlcatelFieldStruct field; field.type = _phone; field.data = (*it).MainNumber.latin1(); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 8, &field);}
-                        if (!(*it).FaxNumber.isEmpty()) {AlcatelFieldStruct field; field.type = _phone; field.data = (*it).FaxNumber.latin1(); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 9, &field);}
-                        if (!(*it).OtherNumber.isEmpty()) {AlcatelFieldStruct field; field.type = _phone; field.data = (*it).OtherNumber.latin1(); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 10, &field);}
-                        if (!(*it).PagerNumber.isEmpty()) {AlcatelFieldStruct field; field.type = _phone; field.data = (*it).PagerNumber.latin1(); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 11, &field);}
-                        if (!(*it).MobileNumber.isEmpty()) {AlcatelFieldStruct field; field.type = _phone; field.data = (*it).MobileNumber.latin1(); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 12, &field);}
-                        if (!(*it).HomeNumber.isEmpty()) {AlcatelFieldStruct field; field.type = _phone; field.data = (*it).HomeNumber.latin1(); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 13, &field);}
-                        if (!(*it).Email1.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).Email1.latin1(); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 14, &field);}
-                        if (!(*it).Email2.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).Email2.latin1(); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 15, &field);}
-                        if (!(*it).Address.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).Address.latin1(); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 16, &field);}
-                        if (!(*it).City.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).City.latin1(); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 17, &field);}
-                        if (!(*it).State.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).State.latin1(); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 18, &field);}
-                        if (!(*it).Zip.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).Zip.latin1(); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 19, &field);}
-                        if (!(*it).Country.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).Country.latin1(); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 20, &field);}
-                        if (!(*it).Custom1.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).Custom1.latin1(); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 21, &field);}
-                        if (!(*it).Custom2.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).Custom2.latin1(); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 22, &field);}
-                        if (!(*it).Custom3.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).Custom3.latin1(); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 23, &field);}
-                        if (!(*it).Custom4.isEmpty()) {AlcatelFieldStruct field; field.type = _string; field.data = (*it).Custom4.latin1(); alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, 24, &field);}
+                        for (int fieldno = 0; fieldno < (*it).max_field; fieldno++) {
+                            AlcatelFieldStruct *field = (*it).getField(fieldno);
+                            if (field != NULL) {
+                                alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, fieldno, field);
+                                if (field->data!=NULL) free(field->data);
+                                free(field);
+                            }
+                        }
 
                         alcatel_commit(ALC_SYNC_TYPE_CONTACTS);
                         ::message(MSG_INFO, "Modified: %s", (*it).getName().latin1());

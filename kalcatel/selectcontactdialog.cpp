@@ -137,7 +137,7 @@ void SelectContactDialog::slotExecuted(QListBoxItem *item) {
     accept();
 }
 
-ContactBoxItem::ContactBoxItem( QString num, int cont, QListBox * listbox, const QString & text=QString::null ) : QListBoxText (listbox, text){
+ContactBoxItem::ContactBoxItem( QString num, int cont, QListBox * listbox, const QString & text ) : QListBoxText (listbox, text){
     Number = num;
     Contact = cont;
 }

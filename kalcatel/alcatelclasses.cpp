@@ -78,6 +78,72 @@ QString MonthNames[] = {
     i18n("November"),
     i18n("December") };
 
+void *getAlcatelField(const QDate &data, AlcatelFieldType type) {
+    if (type == _date) {
+        AlcatelDateStruct *date = (AlcatelDateStruct *)malloc(sizeof(AlcatelDateStruct));
+        date->day = data.day();
+        date->month = data.month();
+        date->year = data.year();
+        return (void *)date;
+    } else {
+        message(MSG_WARNING, "Bad type conversion occured (QDate -> %02d)!", type);
+        return NULL;
+    }
+}
+
+void *getAlcatelField(const QTime &data, AlcatelFieldType type) {
+    if (type == _date) {
+        AlcatelTimeStruct *time = (AlcatelTimeStruct *)malloc(sizeof(AlcatelTimeStruct));
+        time->hour = data.hour();
+        time->minute = data.minute();
+        time->second = data.second();
+        return (void *)time;
+    } else {
+        message(MSG_WARNING, "Bad type conversion occured (QTime -> %02d)!", type);
+        return NULL;
+    }
+}
+
+void *getAlcatelField(const QDateTime &data, AlcatelFieldType type) {
+    if (type == _date) {
+        AlcatelDateStruct *date = (AlcatelDateStruct *)malloc(sizeof(AlcatelDateStruct));
+        date->day = data.date().day();
+        date->month = data.date().month();
+        date->year = data.date().year();
+        return (void *)date;
+    } else if (type == _time) {
+        AlcatelTimeStruct *time = (AlcatelTimeStruct *)malloc(sizeof(AlcatelTimeStruct));
+        time->hour = data.time().hour();
+        time->minute = data.time().minute();
+        time->second = data.time().second();
+        return (void *)time;
+    } else {
+        message(MSG_WARNING, "Bad type conversion occured (QDateTime -> %02d)!", type);
+        return NULL;
+    }
+}
+
+void *getAlcatelField(const QString &data, AlcatelFieldType type) {
+    if (type == _string || type == _phone) {
+        return (void *)strdup(data.latin1());
+    } else {
+        message(MSG_WARNING, "Bad type conversion occured (QString -> %02d)!", type);
+        return NULL;
+    }
+}
+
+void *getAlcatelField(const int &data, AlcatelFieldType type) {
+    if (type == _enum || type == _bool || type == _int || type == _byte) {
+        int *i = (int *)malloc(sizeof(int));
+        *i = data;
+        return (void *)i;
+    } else {
+        message(MSG_WARNING, "Bad type conversion occured (int -> %02d)!", type);
+        return NULL;
+    }
+}
+
+
 AlcatelClass::AlcatelClass() {
     Id = -1;
     Storage = StorageNone;
@@ -91,6 +157,7 @@ AlcatelClass::AlcatelClass() {
 AlcatelContact::AlcatelContact() {
     Category = -1;
     Private = -1;
+    for (int i = 0; i < max_field; i++) deleted_flags[i] = false;
 }
 
 AlcatelContact::~AlcatelContact() {
@@ -139,6 +206,69 @@ void AlcatelContact::setField(int number, AlcatelFieldStruct *data) {
     }
 }
 
+AlcatelFieldStruct *AlcatelContact::getField(int number) {
+    AlcatelFieldStruct *field = (AlcatelFieldStruct *)malloc(sizeof(AlcatelFieldStruct));
+    switch (number) {
+        case 0: field->type = _string; if (deleted_flags[number]) field->data = NULL; else if (LastName.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(LastName, _string); break;
+        case 1: field->type = _string; if (deleted_flags[number]) field->data = NULL; else if (FirstName.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(FirstName, _string); break;
+        case 2: field->type = _string; if (deleted_flags[number]) field->data = NULL; else if (Company.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(Company, _string); break;
+        case 3: field->type = _string; if (deleted_flags[number]) field->data = NULL; else if (JobTitle.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(JobTitle, _string); break;
+        case 4: field->type = _string; if (deleted_flags[number]) field->data = NULL; else if (Note.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(Note, _string); break;
+        case 5: field->type = _byte; if (deleted_flags[number]) field->data = NULL; else if (Category == -1) {free (field); field = NULL;} else  field->data = getAlcatelField(Category, _byte); break;
+        case 6: field->type = _bool; if (deleted_flags[number]) field->data = NULL; else if (Private == -1) {free (field); field = NULL;} else  field->data = getAlcatelField(Private, _bool); break;
+        case 7: field->type = _phone; if (deleted_flags[number]) field->data = NULL; else if (WorkNumber.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(WorkNumber, _phone); break;
+        case 8: field->type = _phone; if (deleted_flags[number]) field->data = NULL; else if (MainNumber.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(MainNumber, _phone); break;
+        case 9: field->type = _phone; if (deleted_flags[number]) field->data = NULL; else if (FaxNumber.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(FaxNumber, _phone); break;
+        case 10: field->type = _phone; if (deleted_flags[number]) field->data = NULL; else if (OtherNumber.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(OtherNumber, _phone); break;
+        case 11: field->type = _phone; if (deleted_flags[number]) field->data = NULL; else if (PagerNumber.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(PagerNumber, _phone); break;
+        case 12: field->type = _phone; if (deleted_flags[number]) field->data = NULL; else if (MobileNumber.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(MobileNumber, _phone); break;
+        case 13: field->type = _phone; if (deleted_flags[number]) field->data = NULL; else if (HomeNumber.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(HomeNumber, _phone); break;
+        case 14: field->type = _string; if (deleted_flags[number]) field->data = NULL; else if (Email1.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(Email1, _string); break;
+        case 15: field->type = _string; if (deleted_flags[number]) field->data = NULL; else if (Email2.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(Email2, _string); break;
+        case 16: field->type = _string; if (deleted_flags[number]) field->data = NULL; else if (Address.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(Address, _string); break;
+        case 17: field->type = _string; if (deleted_flags[number]) field->data = NULL; else if (City.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(City, _string); break;
+        case 18: field->type = _string; if (deleted_flags[number]) field->data = NULL; else if (State.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(State, _string); break;
+        case 19: field->type = _string; if (deleted_flags[number]) field->data = NULL; else if (Zip.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(Zip, _string); break;
+        case 20: field->type = _string; if (deleted_flags[number]) field->data = NULL; else if (Country.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(Country, _string); break;
+        case 21: field->type = _string; if (deleted_flags[number]) field->data = NULL; else if (Custom1.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(Custom1, _string); break;
+        case 22: field->type = _string; if (deleted_flags[number]) field->data = NULL; else if (Custom2.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(Custom2, _string); break;
+        case 23: field->type = _string; if (deleted_flags[number]) field->data = NULL; else if (Custom3.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(Custom3, _string); break;
+        case 24: field->type = _string; if (deleted_flags[number]) field->data = NULL; else if (Custom4.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(Custom4, _string); break;
+
+        default: message(MSG_WARNING, "Unknown field occured (%02d)!", number); free (field); field = NULL; break;
+    }
+    return field;
+}
+
+void AlcatelContact::diffDeleted(const AlcatelContact &cmp) {
+    deleted_flags[0] = (this->LastName.isEmpty()) && (!cmp.LastName.isEmpty());
+    deleted_flags[1] = (this->FirstName.isEmpty()) && (!cmp.FirstName.isEmpty());
+    deleted_flags[2] = (this->Company.isEmpty()) && (!cmp.Company.isEmpty());
+    deleted_flags[3] = (this->JobTitle.isEmpty()) && (!cmp.JobTitle.isEmpty());
+    deleted_flags[4] = (this->Note.isEmpty()) && (!cmp.Note.isEmpty());
+    deleted_flags[5] = (this->Category == -1) && (cmp.Category != -1);
+    deleted_flags[6] = (this->Private == -1) && (cmp.Private != -1);
+    deleted_flags[7] = (this->WorkNumber.isEmpty()) && (!cmp.WorkNumber.isEmpty());
+    deleted_flags[8] = (this->MainNumber.isEmpty()) && (!cmp.MainNumber.isEmpty());
+    deleted_flags[9] = (this->FaxNumber.isEmpty()) && (!cmp.FaxNumber.isEmpty());
+    deleted_flags[10] = (this->OtherNumber.isEmpty()) && (!cmp.OtherNumber.isEmpty());
+    deleted_flags[11] = (this->PagerNumber.isEmpty()) && (!cmp.PagerNumber.isEmpty());
+    deleted_flags[12] = (this->MobileNumber.isEmpty()) && (!cmp.MobileNumber.isEmpty());
+    deleted_flags[13] = (this->HomeNumber.isEmpty()) && (!cmp.HomeNumber.isEmpty());
+    deleted_flags[14] = (this->Email1.isEmpty()) && (!cmp.Email2.isEmpty());
+    deleted_flags[15] = (this->Email2.isEmpty()) && (!cmp.Email2.isEmpty());
+    deleted_flags[16] = (this->Address.isEmpty()) && (!cmp.Address.isEmpty());
+    deleted_flags[17] = (this->City.isEmpty()) && (!cmp.City.isEmpty());
+    deleted_flags[18] = (this->State.isEmpty()) && (!cmp.State.isEmpty());
+    deleted_flags[19] = (this->Zip.isEmpty()) && (!cmp.Zip.isEmpty());
+    deleted_flags[20] = (this->Country.isEmpty()) && (!cmp.Country.isEmpty());
+    deleted_flags[21] = (this->Custom1.isEmpty()) && (!cmp.Custom1.isEmpty());
+    deleted_flags[22] = (this->Custom2.isEmpty()) && (!cmp.Custom2.isEmpty());
+    deleted_flags[23] = (this->Custom3.isEmpty()) && (!cmp.Custom3.isEmpty());
+    deleted_flags[24] = (this->Custom4.isEmpty()) && (!cmp.Custom4.isEmpty());
+}
+
+
 AlcatelCalendar::AlcatelCalendar() {
     Private = -1;
     EventType = -1;
@@ -149,6 +279,8 @@ AlcatelCalendar::AlcatelCalendar() {
     WeekOfMonth = -1;
     Month = -1;
     Frequency = -1;
+
+    for (int i = 0; i < max_field; i++) deleted_flags[i] = false;
 }
 
 AlcatelCalendar::~AlcatelCalendar() {
@@ -262,12 +394,71 @@ void AlcatelCalendar::setField(int number, AlcatelFieldStruct *data) {
     }
 }
 
+AlcatelFieldStruct *AlcatelCalendar::getField(int number) {
+    AlcatelFieldStruct *field = (AlcatelFieldStruct *)malloc(sizeof(AlcatelFieldStruct));
+    switch (number) {
+        case 0: field->type = _date; if (deleted_flags[number]) field->data = NULL; else if (Date.isNull()) {free (field); field = NULL;} else  field->data = getAlcatelField(Date, _date); break;
+        case 1: field->type = _time; if (deleted_flags[number]) field->data = NULL; else if (StartTime.isNull()) {free (field); field = NULL;} else  field->data = getAlcatelField(StartTime, _time); break;
+        case 2: field->type = _time; if (deleted_flags[number]) field->data = NULL; else if (EndTime.isNull()) {free (field); field = NULL;} else  field->data = getAlcatelField(EndTime, _time); break;
+        case 3: field->type = _date; if (deleted_flags[number]) field->data = NULL; else if (Alarm.isNull()) {free (field); field = NULL;} else  field->data = getAlcatelField(Alarm, _date); break;
+        case 4: field->type = _time; if (deleted_flags[number]) field->data = NULL; else if (Alarm.isNull()) {free (field); field = NULL;} else  field->data = getAlcatelField(Alarm, _time); break;
+        case 5: field->type = _string; if (deleted_flags[number]) field->data = NULL; else if (Subject.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(Subject, _string); break;
+        case 6: field->type = _bool; if (deleted_flags[number]) field->data = NULL; else if (Private == -1) {free (field); field = NULL;} else  field->data = getAlcatelField(Private, _bool); break;
+        case 7: field->type = _enum; if (deleted_flags[number]) field->data = NULL; else if (EventType == -1) {free (field); field = NULL;} else  field->data = getAlcatelField(EventType, _enum); break;
+        case 8: field->type = _int; if (deleted_flags[number]) field->data = NULL; else if (ContactID == -1) {free (field); field = NULL;} else  field->data = getAlcatelField(ContactID, _int); break;
+
+        case 10: field->type = _byte; if (deleted_flags[number]) field->data = NULL; else if (DayOfWeek == -1) {free (field); field = NULL;} else  field->data = getAlcatelField(DayOfWeek, _byte); break;
+        case 11: field->type = _byte; if (deleted_flags[number]) field->data = NULL; else if (Day == -1) {free (field); field = NULL;} else  field->data = getAlcatelField(Day, _byte); break;
+        case 12: field->type = _byte; if (deleted_flags[number]) field->data = NULL; else if (WeekOfMonth == -1) {free (field); field = NULL;} else  field->data = getAlcatelField(WeekOfMonth, _byte); break;
+        case 13: field->type = _byte; if (deleted_flags[number]) field->data = NULL; else if (Month == -1) {free (field); field = NULL;} else  field->data = getAlcatelField(Month, _byte); break;
+
+        case 17: field->type = _byte; if (deleted_flags[number]) field->data = NULL; else if (Frequency == -1) {free (field); field = NULL;} else  field->data = getAlcatelField(Frequency, _byte); break;
+        case 18: field->type = _date; if (deleted_flags[number]) field->data = NULL; else if (StartDate.isNull()) {free (field); field = NULL;} else  field->data = getAlcatelField(StartDate, _date); break;
+        case 19: field->type = _date; if (deleted_flags[number]) field->data = NULL; else if (StopDate.isNull()) {free (field); field = NULL;} else  field->data = getAlcatelField(StopDate, _date); break;
+        case 20: field->type = _date; if (deleted_flags[number]) field->data = NULL; else if (Alarm2.isNull()) {free (field); field = NULL;} else  field->data = getAlcatelField(Alarm2, _date); break;
+        case 21: field->type = _time; if (deleted_flags[number]) field->data = NULL; else if (Alarm2.isNull()) {free (field); field = NULL;} else  field->data = getAlcatelField(Alarm2, _time); break;
+
+        case 9:
+        case 14:
+        case 15:
+        case 16: free (field); field = NULL; break; /* silently ignore this, because we loop over all fields */
+
+        default: message(MSG_WARNING, "Unknown field occured (%02d)!", number); free (field); field = NULL; break;
+    }
+    return field;
+}
+
+void AlcatelCalendar::diffDeleted(const AlcatelCalendar &cmp) {
+    deleted_flags[0] = (this->Date.isNull()) && (!cmp.Date.isNull());
+    deleted_flags[1] = (this->StartTime.isNull()) && (!cmp.StartTime.isNull());
+    deleted_flags[2] = (this->EndTime.isNull()) && (!cmp.EndTime.isNull());
+    deleted_flags[3] = (this->Alarm.isNull()) && (!cmp.Alarm.isNull());
+    deleted_flags[4] = (this->Alarm.isNull()) && (!cmp.Alarm.isNull());
+    deleted_flags[5] = (this->Subject.isEmpty()) && (!cmp.Subject.isEmpty());
+    deleted_flags[6] = (this->Private == -1) && (cmp.Private != -1);
+    deleted_flags[7] = (this->EventType == -1) && (cmp.EventType != -1);
+    deleted_flags[8] = (this->ContactID == -1) && (cmp.ContactID != -1);
+
+    deleted_flags[10] = (this->DayOfWeek == -1) && (cmp.DayOfWeek != -1);
+    deleted_flags[11] = (this->Day == -1) && (cmp.Day != -1);
+    deleted_flags[12] = (this->WeekOfMonth == -1) && (cmp.WeekOfMonth != -1);
+    deleted_flags[13] = (this->Month == -1) && (cmp.Month != -1);
+
+    deleted_flags[17] = (this->Frequency == -1) && (cmp.Frequency != -1);
+    deleted_flags[18] = (this->StartDate.isNull()) && (!cmp.StartDate.isNull());
+    deleted_flags[19] = (this->StopDate.isNull()) && (!cmp.StopDate.isNull());
+    deleted_flags[20] = (this->Alarm2.isNull()) && (!cmp.Alarm2.isNull());
+    deleted_flags[21] = (this->Alarm2.isNull()) && (!cmp.Alarm2.isNull());
+}
+
 AlcatelTodo::AlcatelTodo() {
     Completed = -1;
     Private = -1;
     Category = -1;
     Priority = -1;
     ContactID = -1;
+
+    for (int i = 0; i < max_field; i++) deleted_flags[i] = false;
 }
 
 AlcatelTodo::~AlcatelTodo() {
@@ -291,6 +482,36 @@ void AlcatelTodo::setField(int number, AlcatelFieldStruct *data) {
 
         default: message(MSG_WARNING, "Unknown field occured (%02d)!", number); break;
     }
+}
+
+AlcatelFieldStruct *AlcatelTodo::getField(int number) {
+    AlcatelFieldStruct *field = (AlcatelFieldStruct *)malloc(sizeof(AlcatelFieldStruct));
+    switch (number) {
+        case 0: field->type = _date; if (deleted_flags[number]) field->data = NULL; else if (DueDate.isNull()) {free (field); field = NULL;} else  field->data = getAlcatelField(DueDate, field->type); break;
+        case 1: field->type = _bool; if (deleted_flags[number]) field->data = NULL; else if (Completed == -1) {free (field); field = NULL;} else  field->data = getAlcatelField(Completed, field->type);  break;
+        case 2: field->type = _date; if (deleted_flags[number]) field->data = NULL; else if (Alarm.isNull()) {free (field); field = NULL;} else  field->data = getAlcatelField(Alarm, field->type);  break;
+        case 3: field->type = _time; if (deleted_flags[number]) field->data = NULL; else if (Alarm.isNull()) {free (field); field = NULL;} else  field->data = getAlcatelField(Alarm, field->type); break;
+        case 4: field->type = _string; if (deleted_flags[number]) field->data = NULL; else if (Subject.isEmpty()) {free (field); field = NULL;} else  field->data = getAlcatelField(Subject, field->type); break;
+        case 5: field->type = _bool; if (deleted_flags[number]) field->data = NULL; else if (Private == -1) {free (field); field = NULL;} else  field->data = getAlcatelField(Private, field->type); break;
+        case 6: field->type = _byte; if (deleted_flags[number]) field->data = NULL; else if (Category == -1) {free (field); field = NULL;} else  field->data = getAlcatelField(Category, field->type); break;
+        case 7: field->type = _enum; if (deleted_flags[number]) field->data = NULL; else if (Priority == -1) {free (field); field = NULL;} else  field->data = getAlcatelField(Priority, field->type); break;
+        case 8: field->type = _int; if (deleted_flags[number]) field->data = NULL; else if (ContactID == -1) {free (field); field = NULL;} else  field->data = getAlcatelField(ContactID, field->type); break;
+
+        default: message(MSG_WARNING, "Unknown field occured (%02d)!", number); free (field); field = NULL; break;
+    }
+    return field;
+}
+
+void AlcatelTodo::diffDeleted(const AlcatelTodo &cmp) {
+    deleted_flags[0] = (this->DueDate.isNull()) && (!cmp.DueDate.isNull());
+    deleted_flags[1] = (this->Completed == -1) && (cmp.Completed != -1);
+    deleted_flags[2] = (this->Alarm.isNull()) && (!cmp.Alarm.isNull());
+    deleted_flags[3] = (this->Alarm.isNull()) && (!cmp.Alarm.isNull());
+    deleted_flags[4] = (this->Subject.isEmpty()) && (!cmp.Subject.isEmpty());
+    deleted_flags[5] = (this->Private == -1) && (cmp.Private != -1);
+    deleted_flags[6] = (this->Category == -1) && (cmp.Category != -1);
+    deleted_flags[7] = (this->Priority == -1) && (cmp.Priority != -1);
+    deleted_flags[8] = (this->ContactID == -1) && (cmp.ContactID == -1);
 }
 
 AlcatelMessage::AlcatelMessage() {

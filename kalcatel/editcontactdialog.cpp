@@ -395,6 +395,7 @@ void EditContactDialog::slotOK() {
         cont.PrevStorage = contact->PrevStorage;
         if (*contact != cont) {
             // item was changed
+            cont.diffDeleted(*contact);
             list->remove(*contact);
             cont.Modified = true;
             list->append(cont);

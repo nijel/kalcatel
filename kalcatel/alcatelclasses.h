@@ -89,6 +89,12 @@ public:
     /** sets field read from mobile in this class
       */
     void setField(int number, AlcatelFieldStruct *data);
+    /** gets number-th field
+      */
+    AlcatelFieldStruct *getField(int number);
+    /** sets fields that are missing in current object from cmp as deleted
+      */
+    void diffDeleted(const AlcatelContact &cmp);
 
     bool operator==(const AlcatelContact &cmp) const;
     bool operator!=(const AlcatelContact &cmp) const;
@@ -127,6 +133,9 @@ public:
     QString Custom4;
 
     const char *getClassName() {static const char cn[]="AlcatelContact";return cn;}
+    static const int max_field = 25;
+private:
+    bool deleted_flags[max_field];
 };
 
 /** class for storing calendar
@@ -139,6 +148,12 @@ public:
     /** sets field read from mobile in this class
       */
     void setField(int number, AlcatelFieldStruct *data);
+    /** gets number-th field
+      */
+    AlcatelFieldStruct *getField(int number);
+    /** sets fields that are missing in current object from cmp as deleted
+      */
+    void diffDeleted(const AlcatelCalendar &cmp);
 
     bool operator==(const AlcatelCalendar &cmp) const;
     bool operator!=(const AlcatelCalendar &cmp) const;
@@ -179,6 +194,9 @@ public:
     QDateTime Alarm2;
 
     const char *getClassName() {static const char cn[]="AlcatelCalendar";return cn;}
+    static const int max_field = 22;
+private:
+    bool deleted_flags[max_field];
 };
 
 /** class for storing todos
@@ -191,6 +209,12 @@ public:
     /** sets field read from mobile in this class
       */
     void setField(int number, AlcatelFieldStruct *data);
+    /** gets number-th field
+      */
+    AlcatelFieldStruct *getField(int number);
+    /** sets fields that are missing in current object from cmp as deleted
+      */
+    void diffDeleted(const AlcatelTodo &cmp);
 
     bool operator==(const AlcatelTodo &cmp) const;
     bool operator!=(const AlcatelTodo &cmp) const;
@@ -213,6 +237,9 @@ public:
     int ContactID;
 
     const char *getClassName() {static const char cn[]="AlcatelTodo";return cn;}
+    static const int max_field = 9;
+private:
+    bool deleted_flags[max_field];
 };
 
 /** class for storing messages

@@ -1025,6 +1025,7 @@ void KAlcatelView::slotTodoDoubleClicked(QListViewItem *item) {
 }
 
 void KAlcatelView::slotCalendarDoubleClicked(QListViewItem *item) {
+/* TODO: add editing code here */
 }
 
 void KAlcatelView::slotContactDoubleClicked(QListViewItem *item) {

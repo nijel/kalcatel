@@ -270,12 +270,13 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
     debugEdit->insertItem(i18n("Error"));
     debugEdit->insertItem(i18n("None"));
 
-    QWhatsThis::add(debugEdit ,i18n("<b>Stderr messages</b><br>How many messages will be written to standard error output. Messages with lower priority than selected won't be shown. Use debug if there are probles using this program. Debug 2 increases verbosity mostly in binary mode and for most cases is useless."));
+    QWhatsThis::add(debugEdit ,i18n("<b>Stderr messages</b><br>How many messages will be written to standard error output. Messages with lower priority than selected won't be shown. Use Debug if there are problems using this program and possibly consult output with author."
+                                    "<br>Debug 2 only adds some (probaly) unuseful information about reading/writing data to mobile."));
     QToolTip::add(debugEdit ,i18n("Do not display messages with lower priority than"));
 
     otherLayout->addWidget(debugEdit, 6, 1);
 
-    mainLayout->addWidget( janus, 0, 0);
+    mainLayout->addWidget(janus, 0, 0);
 
     QHBoxLayout *layout = new QHBoxLayout;
 

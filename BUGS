@@ -1,8 +1,19 @@
 KNOWN BUGS
 ----------
 
+PROGRAM LOOKS FROZEN
+
+This is penalty for single thread program. Just don NOT kill it and wait some
+time (how much it depends on operation you were performing, reading and
+writing data from/to mobile can take much time, especially when you have
+stored lot of contacts/events/todos there). This issue is planned to fixed in
+0.5 release.
+
+
 PROGRAM CAN'T CONNECT
-(note: this bug is since 0.3 very rare)
+(note: this bug is since 0.3 very rare because some a bit more inteligent and
+ much more slower connecting procedure allows to connect even if phone was
+ kept in wrong state)
 
 Sometimes this program doesn't connect correctly to mobile at first attempt,
 trying again mostly fixes it. When problem stays, try to connect to mobile

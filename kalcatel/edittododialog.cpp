@@ -208,7 +208,6 @@ EditTodoDialog::~EditTodoDialog() {
 }
 
 void EditTodoDialog::emptyFields() {
-    /* TODO: add action here */
     editDueDate->setDate(QDate::currentDate());
     editAlarmDate->setDate(QDate::currentDate());
     editAlarmEnabled->setChecked(false);
@@ -365,6 +364,7 @@ void EditTodoDialog::slotOK() {
         cont.PrevStorage = todo->PrevStorage;
         if (*todo != cont) {
             // item was changed
+            cont.diffDeleted(*todo);
             list->remove(*todo);
             cont.Modified = true;
             list->append(cont);

@@ -2,7 +2,7 @@ known bugs:
  - sometimes this doesn't connect correctly to mobile at first attempt, trying
    again or connecing before using another program (minicom) fixes it, if you
    know any solution send it please to me
- - currently only characters <127 work correctly
+ - currently only ASCII characters <127 work correctly
 
 for 0.1-prerelease:
  - (DONE) reading of contacts (mobile), calendar, todo
@@ -12,7 +12,11 @@ for 0.2-alpha:
  - (DONE) reading of everything - add calls and contacts from SIM
  - (DONE) saving of document
  - (DONE) loading of document
- - load/save still contains some bugs - sometime one or two days are lost, in calendar start/stop date is lost
+merging
+split all listing of data (pc/mobile/sim)
+"hypertext" links to contacts
+icon for pc storage
+
 
 for 0.3-beta:
  - editing of calendar/contacts/...
@@ -24,24 +28,37 @@ for 0.4:
 
 sometimes (till 1.0):
  - czech translation
+ - searching
  - export/import data from csv (and maybe others)
- - rewrite reading as separate thread and allow canceling (probably using QThread + QProgressDialog)
- - move modem initialization (?)
+ - rewrite reading as separate thread and allow canceling (probably using
+   QThread + QProgressDialog)
  - synchronisation with kab (and maybe also korganizer)
- - save and restore positions and size of interface (splitters, list headers, toolbars, ...)
+ - save and restore positions and size of interface (splitters, list
+   headers, toolbars, ...)
  - read clock, set clock as they are in computer
  - contacts sim <-> mobile transfer
 
 nice to have features (probable):
  - print support
  - copy & paste whole items over clipboard
- - try to do something with alarms
+ - try to do something with alarms (this will be probably part of calendar
+   editation, because alarms are in fact calendar events of specific type and
+   with zero date and at commands support for setting this seems to be broken)
 
 nice to have features (possible):
- - simplier interface for non Alcatel phones (without anything what is Alcatel specific)
+ - simplier interface for non Alcatel phones (without anything what is Alcatel
+   specific)
+ - some merge with gnokii - there are currently three possibilities I am
+   thinkink of (I appreciate any help acoording to this):
+    - add alcatel code into gnokii
+    - add support for linkink with knokii in alcatel
+    - make some more generic library for accessing mobiles and add to that
+      library code from gnokii, alcatool and may be some others
  - calendar look for calendar items
  - nicer icons ;-)
 
-nice to have features (unprobable):
+nice to have features (unprobable - all this probably needs reading of flash
+some decoding ot it and write it back, but I'm not able to make such thing.
+Can you help with this?):
  - support for messages in phone
  - logo changing

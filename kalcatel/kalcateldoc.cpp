@@ -197,6 +197,7 @@ QDateTime KAlcatelDoc::readDomDateTime(QDomElement el) {
 
 QDate KAlcatelDoc::readDomDate(QDomElement el) {
     QDate date;
+    date.setYMD(2002,1,31); // need to set date, month set here MUST have 31 days...
     QDomNode n = el.firstChild();
     while( !n.isNull() ) {
         QDomElement l = n.toElement();
@@ -899,17 +900,19 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
             *strm << "</storage>\n";
         }
 
-        *strm << "   <date>\n";
-        *strm << "    <day>";
-        *strm << (*calit).Date.day();
-        *strm << "</day>\n";
-        *strm << "    <month>";
-        *strm << (*calit).Date.month();
-        *strm << "</month>\n";
-        *strm << "    <year>";
-        *strm << (*calit).Date.year();
-        *strm << "</year>\n";
-        *strm << "   </date>\n";
+        if (!(*calit).Date.isNull()){
+            *strm << "   <date>\n";
+            *strm << "    <day>";
+            *strm << (*calit).Date.day();
+            *strm << "</day>\n";
+            *strm << "    <month>";
+            *strm << (*calit).Date.month();
+            *strm << "</month>\n";
+            *strm << "    <year>";
+            *strm << (*calit).Date.year();
+            *strm << "</year>\n";
+            *strm << "   </date>\n";
+        }
 
         if ((*calit).EventType != ALC_CALENDAR_BIRTHDAY && (*calit).EventType != ALC_CALENDAR_ALARM) {
             *strm << "   <starttime>\n";

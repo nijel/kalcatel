@@ -4,6 +4,9 @@ KAlcatel - Changelog
 
 $Id$
 
+2002-02-28 Michal Cihar <cihar@email.cz>
+        * fixed compile time bug for some gcc/distributions
+
 2002-02-25 Michal Cihar <cihar@email.cz>
         * added key configuration
         * added document information

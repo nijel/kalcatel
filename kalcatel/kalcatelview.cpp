@@ -42,7 +42,9 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : KJanusWidget(par
 {
   QStringList list = QStringList();
   setShowIconsInTreeList (true);
-  setTreeListAutoResize (true);
+//  setTreeListAutoResize (true);
+
+//  setShowAll (true);
 
   todo = addVBoxPage (i18n("Todos"), i18n("All todos"), SmallIcon("kalcatel-todo.png"));
   todo_list = createListView(todo, alc_todos);

@@ -408,7 +408,6 @@ void KAlcatelView::repaint() {
                                 (* it).Completed == -1 ? QString(""): (* it).Completed ? i18n("Yes") : i18n("No"),
                                 (* it).Priority == -1 ? QString("") : Priorities[(* it).Priority],
                                 (* it).DueDate.isNull()?i18n("None"):(* it).DueDate.toString(),
-//                                (* it).Subject,
                                 ((* it).Subject.isNull() && (* it).ContactID != -1 && cont != NULL) ? i18n("Call to %1").arg(cont->getName()) : (* it).Subject,
                                 QString("%1 %2").
                                     arg(StorageTypes[(* it).Storage]).arg((* it).Id));
@@ -430,7 +429,6 @@ void KAlcatelView::repaint() {
                         (* it).Completed == -1 ? QString(""): (* it).Completed ? i18n("Yes") : i18n("No"),
                         (* it).Priority == -1 ? QString("") : Priorities[(* it).Priority],
                         (* it).DueDate.isNull()?i18n("None"):(* it).DueDate.toString(),
-//                        (* it).Subject,
                         ((* it).Subject.isNull() && (* it).ContactID != -1 && cont != NULL) ? i18n("Call to %1").arg(cont->getName()) : (* it).Subject,
                         catname,
                         QString("%1 %2").

@@ -133,8 +133,8 @@ bool KAlcatelDoc::saveModified() {
                     win->slotFileSaveAs();
                 } else {
                     saveDocument(URL());
-             	};
-             	deleteContents();
+                };
+                deleteContents();
                 completed=true;
                 break;
             case KMessageBox::No:
@@ -258,6 +258,15 @@ void KAlcatelDoc::readDomMessage(QDomElement el) {
     Msg.Id = pcStorageCounter++;
     Msg.Storage = StoragePC;
 
+    QString del = el.attribute("deleted");
+    if (del == "yes") {
+        Msg.Deleted = true;
+    }
+    QString mod = el.attribute("modified");
+    if (mod == "yes") {
+        Msg.Modified = true;
+    }
+
     while( !n.isNull() ) {
         QDomElement l = n.toElement();
         if( !l.isNull() ) {
@@ -293,6 +302,15 @@ void KAlcatelDoc::readDomContact(QDomElement el) {
     QDomNode n = el.firstChild();
     AlcatelContact Cont;
     Cont.Storage = StoragePC;
+
+    QString del = el.attribute("deleted");
+    if (del == "yes") {
+        Cont.Deleted = true;
+    }
+    QString mod = el.attribute("modified");
+    if (mod == "yes") {
+        Cont.Modified = true;
+    }
 
     while( !n.isNull() ) {
         QDomElement l = n.toElement();
@@ -372,6 +390,15 @@ void KAlcatelDoc::readDomEvent(QDomElement el) {
     Cal.Id = pcStorageCounter++;
     Cal.Storage = StoragePC;
 
+    QString del = el.attribute("deleted");
+    if (del == "yes") {
+        Cal.Deleted = true;
+    }
+    QString mod = el.attribute("modified");
+    if (mod == "yes") {
+        Cal.Modified = true;
+    }
+
     while( !n.isNull() ) {
         QDomElement l = n.toElement();
         if( !l.isNull() ) {
@@ -427,6 +454,15 @@ void KAlcatelDoc::readDomTodo(QDomElement el) {
     Cal.Id = pcStorageCounter++;
     Cal.Storage = StoragePC;
 
+    QString del = el.attribute("deleted");
+    if (del == "yes") {
+        Cal.Deleted = true;
+    }
+    QString mod = el.attribute("modified");
+    if (mod == "yes") {
+        Cal.Modified = true;
+    }
+
     while( !n.isNull() ) {
         QDomElement l = n.toElement();
         if( !l.isNull() ) {
@@ -466,6 +502,15 @@ void KAlcatelDoc::readDomCall(QDomElement el) {
     Call.Storage = StoragePC;
     Call.Id = pcStorageCounter++;
 
+    QString del = el.attribute("deleted");
+    if (del == "yes") {
+        Call.Deleted = true;
+    }
+    QString mod = el.attribute("modified");
+    if (mod == "yes") {
+        Call.Modified = true;
+    }
+
     while( !n.isNull() ) {
         QDomElement l = n.toElement();
         if( !l.isNull() ) {
@@ -493,6 +538,15 @@ void KAlcatelDoc::readDomCategory(QDomElement el, AlcatelCategoryList *list) {
     QDomNode n = el.firstChild();
     AlcatelCategory Cat;
     Cat.Storage = StoragePC;
+
+    QString del = el.attribute("deleted");
+    if (del == "yes") {
+        Cat.Deleted = true;
+    }
+    QString mod = el.attribute("modified");
+    if (mod == "yes") {
+        Cat.Modified = true;
+    }
 
     while( !n.isNull() ) {
         QDomElement l = n.toElement();

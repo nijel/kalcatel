@@ -65,6 +65,7 @@ public:
       * Takes affect only fo StorageMobile and StorageSIM.
       */
     bool Modified;
+    bool Deleted;
     virtual const char *getClassName() = 0;
     virtual QString getName(void) = 0;
 };

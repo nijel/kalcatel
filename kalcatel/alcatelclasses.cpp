@@ -84,6 +84,7 @@ AlcatelClass::AlcatelClass() {
     PrevId = -1;
     PrevStorage = StorageNone;
     Modified = false;
+    Deleted = false;
 }
 
 AlcatelContact::AlcatelContact() {

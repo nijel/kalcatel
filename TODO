@@ -25,6 +25,7 @@ for 0.4:
 
 sometimes (till 1.0):
  - czech translation
+ - rewrite reading as separate thread and allow canceling (probably using QThread + QProgressDialog)
  - move modem initialization (?)
  - synchronisation with kab
  - save and restore positions and size of interface (splitters, list headers, toolbars, ...)

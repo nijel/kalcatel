@@ -91,6 +91,7 @@ class KAlcatelApp : public KMainWindow
     QString mobile_device;
     QString mobile_lock;
     QString mobile_init;
+    bool mobile_rtscts;
     int mobile_rate;
     int mobile_debug;
     bool auto_open_last;

@@ -1379,6 +1379,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what, int category) {
     strcpy(initstring, win->mobile_init);
     strcpy(device, win->mobile_device);
     devname = strrchr(device, '/');
+    modem_rtscts = win->mobile_rtscts;
     devname++;
     sprintf(lockname, win->mobile_lock, devname);
     rate = win->mobile_rate;
@@ -1433,7 +1434,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what, int category) {
              case ERR_MDM_WRITE:
                  KMessageBox::error(win, i18n("Can not write to selected device."), i18n("Error"));
                  modem_close();
-                 return;
+                 return false;
              default:
                  KMessageBox::error(win, i18n("Failed initializing modem.\nUnknown error (%1).").arg(modem_errno), i18n("Error"));
                  modem_close();

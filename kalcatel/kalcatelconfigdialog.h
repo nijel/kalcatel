@@ -86,6 +86,7 @@ private:
     /** baud rate edit
       */
     QComboBox *rateEdit;
+    QCheckBox *editRTSCTS;
     /** debug level edit
       */
     QComboBox *debugEdit;

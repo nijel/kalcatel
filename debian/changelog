@@ -1,3 +1,9 @@
+kalcatel (0.2.1-2) unstable; urgency=low
+
+  * Added support for setting flow control
+
+ -- Michal Cihar <cihar@email.cz>  Thu,  7 Mar 2002 21:56:33 +0100
+
 kalcatel (0.2.1-1) unstable; urgency=low
 
   * New upstream release.

@@ -115,8 +115,16 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
 
     mobileLayout->addWidget(rateEdit, 3, 1);
 
-    label = new QLabel(i18n("Stderr messages:"), mobilePage);
+    label = new QLabel(i18n("Use hardware flow control:"), mobilePage);
     mobileLayout->addWidget(label, 4, 0);
+
+    editRTSCTS = new QCheckBox(i18n("RTSCTS"), mobilePage);
+    mobileLayout->addWidget(editRTSCTS, 4, 1);
+
+    QWhatsThis::add(editRTSCTS ,i18n("<b>Use hardware flow control</b><br>This disables/enables hardware (RTSCTS) flow control or software flow control (XON/XOFF). If your cable supports RTSCTS, it should work better."));
+
+    label = new QLabel(i18n("Stderr messages:"), mobilePage);
+    mobileLayout->addWidget(label, 5, 0);
 
     debugEdit = new QComboBox(mobilePage);
     debugEdit->insertItem(i18n("Debug 2"));
@@ -130,7 +138,7 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
     QWhatsThis::add(debugEdit ,i18n("<b>Stderr messages</b><br>How many messages will be written to standard error output. Messages with lower priority than selected won't be shown. Use debug if there are probles using this program."));
     QToolTip::add(debugEdit ,i18n("Do not display messages with lower priority than"));
 
-    mobileLayout->addWidget(debugEdit, 4, 1);
+    mobileLayout->addWidget(debugEdit, 5, 1);
 
     mergePage = janus->addPage (i18n("Merging"), i18n("Merging configuration"), DesktopIcon("kalcatel-configure.png"));
     QGridLayout *mergeLayout = new QGridLayout( mergePage, 2, 1);
@@ -230,6 +238,7 @@ void KAlcatelConfigDialog::slotOK() {
     theApp->mobile_device = editDevice->url();
     theApp->mobile_lock = editLock->text();
     theApp->mobile_init = editInit->text();
+    theApp->mobile_rtscts = editRTSCTS->isChecked();
     theApp->phone_prefix = editPrefix->text();
     theApp->auto_open_last = editAutoOpen->isChecked();
 
@@ -257,6 +266,7 @@ int KAlcatelConfigDialog::exec () {
     editDevice->setURL(theApp->mobile_device);
     editLock->setText(theApp->mobile_lock);
     editInit->setText(theApp->mobile_init);
+    editRTSCTS->setChecked(theApp->mobile_rtscts);
     editPrefix->setText(theApp->phone_prefix);
     editAutoOpen->setChecked(theApp->auto_open_last);
 

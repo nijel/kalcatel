@@ -6,6 +6,7 @@ $Id$
 
 2002-03-07 Michal Cihar <cihar@email.cz>
         * corrected error message when program can not write to device
+        * added configuration of RTSCTS or XON/XOFF flow control
 
 2002-03-07 Michal Cihar <cihar@email.cz>
         * released 0.2.1

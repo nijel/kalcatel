@@ -38,6 +38,7 @@ extern int modem_errno;
 //int modem;
 extern int rate;
 extern int baudrate;
+extern bool modem_rtscts;
 
 extern char device[100];
 extern char lockname[100];

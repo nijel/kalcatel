@@ -43,6 +43,7 @@ int modem_initialised=0;
 int modem_errno;
 
 int modem=0;
+bool modem_rtscts = true;
 int rate;
 
 int baudrate;
@@ -159,8 +160,8 @@ void modem_setup(void) {
     termios newtio;
 	
     bzero(&newtio, sizeof(newtio));
-    newtio.c_cflag = baudrate|CS8|CREAD|HUPCL|CRTSCTS;
-    newtio.c_iflag = IGNBRK;
+    newtio.c_cflag = baudrate|CS8|CREAD|HUPCL|(modem_rtscts ? CRTSCTS : 0); //CRTSCTS;
+    newtio.c_iflag = IGNBRK|IGNPAR|(modem_rtscts ? 0 : IXON|IXOFF); //IXON|IXOFF
     newtio.c_oflag = 0;
 	newtio.c_lflag = 0;
 

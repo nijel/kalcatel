@@ -222,6 +222,7 @@ void KAlcatelApp::saveOptions() {
     config->writeEntry("Lock", mobile_lock);
     config->writeEntry("Init", mobile_init);
     config->writeEntry("Baud Rate", mobile_rate);
+    config->writeEntry("Use RTSCTS", mobile_rtscts);
     config->writeEntry("Debug", mobile_debug);
 }
 
@@ -269,6 +270,7 @@ void KAlcatelApp::readOptions(){
     mobile_init = config->readEntry("Init", "AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0");
     mobile_rate = config->readNumEntry("Baud Rate", 19200);
     mobile_debug = config->readNumEntry("Debug", MSG_DETAIL);
+    mobile_rtscts = config->readBoolEntry("Use RTSCTS", true);
     msg_level = mobile_debug;
 }
 
@@ -404,6 +406,7 @@ void KAlcatelApp::slotMobileInfo() {
     devname++;
     sprintf(lockname, mobile_lock, devname);
     rate = mobile_rate;
+    modem_rtscts = mobile_rtscts;
 
     switch (rate) {
         case 2400:   baudrate=B2400; break;

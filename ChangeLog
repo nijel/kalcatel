@@ -5,6 +5,9 @@ KAlcatel - Changelog
 $Id$
 
 2002-03-07 Michal Cihar <cihar@email.cz>
+        * corrected error message when program can not write to device
+
+2002-03-07 Michal Cihar <cihar@email.cz>
         * released 0.2.1
 
 2002-03-06 Michal Cihar <cihar@email.cz>

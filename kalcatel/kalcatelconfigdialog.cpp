@@ -71,6 +71,8 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
 
     devCombo->insertItem("/dev/ttyS0");
     devCombo->insertItem("/dev/ttyS1");
+    devCombo->insertItem("/dev/ttyS2");
+    devCombo->insertItem("/dev/ttyS3");
     devCombo->insertItem("/dev/mobile");
     devCombo->insertItem("/dev/modem");
 

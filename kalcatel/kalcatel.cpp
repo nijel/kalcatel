@@ -448,6 +448,10 @@ void KAlcatelApp::slotMobileInfo() {
                 KMessageBox::error(this, i18n("Failed selecting PDU mode."), i18n("Error"));
                 modem_close();
                 return;
+            case ERR_MDM_WRITE:
+                KMessageBox::error(this, i18n("Can not write to selected device."), i18n("Error"));
+                modem_close();
+                return;
             default:
                 KMessageBox::error(this, i18n("Failed initializing modem.\nUnknown error (%1).").arg(modem_errno), i18n("Error"));
                 modem_close();

@@ -110,7 +110,7 @@ int modem_cmd(const char* command,char* answer,int max,int timeout,const char* e
 
 		if (fails>10) {
             message(MSG_ERROR,"Write failed!\n");
-            return 0;
+            return -1;
         }
 		    
         tcdrain(modem);
@@ -191,9 +191,14 @@ int modem_init(void) {
     usleep(SLEEP_INIT);
 
     while (read(modem, answer, sizeof(command) - 1) > 0)
-        ;
+        ; /* just read garbare if there is any */
 
-    modem_cmd("\r\nAT\033\032\r\n",answer,sizeof(answer),0,NULL);/* ESCAPE, CTRL-Z */
+    /* ESCAPE, CTRL-Z */
+    if (modem_cmd("\r\nAT\033\032\r\n",answer,sizeof(answer),0,NULL) == -1) {
+        message(MSG_ERROR,"Cannot write do device!");
+        modem_errno = ERR_MDM_WRITE;
+        return 0;
+    }
 	
     /* perform initialization (if we should do it) */
     if (initstring[0])

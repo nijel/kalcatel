@@ -31,6 +31,7 @@
 #define ERR_MDM_LOCK        3
 #define ERR_MDM_OPEN        4
 #define ERR_MDM_LOCK_OPEN   5
+#define ERR_MDM_WRITE       6
 
 extern int modem_errno;
 

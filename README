@@ -22,9 +22,8 @@ could not guarantee any functionality in your case, but it works well for me.
 
 BUGS & NEW FEATURES
 
-Since I currently don't know how to make standard KDE bug report dialog
-working please send bug reports directly to me. List of known bugs is listed
-in file BUGS.
+For bugreporting use preferably KDE bug reporting dialog. List of known bugs
+is listed in file BUGS.
 
 If you would like some feature in KAlcatel, at first look into TODO file which
 contais plans for future versions. If your feature is not listed there or you

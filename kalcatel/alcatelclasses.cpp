@@ -778,3 +778,190 @@ AlcatelCategory *getCategoryByName(AlcatelCategoryList *list, const QString &nam
     }
     return NULL;
 }
+
+void getStatistics(AlcatelMessageList *list, int &total, int &pc, int &mobile, int &sim, int &deleted, int &modified, int &created) {
+    AlcatelMessageList::Iterator it;
+    total = 0;
+    pc = 0;
+    mobile = 0;
+    sim = 0;
+    deleted = 0;
+    modified = 0;
+    created = 0;
+    for( it = list->begin(); it != list->end(); ++it ) {
+        total++;
+        if ((*it).Modified) modified++;
+        if ((*it).Created) created++;
+        if ((*it).Deleted) deleted++;
+        switch ((*it).Storage) {
+            case(StoragePC):
+                pc++;
+                break;
+            case(StorageSIM):
+                sim++;
+                break;
+            case(StorageMobile):
+                mobile++;
+                break;
+            case(StorageNone):
+            case(StorageAny):
+                break;
+        }
+    }
+}
+
+void getStatistics(AlcatelCalendarList *list, int &total, int &pc, int &mobile, int &sim, int &deleted, int &modified, int &created) {
+    AlcatelCalendarList::Iterator it;
+    total = 0;
+    pc = 0;
+    mobile = 0;
+    sim = 0;
+    deleted = 0;
+    modified = 0;
+    created = 0;
+    for( it = list->begin(); it != list->end(); ++it ) {
+        total++;
+        if ((*it).Modified) modified++;
+        if ((*it).Created) created++;
+        if ((*it).Deleted) deleted++;
+        switch ((*it).Storage) {
+            case(StoragePC):
+                pc++;
+                break;
+            case(StorageSIM):
+                sim++;
+                break;
+            case(StorageMobile):
+                mobile++;
+                break;
+            case(StorageNone):
+            case(StorageAny):
+                break;
+        }
+    }
+}
+
+void getStatistics(AlcatelCategoryList *list, int &total, int &pc, int &mobile, int &sim, int &deleted, int &modified, int &created) {
+    AlcatelCategoryList::Iterator it;
+    total = 0;
+    pc = 0;
+    mobile = 0;
+    sim = 0;
+    deleted = 0;
+    modified = 0;
+    created = 0;
+    for( it = list->begin(); it != list->end(); ++it ) {
+        total++;
+        if ((*it).Modified) modified++;
+        if ((*it).Created) created++;
+        if ((*it).Deleted) deleted++;
+        switch ((*it).Storage) {
+            case(StoragePC):
+                pc++;
+                break;
+            case(StorageSIM):
+                sim++;
+                break;
+            case(StorageMobile):
+                mobile++;
+                break;
+            case(StorageNone):
+            case(StorageAny):
+                break;
+        }
+    }
+}
+
+void getStatistics(AlcatelContactList *list, int &total, int &pc, int &mobile, int &sim, int &deleted, int &modified, int &created) {
+    AlcatelContactList::Iterator it;
+    total = 0;
+    pc = 0;
+    mobile = 0;
+    sim = 0;
+    deleted = 0;
+    modified = 0;
+    created = 0;
+    for( it = list->begin(); it != list->end(); ++it ) {
+        total++;
+        if ((*it).Modified) modified++;
+        if ((*it).Created) created++;
+        if ((*it).Deleted) deleted++;
+        switch ((*it).Storage) {
+            case(StoragePC):
+                pc++;
+                break;
+            case(StorageSIM):
+                sim++;
+                break;
+            case(StorageMobile):
+                mobile++;
+                break;
+            case(StorageNone):
+            case(StorageAny):
+                break;
+        }
+    }
+}
+
+void getStatistics(AlcatelTodoList *list, int &total, int &pc, int &mobile, int &sim, int &deleted, int &modified, int &created) {
+    AlcatelTodoList::Iterator it;
+    total = 0;
+    pc = 0;
+    mobile = 0;
+    sim = 0;
+    deleted = 0;
+    modified = 0;
+    created = 0;
+    for( it = list->begin(); it != list->end(); ++it ) {
+        total++;
+        if ((*it).Modified) modified++;
+        if ((*it).Created) created++;
+        if ((*it).Deleted) deleted++;
+        switch ((*it).Storage) {
+            case(StoragePC):
+                pc++;
+                break;
+            case(StorageSIM):
+                sim++;
+                break;
+            case(StorageMobile):
+                mobile++;
+                break;
+            case(StorageNone):
+            case(StorageAny):
+                break;
+        }
+    }
+}
+
+void getStatistics(AlcatelCallList *list, int &total, int &pc, int &mobile, int &sim, int &deleted, int &modified, int &created) {
+    AlcatelCallList::Iterator it;
+    total = 0;
+    pc = 0;
+    mobile = 0;
+    sim = 0;
+    deleted = 0;
+    modified = 0;
+    created = 0;
+    for( it = list->begin(); it != list->end(); ++it ) {
+        total++;
+        if ((*it).Modified) modified++;
+        if ((*it).Created) created++;
+        if ((*it).Deleted) deleted++;
+        switch ((*it).Storage) {
+            case(StoragePC):
+                pc++;
+                break;
+            case(StorageSIM):
+                sim++;
+                break;
+            case(StorageMobile):
+                mobile++;
+                break;
+            case(StorageNone):
+            case(StorageAny):
+                break;
+        }
+    }
+}
+

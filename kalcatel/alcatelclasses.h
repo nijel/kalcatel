@@ -377,4 +377,13 @@ AlcatelCall *getCallByPrevId(AlcatelCallList *list, int id, AlcatelStorage stype
 /** returns category by name
   */
 AlcatelCategory *getCategoryByName(AlcatelCategoryList *list, const QString &name, AlcatelStorage type);
+
+
+void getStatistics(AlcatelMessageList *list, int &total, int &pc, int &mobile, int &sim, int &deleted, int &modified, int &created);
+void getStatistics(AlcatelCalendarList *list, int &total, int &pc, int &mobile, int &sim, int &deleted, int &modified, int &created);
+void getStatistics(AlcatelCategoryList *list, int &total, int &pc, int &mobile, int &sim, int &deleted, int &modified, int &created);
+void getStatistics(AlcatelContactList *list, int &total, int &pc, int &mobile, int &sim, int &deleted, int &modified, int &created);
+void getStatistics(AlcatelTodoList *list, int &total, int &pc, int &mobile, int &sim, int &deleted, int &modified, int &created);
+void getStatistics(AlcatelCallList *list, int &total, int &pc, int &mobile, int &sim, int &deleted, int &modified, int &created);
+
 #endif

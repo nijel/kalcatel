@@ -534,39 +534,86 @@ void KAlcatelView::repaint() {
         if (unread_sms)
             tree->setCurrentItem(messages_unread_item);
 
-        QString info = i18n("<h2>Document statistics:</h2>\n"
+        QString info = QString("<h2>%1:</h2>\n"
             "<table border=1 cellspacing=0 cellpadding=2>\n"
             "<tr><th>\n"
-            "Todos\n"
-            "</th><td>\n"
-            "%1\n"
-            "</td></tr>\n"
-            "<tr><th>\n"
-            "Calenar events\n"
-            "</th><td>\n"
-            "%2\n"
-            "</td></tr>\n"
-            "<tr><th>\n"
-            "Contacts\n"
-            "</th><td>\n"
-            "%3\n"
-            "</td></tr>\n"
-            "<tr><th>\n"
-            "Calls\n"
-            "</th><td>\n"
-            "%4\n"
-            "</td></tr>\n"
-            "<tr><th>\n"
-            "Messages\n"
-            "</th><td>\n"
-            "%5\n"
-            "</td></tr>\n"
-            "</table>").
-            arg(doc->todos->count()).
-            arg(doc->calendar->count()).
-            arg(doc->contacts->count()).
-            arg(doc->calls->count()).
-            arg(doc->messages->count());
+            "</th><th>\n"
+            "%2"
+            "</th><th>\n"
+            "%3"
+            "</th><th>\n"
+            "%4"
+            "</th><th>\n"
+            "%5"
+            "</th><th>\n"
+            "%6"
+            "</th><th>\n"
+            "%7"
+            "</th><th>\n"
+            "%8"
+            "</t></tr>\n").
+                arg(i18n("Document statistics")).
+                arg(i18n("All")).
+                arg(i18n("PC")).
+                arg(i18n("Mobile")).
+                arg(i18n("SIM")).
+                arg(i18n("Deleted")).
+                arg(i18n("Modified")).
+                arg(i18n("Created"));
+
+        int total, pc, mobile, sim, deleted, modified, created;
+
+        getStatistics(doc->todos, total, pc, mobile, sim, deleted, modified, created);
+        info.append(QString("<tr><td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td><td>%6</td><td>%7</td><td>%8</td></tr>").
+            arg(i18n("Todos")).
+            arg(total).
+            arg(pc).
+            arg(mobile).
+            arg(sim).
+            arg(deleted).
+            arg(modified).
+            arg(created));
+        getStatistics(doc->calendar, total, pc, mobile, sim, deleted, modified, created);
+        info.append(QString("<tr><td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td><td>%6</td><td>%7</td><td>%8</td></tr>").
+            arg(i18n("Events")).
+            arg(total).
+            arg(pc).
+            arg(mobile).
+            arg(sim).
+            arg(deleted).
+            arg(modified).
+            arg(created));
+        getStatistics(doc->contacts, total, pc, mobile, sim, deleted, modified, created);
+        info.append(QString("<tr><td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td><td>%6</td><td>%7</td><td>%8</td></tr>").
+            arg(i18n("Contacts")).
+            arg(total).
+            arg(pc).
+            arg(mobile).
+            arg(sim).
+            arg(deleted).
+            arg(modified).
+            arg(created));
+        getStatistics(doc->messages, total, pc, mobile, sim, deleted, modified, created);
+        info.append(QString("<tr><td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td><td>%6</td><td>%7</td><td>%8</td></tr>").
+            arg(i18n("Messages")).
+            arg(total).
+            arg(pc).
+            arg(mobile).
+            arg(sim).
+            arg(deleted).
+            arg(modified).
+            arg(created));
+        getStatistics(doc->calls, total, pc, mobile, sim, deleted, modified, created);
+        info.append(QString("<tr><td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td><td>%6</td><td>%7</td><td>%8</td></tr>").
+            arg(i18n("Calls")).
+            arg(total).
+            arg(pc).
+            arg(mobile).
+            arg(sim).
+            arg(deleted).
+            arg(modified).
+            arg(created));
+        info.append("</table>");
 
         kalcatel_html->begin();
         kalcatel_html->write(html_text->arg(i18n("Application to manage Alcatel One Touch 501 & 701 mobile")).arg(info));

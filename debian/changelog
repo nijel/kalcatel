@@ -1,3 +1,11 @@
+kalcatel (0.2.1-1) unstable; urgency=low
+
+  * New upstream release.
+    - supports more than 50 items from phone
+    - fixes some bugs and crashes
+
+ -- Michal Cihar <cihar@email.cz>  Wed,  6 Mar 2002 23:09:21 +0100
+
 kalcatel (0.2-1) unstable; urgency=low
 
   * New upstream release.

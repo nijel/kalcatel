@@ -71,6 +71,7 @@ class KHTMLPart;
 
 class QGridLayout;
 
+class KAlcatelListView;
 class KAlcatelTreeViewItem;
 
 #define ID_KALCATEL         0
@@ -162,14 +163,14 @@ class KAlcatelView : public QWidget {
         *calls_item, *calls_outgoing_item, *calls_missed_item, *calls_received_item,
         *messages_item, *messages_read_item, *messages_unread_item, *messages_sent_item, *messages_unsent_item;
 
-    KListView *todo_list, *todo_cat_lists[ALC_MAX_CATEGORIES],
+    KAlcatelListView *todo_list, *todo_cat_lists[ALC_MAX_CATEGORIES],
         *calendar_list,
         *contacts_list, *contacts_sim_list, *contacts_cat_list, *contacts_cat_lists[ALC_MAX_CATEGORIES],
         *calls_list, *calls_outgoing_list, *calls_missed_list, *calls_received_list,
         *messages_list, *messages_read_list, *messages_unread_list, *messages_sent_list, *messages_unsent_list;
 
 
-    KListView *createListView(QWidget *parent, AlcListType type);
+    KAlcatelListView *createListView(QWidget *parent, AlcListType type);
 
     int docVersion;
     int messagesVersion;

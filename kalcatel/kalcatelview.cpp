@@ -54,6 +54,7 @@
 
 // application specific includes
 #include "alcatelclasses.h"
+#include "kalcatellistview.h"
 #include "kalcatelview.h"
 #include "kalcateldoc.h"
 #include "kalcatel.h"
@@ -188,8 +189,8 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : QWidget(parent, 
 KAlcatelView::~KAlcatelView() {
 }
 
-KListView *KAlcatelView::createListView(QWidget *parent, AlcListType type) {
-    KListView *list = new KListView(parent);
+KAlcatelListView *KAlcatelView::createListView(QWidget *parent, AlcListType type) {
+    KAlcatelListView *list = new KAlcatelListView(parent);
 
     list->setAllColumnsShowFocus(true);
     list->setShowSortIndicator(true);

@@ -30,7 +30,7 @@ ldadd=\s$(LIB_KFILE) $(LIB_KHTML) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
 ldflags=
 
 [General]
-AMChanged=true
+AMChanged=false
 author=Michal Cihar
 configure_args=--prefix=/usr
 debug_args=
@@ -196,7 +196,7 @@ install_location=
 type=DATA
 
 [kalcatel/Makefile.am]
-files=kalcatel/main.cpp,kalcatel/kalcatel.cpp,kalcatel/kalcatel.h,kalcatel/kalcateldoc.cpp,kalcatel/kalcateldoc.h,kalcatel/kalcatelview.cpp,kalcatel/kalcatelview.h,kalcatel/kalcatelui.rc,kalcatel/kalcatel.desktop,kalcatel/alcatelclasses.cpp,kalcatel/alcatelclasses.h,kalcatel/kalcatelconfigdialog.cpp,kalcatel/kalcatelconfigdialog.h,kalcatel/kalcateltreeviewitem.cpp,kalcatel/kalcateltreeviewitem.h,kalcatel/kalcatelviewitem.cpp,kalcatel/kalcatelviewitem.h,kalcatel/kalcatelmergedialog.cpp,kalcatel/kalcatelmergedialog.h,kalcatel/editmessagedialog.cpp,kalcatel/editmessagedialog.h,kalcatel/signallabel.cpp,kalcatel/signallabel.h,kalcatel/signalled.cpp,kalcatel/signalled.h,kalcatel/editcontactdialog.cpp,kalcatel/editcontactdialog.h,kalcatel/phonenumbervalidator.cpp,kalcatel/phonenumbervalidator.h,kalcatel/kalcatellistview.cpp,kalcatel/kalcatellistview.h,kalcatel/edittododialog.cpp,kalcatel/edittododialog.h,kalcatel/timevalidator.cpp,kalcatel/timevalidator.h
+files=kalcatel/main.cpp,kalcatel/kalcatel.cpp,kalcatel/kalcatel.h,kalcatel/kalcateldoc.cpp,kalcatel/kalcateldoc.h,kalcatel/kalcatelview.cpp,kalcatel/kalcatelview.h,kalcatel/kalcatelui.rc,kalcatel/kalcatel.desktop,kalcatel/alcatelclasses.cpp,kalcatel/alcatelclasses.h,kalcatel/kalcatelconfigdialog.cpp,kalcatel/kalcatelconfigdialog.h,kalcatel/kalcateltreeviewitem.cpp,kalcatel/kalcateltreeviewitem.h,kalcatel/kalcatelviewitem.cpp,kalcatel/kalcatelviewitem.h,kalcatel/kalcatelmergedialog.cpp,kalcatel/kalcatelmergedialog.h,kalcatel/editmessagedialog.cpp,kalcatel/editmessagedialog.h,kalcatel/signallabel.cpp,kalcatel/signallabel.h,kalcatel/signalled.cpp,kalcatel/signalled.h,kalcatel/editcontactdialog.cpp,kalcatel/editcontactdialog.h,kalcatel/phonenumbervalidator.cpp,kalcatel/phonenumbervalidator.h,kalcatel/kalcatellistview.cpp,kalcatel/kalcatellistview.h,kalcatel/edittododialog.cpp,kalcatel/edittododialog.h,kalcatel/timevalidator.cpp,kalcatel/timevalidator.h,kalcatel/selectcontactdialog.cpp,kalcatel/selectcontactdialog.h
 sub_dirs=alcatool,images,info
 type=prog_main
 
@@ -861,6 +861,18 @@ install_location=
 type=SOURCE
 
 [kalcatel/phonenumbervalidator.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[kalcatel/selectcontactdialog.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[kalcatel/selectcontactdialog.h]
 dist=true
 install=false
 install_location=

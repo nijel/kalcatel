@@ -48,6 +48,8 @@
 
 #include "timevalidator.h"
 
+#include "selectcontactdialog.h"
+
 #include "edittododialog.h"
 
 EditTodoDialog::EditTodoDialog(AlcatelCategoryList *cat, AlcatelTodoList *lst, AlcatelContactList *conts, const AlcatelTodo *cont, QWidget *parent, const char *name ) : KDialog(parent,name,true) {
@@ -124,7 +126,7 @@ EditTodoDialog::EditTodoDialog(AlcatelCategoryList *cat, AlcatelTodoList *lst, A
     editContactID->setText(i18n("None"));
 
     QPushButton *buttonContacts = new QPushButton(i18n("Contacts..."), this);
-    buttonContacts->setDisabled(true);
+    connect ( buttonContacts, SIGNAL( clicked() ), this, SLOT(selectContacts()));
     mainLayout->addWidget(buttonContacts,10,2);
 
     line = new QFrame( this );
@@ -378,4 +380,21 @@ void EditTodoDialog::slotStorage(int st) {
         (AlcatelStorage)st == StorageAny ||
         (AlcatelStorage)st == StorageNone)
             editStorage->setCurrentItem((int)StoragePC);
+}
+
+void EditTodoDialog::selectContacts() {
+    SelectContactDialog dlg(SelectContactDialog::Contact,(AlcatelStorage)editStorage->currentItem(), contacts, this);
+    if (dlg.exec()) {
+        ContactID = dlg.getContactID();
+        if (ContactID != -1 && ContactID != 0) {
+            AlcatelContact *cont = getContactById(contacts, ContactID, (AlcatelStorage)editStorage->currentItem());
+            if (cont == NULL) {
+                editContactID->setText(i18n("Unknown (id=%1)").arg(ContactID));
+            } else {
+                editContactID->setText(cont->getName());
+            }
+        } else {
+            editContactID->setText(i18n("None"));
+        }
+    }
 }

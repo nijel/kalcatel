@@ -275,7 +275,7 @@ void KAlcatelTodoViewItem::update() {
     setText( 1, ((AlcatelTodo *)alcatelData)->Completed == -1 ? QString(""): ((AlcatelTodo *)alcatelData)->Completed ? i18n("Yes") : i18n("No"));
     setText( 2, ((AlcatelTodo *)alcatelData)->Priority == -1 ? QString("") : Priorities[((AlcatelTodo *)alcatelData)->Priority]);
     setText( 3, ((AlcatelTodo *)alcatelData)->DueDate.isNull()?i18n("None"):((AlcatelTodo *)alcatelData)->DueDate.toString());
-    setText( 4, (((AlcatelTodo *)alcatelData)->Subject.isNull() && ((AlcatelTodo *)alcatelData)->ContactID != -1 && contact != NULL) ? i18n("Call to %1").arg(contact->getName()) : ((AlcatelTodo *)alcatelData)->Subject);
+    setText( 4, (((AlcatelTodo *)alcatelData)->Subject.isEmpty() && ((AlcatelTodo *)alcatelData)->ContactID != -1 && contact != NULL) ? i18n("Call to %1").arg(contact->getName()) : ((AlcatelTodo *)alcatelData)->Subject);
     setText( 5, categoryname);
     setText( 6, QString("%1 %2").arg(StorageTypes[alcatelData->Storage]).arg(alcatelData->Id));
 }
@@ -325,7 +325,7 @@ void KAlcatelTodoCatViewItem::update() {
     setText( 1, ((AlcatelTodo *)alcatelData)->Completed == -1 ? QString(""): ((AlcatelTodo *)alcatelData)->Completed ? i18n("Yes") : i18n("No"));
     setText( 2, ((AlcatelTodo *)alcatelData)->Priority == -1 ? QString("") : Priorities[((AlcatelTodo *)alcatelData)->Priority]);
     setText( 3, ((AlcatelTodo *)alcatelData)->DueDate.isNull()?i18n("None"):((AlcatelTodo *)alcatelData)->DueDate.toString());
-    setText( 4, (((AlcatelTodo *)alcatelData)->Subject.isNull() && ((AlcatelTodo *)alcatelData)->ContactID != -1 && contact != NULL) ? i18n("Call to %1").arg(contact->getName()) : ((AlcatelTodo *)alcatelData)->Subject);
+    setText( 4, (((AlcatelTodo *)alcatelData)->Subject.isEmpty() && ((AlcatelTodo *)alcatelData)->ContactID != -1 && contact != NULL) ? i18n("Call to %1").arg(contact->getName()) : ((AlcatelTodo *)alcatelData)->Subject);
     setText( 5, QString("%1 %2").arg(StorageTypes[alcatelData->Storage]).arg(alcatelData->Id));
 }
 
@@ -540,7 +540,7 @@ void KAlcatelCalendarViewItem::update() {
     setText( 2, ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_BIRTHDAY || ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_ALARM ? i18n("N/A") : ((AlcatelCalendar *)alcatelData)->StartTime.toString());
     setText( 3, ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_BIRTHDAY || ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_ALARM ? i18n("N/A") : ((AlcatelCalendar *)alcatelData)->EndTime.toString());
     setText( 4, ((AlcatelCalendar *)alcatelData)->EventType!=-1?CalendarTypes[((AlcatelCalendar *)alcatelData)->EventType]:i18n("Unknown"));
-    setText( 5, (((AlcatelCalendar *)alcatelData)->Subject.isNull() && ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_CALL && contact != NULL) ? i18n("Call to %1").arg(contact->getName()) : ((AlcatelCalendar *)alcatelData)->Subject);
+    setText( 5, (((AlcatelCalendar *)alcatelData)->Subject.isEmpty() && ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_CALL && contact != NULL) ? i18n("Call to %1").arg(contact->getName()) : ((AlcatelCalendar *)alcatelData)->Subject);
     setText( 6, ((AlcatelCalendar *)alcatelData)->Alarm.isNull()?i18n("None"):((AlcatelCalendar *)alcatelData)->Alarm.toString());
     setText( 7, ((AlcatelCalendar *)alcatelData)->Repeating());
     setText( 8, QString("%1 %2").arg(StorageTypes[alcatelData->Storage]).arg(alcatelData->Id));

@@ -26,6 +26,7 @@
 #define EDITMESSAGEDIALOG_H
 
 #include <kdialog.h>
+#include "alcatelclasses.h"
 
 
 class QCheckBox;
@@ -41,10 +42,10 @@ class QLabel;
 class EditMessageDialog : public KDialog  {
    Q_OBJECT
 public: 
-	EditMessageDialog(QWidget *parent=0, const char *name=0);
-	~EditMessageDialog();
-	bool reread;
-public slots:
+    EditMessageDialog(AlcatelContactList *cont, QWidget *parent=0, const char *name=0);
+    ~EditMessageDialog();
+    bool reread;
+private slots:
     /** called when cancel pressed
       */
     void slotCancel();
@@ -55,6 +56,7 @@ public slots:
     void slotWriteChanged(bool on);
     void slotSendChanged(bool on);
     void slotTextChanged();
+    void selectContacts();
 private:
     QCheckBox *sendCheck;
     QCheckBox *writeCheck;
@@ -63,6 +65,7 @@ private:
     QMultiLineEdit *messageEdit;
     QLabel *msgInfoLabel;
     QComboBox *classCombo;
+    AlcatelContactList *contacts;
 };
 
 #endif

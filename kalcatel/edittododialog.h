@@ -77,12 +77,13 @@ private:
     QPushButton *buttonContacts;
 
     int ContactID;
-public slots:
+private slots:
     void toggleDueDate ( bool t );
     void toggleAlarm ( bool t );
     void slotOK();
     void slotCancel();
     void slotStorage(int st);
+    void selectContacts();
 };
 
 #endif

@@ -352,8 +352,6 @@ class KAlcatelApp : public KMainWindow
     KAction *preferencesKeyBindings;
     KAction *preferencesToolbars;
 
-    KAlcatelConfigDialog *preferencesDialog;
-
     bool modemConnected;
     bool modemLocked;
 

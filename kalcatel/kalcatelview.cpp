@@ -1034,7 +1034,7 @@ void KAlcatelView::slotContactDoubleClicked(QListViewItem *item) {
 void KAlcatelView::slotTodoDelete(QListViewItem *item) {
     KAlcatelDoc *theDoc = getDocument();
     AlcatelClass *data = ((KAlcatelDataItem *) item)->alcatelData;
-    if (data->Storage == StoragePC && data->PrevStorage == StorageNone) {
+    if (data->Storage == StoragePC && (data->PrevStorage == StorageNone || data->PrevId == -1)) {
         theDoc->todos->remove(*(AlcatelTodo *)data);
     } else {
         AlcatelTodo cont(*(AlcatelTodo *)data);
@@ -1048,7 +1048,7 @@ void KAlcatelView::slotTodoDelete(QListViewItem *item) {
 void KAlcatelView::slotMessageDelete(QListViewItem *item) {
     KAlcatelDoc *theDoc = getDocument();
     AlcatelClass *data = ((KAlcatelDataItem *) item)->alcatelData;
-    if (data->Storage == StoragePC && data->PrevStorage == StorageNone) {
+    if (data->Storage == StoragePC && (data->PrevStorage == StorageNone || data->PrevId == -1)) {
         theDoc->messages->remove(*(AlcatelMessage *)data);
     } else {
         AlcatelMessage cont = *(AlcatelMessage *)data;
@@ -1062,7 +1062,7 @@ void KAlcatelView::slotMessageDelete(QListViewItem *item) {
 void KAlcatelView::slotCalendarDelete(QListViewItem *item) {
     KAlcatelDoc *theDoc = getDocument();
     AlcatelClass *data = ((KAlcatelDataItem *) item)->alcatelData;
-    if (data->Storage == StoragePC && data->PrevStorage == StorageNone) {
+    if (data->Storage == StoragePC && (data->PrevStorage == StorageNone || data->PrevId == -1)) {
         theDoc->calendar->remove(*(AlcatelCalendar *)data);
     } else {
         AlcatelCalendar cont = *(AlcatelCalendar *)data;
@@ -1076,7 +1076,7 @@ void KAlcatelView::slotCalendarDelete(QListViewItem *item) {
 void KAlcatelView::slotContactDelete(QListViewItem *item) {
     KAlcatelDoc *theDoc = getDocument();
     AlcatelClass *data = ((KAlcatelDataItem *) item)->alcatelData;
-    if (data->Storage == StoragePC && data->PrevStorage == StorageNone) {
+    if (data->Storage == StoragePC && (data->PrevStorage == StorageNone || data->PrevId == -1)) {
         theDoc->contacts->remove(*(AlcatelContact *)data);
     } else {
         AlcatelContact cont = *(AlcatelContact *)data;

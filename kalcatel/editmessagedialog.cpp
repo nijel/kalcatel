@@ -49,7 +49,10 @@
 #include "alcatool/pdu.h"
 #include "alcatool/sms.h"
 
-EditMessageDialog::EditMessageDialog(QWidget *parent, const char *name ) : KDialog(parent,name, true) {
+#include "selectcontactdialog.h"
+
+EditMessageDialog::EditMessageDialog(AlcatelContactList *cont, QWidget *parent, const char *name ) : KDialog(parent,name, true) {
+    contacts = cont;
     QLabel *label;
     QFrame *line;
 
@@ -103,7 +106,7 @@ EditMessageDialog::EditMessageDialog(QWidget *parent, const char *name ) : KDial
     QWhatsThis::add(sendToCombo ,i18n("<b>Send to number(s)</b><br>Enter here number(s) of receivers of this message, more numbers should be separated with space, comma or semicolon."));
 
     QPushButton *buttonContacts = new QPushButton(i18n("Contacts..."), this);
-    buttonContacts->setDisabled(true);
+    connect ( buttonContacts, SIGNAL( clicked() ), this, SLOT(selectContacts()));
     mainLayout->addWidget(buttonContacts,3,4);
     QWhatsThis::add(buttonContacts ,i18n("<b>Contacts</b><br>Use this button to add number from your contacts."));
 
@@ -286,4 +289,11 @@ void EditMessageDialog::slotSendChanged(bool on) {
 
 void EditMessageDialog::slotTextChanged() {
     msgInfoLabel->setText(i18n("Used %1 of %2 characters").arg(messageEdit->length()).arg(160));
+}
+
+void EditMessageDialog::selectContacts() {
+    SelectContactDialog dlg(SelectContactDialog::Numbers,StorageAny, contacts, this);
+    if (dlg.exec()) {
+        sendToCombo->setEditText(sendToCombo->currentText().append(" ").append(dlg.getNumbers()));
+    }
 }

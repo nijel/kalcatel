@@ -91,8 +91,6 @@ KAlcatelApp::KAlcatelApp(QWidget* , const char* name):KMainWindow(0, name) {
 
     initConfig();
 
-    preferencesDialog = new KAlcatelConfigDialog(this);
-
     ///////////////////////////////////////////////////////////////////
     // disable actions at startup
   /*
@@ -111,7 +109,6 @@ KAlcatelApp::~KAlcatelApp() {
         modemConnected = false;
         modem_close();
     }
-    delete preferencesDialog;
 }
 
 void KAlcatelApp::initConfig() {
@@ -986,7 +983,8 @@ void KAlcatelApp::slotDefaultDetailMsg() {
 }
 
 void KAlcatelApp::slotPreferencesEdit() {
-    if (preferencesDialog->exec()) initConfig();
+    KAlcatelConfigDialog preferencesDialog(this);
+    if (preferencesDialog.exec()) initConfig();
 }
 
 void KAlcatelApp::slotPreferencesSave() {
@@ -1033,7 +1031,7 @@ void KAlcatelApp::timerEvent( QTimerEvent *e ) {
 }
 
 void KAlcatelApp::slotNewMessage() {
-    EditMessageDialog dialog(this);
+    EditMessageDialog dialog(getDocument()->contacts, this);
     dialog.reread = reread_messages;
     if (dialog.exec() && dialog.reread)
         slotFetchMessages();

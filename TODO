@@ -15,7 +15,9 @@ for 0.2-alpha:
  - (DONE) merging of data
 
 for 0.3-beta:
- - editing of calendar/contacts/...
+ - editing of calendar
+ - (DONE) editing of contacts
+ - (DONE) editing of todos
  - contact select dialog
  - (DONE) sending/writing messages
  - write to mobile

@@ -31,6 +31,8 @@
 #include <qlineedit.h>
 #include <qcheckbox.h>
 #include <qwhatsthis.h>
+#include <qstringlist.h>
+#include <qregexp.h>
 
 #include <kdialog.h>
 #include <kcombobox.h>
@@ -240,10 +242,14 @@ void EditTodoDialog::loadTodo(const AlcatelTodo *cont) {
 
     editCompleted->setChecked(todo->Completed);
 
-    editAlarmEnabled->setChecked(! (todo->Alarm.date().isNull() || todo->Alarm.time().isNull()));
+    editAlarmEnabled->setChecked(! todo->Alarm.isNull());
 
-    if (todo->Alarm.date().isNull()) editAlarmDate->setDate(QDate::currentDate());
-    else editAlarmDate->setDate(todo->Alarm.date());
+    if (todo->Alarm.isNull()) {
+        if (!todo->DueDate.isNull()) editAlarmDate->setDate(todo->DueDate);
+        else editAlarmDate->setDate(QDate::currentDate());
+    } else {
+        editAlarmDate->setDate(todo->Alarm.date());
+    }
 
     editAlarmTime->setEditText(todo->Alarm.time().toString());
 
@@ -291,6 +297,75 @@ void EditTodoDialog::toggleAlarm ( bool t ) {
 }
 
 void EditTodoDialog::slotOK() {
+    AlcatelTodo cont;
+    cont.Storage =  (AlcatelStorage)editStorage->currentItem();
+
+    cont.Id = editPosition->value();
+
+    if (editDueDateEnabled->isChecked()) cont.DueDate = editDueDate->date();
+    else cont.DueDate = QDate();
+
+    if (editAlarmEnabled->isChecked()) {
+        cont.Alarm.setDate(editAlarmDate->date());
+        QStringList list = QStringList::split(QRegExp("[:.]"), editAlarmTime->currentText(), false);
+        switch (list.count()) {
+            case 3:
+                cont.Alarm.setTime(QTime(list[0].toInt(), list[1].toInt(), list[2].toInt()));
+                break;
+            case 2:
+                cont.Alarm.setTime(QTime(list[0].toInt(), list[1].toInt(), 0));
+                break;
+            case 1:
+                cont.Alarm.setTime(QTime(list[0].toInt(), 0, 0));
+                break;
+            case 0:
+            default:
+                cont.Alarm.setTime(QTime(0, 0, 0));
+        }
+    } else {
+        cont.Alarm.setDate(QDate());
+        cont.Alarm.setTime(QTime());
+    }
+
+    cont.Completed = editCompleted->isChecked();
+
+    cont.Subject = editSubject->text();
+
+    cont.Priority = editPriority->currentItem();
+
+    cont.ContactID = ContactID;
+
+    if (editCategory->currentText() == i18n("Not set")) cont.Category = -1;
+    else if (editCategory->currentText() == i18n("None")) cont.Category = 255;
+    else {
+        AlcatelCategory *cat = getCategoryByName ( categories, editCategory->currentText(), StorageAny);
+        if (cat != NULL) cont.Category = cat->Id;
+        else cont.Category = -1;
+    }
+    cont.Private = editPrivate->isChecked();
+
+    KAlcatelDoc *theDoc=((KAlcatelApp *) parentWidget())->getDocument();
+    if (todo == NULL) {
+        // insert new item
+        cont.Modified = true;
+        cont.Created = true;
+        if (cont.Storage == StoragePC) cont.Id = theDoc->getPCStorageId();
+        list->append(cont);
+        theDoc->updateDocument(alcatel_todos);
+    } else {
+        cont.Created = todo->Created;
+        cont.Deleted = todo->Deleted;
+        cont.PrevId = todo->PrevId;
+        cont.PrevStorage = todo->PrevStorage;
+        if (*todo != cont) {
+            // item was changed
+            list->remove(*todo);
+            cont.Modified = true;
+            list->append(cont);
+            theDoc->updateDocument(alcatel_todos);
+        }
+    }
+
     accept();
 }
 

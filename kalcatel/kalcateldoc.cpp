@@ -77,13 +77,6 @@ KAlcatelDoc::KAlcatelDoc(QWidget *parent, const char *name) : QObject(parent, na
 
 KAlcatelDoc::~KAlcatelDoc()
 {
-  free(todo_cats);
-  free(contact_cats);
-
-  free(contacts);
-  free(caledar);
-  free(todo);
-  free(sms);
 }
 
 void KAlcatelDoc::addView(KAlcatelView *view)
@@ -241,8 +234,12 @@ int i;
                KMessageBox::error(win, i18n("Modem locked."), i18n("Error"));
                modem_close();
                return false;
+           case ERR_MDM_LOCK_OPEN:
+               KMessageBox::error(win, i18n("Can not open modem lock."), i18n("Error"));
+               modem_close();
+               return false;
            default:
-               KMessageBox::error(win, i18n("Failed opening modem.\nUnknown error."), i18n("Error"));
+               KMessageBox::error(win, i18n("Failed opening modem.\nUnknown error (%1).").arg(modem_errno), i18n("Error"));
                modem_close();
                return false;
        }
@@ -262,7 +259,7 @@ int i;
                modem_close();
                return false;
            default:
-               KMessageBox::error(win, i18n("Failed initializing modem.\nUnknown error."), i18n("Error"));
+               KMessageBox::error(win, i18n("Failed initializing modem.\nUnknown error (%1).").arg(modem_errno), i18n("Error"));
                modem_close();
                return false;
        }
@@ -273,21 +270,26 @@ int i;
   {
     SMS *msg;
     win->slotStatusMsg(i18n("Reading messages"),ID_DETAIL_MSG);
+    sms->clear();
     msg = get_smss();
 
     i = 0;
     while (msg[i].pos != -1) {
-        AlcatelSMS Msg;
-        Msg.Date = QDateTime();
-        Msg.Date.setTime_t(msg[i].date);
-        Msg.Length = msg[i].len;
-        Msg.Position = msg[i].pos;
-        Msg.Raw = strdup(msg[i].raw);
-        Msg.SMSC = QString(msg[i].smsc);
-        Msg.Sender = QString(msg[i].sendr);
-        Msg.Status = msg[i].stat;
-        Msg.Text = QString(msg[i].ascii);
-        sms->append(Msg);
+        AlcatelSMS *Msg = new AlcatelSMS();
+        Msg->Date = QDateTime();
+        Msg->Date.setTime_t(msg[i].date);
+        Msg->Length = msg[i].len;
+        Msg->Position = msg[i].pos;
+        Msg->Raw = strdup(msg[i].raw);
+        free(msg[i].raw);
+        Msg->SMSC = QString(msg[i].smsc);
+        free(msg[i].smsc);
+        Msg->Sender = QString(msg[i].sendr);
+        free(msg[i].sendr);
+        Msg->Status = msg[i].stat;
+        Msg->Text = QString(msg[i].ascii);
+        free(msg[i].ascii);
+        sms->append(*Msg);
         i++;
     }
     free(msg);

@@ -396,7 +396,7 @@ void KAlcatelApp::slotMobileInfo()
               modem_close();
               return;
           default:
-              KMessageBox::error(this, i18n("Failed opening modem.\nUnknown error."), i18n("Error"));
+              KMessageBox::error(this, i18n("Failed opening modem.\nUnknown error (%1).").arg(modem_errno), i18n("Error"));
               modem_close();
               return;
       }
@@ -416,7 +416,7 @@ void KAlcatelApp::slotMobileInfo()
               modem_close();
               return;
           default:
-              KMessageBox::error(this, i18n("Failed initializing modem.\nUnknown error."), i18n("Error"));
+              KMessageBox::error(this, i18n("Failed initializing modem.\nUnknown error (%1).").arg(modem_errno), i18n("Error"));
               modem_close();
               return;
       }

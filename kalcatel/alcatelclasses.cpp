@@ -26,6 +26,7 @@
 #include <stdlib.h>
 
 #include "alcatelclasses.h"
+#include "alcatool/logging.h"
 
 /*
 AlcatelClasses::AlcatelClasses(){
@@ -76,6 +77,9 @@ AlcatelSMS::AlcatelSMS(){
 }
 
 AlcatelSMS::~AlcatelSMS(){
-    free( Raw );
+    if (Raw != NULL) {
+        free( Raw );
+        Raw = NULL;
+    }
 }
 

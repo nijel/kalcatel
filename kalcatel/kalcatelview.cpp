@@ -327,6 +327,13 @@ void KAlcatelView::repaint() {
             AlcatelSMSList::Iterator it;
             KListView *list;
             QString type;
+
+            messages_list->clear();
+            msg_unread_list->clear();
+            msg_read_list->clear();
+            msg_unsent_list->clear();
+            msg_sent_list->clear();
+
             for( it = doc->sms->begin(); it != doc->sms->end(); ++it ) {
                 switch ((* it).Status) {
                     case SMS_UNREAD:
@@ -355,7 +362,7 @@ void KAlcatelView::repaint() {
                         QString((* it).Date.time().toString()),
                         QString((* it).Text),
                         QString().sprintf("%d", (* it).Position));
-                messages_list->insertItem(newItem);
+//                messages_list->insertItem(newItem);
 
                 newItem = new QListViewItem (list,
                         QString((* it).Sender),
@@ -364,7 +371,7 @@ void KAlcatelView::repaint() {
                         QString((* it).Date.time().toString()),
                         QString((* it).Text),
                         QString().sprintf("%d", (* it).Position));
-                list->insertItem(newItem);
+//                list->insertItem(newItem);
             } /* for cycle over sms */
             if (unread_sms)
                 showPage(10);

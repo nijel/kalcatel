@@ -45,4 +45,5 @@ rm -rf ../file.list.kalcatel
 
 
 %files -f ../file.list.kalcatel
-${_mandir}/*/*
+%doc %{_mandir}/*/*
+%doc AUTHORS BUGS ChangeLog README COPYING

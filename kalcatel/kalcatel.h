@@ -82,6 +82,15 @@ class KAlcatelApp : public KMainWindow
      */	
     KAlcatelDoc *getDocument() const; 	
 
+    /* configuration :*/
+    QString phone_prefix;
+    QString mobile_device;
+    QString mobile_lock;
+    QString mobile_init;
+    int mobile_rate;
+    int mobile_debug;
+
+
   protected:
     /** save general Options like all bar positions and status as well as the geometry and the recent file list to the configuration
      * file
@@ -126,6 +135,7 @@ class KAlcatelApp : public KMainWindow
      * @see KTMainWindow#readProperties
      */
     virtual void readProperties(KConfig *_cfg);
+
 
   public slots:
     /** open a new application window by creating a new instance of KAlcatelApp */

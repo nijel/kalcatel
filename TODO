@@ -6,7 +6,6 @@ known bugs:
 
 for 0.1-prerelease:
  - reading of contacts (mobile), calendar, todo
- - modem initialization on document open and closing on document close
  - configuration (at least of modem)
 
 for 0.2-alpha:
@@ -25,6 +24,7 @@ for 0.4:
  - czech translation (maybe sooner)
 
 sometimes (till 1.0):
+ - move modem initialization (?)
  - synchronisation with kab
  - save and restore positions and size of interface (splitters, list headers, toolbars, ...)
  - read clock, set clock as they are in computer

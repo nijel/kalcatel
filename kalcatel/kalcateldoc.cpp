@@ -55,6 +55,14 @@
 #include "alcatool/pdu.h"
 #include "alcatool/alcatel.h"
 
+/* TODO: this should be in configuration */
+/*
+char default_device[] = "/dev/ttyS1";
+char default_lock[] = "/var/lock/LCK..%s";
+char default_init[] = "AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0";
+int default_rate = 19200;
+*/
+
 QList<KAlcatelView> *KAlcatelDoc::pViewList = 0L;
 
 KAlcatelDoc::KAlcatelDoc(QWidget *parent, const char *name) : QObject(parent, name)
@@ -347,24 +355,19 @@ int KAlcatelDoc::readMobileCategories(AlcatelCategoryList *strList, alc_type syn
 
 bool KAlcatelDoc::readMobile(AlcReadType what = alcatel_read_all, int category = -1)
 {
-    /* TODO: this should be in configuration */
-    char default_device[] = "/dev/ttyS1";
-    char default_lock[] = "/var/lock/LCK..%s";
-    char default_init[] = "AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0";
-    int default_rate = 19200;
     char *devname;
     int i;
 
     KAlcatelApp *win=(KAlcatelApp *) parent();
 
-    msg_level = MSG_DEBUG;
+    msg_level = win->mobile_debug;
 
-    strcpy(initstring, default_init);
-    strcpy(device, default_device);
+    strcpy(initstring, win->mobile_init);
+    strcpy(device, win->mobile_device);
     devname = strrchr(device, '/');
     devname++;
-    sprintf(lockname, default_lock, devname);
-    rate=default_rate;
+    sprintf(lockname, win->mobile_lock, devname);
+    rate = win->mobile_rate;
 
     switch (rate) {
         case 2400:   baudrate=B2400; break;

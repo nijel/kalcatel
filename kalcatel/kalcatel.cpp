@@ -184,45 +184,62 @@ KAlcatelDoc *KAlcatelApp::getDocument() const
   return doc;
 }
 
-void KAlcatelApp::saveOptions()
-{	
-  config->setGroup("General Options");
-  config->writeEntry("Geometry", size());
-  config->writeEntry("Show Toolbar", viewToolBar->isChecked());
-  config->writeEntry("Show Statusbar",viewStatusBar->isChecked());
-  config->writeEntry("ToolBarPos", (int) toolBar("mainToolBar")->barPos());
-  fileOpenRecent->saveEntries(config,"Recent Files");
+void KAlcatelApp::saveOptions() {	
+    config->setGroup("General Options");
+    config->writeEntry("Geometry", size());
+    config->writeEntry("Show Toolbar", viewToolBar->isChecked());
+    config->writeEntry("Show Statusbar",viewStatusBar->isChecked());
+    config->writeEntry("ToolBarPos", (int) toolBar("mainToolBar")->barPos());
+    fileOpenRecent->saveEntries(config,"Recent Files");
+
+    config->setGroup("Contacts");
+    config->writeEntry("PhonePrefix", phone_prefix);
+
+    config->setGroup("Mobile");
+    config->writeEntry("Device", mobile_device);
+    config->writeEntry("Lock", mobile_lock);
+    config->writeEntry("Init", mobile_init);
+    config->writeEntry("BaudRate", mobile_rate);
+    config->writeEntry("Debugging", mobile_debug);
 }
 
 
-void KAlcatelApp::readOptions()
-{
-	
-  config->setGroup("General Options");
+void KAlcatelApp::readOptions(){
+    config->setGroup("General Options");
 
-  // bar status settings
-  bool bViewToolbar = config->readBoolEntry("Show Toolbar", true);
-  viewToolBar->setChecked(bViewToolbar);
-  slotViewToolBar();
+    // bar status settings
+    bool bViewToolbar = config->readBoolEntry("Show Toolbar", true);
+    viewToolBar->setChecked(bViewToolbar);
+    slotViewToolBar();
 
-  bool bViewStatusbar = config->readBoolEntry("Show Statusbar", true);
-  viewStatusBar->setChecked(bViewStatusbar);
-  slotViewStatusBar();
+    bool bViewStatusbar = config->readBoolEntry("Show Statusbar", true);
+    viewStatusBar->setChecked(bViewStatusbar);
+    slotViewStatusBar();
 
 
-  // bar position settings
-  KToolBar::BarPosition toolBarPos;
-  toolBarPos=(KToolBar::BarPosition) config->readNumEntry("ToolBarPos", KToolBar::Top);
-  toolBar("mainToolBar")->setBarPos(toolBarPos);
-	
-  // initialize the recent file list
-  fileOpenRecent->loadEntries(config,"Recent Files");
+    // bar position settings
+    KToolBar::BarPosition toolBarPos;
+    toolBarPos=(KToolBar::BarPosition) config->readNumEntry("ToolBarPos", KToolBar::Top);
+    toolBar("mainToolBar")->setBarPos(toolBarPos);
+  	
+    // initialize the recent file list
+    fileOpenRecent->loadEntries(config,"Recent Files");
 
-  QSize size=config->readSizeEntry("Geometry");
-  if(!size.isEmpty())
-  {
-    resize(size);
-  }
+    QSize size=config->readSizeEntry("Geometry");
+    if(!size.isEmpty())
+    {
+      resize(size);
+    }
+
+    config->setGroup("Contacts");
+    phone_prefix = config->readEntry("PhonePrefix", "+420");
+
+    config->setGroup("Mobile");
+    mobile_device = config->readPathEntry("Device", "/dev/ttyS1");
+    mobile_lock = config->readPathEntry("Lock", "/var/lock/LCK..%s");
+    mobile_init = config->readEntry("Init", "AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0");
+    mobile_rate = config->readNumEntry("BaudRate", 19200);
+    mobile_debug = config->readNumEntry("Debugging", MSG_DETAIL);
 }
 
 void KAlcatelApp::saveProperties(KConfig *_cfg)
@@ -350,159 +367,153 @@ void KAlcatelApp::slotFileReadMobileSms()
   slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
-void KAlcatelApp::slotMobileInfo()
-{
-  char manuf[128], model[128], rev[128], sn[128], *s;
-  int bat_percent, bat_state, sign_strength, sign_err;
-  slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
+void KAlcatelApp::slotMobileInfo() {
+    char manuf[128], model[128], rev[128], sn[128], *s;
+    int bat_percent, bat_state, sign_strength, sign_err;
+    slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
 
-/* TODO: this should be in configuration */
-  char default_device[] = "/dev/ttyS1";
-  char default_lock[] = "/var/lock/LCK..%s";
-  char default_init[] = "AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0";
-  int default_rate = 19200;
-  char *devname;
+    char *devname;
 
-  msg_level = MSG_DEBUG;
+    msg_level = mobile_debug;
 
-  strcpy(initstring, default_init);
-  strcpy(device, default_device);
-  devname = strrchr(device, '/');
-  devname++;
-  sprintf(lockname, default_lock, devname);
-  rate=default_rate;
+    strcpy(initstring, mobile_init);
+    strcpy(device, mobile_device);
+    devname = strrchr(device, '/');
+    devname++;
+    sprintf(lockname, mobile_lock, devname);
+    rate = mobile_rate;
 
-  switch (rate) {
-      case 2400:   baudrate=B2400; break;
-      case 4800:   baudrate=B4800; break;
-      case 9600:   baudrate=B9600; break;
-      case 19200:  baudrate=B19200; break;
-      case 38400:  baudrate=B38400; break;
-      default:
-          message(MSG_ERROR,"Ivalid baud rate (%d), setting to default (19200)!", rate);
-          baudrate=B19200;
-  }
+    switch (rate) {
+        case 2400:   baudrate=B2400; break;
+        case 4800:   baudrate=B4800; break;
+        case 9600:   baudrate=B9600; break;
+        case 19200:  baudrate=B19200; break;
+        case 38400:  baudrate=B38400; break;
+        default:
+            message(MSG_ERROR,"Ivalid baud rate (%d), setting to default (19200)!", rate);
+            baudrate=B19200;
+    }
 
 
-  this->slotStatusMsg(i18n("Opening modem"),ID_DETAIL_MSG);
-  if (!modem_open()) {
-      switch (modem_errno) {
-          case ERR_MDM_OPEN:
-              KMessageBox::error(this, i18n("Failed opening modem for read/write."), i18n("Error"));
-              modem_close();
-              return;
-          case ERR_MDM_LOCK:
-              KMessageBox::error(this, i18n("Modem locked."), i18n("Error"));
-              modem_close();
-              return;
-          default:
-              KMessageBox::error(this, i18n("Failed opening modem.\nUnknown error (%1).").arg(modem_errno), i18n("Error"));
-              modem_close();
-              return;
-      }
-      return;
-  }
-  this->slotStatusMsg(i18n("Setting serial port"),ID_DETAIL_MSG);
-  modem_setup();
-  this->slotStatusMsg(i18n("Initializing modem"),ID_DETAIL_MSG);
-  if (!modem_init()) {
-      switch (modem_errno) {
-          case ERR_MDM_AT:
-              KMessageBox::error(this, i18n("Modem doesn't react on AT command."), i18n("Error"));
-              modem_close();
-              return;
-          case ERR_MDM_PDU:
-              KMessageBox::error(this, i18n("Failed selecting PDU mode."), i18n("Error"));
-              modem_close();
-              return;
-          default:
-              KMessageBox::error(this, i18n("Failed initializing modem.\nUnknown error (%1).").arg(modem_errno), i18n("Error"));
-              modem_close();
-              return;
-      }
-      return;
-  }
+    this->slotStatusMsg(i18n("Opening modem"),ID_DETAIL_MSG);
+    if (!modem_open()) {
+        switch (modem_errno) {
+            case ERR_MDM_OPEN:
+                KMessageBox::error(this, i18n("Failed opening modem for read/write."), i18n("Error"));
+                modem_close();
+                return;
+            case ERR_MDM_LOCK:
+                KMessageBox::error(this, i18n("Modem locked."), i18n("Error"));
+                modem_close();
+                return;
+            default:
+                KMessageBox::error(this, i18n("Failed opening modem.\nUnknown error (%1).").arg(modem_errno), i18n("Error"));
+                modem_close();
+                return;
+        }
+        return;
+    }
+    this->slotStatusMsg(i18n("Setting serial port"),ID_DETAIL_MSG);
+    modem_setup();
+    this->slotStatusMsg(i18n("Initializing modem"),ID_DETAIL_MSG);
+    if (!modem_init()) {
+        switch (modem_errno) {
+            case ERR_MDM_AT:
+                KMessageBox::error(this, i18n("Modem doesn't react on AT command."), i18n("Error"));
+                modem_close();
+                return;
+            case ERR_MDM_PDU:
+                KMessageBox::error(this, i18n("Failed selecting PDU mode."), i18n("Error"));
+                modem_close();
+                return;
+            default:
+                KMessageBox::error(this, i18n("Failed initializing modem.\nUnknown error (%1).").arg(modem_errno), i18n("Error"));
+                modem_close();
+                return;
+        }
+        return;
+    }
 
-  this->slotStatusMsg(i18n("Reading information"),ID_DETAIL_MSG);
+    this->slotStatusMsg(i18n("Reading information"),ID_DETAIL_MSG);
 
-  get_manufacturer(manuf,sizeof(manuf));
+    get_manufacturer(manuf,sizeof(manuf));
 
-  get_model(model,sizeof(model));
+    get_model(model,sizeof(model));
 
-  get_revision(rev,sizeof(rev));
+    get_revision(rev,sizeof(rev));
 
-  get_sn(sn,sizeof(sn));
+    get_sn(sn,sizeof(sn));
 
-  get_battery(&bat_state, &bat_percent);
+    get_battery(&bat_state, &bat_percent);
 
-  get_signal(&sign_strength, &sign_err);
+    get_signal(&sign_strength, &sign_err);
 
-  s = get_smsc();
+    s = get_smsc();
 
-  modem_close();
+    modem_close();
 
-  KMessageBox::information(this,
-        i18n("<table border=\"0\">"
-        "<tr><td><b>"
-        "Manufacturer:"
-        "</b></td><td>"
-        "%1"
-        "</td></tr>"
-        "<tr><td><b>"
-        "Model:"
-        "</b></td><td>"
-        "%2"
-        "</td></tr>"
-        "<tr><td><b>"
-        "Revision:"
-        "</b></td><td>"
-        "%3"
-        "</td></tr>"
-        "<tr><td><b>"
-        "Serial number:"
-        "</b></td><td>"
-        "%4"
-        "</td></tr>"
-        "<tr><td><b>"
-        "Battery status:"
-        "</b></td><td>"
-        "%5"
-        "</td></tr>"
-        "<tr><td><b>"
-        "Battery charge:"
-        "</b></td><td>"
-        "%6%"
-        "</td></tr>"
-        "<tr><td><b>"
-        "Signal strength:"
-        "</b></td><td>"
-        "%7"
-        "</td></tr>"
-        "<tr><td><b>"
-        "Signal error rate:"
-        "</b></td><td>"
-        "%8"
-        "</td></tr>"
-        "<tr><td><b>"
-        "SMS Centre:"
-        "</b></td><td>"
-        "%9"
-        "</td></tr>"
-        "</table>"
-        ).
-        arg(manuf).
-        arg(model).
-        arg(rev).
-        arg(sn).
-        arg(bat_state).
-        arg(bat_percent).
-        arg(sign_strength == 99 ? i18n("Unknown") : QString(mobil_signal_info[sign_strength])).
-        arg(sign_err == 99 ? i18n("Unknown") : QString("%1").arg(sign_err)).
-        arg(s)
-        ,
-        i18n("Mobile information"));
+    KMessageBox::information(this,
+          i18n("<table border=\"0\">"
+          "<tr><td><b>"
+          "Manufacturer:"
+          "</b></td><td>"
+          "%1"
+          "</td></tr>"
+          "<tr><td><b>"
+          "Model:"
+          "</b></td><td>"
+          "%2"
+          "</td></tr>"
+          "<tr><td><b>"
+          "Revision:"
+          "</b></td><td>"
+          "%3"
+          "</td></tr>"
+          "<tr><td><b>"
+          "Serial number:"
+          "</b></td><td>"
+          "%4"
+          "</td></tr>"
+          "<tr><td><b>"
+          "Battery status:"
+          "</b></td><td>"
+          "%5"
+          "</td></tr>"
+          "<tr><td><b>"
+          "Battery charge:"
+          "</b></td><td>"
+          "%6%"
+          "</td></tr>"
+          "<tr><td><b>"
+          "Signal strength:"
+          "</b></td><td>"
+          "%7"
+          "</td></tr>"
+          "<tr><td><b>"
+          "Signal error rate:"
+          "</b></td><td>"
+          "%8"
+          "</td></tr>"
+          "<tr><td><b>"
+          "SMS Centre:"
+          "</b></td><td>"
+          "%9"
+          "</td></tr>"
+          "</table>"
+          ).
+          arg(manuf).
+          arg(model).
+          arg(rev).
+          arg(sn).
+          arg(bat_state).
+          arg(bat_percent).
+          arg(sign_strength == 99 ? i18n("Unknown") : QString(mobil_signal_info[sign_strength])).
+          arg(sign_err == 99 ? i18n("Unknown") : QString("%1").arg(sign_err)).
+          arg(s)
+          ,
+          i18n("Mobile information"));
 
-  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
+    slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }
 
 void KAlcatelApp::slotFileNew()

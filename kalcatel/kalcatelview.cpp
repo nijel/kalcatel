@@ -45,7 +45,7 @@
 #include "alcatool/logging.h"
 
 /* TODO: move to config */
-QString prefix = QString("+420");
+//QString prefix = QString("+420");
 
 KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : KJanusWidget(parent, name, TreeList) {
     int i;
@@ -327,7 +327,7 @@ void KAlcatelView::repaint() {
                         list = msg_sent_list;
                         break;
                 }
-                AlcatelContact *cont = getContactByPhone(doc->contacts, &((* it).Sender), &prefix);
+                AlcatelContact *cont = getContactByPhone(doc->contacts, &((* it).Sender), &(((KAlcatelApp *)parent())->phone_prefix));
                 new QListViewItem (messages_list,
                         QString((* it).Sender),
                         cont == NULL? QString("") : cont->Name(),
@@ -549,7 +549,7 @@ void KAlcatelView::slotShowMessage(QTextView *where, AlcatelSMS *what) {
         where->setText( i18n("Failed reading message!"));
         return;
     }
-    AlcatelContact *cont = getContactByPhone(getDocument()->contacts, &(what->Sender), &prefix);
+    AlcatelContact *cont = getContactByPhone(getDocument()->contacts, &(what->Sender), &(((KAlcatelApp *)parent())->phone_prefix));
     where->setText( i18n(
         "<b>From:</b> %1 (%2)<br>"
         "<b>Date:</b> %3<br>"

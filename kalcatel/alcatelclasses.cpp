@@ -72,7 +72,7 @@ void AlcatelContact::setField(int number, FIELD *data) {
         case 17: chk_type(_string) City = (char *)((*data).data); break;
         case 18: chk_type(_string) State = (char *)((*data).data); break;
         case 19: chk_type(_string) Zip = (char *)((*data).data); break;
-        case 20: chk_type(_string) Coutry = (char *)((*data).data); break;
+        case 20: chk_type(_string) Country = (char *)((*data).data); break;
         case 21: chk_type(_string) Custom1 = (char *)((*data).data); break;
         case 22: chk_type(_string) Custom2 = (char *)((*data).data); break;
         case 23: chk_type(_string) Custom3 = (char *)((*data).data); break;
@@ -178,7 +178,7 @@ AlcatelCategory::AlcatelCategory() {
 
 QString SMSTypes[] = { i18n("Unread"), i18n("Read"), i18n("Unsent"), i18n("Sent")};
 
-AlcatelSMS *findAlcatelSMSById(AlcatelSMSList *list, int id) {
+AlcatelSMS *getSMSById(AlcatelSMSList *list, int id) {
     AlcatelSMSList::Iterator it;
     for( it = list->begin(); it != list->end(); ++it ) {
         if ((* it).Id == id)
@@ -188,13 +188,13 @@ AlcatelSMS *findAlcatelSMSById(AlcatelSMSList *list, int id) {
 }
 
 QString *getCategoryName(AlcatelCategoryList *list, int id) {
-    static QString *str=new QString("");
+    static QString str = i18n("Unknown");
     AlcatelCategoryList::Iterator it;
     for( it = list->begin(); it != list->end(); ++it ) {
         if ((* it).Id == id)
             return &((*it).Name);
     }
-    return str;
+    return &str;
 }
 
 int phoneCmp(QString *number1, QString *number2, QString *prefix) {
@@ -222,3 +222,13 @@ AlcatelContact *getContactByPhone(AlcatelContactList *list, QString *number, QSt
     }
     return NULL;
 }
+
+AlcatelContact *getContactById(AlcatelContactList *list, int id) {
+    AlcatelContactList::Iterator it;
+    for( it = list->begin(); it != list->end(); ++it ) {
+        if ((* it).Id == id)
+            return &(*it);
+    }
+    return NULL;
+}
+

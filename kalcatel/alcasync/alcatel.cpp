@@ -71,7 +71,7 @@ char alc_contacts_field_names[ALC_CONTACTS_FIELDS][20] = {
     "City",
     "State",
     "Zip",
-    "Coutry",
+    "Country",
     "Custom1",
     "Custom2",
     "Custom3",

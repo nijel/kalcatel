@@ -195,6 +195,8 @@ void KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
 
     int count;
 
+    KAlcatelApp *win=(KAlcatelApp *) parent();
+
     switch (sync) {
         case ALC_SYNC_CALENDAR:
             count = ALC_CALENDAR_FIELDS;
@@ -226,6 +228,7 @@ void KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
         message(MSG_INFO, "Received %d ids", ids[0]);
 
         for (i = 1; i <= ids[0]; i++) {
+            win->slotStatusMsg(i18n("Reading item %1 of %2").arg(i).arg(ids[0]),ID_DETAIL_MSG);
             message(MSG_DEBUG, "Reading id[%d] = %d", i-1, ids[i]);
             items = sync_get_fields(type, ids[i]);
             message(MSG_INFO, "Receiving data for item %d (%d fields)", ids[i], items[0]);

@@ -54,6 +54,9 @@ typedef enum {
 class KAlcatelDoc;
 class QTextView;
 class AlcatelSMS;
+class AlcatelContact;
+class AlcatelCalendar;
+class AlcatelTodo;
 
 /** The KAlcatelView class provides the view widget for the KAlcatelApp instance.	
  * The View instance inherits QWidget as a base class and represents the view object of a KTMainWindow. As KAlcatelView is part of the
@@ -83,32 +86,34 @@ class KAlcatelView : public KJanusWidget
 //    void print(QPrinter *pPrinter);
   public slots:
     void repaint();
-    void slotMessageChanged();
-    void slotReadMessageChanged();
-    void slotUnreadMessageChanged();
-    void slotSentMessageChanged();
-    void slotUnsentMessageChanged();
-    void slotTodoChanged();
-    void slotCalendarChanged();
-    void slotContactChanged();
-    void slotContactSimChanged();
-    void slotContactMobileChanged();
-    void slotContactMobileCatChanged();
+    void slotMessageChanged(QListViewItem *item);
+    void slotReadMessageChanged(QListViewItem *item);
+    void slotUnreadMessageChanged(QListViewItem *item);
+    void slotSentMessageChanged(QListViewItem *item);
+    void slotUnsentMessageChanged(QListViewItem *item);
+    void slotTodoChanged(QListViewItem *item);
+    void slotCalendarChanged(QListViewItem *item);
+    void slotContactChanged(QListViewItem *item);
+    void slotContactSimChanged(QListViewItem *item);
+    void slotContactMobileChanged(QListViewItem *item);
+    void slotContactMobileCatChanged(QListViewItem *item);
     void slotShowMessage(QTextView *where, AlcatelSMS *what);
+    void slotShowContact(QTextView *where, AlcatelContact *what);
 	
   private:
     QVBox *todo, *calendar,
         *contacts, *contacts_sim, *contacts_mobile,
         *calls, *calls_ld, *calls_mc, *calls_rc,
         *messages, *msg_read, *msg_unread, *msg_sent, *msg_unsent;
-    KListView *todo_list, *calendar_list,
+    KListView *todo_list, *todo_cat_list[ALCATEL_MAX_CATEGORIES],
+        *calendar_list,
         *contacts_list, *contacts_sim_list, *contacts_mobile_list, *contacts_cat_list[ALCATEL_MAX_CATEGORIES],
         *calls_list, *calls_ld_list, *calls_mc_list, *calls_rc_list,
         *messages_list, *msg_read_list, *msg_unread_list, *msg_sent_list, *msg_unsent_list;
 
     QTextView *message, *message_read, *message_unread, *message_sent, *message_unsent,
-        *todo_view, *calendar_view, *contact_view, *contact_sim_view, *contact_mobile_view,
-        *contacts_cat_view[ALCATEL_MAX_CATEGORIES];
+        *todo_view, *calendar_view, *todo_cat_view[ALCATEL_MAX_CATEGORIES],
+        *contact_view, *contact_sim_view, *contact_mobile_view, *contacts_cat_view[ALCATEL_MAX_CATEGORIES];
 
     KListView *createListView(QWidget *parent, AlcListType type);
 

@@ -75,7 +75,7 @@ public:
     QString City;
     QString State;
     QString Zip;
-    QString Coutry;
+    QString Country;
     QString Custom1;
     QString Custom2;
     QString Custom3;
@@ -156,9 +156,10 @@ typedef QValueList<AlcatelTodo> AlcatelTodoList;
 typedef QValueList<AlcatelSMS> AlcatelSMSList;
 typedef QValueList<AlcatelCategory> AlcatelCategoryList;
 
-AlcatelSMS *findAlcatelSMSById(AlcatelSMSList *list, int id);
+AlcatelSMS *getSMSById(AlcatelSMSList *list, int id);
 QString *getCategoryName(AlcatelCategoryList *list, int id);
 int phoneCmp(QString *number1, QString *number2, QString *prefix);
 AlcatelContact *getContactByPhone(AlcatelContactList *list, QString *number, QString *prefix);
+AlcatelContact *getContactById(AlcatelContactList *list, int id);
 
 #endif

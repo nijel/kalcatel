@@ -8,7 +8,7 @@ $Id$
         * updated to latest autoconf/automake templates
         * fixed typo (nuber -> number)
         * started Czech translation (still missing 369 of 480)
-        * some improvements in contact select dialog (still néot final)
+        * some improvements in contact select dialog (still not final)
 
 2002-05-15 Michal Cihar <cihar@email.cz>
         * added replacing of & in saved files

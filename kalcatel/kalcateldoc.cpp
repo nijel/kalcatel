@@ -309,7 +309,7 @@ void KAlcatelDoc::readDomContact(QDomElement el) {
 
     QString delf = el.attribute("deleted_fields");
     if (!delf.isEmpty()) {
-        for(int i =0; i< MIN(AlcatelContact::max_field,delf.length()); i++)
+        for(unsigned int i =0; i< MIN(AlcatelContact::max_field,delf.length()); i++)
             Cont.deleted_flags[i] = delf[i] == '1';
     }
 
@@ -406,7 +406,7 @@ void KAlcatelDoc::readDomEvent(QDomElement el) {
 
     QString delf = el.attribute("deleted_fields");
     if (!delf.isEmpty()) {
-        for(int i =0; i< MIN(AlcatelCalendar::max_field,delf.length()); i++)
+        for(unsigned int i =0; i< MIN(AlcatelCalendar::max_field,delf.length()); i++)
             Cal.deleted_flags[i] = delf[i] == '1';
     }
 
@@ -480,7 +480,7 @@ void KAlcatelDoc::readDomTodo(QDomElement el) {
 
     QString delf = el.attribute("deleted_fields");
     if (!delf.isEmpty()) {
-        for(int i =0; i< MIN(AlcatelTodo::max_field,delf.length()); i++)
+        for(unsigned int i =0; i< MIN(AlcatelTodo::max_field,delf.length()); i++)
             Cal.deleted_flags[i] = delf[i] == '1';
     }
 
@@ -880,7 +880,7 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
             *strm << "  <contact";
 
             *strm << " deleted_fields=\"";
-            for (int i=0; i<AlcatelContact::max_field; i++)
+            for (unsigned int i=0; i<AlcatelContact::max_field; i++)
                 *strm << ((*cit).deleted_flags[i] ? '1' : '0');
             *strm << "\"";
 
@@ -990,7 +990,7 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
             *strm << "  <event";
 
             *strm << " deleted_fields=\"";
-            for (int i=0; i<AlcatelCalendar::max_field; i++)
+            for (unsigned int i=0; i<AlcatelCalendar::max_field; i++)
                 *strm << ((*calit).deleted_flags[i] ? '1' : '0');
             *strm << "\"";
 
@@ -1114,7 +1114,7 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
             *strm << "  <todo";
 
             *strm << " deleted_fields=\"";
-            for (int i=0; i<AlcatelTodo::max_field; i++)
+            for (unsigned int i=0; i<AlcatelTodo::max_field; i++)
                 *strm << ((*tit).deleted_flags[i] ? '1' : '0');
             *strm << "\"";
 
@@ -2212,13 +2212,29 @@ this shouldn't be here because it should be created on the fly
     }*/
 
     {
+        contactsVersion++;
+
         ::message(MSG_INFO, "Commiting todos...");
         AlcatelTodoList::Iterator it;
-        for( it = todos->begin(); it != todos->end(); ++it ) {
+        for( it = todos->begin(); it != todos->end(); ) {
             if ((*it).Storage == StorageMobile || ((*it).Storage == StoragePC && (*it).PrevStorage == StorageMobile)) {
                 if ((*it).Deleted) {
-                    ::message(MSG_INFO, "NOT IMPLEMENTED ACTION! Deleted todo: %s", (*it).getName().latin1());
-                    KMessageBox::sorry(win, i18n("Deleting of todos is not yet implemented."), i18n("Sorry"));
+                    if (!alcatel_attach() ||
+                        !alcatel_start_session() ||
+                        !alcatel_select_type(ALC_SYNC_TYPE_TODO)) {
+                        KMessageBox::error(win, i18n("Deleting of todo failed!"), i18n("Error"));
+                    } else {
+                        alcatel_begin_transfer(ALC_SYNC_TODO);
+                        
+                        int id = (*it).Storage == StorageMobile ? (*it).Id : (*it).PrevId;
+
+                        alcatel_delete_item(ALC_SYNC_TYPE_TODO, id);
+
+                        alcatel_commit(ALC_SYNC_TYPE_TODO);
+                        ::message(MSG_INFO, "Deleted: %s (id = %d)", (*it).getName().latin1(), id);
+                        todos->remove((*(it++)));
+                    }
+                    alcatel_close_session(ALC_SYNC_TYPE_TODO);
                 } else if ((*it).Created) {
                     if (!alcatel_attach() ||
                         !alcatel_start_session() ||
@@ -2227,7 +2243,7 @@ this shouldn't be here because it should be created on the fly
                     } else {
                         alcatel_begin_transfer(ALC_SYNC_TODO);
 
-                        for (int fieldno = 0; fieldno < (*it).max_field; fieldno++) {
+                        for (unsigned int fieldno = 0; fieldno < (*it).max_field; fieldno++) {
                             AlcatelFieldStruct *field = (*it).getField(fieldno);
                             if (field != NULL) {
                                 if (field->data != NULL) {
@@ -2251,6 +2267,7 @@ this shouldn't be here because it should be created on the fly
                         }
                     }
                     alcatel_close_session(ALC_SYNC_TYPE_TODO);
+                    it++;
                 } else if ((*it).Modified) {
                     if (!alcatel_attach() ||
                         !alcatel_start_session() ||
@@ -2261,7 +2278,7 @@ this shouldn't be here because it should be created on the fly
 
                         int id = (*it).Storage == StorageMobile ? (*it).Id : (*it).PrevId;
 
-                        for (int fieldno = 0; fieldno < (*it).max_field; fieldno++) {
+                        for (unsigned int fieldno = 0; fieldno < (*it).max_field; fieldno++) {
                             AlcatelFieldStruct *field = (*it).getField(fieldno);
                             if (field != NULL) {
                                 alcatel_update_field(ALC_SYNC_TYPE_TODO, id, fieldno, field);
@@ -2278,6 +2295,9 @@ this shouldn't be here because it should be created on the fly
                         ::message(MSG_INFO, "Modified: %s", (*it).getName().latin1());
                     }
                     alcatel_close_session(ALC_SYNC_TYPE_TODO);
+                    it++;
+                } else {
+                    it++;
                 }
             }
         }
@@ -2286,11 +2306,25 @@ this shouldn't be here because it should be created on the fly
     {
         ::message(MSG_INFO, "Commiting events...");
         AlcatelCalendarList::Iterator it;
-        for( it = calendar->begin(); it != calendar->end(); ++it ) {
+        for( it = calendar->begin(); it != calendar->end(); ) {
             if ((*it).Storage == StorageMobile || ((*it).Storage == StoragePC && (*it).PrevStorage == StorageMobile)) {
                 if ((*it).Deleted) {
-                    ::message(MSG_INFO, "NOT IMPLEMENTED ACTION! Deleted event: %s", (*it).getName().latin1());
-                    KMessageBox::sorry(win, i18n("Deleting of events is not yet implemented."), i18n("Sorry"));
+                    if (!alcatel_attach() ||
+                        !alcatel_start_session() ||
+                        !alcatel_select_type(ALC_SYNC_TYPE_CALENDAR)) {
+                        KMessageBox::error(win, i18n("Deleting of event failed!"), i18n("Error"));
+                    } else {
+                        alcatel_begin_transfer(ALC_SYNC_CALENDAR);
+                        
+                        int id = (*it).Storage == StorageMobile ? (*it).Id : (*it).PrevId;
+
+                        alcatel_delete_item(ALC_SYNC_TYPE_CALENDAR, id);
+
+                        alcatel_commit(ALC_SYNC_TYPE_CALENDAR);
+                        ::message(MSG_INFO, "Deleted: %s (id = %d)", (*it).getName().latin1(), id);
+                        calendar->remove((*(it++)));
+                    }
+                    alcatel_close_session(ALC_SYNC_TYPE_CALENDAR);
                 } else if ((*it).Created) {
                     if (!alcatel_attach() ||
                         !alcatel_start_session() ||
@@ -2299,7 +2333,7 @@ this shouldn't be here because it should be created on the fly
                     } else {
                         alcatel_begin_transfer(ALC_SYNC_CALENDAR);
 
-                        for (int fieldno = 0; fieldno < (*it).max_field; fieldno++) {
+                        for (unsigned int fieldno = 0; fieldno < (*it).max_field; fieldno++) {
                             AlcatelFieldStruct *field = (*it).getField(fieldno);
                             if (field != NULL) {
                                 if (field->data != NULL) {
@@ -2323,6 +2357,7 @@ this shouldn't be here because it should be created on the fly
                         }
                     }
                     alcatel_close_session(ALC_SYNC_TYPE_CALENDAR);
+                    it++;
                 } else if ((*it).Modified) {
                     if (!alcatel_attach() ||
                         !alcatel_start_session() ||
@@ -2333,7 +2368,7 @@ this shouldn't be here because it should be created on the fly
 
                         int id = (*it).Storage == StorageMobile ? (*it).Id : (*it).PrevId;
 
-                        for (int fieldno = 0; fieldno < (*it).max_field; fieldno++) {
+                        for (unsigned int fieldno = 0; fieldno < (*it).max_field; fieldno++) {
                             AlcatelFieldStruct *field = (*it).getField(fieldno);
                             if (field != NULL) {
                                 alcatel_update_field(ALC_SYNC_TYPE_CALENDAR, id, fieldno, field);
@@ -2350,6 +2385,9 @@ this shouldn't be here because it should be created on the fly
                         ::message(MSG_INFO, "Modified: %s", (*it).getName().latin1());
                     }
                     alcatel_close_session(ALC_SYNC_TYPE_CALENDAR);
+                    it++;
+                } else {
+                    it++;
                 }
             }
         }
@@ -2360,11 +2398,25 @@ this shouldn't be here because it should be created on the fly
         AlcatelContactList::Iterator it;
 
 
-        for( it = contacts->begin(); it != contacts->end(); ++it ) {
+        for( it = contacts->begin(); it != contacts->end(); ) {
             if ((*it).Storage == StorageMobile || ((*it).Storage == StoragePC && (*it).PrevStorage == StorageMobile)) {
                 if ((*it).Deleted) {
-                    ::message(MSG_INFO, "NOT IMPLEMENTED ACTION! Deleted contact: %s", (*it).getName().latin1());
-                    KMessageBox::sorry(win, i18n("Deleting of contacts is not yet implemented."), i18n("Sorry"));
+                    if (!alcatel_attach() ||
+                        !alcatel_start_session() ||
+                        !alcatel_select_type(ALC_SYNC_TYPE_CONTACTS)) {
+                        KMessageBox::error(win, i18n("Deleting of contact failed!"), i18n("Error"));
+                    } else {
+                        alcatel_begin_transfer(ALC_SYNC_CONTACTS);
+                        
+                        int id = (*it).Storage == StorageMobile ? (*it).Id : (*it).PrevId;
+
+                        alcatel_delete_item(ALC_SYNC_TYPE_CONTACTS, id);
+
+                        alcatel_commit(ALC_SYNC_TYPE_CONTACTS);
+                        ::message(MSG_INFO, "Deleted: %s (id = %d)", (*it).getName().latin1(), id);
+                        contacts->remove((*(it++)));
+                    }
+                    alcatel_close_session(ALC_SYNC_TYPE_CALENDAR);
                 } else if ((*it).Created) {
                     if (!alcatel_attach() ||
                         !alcatel_start_session() ||
@@ -2373,7 +2425,7 @@ this shouldn't be here because it should be created on the fly
                     } else {
                         alcatel_begin_transfer(ALC_SYNC_CONTACTS);
 
-                        for (int fieldno = 0; fieldno < (*it).max_field; fieldno++) {
+                        for (unsigned int fieldno = 0; fieldno < (*it).max_field; fieldno++) {
                             AlcatelFieldStruct *field = (*it).getField(fieldno);
                             if (field != NULL) {
                                 if (field->data != NULL) {
@@ -2397,6 +2449,7 @@ this shouldn't be here because it should be created on the fly
                         }
                     }
                     alcatel_close_session(ALC_SYNC_TYPE_CONTACTS);
+                    it++;
                 } else if ((*it).Modified) {
                     if (!alcatel_attach() ||
                         !alcatel_start_session() ||
@@ -2407,7 +2460,7 @@ this shouldn't be here because it should be created on the fly
 
                         int id = (*it).Storage == StorageMobile ? (*it).Id : (*it).PrevId;
 
-                        for (int fieldno = 0; fieldno < (*it).max_field; fieldno++) {
+                        for (unsigned int fieldno = 0; fieldno < (*it).max_field; fieldno++) {
                             AlcatelFieldStruct *field = (*it).getField(fieldno);
                             if (field != NULL) {
                                 alcatel_update_field(ALC_SYNC_TYPE_CONTACTS, id, fieldno, field);
@@ -2424,7 +2477,12 @@ this shouldn't be here because it should be created on the fly
                         ::message(MSG_INFO, "Modified: %s", (*it).getName().latin1());
                     }
                     alcatel_close_session(ALC_SYNC_TYPE_CONTACTS);
+                    it++;
+                } else {
+                    it++;
                 }
+            } else { /* Storage not in mobile */
+                it++;
             }
         }
     }
@@ -2433,7 +2491,11 @@ this shouldn't be here because it should be created on the fly
 
     win->modemDisconnect();
 
+    todosVersion++;
+    callsVersion++;
+    calendarVersion++;
     contactsVersion++;
+    messagesVersion++;
     version++;
     modified=true;
     slotUpdateAllViews(NULL);

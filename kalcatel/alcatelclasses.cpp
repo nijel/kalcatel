@@ -162,7 +162,7 @@ AlcatelClass::AlcatelClass() {
 AlcatelContact::AlcatelContact() {
     Category = -1;
     Private = -1;
-    for (int i = 0; i < max_field; i++) deleted_flags[i] = false;
+    for (unsigned int i = 0; i < max_field; i++) deleted_flags[i] = false;
 }
 
 AlcatelContact::~AlcatelContact() {
@@ -300,7 +300,7 @@ AlcatelCalendar::AlcatelCalendar() {
     Month = -1;
     Frequency = -1;
 
-    for (int i = 0; i < max_field; i++) deleted_flags[i] = false;
+    for (unsigned int i = 0; i < max_field; i++) deleted_flags[i] = false;
 }
 
 AlcatelCalendar::~AlcatelCalendar() {
@@ -483,7 +483,7 @@ AlcatelTodo::AlcatelTodo() {
     Priority = -1;
     ContactID = -1;
 
-    for (int i = 0; i < max_field; i++) deleted_flags[i] = false;
+    for (unsigned int i = 0; i < max_field; i++) deleted_flags[i] = false;
 }
 
 AlcatelTodo::~AlcatelTodo() {

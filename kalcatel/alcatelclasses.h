@@ -133,7 +133,7 @@ public:
     QString Custom4;
 
     const char *getClassName() {static const char cn[]="AlcatelContact";return cn;}
-    static const int max_field = 25;
+    static const unsigned int max_field = 25;
     bool deleted_flags[max_field];
 };
 
@@ -193,7 +193,7 @@ public:
     QDateTime Alarm2;
 
     const char *getClassName() {static const char cn[]="AlcatelCalendar";return cn;}
-    static const int max_field = 22;
+    static const unsigned int max_field = 22;
     bool deleted_flags[max_field];
 };
 
@@ -235,7 +235,7 @@ public:
     int ContactID;
 
     const char *getClassName() {static const char cn[]="AlcatelTodo";return cn;}
-    static const int max_field = 9;
+    static const unsigned int max_field = 9;
     bool deleted_flags[max_field];
 };
 

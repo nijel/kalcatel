@@ -1,0 +1,524 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2002-02-13 22:16+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: kalcatel.cpp:83
+msgid "&Read everything from mobile"
+msgstr ""
+
+#: kalcatel.cpp:84
+msgid "Read &todos from mobile"
+msgstr ""
+
+#: kalcatel.cpp:85
+msgid "Read &SMSs from mobile"
+msgstr ""
+
+#: kalcatel.cpp:86
+msgid "Read &calendar from mobile"
+msgstr ""
+
+#: kalcatel.cpp:87
+msgid "Read c&alls from mobile"
+msgstr ""
+
+#: kalcatel.cpp:88
+msgid "Read contacts (S&IM) from mobile"
+msgstr ""
+
+#: kalcatel.cpp:89
+msgid "Read contacts (m&obile) from mobile"
+msgstr ""
+
+#: kalcatel.cpp:116
+msgid "Creates a new document"
+msgstr ""
+
+#: kalcatel.cpp:117
+msgid "Opens an existing document"
+msgstr ""
+
+#: kalcatel.cpp:118
+msgid "Opens a recently used file"
+msgstr ""
+
+#: kalcatel.cpp:119
+msgid "Saves the actual document"
+msgstr ""
+
+#: kalcatel.cpp:120
+msgid "Saves the actual document as..."
+msgstr ""
+
+#: kalcatel.cpp:121
+msgid "Closes the actual document"
+msgstr ""
+
+#: kalcatel.cpp:122
+msgid "Prints out the actual document"
+msgstr ""
+
+#: kalcatel.cpp:123
+msgid "Quits the application"
+msgstr ""
+
+#: kalcatel.cpp:124
+msgid "Cuts the selected section and puts it to the clipboard"
+msgstr ""
+
+#: kalcatel.cpp:125
+msgid "Copies the selected section to the clipboard"
+msgstr ""
+
+#: kalcatel.cpp:126
+msgid "Pastes the clipboard contents to actual position"
+msgstr ""
+
+#: kalcatel.cpp:127
+msgid "Enables/disables the toolbar"
+msgstr ""
+
+#: kalcatel.cpp:128
+msgid "Enables/disables the statusbar"
+msgstr ""
+
+#: kalcatel.cpp:169 kalcatel.cpp:368 kalcatel.cpp:391
+msgid "Opening file..."
+msgstr ""
+
+#: kalcatel.cpp:173 kalcatel.cpp:303 kalcatel.cpp:310 kalcatel.cpp:317
+#: kalcatel.cpp:324 kalcatel.cpp:331 kalcatel.cpp:338 kalcatel.cpp:345
+#: kalcatel.cpp:363 kalcatel.cpp:386 kalcatel.cpp:403 kalcatel.cpp:412
+#: kalcatel.cpp:428 kalcatel.cpp:437 kalcatel.cpp:450 kalcatel.cpp:476
+#: kalcatel.cpp:483 kalcatel.cpp:490 kalcatel.cpp:507 kalcatel.cpp:524
+msgid "Ready."
+msgstr ""
+
+#: kalcatel.cpp:301 kalcatel.cpp:308 kalcatel.cpp:315 kalcatel.cpp:322
+#: kalcatel.cpp:329 kalcatel.cpp:336 kalcatel.cpp:343
+msgid "Reading data from mobile..."
+msgstr ""
+
+#: kalcatel.cpp:350
+msgid "Creating new document..."
+msgstr ""
+
+#: kalcatel.cpp:378
+msgid ""
+"*.kalc|KAlcatel files\n"
+"*|All files"
+msgstr ""
+
+#: kalcatel.cpp:378
+msgid "Open File..."
+msgstr ""
+
+#: kalcatel.cpp:408
+msgid "Saving file..."
+msgstr ""
+
+#: kalcatel.cpp:417
+msgid "Saving file with a new filename..."
+msgstr ""
+
+#: kalcatel.cpp:420
+msgid "*|All files"
+msgstr ""
+
+#: kalcatel.cpp:433
+msgid "Closing file..."
+msgstr ""
+
+#: kalcatel.cpp:442
+msgid "Printing..."
+msgstr ""
+
+#: kalcatel.cpp:455
+msgid "Exiting..."
+msgstr ""
+
+#: kalcatel.cpp:474
+msgid "Cutting selection..."
+msgstr ""
+
+#: kalcatel.cpp:481
+msgid "Copying selection to clipboard..."
+msgstr ""
+
+#: kalcatel.cpp:488
+msgid "Inserting clipboard contents..."
+msgstr ""
+
+#: kalcatel.cpp:495
+msgid "Toggling toolbar..."
+msgstr ""
+
+#: kalcatel.cpp:512
+msgid "Toggle the statusbar..."
+msgstr ""
+
+#: kalcatel.cpp:540 kalcatel.cpp:547
+msgid "("
+msgstr ""
+
+#: kalcatel.cpp:542 kalcatel.cpp:549
+msgid ")"
+msgstr ""
+
+#: kalcateldoc.cpp:131
+msgid ""
+"The current file has been modified.\n"
+"Do you want to save it?"
+msgstr ""
+
+#: kalcateldoc.cpp:234
+msgid "Opening modem"
+msgstr ""
+
+#: kalcateldoc.cpp:238
+msgid "Failed opening modem for read/write."
+msgstr ""
+
+#: kalcateldoc.cpp:242
+msgid "Modem locked."
+msgstr ""
+
+#: kalcateldoc.cpp:246
+msgid ""
+"Failed opening modem.\n"
+"Unknown error."
+msgstr ""
+
+#: kalcateldoc.cpp:252
+msgid "Setting serial port"
+msgstr ""
+
+#: kalcateldoc.cpp:254
+msgid "Initializing modem"
+msgstr ""
+
+#: kalcateldoc.cpp:258
+msgid "Modem doesn't react on AT command."
+msgstr ""
+
+#: kalcateldoc.cpp:262
+msgid "Failed selecting PDU mode."
+msgstr ""
+
+#: kalcateldoc.cpp:266
+msgid ""
+"Failed initializing modem.\n"
+"Unknown error."
+msgstr ""
+
+#: kalcateldoc.cpp:276
+msgid "Reading messages"
+msgstr ""
+
+#: kalcateldoc.cpp:296
+msgid "SMS messages read"
+msgstr ""
+
+#: kalcateldoc.cpp:301
+msgid "Not implemented yet..."
+msgstr ""
+
+#: kalcatelview.cpp:53
+msgid "Todos"
+msgstr ""
+
+#: kalcatelview.cpp:53
+msgid "All todos"
+msgstr ""
+
+#: kalcatelview.cpp:56
+msgid "Calendar"
+msgstr ""
+
+#: kalcatelview.cpp:56
+msgid "Whole calendar"
+msgstr ""
+
+#: kalcatelview.cpp:59 kalcatelview.cpp:62 kalcatelview.cpp:68
+msgid "Contacts"
+msgstr ""
+
+#: kalcatelview.cpp:59
+msgid "All contacts"
+msgstr ""
+
+#: kalcatelview.cpp:63
+msgid "SIM"
+msgstr ""
+
+#: kalcatelview.cpp:64
+msgid "Contacts on SIM card"
+msgstr ""
+
+#: kalcatelview.cpp:69 kalcatelview.cpp:176 kalcatelview.cpp:213
+msgid "Mobile"
+msgstr ""
+
+#: kalcatelview.cpp:70
+msgid "Contacts stored in mobile"
+msgstr ""
+
+#: kalcatelview.cpp:74 kalcatelview.cpp:77 kalcatelview.cpp:83
+#: kalcatelview.cpp:89
+msgid "Calls"
+msgstr ""
+
+#: kalcatelview.cpp:74
+msgid "All calls"
+msgstr ""
+
+#: kalcatelview.cpp:78
+msgid "Missed"
+msgstr ""
+
+#: kalcatelview.cpp:79
+msgid "Missed calls"
+msgstr ""
+
+#: kalcatelview.cpp:84
+msgid "Received"
+msgstr ""
+
+#: kalcatelview.cpp:85
+msgid "Received calls"
+msgstr ""
+
+#: kalcatelview.cpp:90
+msgid "Outgoing"
+msgstr ""
+
+#: kalcatelview.cpp:91
+msgid "Outgoing calls"
+msgstr ""
+
+#: kalcatelview.cpp:95 kalcatelview.cpp:105 kalcatelview.cpp:117
+#: kalcatelview.cpp:129 kalcatelview.cpp:141
+msgid "Messages"
+msgstr ""
+
+#: kalcatelview.cpp:95
+msgid "All messages"
+msgstr ""
+
+#: kalcatelview.cpp:106 kalcatelview.cpp:334
+msgid "Unread"
+msgstr ""
+
+#: kalcatelview.cpp:107
+msgid "Unread messages"
+msgstr ""
+
+#: kalcatelview.cpp:118 kalcatelview.cpp:339
+msgid "Read"
+msgstr ""
+
+#: kalcatelview.cpp:119
+msgid "Read messages"
+msgstr ""
+
+#: kalcatelview.cpp:130 kalcatelview.cpp:347
+msgid "Sent"
+msgstr ""
+
+#: kalcatelview.cpp:131
+msgid "Sent messages"
+msgstr ""
+
+#: kalcatelview.cpp:142 kalcatelview.cpp:343
+msgid "Unsent"
+msgstr ""
+
+#: kalcatelview.cpp:143
+msgid "Unsent messages"
+msgstr ""
+
+#: kalcatelview.cpp:169 kalcatelview.cpp:274 kalcatelview.cpp:279
+#: kalcatelview.cpp:285
+msgid "Name"
+msgstr ""
+
+#: kalcatelview.cpp:170
+msgid "Phone"
+msgstr ""
+
+#: kalcatelview.cpp:173 kalcatelview.cpp:211
+msgid "Last name"
+msgstr ""
+
+#: kalcatelview.cpp:174 kalcatelview.cpp:212
+msgid "First name"
+msgstr ""
+
+#: kalcatelview.cpp:175 kalcatelview.cpp:223
+msgid "Category"
+msgstr ""
+
+#: kalcatelview.cpp:177 kalcatelview.cpp:214
+msgid "Work"
+msgstr ""
+
+#: kalcatelview.cpp:178 kalcatelview.cpp:215
+msgid "Main"
+msgstr ""
+
+#: kalcatelview.cpp:179 kalcatelview.cpp:216
+msgid "Email"
+msgstr ""
+
+#: kalcatelview.cpp:219
+msgid "Completed"
+msgstr ""
+
+#: kalcatelview.cpp:220
+msgid "Priority"
+msgstr ""
+
+#: kalcatelview.cpp:221
+msgid "Due date"
+msgstr ""
+
+#: kalcatelview.cpp:222 kalcatelview.cpp:241
+msgid "Subject"
+msgstr ""
+
+#: kalcatelview.cpp:238 kalcatelview.cpp:287 kalcatelview.cpp:295
+#: kalcatelview.cpp:303
+msgid "Date"
+msgstr ""
+
+#: kalcatelview.cpp:239
+msgid "Start"
+msgstr ""
+
+#: kalcatelview.cpp:240
+msgid "End"
+msgstr ""
+
+#: kalcatelview.cpp:242
+msgid "Alarm"
+msgstr ""
+
+#: kalcatelview.cpp:243
+msgid "Repeat"
+msgstr ""
+
+#: kalcatelview.cpp:273 kalcatelview.cpp:278 kalcatelview.cpp:284
+msgid "Number"
+msgstr ""
+
+#: kalcatelview.cpp:275 kalcatelview.cpp:281 kalcatelview.cpp:290
+#: kalcatelview.cpp:298 kalcatelview.cpp:306
+msgid "Position"
+msgstr ""
+
+#: kalcatelview.cpp:280
+msgid "Type"
+msgstr ""
+
+#: kalcatelview.cpp:286
+msgid "Status"
+msgstr ""
+
+#: kalcatelview.cpp:288 kalcatelview.cpp:296 kalcatelview.cpp:304
+msgid "Time"
+msgstr ""
+
+#: kalcatelview.cpp:289 kalcatelview.cpp:297 kalcatelview.cpp:305
+msgid "Text"
+msgstr ""
+
+#: kalcatelview.cpp:293
+msgid "From"
+msgstr ""
+
+#: kalcatelview.cpp:294
+msgid "From (name)"
+msgstr ""
+
+#: kalcatelview.cpp:301
+msgid "To"
+msgstr ""
+
+#: kalcatelview.cpp:302
+msgid "To (name)"
+msgstr ""
+
+#: kalcatelview.cpp:384 kalcatelview.cpp:402 kalcatelview.cpp:420
+#: kalcatelview.cpp:438 kalcatelview.cpp:456
+msgid "<b>From:</b> %1 (%2)<br><b>Date:</b> %3<br><b>Time:</b> %4<br><br>%5"
+msgstr ""
+
+#: main.cpp:31
+msgid "KAlcatel - Application to work with Alcatel 50x and 70x mobile phone."
+msgstr ""
+
+#: main.cpp:43
+msgid "KAlcatel"
+msgstr ""
+
+#: main.cpp:46
+msgid ""
+"This application allows you to manage contacs, todos and calendar\n"
+"in your Alcatel One Touch 50x and 70x mobile.\n"
+"\n"
+"Protocol used by this phone is binary and not documented, so this\n"
+"program could not guarantee any functionality in your case, but it works "
+"well for me."
+msgstr ""
+
+#: main.cpp:52
+msgid ""
+"for NOT publishing specification of protocol\n"
+"Their only answer was:\n"
+"\"Your piece of advice will be helpful enough for us to deliberate\n"
+"and  get the best service for all our customers.\""
+msgstr ""
+
+#: kalcatelview.moc.cpp:42 kalcatelview.moc.cpp:47
+msgid "KAlcatelView"
+msgstr ""
+
+#: kalcatel.moc.cpp:42 kalcatel.moc.cpp:47
+msgid "KAlcatelApp"
+msgstr ""
+
+#: kalcateldoc.moc.cpp:42 kalcateldoc.moc.cpp:47
+msgid "KAlcatelDoc"
+msgstr ""
+
+#: rc.cpp:2
+msgid "&Mobile"
+msgstr ""
+
+#: rc.cpp:3
+msgid "Read Toolbar"
+msgstr ""
+
+#: _translatorinfo.cpp:1
+msgid ""
+"_: NAME OF TRANSLATORS\n"
+"Your names"
+msgstr ""
+
+#: _translatorinfo.cpp:3
+msgid ""
+"_: EMAIL OF TRANSLATORS\n"
+"Your emails"
+msgstr ""

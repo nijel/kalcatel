@@ -1,3 +1,9 @@
+kalcatel (0.3.3-1) unstable; urgency=low
+
+  * new upstream version
+
+ -- Michal Cihar <cihar@email.cz>  Fri,  9 May 2003 19:25:48 +0200
+
 kalcatel (0.3.2-1) unstable; urgency=low
 
   * new upstream version, built against KDE 3/Qt 3

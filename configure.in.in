@@ -1,4 +1,4 @@
 #MIN_CONFIG(3.0)
 
-AM_INIT_AUTOMAKE(kalcatel,0.3.2)
+AM_INIT_AUTOMAKE(kalcatel,0.3.3)
 

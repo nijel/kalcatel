@@ -45,11 +45,11 @@ as Authors, publish date, the abstract, and Keywords -->
 
 <authorgroup>
 <author>
-<firstname>George</firstname>
-<othername>N.</othername>
-<surname>Ugnacious</surname>
+<firstname>Michal</firstname>
+<!--<othername>N.</othername>-->
+<surname>Cihar</surname>
 <affiliation>
-<address><email>gnu@kde.org</email></address>
+<address><email>cihar@email.cz</email></address>
 </affiliation>
 </author>
 </authorgroup>
@@ -57,9 +57,9 @@ as Authors, publish date, the abstract, and Keywords -->
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 
 <copyright>
-<year>1999</year>
-<year>2000</year>
-<holder>George N. Ugnacious</holder>
+<year>2002</year>
+<!--<year>2000</year>-->
+<holder>Michal Cihar</holder>
 </copyright>
 <!-- Translators: put here the copyright notice of the translation -->
 <!-- Put here the FDL notice.  Read the explanation in fdl-notice.docbook 
@@ -73,8 +73,8 @@ Please respect the format of the date (DD/MM/YYYY) and of the version
 (V.MM.LL), it could be used by automation scripts.
 Do NOT change these in the translation. -->
 
-<date>03/04/1999</date>
-<releaseinfo>1.01.00</releaseinfo>
+<date>12/02/2002</date>
+<releaseinfo>0.1-rerelease</releaseinfo>
 
 <!-- Abstract about this handbook -->
 
@@ -91,10 +91,10 @@ Please at least include KDE, the KDE package it is in, the name
 
 <keywordset>
 <keyword>KDE</keyword>
-<keyword>kdeutils</keyword>
-<keyword>Kapp</keyword>
-<keyword>nothing</keyword>
-<keyword>nothing else</keyword>
+<keyword>KAlcatel</keyword>
+<keyword>Alcatel</keyword>
+<keyword>501</keyword>
+<keyword>701</keyword>
 </keywordset>
 
 </bookinfo>

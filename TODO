@@ -1,1 +1,37 @@
+for 0.1-prerelease:
+ - reading of contacts (mobile), calendar, todo
+ - modem initialization on document open and closing on document close
+ - configuration (at least of modem)
 
+for 0.2-alpha:
+ - reading of everything
+ - saving of document
+ - export to csv (and maybe others)
+
+for 0.3-beta:
+ - editing of calendar/contacts/...
+ - sending/writing messages
+ - write to mobile
+ - import data from csv (and maybe others)
+
+for 0.4:
+ - fix majority of reported bugs, this should be first "stable" release
+
+sometimes (till 1.0):
+ - synchronisation with kab
+ - save and restore positions and size of interface (splitters, list headers, toolbars, ...)
+ - read clock, set clock as they are in computer
+ - contacts sim <-> mobile transfer
+
+nice to have features (probable):
+ - print support
+ - copy & paste whole items over clipboard
+ - try to do something with alarms
+
+nice to have features (possible):
+ - simplier interface for non Alcatel phones (without anything what is Alcatel specific)
+ - nicer icons ;-)
+
+nice to have features (unprobable):
+ - support for messages in phone
+ - logo changing

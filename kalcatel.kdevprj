@@ -24,7 +24,7 @@ ldadd=\s$(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
 ldflags=
 
 [General]
-AMChanged=false
+AMChanged=true
 author=Michal Cihar
 configure_args=--prefix=/usr
 email=cihar@email.cz
@@ -36,9 +36,9 @@ modifyMakefiles=true
 project_name=KAlcatel
 project_type=normal_kde2
 sgml_file=/work/alcatel/kalcatel/doc/en/index.docbook
-short_info=This application allows you to manage contacs\\, todos and calendar,in your Alcatel One Touch 50x and 70x mobile.,,Protocol used by this phone is binary and not documented\\, so this,program could not guarantee any functionality in your case\\, but it works well for me.
+short_info=This application allows you to manage calls\\, messages\\, contacs\\, todos,and calendar in your Alcatel One Touch 50x and 70x mobile.,,Protocol used by this phone is binary and not documented\\, so this,program could not guarantee any functionality in your case\\, but it works well for me.
 sub_dir=kalcatel/
-version=0.1
+version=0.1-prerelease
 version_control=CVS
 workspace=1
 

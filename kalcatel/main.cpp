@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 	KAboutData aboutData( "kalcatel", I18N_NOOP("KAlcatel"),
 		VERSION, description, KAboutData::License_GPL,
 		"(c) 2002, Michal Cihar",
-		i18n("This application allows you to manage messages, calls, contacs, todos\n"
+		I18N_NOOP("This application allows you to manage messages, calls, contacs, todos\n"
 		"and calendar in your Alcatel One Touch 50x and 70x mobile.\n\n"
 		"Protocol used by this phone is binary and not documented, so this\n"
 		"program could not guarantee any functionality in your case, but it works well for me."),

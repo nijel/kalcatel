@@ -11,20 +11,20 @@ for 0.1-prerelease:
 for 0.2-alpha:
  - (DONE) reading of everything - add calls and contacts from SIM
  - (DONE) saving of document
- - loading of document
- - export to csv (and maybe others)
+ - (DONE) loading of document
+ - load/save still contains some bugs - sometime one or two days are lost, in calendar start/stop date is lost
 
 for 0.3-beta:
  - editing of calendar/contacts/...
  - sending/writing messages
  - write to mobile
- - import data from csv (and maybe others)
 
 for 0.4:
  - fix majority of reported bugs, this should be first "stable" release
 
 sometimes (till 1.0):
  - czech translation
+ - export/import data from csv (and maybe others)
  - rewrite reading as separate thread and allow canceling (probably using QThread + QProgressDialog)
  - move modem initialization (?)
  - synchronisation with kab (and maybe also korganizer)

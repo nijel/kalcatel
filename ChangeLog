@@ -8,6 +8,7 @@ $Id$
         * added key configuration
         * added document information
         * corrected sorting by date, time etc.
+        * support for loading document
 
 2002-02-21 Michal Cihar <cihar@email.cz>
         * changed way of creating view, not used KJanusWidget anymore

@@ -82,17 +82,19 @@ class KAlcatelTreeViewItem;
 #define ID_CONTACTS         3
 #define ID_CONTACTS_SIM     4
 #define ID_CONTACTS_MOBILE  5
-#define ID_CALLS            6
-#define ID_CALLS_OUTGOING   7
-#define ID_CALLS_MISSED     8
-#define ID_CALLS_RECEIVED   9
-#define ID_MESSAGES         10
-#define ID_MESSAGES_SENT    11
-#define ID_MESSAGES_UNSENT  12
-#define ID_MESSAGES_READ    13
-#define ID_MESSAGES_UNREAD  14
+#define ID_CONTACTS_PC      6
+#define ID_CALLS            7
+#define ID_CALLS_OUTGOING   8
+#define ID_CALLS_MISSED     9
+#define ID_CALLS_RECEIVED   10
+#define ID_MESSAGES         11
+#define ID_MESSAGES_SENT    12
+#define ID_MESSAGES_UNSENT  13
+#define ID_MESSAGES_READ    14
+#define ID_MESSAGES_UNREAD  15
 #define ID_TODOS_CAT        1000
 #define ID_CONTACTS_CAT     2000
+#define ID_CONTACTS_PC_CAT  3000
 
 
 /** The KAlcatelView class provides the view widget for the KAlcatelApp instance.	
@@ -154,13 +156,14 @@ class KAlcatelView : public QWidget {
     KAlcatelTreeViewItem *kalcatel_item,
         *todo_item,
         *calendar_item,
-        *contacts_item, *contacts_sim_item, *contacts_mobile_item,
+        *contacts_item, *contacts_sim_item, *contacts_mobile_item, *contacts_pc_item,
         *calls_item, *calls_outgoing_item, *calls_missed_item, *calls_received_item,
         *messages_item, *messages_read_item, *messages_unread_item, *messages_sent_item, *messages_unsent_item;
 
     KListView *todo_list, *todo_cat_list[ALC_MAX_CATEGORIES],
         *calendar_list,
         *contacts_list, *contacts_sim_list, *contacts_mobile_list, *contacts_cat_list[ALC_MAX_CATEGORIES],
+        *contacts_pc_list, *contacts_pc_cat_list[ALC_MAX_CATEGORIES],
         *calls_list, *calls_outgoing_list, *calls_missed_list, *calls_received_list,
         *messages_list, *messages_read_list, *messages_unread_list, *messages_sent_list, *messages_unsent_list;
 

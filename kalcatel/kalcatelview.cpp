@@ -104,6 +104,7 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : QWidget(parent, 
     for (i=0; i<ALC_MAX_CATEGORIES; i++) {
         contacts_cat_list[i] =  NULL;
         todo_cat_list[i] =  NULL;
+        contacts_pc_cat_list[i] = NULL;
     }
 
     kalcatel_item = new KAlcatelTreeViewItem(tree, i18n("KAlcatel"), SmallIcon("kalcatel-mobile.png"), ID_KALCATEL );
@@ -169,6 +170,10 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : QWidget(parent, 
     widgetstack->addWidget( contacts_list = createListView( widgetstack, alc_contacts ), ID_CONTACTS );
     connect( contacts_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
     contacts_item = new KAlcatelTreeViewItem(kalcatel_item, i18n("Contacts"), SmallIcon("kalcatel-contact.png"), ID_CONTACTS );
+
+    widgetstack->addWidget( contacts_pc_list = createListView( widgetstack, alc_contacts_mobile ), ID_CONTACTS_PC );
+    connect( contacts_pc_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
+    contacts_pc_item = new KAlcatelTreeViewItem(contacts_item, i18n("PC"), SmallIcon("kalcatel-contact-pc.png"), ID_CONTACTS_PC );
 
     widgetstack->addWidget( contacts_mobile_list = createListView( widgetstack, alc_contacts_mobile ), ID_CONTACTS_MOBILE );
     connect( contacts_mobile_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
@@ -347,7 +352,8 @@ void KAlcatelView::repaint() {
                         (* it).Date.date().toString(),
                         (* it).Date.time().toString(),
                         QString((* it).Text),
-                        QString("%1").arg((* it).Id));
+                        QString("%1 %2").
+                            arg(StorageTypes[(* it).Storage]).arg((* it).Id));
 
                 new KAlcatelMessageCatViewItem (list, &(* it),
                         QString((* it).Sender),
@@ -355,7 +361,8 @@ void KAlcatelView::repaint() {
                         (* it).Date.date().toString(),
                         (* it).Date.time().toString(),
                         QString((* it).Text),
-                        QString("%1").arg((* it).Id));
+                        QString("%1 %2").
+                            arg(StorageTypes[(* it).Storage]).arg((* it).Id));
             } /* for cycle over sms */
             if (unread_sms)
                 tree->setCurrentItem(messages_unread_item);
@@ -401,12 +408,13 @@ void KAlcatelView::repaint() {
                                 (* it).Priority == -1 ? QString("") : Priorities[(* it).Priority],
                                 (* it).DueDate.isNull()?i18n("None"):(* it).DueDate.toString(),
                                 (* it).Subject,
-                                QString("%1").arg((* it).Id));
+                                QString("%1 %2").
+                                    arg(StorageTypes[(* it).Storage]).arg((* it).Id));
                     } else {
                         ::message(MSG_WARNING, "Can not insert to category list (%d)", (* it).Category);
                     }
 
-                    AlcatelCategory *cat = getCategoryById(doc->todo_cats, (*it).Category, StorageMobile);
+                    AlcatelCategory *cat = getCategoryById(doc->todo_cats, (*it).Category, (*it).Storage);
                     if (cat == NULL) {
                         catname = i18n("Unknown (id=%1)").arg((* it).Category);
                     } else {
@@ -422,7 +430,8 @@ void KAlcatelView::repaint() {
                         (* it).DueDate.isNull()?i18n("None"):(* it).DueDate.toString(),
                         (* it).Subject,
                         catname,
-                        QString("%1").arg((* it).Id));
+                        QString("%1 %2").
+                            arg(StorageTypes[(* it).Storage]).arg((* it).Id));
 
             } /* for cycle over todos */
 
@@ -445,7 +454,8 @@ void KAlcatelView::repaint() {
                         (* it).Subject,
                         (* it).Alarm.isNull()?i18n("None"):(* it).Alarm.toString(),
                         (* it).Repeating(),
-                        QString("%1").arg((* it).Id));
+                        QString("%1 %2").
+                            arg(StorageTypes[(* it).Storage]).arg((* it).Id));
             } /* for cycle over items */
 
             tree->setCurrentItem(calendar_item);
@@ -525,10 +535,17 @@ void KAlcatelView::repaint() {
             }
 
             for( c_it = doc->contact_cats->begin(); c_it != doc->contact_cats->end(); ++c_it ) {
-                widgetstack->addWidget(contacts_cat_list[(*c_it).Id] = createListView(widgetstack, alc_contacts_mobile_cat), ID_CONTACTS_CAT + (*c_it).Id );
-                new KAlcatelTreeViewItem(contacts_mobile_item, (*c_it).Name, SmallIcon("kalcatel-contact-mobile.png"), ID_CONTACTS_CAT + (*c_it).Id );
-                connect( contacts_cat_list[(*c_it).Id], SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
-                ::message(MSG_DEBUG, "Created category listview %d", (*c_it).Id);
+                if ((*c_it).Storage==StorageMobile) {
+                    widgetstack->addWidget(contacts_cat_list[(*c_it).Id] = createListView(widgetstack, alc_contacts_mobile_cat), ID_CONTACTS_CAT + (*c_it).Id );
+                    new KAlcatelTreeViewItem(contacts_mobile_item, (*c_it).Name, SmallIcon("kalcatel-contact-mobile.png"), ID_CONTACTS_CAT + (*c_it).Id );
+                    connect( contacts_cat_list[(*c_it).Id], SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
+                    ::message(MSG_DEBUG, "Created category listview %d", (*c_it).Id);
+                } else {
+                    widgetstack->addWidget(contacts_pc_cat_list[(*c_it).Id] = createListView(widgetstack, alc_contacts_mobile_cat), ID_CONTACTS_PC_CAT + (*c_it).Id );
+                    new KAlcatelTreeViewItem(contacts_pc_item, (*c_it).Name, SmallIcon("kalcatel-contact-mobile.png"), ID_CONTACTS_PC_CAT + (*c_it).Id );
+                    connect( contacts_pc_cat_list[(*c_it).Id], SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
+                    ::message(MSG_DEBUG, "Created category listview %d", (*c_it).Id);
+                }
             }
 
             AlcatelContactList::Iterator it;
@@ -562,7 +579,7 @@ void KAlcatelView::repaint() {
                         } else {
                             ::message(MSG_WARNING, "Can not insert to category list (%d)", (* it).Category);
                         }
-                        AlcatelCategory *cat = getCategoryById(doc->contact_cats, (* it).Category, StorageMobile);
+                        AlcatelCategory *cat = getCategoryById(doc->contact_cats, (* it).Category, (* it).Storage);
                         if (cat == NULL) {
                             catname = i18n("Unknown (id=%1)").arg((* it).Category);
                         } else {
@@ -581,6 +598,40 @@ void KAlcatelView::repaint() {
                             QString((* it).Email1),
                             QString("%1").arg((* it).Id));
                 } /* storage=mobile */
+                else if ((* it).Storage == StoragePC) {
+                    QString catname;
+                    if ((* it).Category >= 0) {
+                        if ((contacts_pc_cat_list[(* it).Category] != NULL) && ((* it).Category < ALC_MAX_CATEGORIES)) {
+                            new KAlcatelContactMobileCatViewItem (contacts_pc_cat_list[(* it).Category], &(*it),
+                                    QString((* it).LastName),
+                                    QString((* it).FirstName),
+                                    QString((* it).MobileNumber),
+                                    QString((* it).WorkNumber),
+                                    QString((* it).MainNumber),
+                                    QString((* it).Email1),
+                                    QString("%1").arg((* it).Id));
+                        } else {
+                            ::message(MSG_WARNING, "Can not insert to category list (%d)", (* it).Category);
+                        }
+                        AlcatelCategory *cat = getCategoryById(doc->contact_cats, (* it).Category, (* it).Storage);
+                        if (cat == NULL) {
+                            catname = i18n("Unknown (id=%1)").arg((* it).Category);
+                        } else {
+                            catname = cat->Name;;
+                        }
+                    } else {
+                        catname = i18n("None");
+                    }
+                    new KAlcatelContactMobileViewItem (contacts_pc_list, &(*it),
+                            QString((* it).LastName),
+                            QString((* it).FirstName),
+                            catname,
+                            QString((* it).MobileNumber),
+                            QString((* it).WorkNumber),
+                            QString((* it).MainNumber),
+                            QString((* it).Email1),
+                            QString("%1").arg((* it).Id));
+                } /* storage=pc */
                 else {
                     new KAlcatelContactSIMViewItem (contacts_sim_list, &(*it),
                             QString((* it).LastName),
@@ -679,7 +730,7 @@ void KAlcatelView::slotShowTodo(AlcatelTodo *what) {
         return;
     }
 
-    AlcatelContact *cont=getContactById(getDocument()->contacts, what->ContactID, StorageMobile);
+    AlcatelContact *cont=getContactById(getDocument()->contacts, what->ContactID, what->Storage);
     if (!what->Subject.isEmpty()) text.append(i18n("<b>Subject:</b> %1<br>").arg(what->Subject));
     if (!what->DueDate.isNull()) text.append(i18n("<b>DueDate:</b> %1<br>").arg(what->DueDate.toString()));
     if (!what->Alarm.isNull()) text.append(i18n("<b>Alarm:</b> %1<br>").arg(what->Alarm.toString()));
@@ -688,7 +739,7 @@ void KAlcatelView::slotShowTodo(AlcatelTodo *what) {
     if (what->Priority != -1) text.append(i18n("<b>Priority:</b> %1<br>").arg(Priorities[what->Priority]));
     if (what->ContactID != -1 && what->ContactID != 0) text.append(i18n("<b>Contact:</b> %1<br>").arg(cont==NULL?QString("id=%1").arg(what->ContactID):cont->Name()));
     if (what->Category != -1) {
-        AlcatelCategory *cat = getCategoryById(getDocument()->todo_cats, what->Category, StorageMobile);
+        AlcatelCategory *cat = getCategoryById(getDocument()->todo_cats, what->Category, what->Storage);
         if (cat == NULL) {
             text.append(i18n("<b>Category:</b> %1<br>").arg(i18n("Unknown (id=%1))").arg(what->Category)));
         } else {
@@ -712,7 +763,7 @@ void KAlcatelView::slotShowCalendar(AlcatelCalendar *what) {
         return;
     }
 
-    AlcatelContact *cont=getContactById(getDocument()->contacts, what->ContactID, StorageMobile);
+    AlcatelContact *cont=getContactById(getDocument()->contacts, what->ContactID, what->Storage);
 
     if (!what->Subject.isEmpty()) text.append(i18n("<b>Subject:</b> %1<br>").arg(what->Subject));
     if (!what->Date.isNull()) text.append(i18n("<b>Date:</b> %1<br>").arg(what->Date.toString()));
@@ -748,13 +799,12 @@ void KAlcatelView::slotShowContact(AlcatelContact *what) {
     if (what->Storage == StorageSIM) {
         if (!what->LastName.isEmpty()) text.append(i18n("<b>Name:</b> %1<br>").arg(what->LastName));
         if (!what->MainNumber.isEmpty()) text.append(i18n("<b>Phone:</b> %1<br>").arg(what->MainNumber));
-        text.append(i18n("<b>Storage:</b> %1<br>").arg(i18n("SIM card")));
     } else {
         if (!what->FirstName.isEmpty()) text.append(i18n("<b>FirstName:</b> %1<br>").arg(what->FirstName));
         if (!what->LastName.isEmpty()) text.append(i18n("<b>LastName:</b> %1<br>").arg(what->LastName));
 
         if (what->Category != -1) {
-            AlcatelCategory *cat = getCategoryById(getDocument()->contact_cats, what->Category, StorageMobile);
+            AlcatelCategory *cat = getCategoryById(getDocument()->contact_cats, what->Category, what->Storage);
             if (cat == NULL) {
                 text.append(i18n("<b>Category:</b> %1<br>").arg(i18n("Unknown (id=%1))").arg(what->Category)));
             } else {
@@ -794,8 +844,8 @@ void KAlcatelView::slotShowContact(AlcatelContact *what) {
         if (!what->Custom4.isEmpty()) text.append(i18n("<b>Custom4:</b> %1<br>").arg(custom));
         if (!what->Note.isEmpty()) text.append(i18n("<b>Note:</b> %1<br>").arg(what->Note));
         if (what->Private != -1) text.append(i18n("<b>Private:</b> %1<br>").arg(what->Private == 1?i18n("Yes"):i18n("No")));
-        text.append(i18n("<b>Storage:</b> %1<br>").arg(i18n("Phone")));
     }
+    text.append(i18n("<b>Storage:</b> %1<br>").arg(StorageTypes[what->Storage]));
     text.append(i18n("<b>Position:</b> %1").arg(what->Id));
     textview->setText(text);
     textview->setMinimumHeight(textview->contentsHeight()); /* resize to show all contents*/
@@ -845,6 +895,7 @@ void KAlcatelView::slotSetTitle( int num ) {
     else if (num == ID_CONTACTS) titlelabel->setText(i18n("All contacts"));
     else if (num == ID_CONTACTS_SIM) titlelabel->setText(i18n("Contacts stored on SIM card"));
     else if (num == ID_CONTACTS_MOBILE ) titlelabel->setText(i18n("Contacts stored in mobile"));
+    else if (num == ID_CONTACTS_PC ) titlelabel->setText(i18n("Contacts stored in PC"));
     else if (num == ID_CALLS) titlelabel->setText(i18n("All calls"));
     else if (num == ID_CALLS_OUTGOING) titlelabel->setText(i18n("Outgoing calls"));
     else if (num == ID_CALLS_MISSED) titlelabel->setText(i18n("Missed calls"));
@@ -861,8 +912,15 @@ void KAlcatelView::slotSetTitle( int num ) {
         else
             titlelabel->setText(i18n("Contacts in category %1").arg(cat->Name));
     }
+    else if (num >= ID_CONTACTS_PC_CAT && num < ID_CONTACTS_PC_CAT + ALC_MAX_CATEGORIES){
+        AlcatelCategory *cat = getCategoryById(getDocument()->contact_cats, num - ID_CONTACTS_PC_CAT, StoragePC);
+        if (cat == NULL)
+            titlelabel->setText(i18n("Contacts in unknown category"));
+        else
+            titlelabel->setText(i18n("Contacts in category %1").arg(cat->Name));
+    }
     else if (num >= ID_TODOS_CAT && num < ID_TODOS_CAT + ALC_MAX_CATEGORIES){
-        AlcatelCategory *cat = getCategoryById(getDocument()->todo_cats, num - ID_TODOS_CAT, StorageMobile);
+        AlcatelCategory *cat = getCategoryById(getDocument()->todo_cats, num - ID_TODOS_CAT, StorageMobile); /* TODO: this should bechanged... */
         if (cat == NULL)
             titlelabel->setText(i18n("Todos in unknown category"));
         else

@@ -293,16 +293,196 @@ void KAlcatelDoc::readDomMessage(QDomElement el) {
     messages->append(*Msg);
 }
 
+void KAlcatelDoc::readDomContact(QDomElement el) {
+    QDomNode n = el.firstChild();
+    AlcatelContact *Cont = new AlcatelContact();
+    Cont->Id = pcStorageCounter++;
+    Cont->Storage = StoragePC;
+
+    while( !n.isNull() ) {
+        QDomElement l = n.toElement();
+        if( !l.isNull() ) {
+            if (l.tagName() == "id") {
+                Cont->PrevId = readDomInt(l);
+            } else if (l.tagName() == "storage") {
+                Cont->PrevStorage = (AlcatelStorage)readDomInt(l);
+            } else if (l.tagName() == "lastname") {
+                Cont->LastName = readDomString(l);
+            } else if (l.tagName() == "firstname") {
+                Cont->FirstName = readDomString(l);
+            } else if (l.tagName() == "company") {
+                Cont->Company = readDomString(l);
+            } else if (l.tagName() == "jobtitle") {
+                Cont->JobTitle = readDomString(l);
+            } else if (l.tagName() == "note") {
+                Cont->Note = readDomString(l);
+            } else if (l.tagName() == "category") {
+                Cont->Category = readDomInt(l);
+            } else if (l.tagName() == "private") {
+                Cont->Private = readDomInt(l);
+            } else if (l.tagName() == "worknumber") {
+                Cont->WorkNumber = readDomString(l);
+            } else if (l.tagName() == "mainnumber") {
+                Cont->MainNumber = readDomString(l);
+            } else if (l.tagName() == "faxnumber") {
+                Cont->FaxNumber = readDomString(l);
+            } else if (l.tagName() == "othernumber") {
+                Cont->OtherNumber = readDomString(l);
+            } else if (l.tagName() == "pagernumber") {
+                Cont->PagerNumber = readDomString(l);
+            } else if (l.tagName() == "mobilenumber") {
+                Cont->MobileNumber = readDomString(l);
+            } else if (l.tagName() == "homenumber") {
+                Cont->HomeNumber = readDomString(l);
+            } else if (l.tagName() == "email1") {
+                Cont->Email1 = readDomString(l);
+            } else if (l.tagName() == "email2") {
+                Cont->Email2= readDomString(l);
+            } else if (l.tagName() == "address") {
+                Cont->Address = readDomString(l);
+            } else if (l.tagName() == "city") {
+                Cont->City = readDomString(l);
+            } else if (l.tagName() == "state") {
+                Cont->State = readDomString(l);
+            } else if (l.tagName() == "zip") {
+                Cont->Zip = readDomString(l);
+            } else if (l.tagName() == "country") {
+                Cont->Country = readDomString(l);
+            } else if (l.tagName() == "custom1") {
+                Cont->Custom1 = readDomString(l);
+            } else if (l.tagName() == "custom2") {
+                Cont->Custom2 = readDomString(l);
+            } else if (l.tagName() == "custom3") {
+                Cont->Custom3 = readDomString(l);
+            } else if (l.tagName() == "custom4") {
+                Cont->Custom4 = readDomString(l);
+            } else {
+                ::message(MSG_WARNING, "Unknown tag in document: %s", l.tagName().latin1());
+            }
+        }
+        n = n.nextSibling();
+    }
+    ::message(MSG_DEBUG2, "Read contact %d", Cont->Id);
+    contacts->append(*Cont);
+}
+
 void KAlcatelDoc::readDomEvent(QDomElement el) {
+    QDomNode n = el.firstChild();
+    AlcatelCalendar *Cal = new AlcatelCalendar();
+    Cal->Id = pcStorageCounter++;
+    Cal->Storage = StoragePC;
+
+    while( !n.isNull() ) {
+        QDomElement l = n.toElement();
+        if( !l.isNull() ) {
+            if (l.tagName() == "id") {
+                Cal->PrevId = readDomInt(l);
+            } else if (l.tagName() == "storage") {
+                Cal->PrevStorage = (AlcatelStorage)readDomInt(l);
+            } else if (l.tagName() == "date") {
+                Cal->Date = readDomDate(l);
+            } else if (l.tagName() == "starttime") {
+                Cal->StartTime = readDomTime(l);
+            } else if (l.tagName() == "endtime") {
+                Cal->EndTime = readDomTime(l);
+            } else if (l.tagName() == "alarm") {
+                Cal->Alarm = readDomDateTime(l);
+            } else if (l.tagName() == "alarm2") {
+                Cal->Alarm2 = readDomDateTime(l);
+            } else if (l.tagName() == "subject") {
+                Cal->Subject = readDomString(l);
+            } else if (l.tagName() == "private") {
+                Cal->Private = readDomInt(l);
+            } else if (l.tagName() == "eventtype") {
+                Cal->EventType = readDomInt(l);
+            } else if (l.tagName() == "contactid") {
+                Cal->ContactID = readDomInt(l);
+            } else if (l.tagName() == "dayofweek") {
+                Cal->DayOfWeek = readDomInt(l);
+            } else if (l.tagName() == "day") {
+                Cal->Day = readDomInt(l);
+            } else if (l.tagName() == "weekofmonth") {
+                Cal->WeekOfMonth = readDomInt(l);
+            } else if (l.tagName() == "month") {
+                Cal->Month = readDomInt(l);
+            } else if (l.tagName() == "frequency") {
+                Cal->Frequency = readDomInt(l);
+            } else if (l.tagName() == "stopdate") {
+                Cal->StopDate = readDomDate(l);
+            } else if (l.tagName() == "startdate") {
+                Cal->StartDate = readDomDate(l);
+            } else {
+                ::message(MSG_WARNING, "Unknown tag in document: %s", l.tagName().latin1());
+            }
+        }
+        n = n.nextSibling();
+    }
+    ::message(MSG_DEBUG2, "Read event %d", Cal->Id);
+    calendar->append(*Cal);
 }
 
 void KAlcatelDoc::readDomTodo(QDomElement el) {
-}
+    QDomNode n = el.firstChild();
+    AlcatelTodo *Cal = new AlcatelTodo();
+    Cal->Id = pcStorageCounter++;
+    Cal->Storage = StoragePC;
 
-void KAlcatelDoc::readDomContact(QDomElement el) {
+    while( !n.isNull() ) {
+        QDomElement l = n.toElement();
+        if( !l.isNull() ) {
+            if (l.tagName() == "id") {
+                Cal->PrevId = readDomInt(l);
+            } else if (l.tagName() == "storage") {
+                Cal->PrevStorage = (AlcatelStorage)readDomInt(l);
+            } else if (l.tagName() == "alarm") {
+                Cal->Alarm = readDomDateTime(l);
+            } else if (l.tagName() == "subject") {
+                Cal->Subject = readDomString(l);
+            } else if (l.tagName() == "duedate") {
+                Cal->DueDate = readDomDate(l);
+            } else if (l.tagName() == "private") {
+                Cal->Private = readDomInt(l);
+            } else if (l.tagName() == "contactid") {
+                Cal->ContactID = readDomInt(l);
+            } else if (l.tagName() == "completed") {
+                Cal->Completed = readDomInt(l);
+            } else if (l.tagName() == "category") {
+                Cal->Category = readDomInt(l);
+            } else if (l.tagName() == "priority") {
+                Cal->Priority = readDomInt(l);
+            } else {
+                ::message(MSG_WARNING, "Unknown tag in document: %s", l.tagName().latin1());
+            }
+        }
+        n = n.nextSibling();
+    }
+    ::message(MSG_DEBUG2, "Read todo %d", Cal->Id);
+    todos->append(*Cal);
 }
 
 void KAlcatelDoc::readDomCategory(QDomElement el, AlcatelCategoryList *list) {
+    QDomNode n = el.firstChild();
+    AlcatelCategory *Cat = new AlcatelCategory();
+    Cat->Storage = StoragePC;
+
+    while( !n.isNull() ) {
+        QDomElement l = n.toElement();
+        if( !l.isNull() ) {
+            if (l.tagName() == "id") {
+                Cat->PrevId = readDomInt(l);
+                Cat->Id = Cat->PrevId;
+            } else if (l.tagName() == "storage") {
+                Cat->PrevStorage = (AlcatelStorage)readDomInt(l);
+            } else if (l.tagName() == "name") {
+                Cat->Name = readDomString(l);
+            } else {
+                ::message(MSG_WARNING, "Unknown tag in document: %s", l.tagName().latin1());
+            }
+        }
+        n = n.nextSibling();
+    }
+    ::message(MSG_DEBUG2, "Read category %d", Cat->Id);
+    list->append(*Cat);
 }
 
 bool KAlcatelDoc::openDocument(const KURL& url, const char *format /*=0*/) {
@@ -753,53 +933,57 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
         }
 
         if (!(*calit).Alarm.isNull()) {
-            *strm << "   <alarmdate>\n";
-            *strm << "    <day>";
+            *strm << "   <alarm>\n";
+            *strm << "    <date>\n";
+            *strm << "     <day>";
             *strm << (*calit).Alarm.date().day();
             *strm << "</day>\n";
-            *strm << "    <month>";
+            *strm << "     <month>";
             *strm << (*calit).Alarm.date().month();
             *strm << "</month>\n";
-            *strm << "    <year>";
+            *strm << "     <year>";
             *strm << (*calit).Alarm.date().year();
             *strm << "</year>\n";
-            *strm << "   </alarmdate>\n";
-            *strm << "   <alarmtime>\n";
-            *strm << "    <hour>";
+            *strm << "    </date>\n";
+            *strm << "    <time>\n";
+            *strm << "     <hour>";
             *strm << (*calit).Alarm.time().hour();
             *strm << "</hour>\n";
-            *strm << "    <minute>";
+            *strm << "     <minute>";
             *strm << (*calit).Alarm.time().minute();
             *strm << "</minute>\n";
-            *strm << "    <second>";
+            *strm << "     <second>";
             *strm << (*calit).Alarm.time().second();
             *strm << "</second>\n";
-            *strm << "   </alarmtime>\n";
+            *strm << "    </time>\n";
+            *strm << "   </alarm>\n";
         }
 
         if (!(*calit).Alarm2.isNull()) {
-            *strm << "   <alarm2date>\n";
-            *strm << "    <day>";
+            *strm << "   <alarm2>\n";
+            *strm << "    <date>\n";
+            *strm << "     <day>";
             *strm << (*calit).Alarm2.date().day();
             *strm << "</day>\n";
-            *strm << "    <month>";
+            *strm << "     <month>";
             *strm << (*calit).Alarm2.date().month();
             *strm << "</month>\n";
-            *strm << "    <year>";
+            *strm << "     <year>";
             *strm << (*calit).Alarm2.date().year();
             *strm << "</year>\n";
-            *strm << "   </alarm2date>\n";
-            *strm << "   <alarm2time>\n";
-            *strm << "    <hour>";
+            *strm << "    </date>\n";
+            *strm << "    <time>\n";
+            *strm << "     <hour>";
             *strm << (*calit).Alarm2.time().hour();
             *strm << "</hour>\n";
-            *strm << "    <minute>";
+            *strm << "     <minute>";
             *strm << (*calit).Alarm2.time().minute();
             *strm << "</minute>\n";
-            *strm << "    <second>";
+            *strm << "     <second>";
             *strm << (*calit).Alarm2.time().second();
             *strm << "</second>\n";
-            *strm << "   </alarm2time>\n";
+            *strm << "    </time>\n";
+            *strm << "   </alarm2>\n";
         }
 
         if (!(*calit).Subject.isEmpty()) {
@@ -859,7 +1043,7 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
                 *strm << "</frequency>\n";
             }
 
-            if (!(*calit).StopDate.isNull()) {
+            if (!((*calit).StopDate.isNull())) {
                 *strm << "   <stopdate>\n";
                 *strm << "    <day>";
                 *strm << (*calit).StopDate.day();
@@ -873,7 +1057,7 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
                 *strm << "   </stopdate>\n";
             }
 
-            if (!(*calit).StopDate.isNull()) {
+            if (!((*calit).StopDate.isNull())) {
                 *strm << "   <startdate>\n";
                 *strm << "    <day>";
                 *strm << (*calit).StartDate.day();
@@ -957,28 +1141,30 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
         }
 
         if (!(*tit).Alarm.isNull()) {
-            *strm << "   <alarmdate>\n";
-            *strm << "    <day>";
+            *strm << "   <alarm>\n";
+            *strm << "    <date>\n";
+            *strm << "     <day>";
             *strm << (*tit).Alarm.date().day();
             *strm << "</day>\n";
-            *strm << "    <month>";
+            *strm << "     <month>";
             *strm << (*tit).Alarm.date().month();
             *strm << "</month>\n";
-            *strm << "    <year>";
+            *strm << "     <year>";
             *strm << (*tit).Alarm.date().year();
             *strm << "</year>\n";
-            *strm << "   </alarmdate>\n";
-            *strm << "   <alarmtime>\n";
-            *strm << "    <hour>";
+            *strm << "    </date>\n";
+            *strm << "    <time>\n";
+            *strm << "     <hour>";
             *strm << (*tit).Alarm.time().hour();
             *strm << "</hour>\n";
-            *strm << "    <minute>";
+            *strm << "     <minute>";
             *strm << (*tit).Alarm.time().minute();
             *strm << "</minute>\n";
-            *strm << "    <second>";
+            *strm << "     <second>";
             *strm << (*tit).Alarm.time().second();
             *strm << "</second>\n";
-            *strm << "   </alarmtime>\n";
+            *strm << "    </time>\n";
+            *strm << "   </alarm>\n";
         }
 
         *strm << "  </todo>\n";

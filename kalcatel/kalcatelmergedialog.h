@@ -61,6 +61,7 @@ public:
     MergeItem(QWidget *parent, QString name, QTime mobileData, QTime pcData, bool disableDelete = false);
     MergeItem(QWidget *parent, QString name, QDateTime mobileData, QDateTime pcData, bool disableDelete = false);
     MergeItem(QWidget *parent, QString name, int mobileData, int pcData, bool disableDelete = false);
+    MergeItem(QWidget *parent, QString name, int mobileData, int pcData, int diff, bool disableDelete = false);
     MergeItem(const MergeItem  &item);
     MergeItem();
 	~MergeItem(void);

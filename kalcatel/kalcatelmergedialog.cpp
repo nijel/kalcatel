@@ -186,8 +186,8 @@ AlcatelMessage *KAlcatelMergeDialog::exec(AlcatelMessage &c1, AlcatelMessage &c2
     titleLabel->setText(i18n("Field type: <b>%1</b><br/>Field name: <b>%2</b>").arg(i18n("Message")).arg(c1.getName()));
     deleteButton->setDisabled(true);
 
-    if (c1.Status != c2.Status)  { itemList.append(MergeItem(conflictGrid, i18n("Status"), c1.Status, c2.Status, true)); }
-    if (c1.Length != c2.Length)  { itemList.append(MergeItem(conflictGrid, i18n("Length"), c1.Length, c2.Length, true)); }
+    if (c1.Status != c2.Status)  { itemList.append(MergeItem(conflictGrid, i18n("Status"), MessageTypes[c1.Status], MessageTypes[c2.Status], true)); }
+    if (c1.Length != c2.Length)  { itemList.append(MergeItem(conflictGrid, i18n("Length"), c1.Length, c2.Length, -1, true)); }
     if (((c1.Raw.isEmpty() ^ c2.Raw.isEmpty())) || (c1.Raw != c2.Raw))  { itemList.append(MergeItem(conflictGrid, i18n("Raw"), c1.Raw, c2.Raw, true)); }
     if (((c1.Sender.isEmpty() ^ c2.Sender.isEmpty())) || (c1.Sender != c2.Sender))  { itemList.append(MergeItem(conflictGrid, i18n("Sender"), c1.Sender, c2.Sender, true)); }
     if (((c1.Date.isNull() ^ c2.Date.isNull())) || (c1.Date != c2.Date))  { itemList.append(MergeItem(conflictGrid, i18n("Date"), c1.Date, c2.Date, true)); }
@@ -213,12 +213,36 @@ AlcatelCalendar *KAlcatelMergeDialog::exec(AlcatelCalendar &c1, AlcatelCalendar 
     if (((c1.Subject.isEmpty() ^ c2.Subject.isEmpty())) || (c1.Subject != c2.Subject))  { itemList.append(MergeItem(conflictGrid, i18n("Subject"), c1.Subject, c2.Subject)); }
     if (c1.Private != c2.Private)  { itemList.append(MergeItem(conflictGrid, i18n("Private"), c1.Private, c2.Private)); }
     if (c1.EventType != c2.EventType)  { itemList.append(MergeItem(conflictGrid, i18n("EventType"), CalendarTypes[c1.EventType], CalendarTypes[c2.EventType])); }
-    if (c1.ContactID != c2.ContactID)  { itemList.append(MergeItem(conflictGrid, i18n("ContactID"), c1.ContactID, c2.ContactID)); }
-    if (c1.DayOfWeek != c2.DayOfWeek)  { itemList.append(MergeItem(conflictGrid, i18n("DayOfWeek"), c1.DayOfWeek, c2.DayOfWeek)); }
-    if (c1.Day != c2.Day)  { itemList.append(MergeItem(conflictGrid, i18n("Day"), c1.Day, c2.Day)); }
-    if (c1.WeekOfMonth != c2.WeekOfMonth)  { itemList.append(MergeItem(conflictGrid, i18n("WeekOfMonth"), c1.WeekOfMonth, c2.WeekOfMonth)); }
-    if (c1.Month != c2.Month)  { itemList.append(MergeItem(conflictGrid, i18n("Month"), c1.Month, c2.Month)); }
-    if (c1.Frequency != c2.Frequency)  { itemList.append(MergeItem(conflictGrid, i18n("Frequency"), c1.Frequency, c2.Frequency)); }
+    if (c1.ContactID != c2.ContactID)  {
+        KAlcatelApp *theApp = (KAlcatelApp *) parentWidget();
+        KAlcatelDoc *theDoc = theApp->getDocument();
+        QString s1;
+        QString s2;
+        if (c1.ContactID == 0) {
+            s1 = i18n("None");
+        } else if (c1.ContactID == -1) {
+            s1 = i18n("Not set");
+        } else {
+            AlcatelContact *cat1 = getContactById(theDoc->contacts, c1.ContactID, c1.Storage);
+            s1 = cat1 == NULL ? i18n("Unknown") : cat1->getName();
+            s1.append(i18n(" (id=%1)").arg(c1.ContactID));
+        }
+        if (c2.ContactID == 0) {
+            s2 = i18n("None");
+        } else if (c2.ContactID == -1) {
+            s2 = i18n("Not set");
+        } else {
+            AlcatelContact *cat2 = getContactById(theDoc->contacts, c2.ContactID, c2.Storage);
+            s2 = cat2 == NULL ? i18n("Unknown") : cat2->getName();
+            s2.append(i18n(" (id=%1)").arg(c2.ContactID));
+        }
+        itemList.append(MergeItem(conflictGrid, i18n("Contact"), s1, s2));
+    }
+    if (c1.DayOfWeek != c2.DayOfWeek)  { itemList.append(MergeItem(conflictGrid, i18n("DayOfWeek"), c1.DayOfWeek, c2.DayOfWeek, -1)); }
+    if (c1.Day != c2.Day)  { itemList.append(MergeItem(conflictGrid, i18n("Day"), c1.Day, c2.Day, -1)); }
+    if (c1.WeekOfMonth != c2.WeekOfMonth)  { itemList.append(MergeItem(conflictGrid, i18n("WeekOfMonth"), c1.WeekOfMonth, c2.WeekOfMonth, -1)); }
+    if (c1.Month != c2.Month)  { itemList.append(MergeItem(conflictGrid, i18n("Month"), c1.Month, c2.Month, -1)); }
+    if (c1.Frequency != c2.Frequency)  { itemList.append(MergeItem(conflictGrid, i18n("Frequency"), c1.Frequency, c2.Frequency, -1)); }
     if (c1.StartDate != c2.StartDate)  { itemList.append(MergeItem(conflictGrid, i18n("StartDate"), c1.StartDate, c2.StartDate)); }
     if (c1.StopDate != c2.StopDate)  { itemList.append(MergeItem(conflictGrid, i18n("StopDate"), c1.StopDate, c2.StopDate)); }
     if (c1.Alarm2 != c2.Alarm2)  { itemList.append(MergeItem(conflictGrid, i18n("Alarm2"), c1.Alarm2, c2.Alarm2)); }
@@ -240,9 +264,41 @@ AlcatelTodo *KAlcatelMergeDialog::exec(AlcatelTodo &c1, AlcatelTodo &c2) {
     if (c1.Alarm != c2.Alarm)  { itemList.append(MergeItem(conflictGrid, i18n("Alarm"), c1.Alarm, c2.Alarm)); }
     if (((c1.Subject.isEmpty() ^ c2.Subject.isEmpty())) || (c1.Subject != c2.Subject))  { itemList.append(MergeItem(conflictGrid, i18n("Subject"), c1.Subject, c2.Subject)); }
     if (c1.Private != c2.Private)  { itemList.append(MergeItem(conflictGrid, i18n("Private"), c1.Private, c2.Private)); }
-    if (c1.Category != c2.Category)  { itemList.append(MergeItem(conflictGrid, i18n("Category"), c1.Category, c2.Category)); }
-    if (c1.Priority != c2.Priority)  { itemList.append(MergeItem(conflictGrid, i18n("Priority"), c1.Priority, c2.Priority)); }
-    if (c1.ContactID != c2.ContactID)  { itemList.append(MergeItem(conflictGrid, i18n("ContactID"), c1.ContactID, c2.ContactID)); }
+    if (c1.Category != c2.Category)  {
+        KAlcatelApp *theApp = (KAlcatelApp *) parentWidget();
+        KAlcatelDoc *theDoc = theApp->getDocument();
+        AlcatelCategory *cat1 = getCategoryById(theDoc->todo_cats, c1.Category, c1.Storage);
+        AlcatelCategory *cat2 = getCategoryById(theDoc->todo_cats, c2.Category, c2.Storage);
+        QString s1 = cat1 == NULL ? i18n("Unknown") : cat1->Name;
+        QString s2 = cat2 == NULL ? i18n("Unknown") : cat2->Name;
+        itemList.append(MergeItem(conflictGrid, i18n("Category"), s1, s2));
+    }
+    if (c1.Priority != c2.Priority)  { itemList.append(MergeItem(conflictGrid, i18n("Priority"), Priorities[c1.Priority], Priorities[c2.Priority])); }
+    if (c1.ContactID != c2.ContactID)  {
+        KAlcatelApp *theApp = (KAlcatelApp *) parentWidget();
+        KAlcatelDoc *theDoc = theApp->getDocument();
+        QString s1;
+        QString s2;
+        if (c1.ContactID == 0) {
+            s1 = i18n("None");
+        } else if (c1.ContactID == -1) {
+            s1 = i18n("Not set");
+        } else {
+            AlcatelContact *cat1 = getContactById(theDoc->contacts, c1.ContactID, c1.Storage);
+            s1 = cat1 == NULL ? i18n("Unknown") : cat1->getName();
+            s1.append(i18n(" (id=%1)").arg(c1.ContactID));
+        }
+        if (c2.ContactID == 0) {
+            s2 = i18n("None");
+        } else if (c2.ContactID == -1) {
+            s2 = i18n("Not set");
+        } else {
+            AlcatelContact *cat2 = getContactById(theDoc->contacts, c2.ContactID, c2.Storage);
+            s2 = cat2 == NULL ? i18n("Unknown") : cat2->getName();
+            s2.append(i18n(" (id=%1)").arg(c2.ContactID));
+        }
+        itemList.append(MergeItem(conflictGrid, i18n("Contact"), s1, s2));
+    }
 
     exec();
     slotClear();
@@ -899,6 +955,21 @@ MergeItem::MergeItem(QWidget *parent, QString name, QTime mobileData, QTime pcDa
 MergeItem::MergeItem(QWidget *parent, QString name, QDateTime mobileData, QDateTime pcData, bool disableDelete = false) {
     QString s1 = mobileData.toString();
     QString s2 = pcData.toString();
+    MergeItem_init(parent, name, s1, s2, disableDelete);
+}
+
+MergeItem::MergeItem(QWidget *parent, QString name, int mobileData, int pcData, int diff, bool disableDelete = false) {
+    QString s1, s2;
+    if (mobileData==-1) {
+        s1 = i18n("Not set");
+    } else {
+        s1.setNum(mobileData);
+    }
+    if (pcData==-1) {
+        s2 = i18n("Not set");
+    } else {
+        s2.setNum(pcData);
+    }
     MergeItem_init(parent, name, s1, s2, disableDelete);
 }
 

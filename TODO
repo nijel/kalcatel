@@ -12,8 +12,6 @@ for 0.2-alpha:
  - (DONE) reading of everything - add calls and contacts from SIM
  - (DONE) saving of document
  - (DONE) loading of document
-merging
- - ids should be int !!!!!!!!!!
 remove empty pc categories after sync
 
 for 0.3-beta:
@@ -27,6 +25,7 @@ for 0.4:
 sometimes (till 1.0):
  - czech translation
  - searching
+ - filters
  - export/import data from csv (and maybe others)
  - rewrite reading as separate thread and allow canceling (probably using
    QThread + QProgressDialog)

@@ -710,7 +710,7 @@ void KAlcatelView::slotShowTodo(AlcatelTodo *what) {
     if (what->Private != -1) text.append(i18n("<b>Private:</b> %1<br>").arg(what->Private == 1?i18n("Yes"):i18n("No")));
     if (what->Completed != -1) text.append(i18n("<b>Completed:</b> %1<br>").arg(what->Completed == 1?i18n("Yes"):i18n("No")));
     if (what->Priority != -1) text.append(i18n("<b>Priority:</b> %1<br>").arg(Priorities[what->Priority]));
-    if (what->ContactID != -1 && what->ContactID != 0) text.append(i18n("<b>Contact:</b> %1<br>").arg(cont==NULL?QString("id=%1").arg(what->ContactID):
+    if (what->ContactID != -1 && what->ContactID != 0) text.append(i18n("<b>Contact:</b> %1<br>").arg(cont==NULL?i18n("id=%1").arg(what->ContactID):
         QString("<a href=\"contact:%1/%2\">%3</a>").arg(what->Storage==StoragePC ? 'P' : what->Storage==StorageMobile ? 'M' : 'S').
         arg(what->ContactID).arg(cont->getName())
             ));

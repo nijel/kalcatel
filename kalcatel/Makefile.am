@@ -1,0 +1,52 @@
+####### kdevelop will overwrite this part!!! (begin)##########
+bin_PROGRAMS = kalcatel
+kalcatel_SOURCES = kalcatelview.cpp kalcateldoc.cpp kalcatel.cpp main.cpp 
+kalcatel_LDADD   =  $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KFILE)  $(LIBSOCKET)
+
+
+EXTRA_DIST = main.cpp kalcatel.cpp kalcatel.h kalcateldoc.cpp kalcateldoc.h kalcatelview.cpp kalcatelview.h kalcatelui.rc kalcatel.desktop lo32-app-kalcatel.png lo16-app-kalcatel.png 
+
+install-data-local:
+	$(mkinstalldirs) $(kde_appsdir)/Applications/
+	$(INSTALL_DATA) $(srcdir)/kalcatel.desktop $(kde_appsdir)/Applications/kalcatel.desktop
+	$(mkinstalldirs) $(kde_icondir)/locolor/32x32/apps/
+	$(INSTALL_DATA) $(srcdir)/lo32-app-kalcatel.png $(kde_icondir)/locolor/32x32/apps/kalcatel.png
+	$(mkinstalldirs) $(kde_icondir)/locolor/16x16/apps/
+	$(INSTALL_DATA) $(srcdir)/lo16-app-kalcatel.png $(kde_icondir)/locolor/16x16/apps/kalcatel.png
+
+uninstall-local:
+	-rm -f $(kde_appsdir)/Applications/kalcatel.desktop
+	-rm -f $(kde_icondir)/locolor/32x32/apps/kalcatel.png
+	-rm -f $(kde_icondir)/locolor/16x16/apps/kalcatel.png
+
+####### kdevelop will overwrite this part!!! (end)############
+# this 10 paths are KDE specific. Use them:
+# kde_htmldir       Where your docs should go to. (contains lang subdirs)
+# kde_appsdir       Where your application file (.kdelnk) should go to. 
+# kde_icondir       Where your icon should go to.
+# kde_minidir       Where your mini icon should go to.
+# kde_datadir       Where you install application data. (Use a subdir)
+# kde_locale        Where translation files should go to.(contains lang subdirs)
+# kde_cgidir        Where cgi-bin executables should go to.
+# kde_confdir       Where config files should go to.
+# kde_mimedir       Where mimetypes should go to.
+# kde_toolbardir    Where general toolbar icons should go to.
+# kde_wallpaperdir  Where general wallpapers should go to.
+
+# set the include path for X, qt and KDE
+INCLUDES= $(all_includes)
+
+METASOURCES = AUTO
+
+# the library search path. 
+kalcatel_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+
+rcdir = $(kde_datadir)/kalcatel
+rc_DATA = kalcatelui.rc
+
+messages: rc.cpp
+	LIST=`find . -name \*.h -o -name \*.hh -o -name \*.H -o -name \*.hxx -o -name \*.hpp -o -name \*.cpp -o -name \*.cc -o -name \*.cxx -o -name \*.ecpp -o -name \*.C`; \
+	if test -n "$$LIST"; then \
+	 $(XGETTEXT) $$LIST -o $(podir)/kalcatel.pot; \
+	fi
+

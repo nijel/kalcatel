@@ -1,0 +1,12 @@
+# KDE Config File  
+[Desktop Entry]
+Type=Application
+Exec=kalcatel -caption "%c" %i %m  
+Icon=kalcatel.png
+MiniIcon=kalcatel.png
+DocPath=kalcatel/index.html
+Comment=
+Comment[de]=
+Terminal=0
+Name=KAlcatel
+Name[de]=KAlcatel

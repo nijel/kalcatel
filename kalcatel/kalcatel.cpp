@@ -201,13 +201,15 @@ void KAlcatelApp::saveOptions() {
         config->writeEntry("Last File", last_file.url());
 
     config->setGroup("Contacts");
-    config->writeEntry("PhonePrefix", phone_prefix);
+    config->writeEntry("Phone Prefix", phone_prefix);
+    config->writeEntry("Use Custom Field as URL", contact_url);
+
 
     config->setGroup("Mobile");
     config->writeEntry("Device", mobile_device);
     config->writeEntry("Lock", mobile_lock);
     config->writeEntry("Init", mobile_init);
-    config->writeEntry("BaudRate", mobile_rate);
+    config->writeEntry("Baud Rate", mobile_rate);
     config->writeEntry("Debugging", mobile_debug);
 }
 
@@ -242,13 +244,14 @@ void KAlcatelApp::readOptions(){
     last_file = config->readEntry("Last File", "");
 
     config->setGroup("Contacts");
-    phone_prefix = config->readEntry("PhonePrefix", "+420");
+    phone_prefix = config->readEntry("Phone Prefix", "+420");
+    contact_url = config->readNumEntry("Use Custom Field as URL", 1);
 
     config->setGroup("Mobile");
     mobile_device = config->readPathEntry("Device", "/dev/ttyS1");
     mobile_lock = config->readPathEntry("Lock", "/var/lock/LCK..%s");
     mobile_init = config->readEntry("Init", "AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0");
-    mobile_rate = config->readNumEntry("BaudRate", 19200);
+    mobile_rate = config->readNumEntry("Baud Rate", 19200);
     mobile_debug = config->readNumEntry("Debugging", MSG_DETAIL);
 }
 

@@ -89,6 +89,9 @@ private:
     /** auto open last file edit
       */
     QCheckBox *editAutoOpen;
+    /** which field show as url edit
+      */
+    QComboBox *contactUrlEdit;
 };
 
 #endif

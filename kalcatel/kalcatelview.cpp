@@ -692,7 +692,7 @@ void KAlcatelView::slotContactSimChanged(QListViewItem *item) {
 }
 
 void KAlcatelView::slotContactMobileChanged(QListViewItem *item) {
-    slotShowContact(contact_mobile_view, getContactById(getDocument()->contacts, item->text(7).toInt(), StorageSIM));
+    slotShowContact(contact_mobile_view, getContactById(getDocument()->contacts, item->text(7).toInt(), StorageMobile));
 }
 
 void KAlcatelView::slotContactMobileCatChanged(QListViewItem *item) {
@@ -730,10 +730,20 @@ void KAlcatelView::slotShowContact(KTextBrowser *where, AlcatelContact *what) {
         if (!what->State.isEmpty()) text.append(i18n("<b>State:</b> %1<br>").arg(what->State));
         if (!what->Zip.isEmpty()) text.append(i18n("<b>Zip:</b> %1<br>").arg(what->Zip));
         if (!what->Country.isEmpty()) text.append(i18n("<b>Country:</b> %1<br>").arg(what->Country));
-        if (!what->Custom1.isEmpty()) text.append(i18n("<b>Custom1:</b> %1<br>").arg(what->Custom1));
-        if (!what->Custom2.isEmpty()) text.append(i18n("<b>Custom2:</b> %1<br>").arg(what->Custom2));
-        if (!what->Custom3.isEmpty()) text.append(i18n("<b>Custom3:</b> %1<br>").arg(what->Custom3));
-        if (!what->Custom4.isEmpty()) text.append(i18n("<b>Custom4:</b> %1<br>").arg(what->Custom4));
+        QString custom;
+        KAlcatelApp *theApp=(KAlcatelApp *) parentWidget();
+        if (theApp->contact_url == 1) custom = i18n("<a href=\"%1\">%2</a>").arg(what->Custom1).arg(what->Custom1);
+        else custom = what->Custom1;
+        if (!what->Custom1.isEmpty()) text.append(i18n("<b>Custom1:</b> %1<br>").arg(custom));
+        if (theApp->contact_url == 2) custom = i18n("<a href=\"%1\">%2</a>").arg(what->Custom1).arg(what->Custom1);
+        else custom = what->Custom1;
+        if (!what->Custom2.isEmpty()) text.append(i18n("<b>Custom2:</b> %1<br>").arg(custom));
+        if (theApp->contact_url == 3) custom = i18n("<a href=\"%1\">%2</a>").arg(what->Custom1).arg(what->Custom1);
+        else custom = what->Custom1;
+        if (!what->Custom3.isEmpty()) text.append(i18n("<b>Custom3:</b> %1<br>").arg(custom));
+        if (theApp->contact_url == 4) custom = i18n("<a href=\"%1\">%2</a>").arg(what->Custom1).arg(what->Custom1);
+        else custom = what->Custom1;
+        if (!what->Custom4.isEmpty()) text.append(i18n("<b>Custom4:</b> %1<br>").arg(custom));
         if (!what->Note.isEmpty()) text.append(i18n("<b>Note:</b> %1<br>").arg(what->Note));
         if (what->Private != -1) text.append(i18n("<b>Private:</b> %1<br>").arg(what->Private == 1?i18n("Yes"):i18n("No")));
         text.append(i18n("<b>Storage:</b> %1<br>").arg(i18n("Phone")));

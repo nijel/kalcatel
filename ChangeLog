@@ -9,6 +9,7 @@ $Id$
 
 2002-02-20 Michal Cihar <cihar@email.cz>
         * added saving support
+        * clickable email addresses in contact view
 
 2002-02-19 Michal Cihar <cihar@email.cz>
         * added reading of calls and contacts from SIM

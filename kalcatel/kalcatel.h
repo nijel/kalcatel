@@ -93,6 +93,7 @@ class KAlcatelApp : public KMainWindow
     bool auto_open_last;
     KURL last_file;
 
+    int contact_url;
 
   protected:
     /** save general Options like all bar positions and status as well as the geometry and the recent file list to the configuration

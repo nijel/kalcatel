@@ -148,14 +148,29 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
     otherLayout->addWidget(editPrefix, 0, 1);
 
     label = new QLabel(otherPage);
-    label->setText(i18n("Open last document on start:"));
+    label->setText(i18n("Show custom field as URL:"));
     otherLayout->addWidget(label, 1, 0);
+
+    contactUrlEdit = new QComboBox(otherPage);
+    contactUrlEdit->insertItem(i18n("None"));
+    contactUrlEdit->insertItem(i18n("Custom1"));
+    contactUrlEdit->insertItem(i18n("Custom2"));
+    contactUrlEdit->insertItem(i18n("Custom3"));
+    contactUrlEdit->insertItem(i18n("Custom4"));
+
+    QWhatsThis::add(contactUrlEdit ,i18n("<b>Show custom field as URL</b><br>If you use one of Custom fields for storing URLs you should select here which. Selected field will be show as link."));
+
+    otherLayout->addWidget(contactUrlEdit, 1, 1);
+
+    label = new QLabel(otherPage);
+    label->setText(i18n("Open last document on start:"));
+    otherLayout->addWidget(label, 2, 0);
 
     editAutoOpen = new QCheckBox(otherPage);
 
     QWhatsThis::add(editAutoOpen ,i18n("<b>Open last document on start</b><br>If checked, application will try to open last working file on start."));
 
-    otherLayout->addWidget(editAutoOpen, 1, 1);
+    otherLayout->addWidget(editAutoOpen, 2, 1);
 
     mainLayout->addWidget( janus, 0, 0);
 
@@ -210,6 +225,7 @@ void KAlcatelConfigDialog::slotOK() {
     }
 
     theApp->mobile_debug = debugEdit->currentItem();
+    theApp->contact_url = contactUrlEdit->currentItem();
 
     accept();
 }
@@ -234,6 +250,7 @@ int KAlcatelConfigDialog::exec () {
     }
 
     debugEdit->setCurrentItem(theApp->mobile_debug);
+    contactUrlEdit->setCurrentItem(theApp->contact_url);
 
     return KDialog::exec();
 }

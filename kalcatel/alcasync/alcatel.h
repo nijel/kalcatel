@@ -146,6 +146,11 @@ struct AlcatelTimeStruct {
  *          protocol that is used, try to find out which packet was send
  *          before and what action failed and they either try to find error
  *          or try to contact author to help you with it
+ *  0x13 = closing of nonexistent session ???
+ *  0x0C = bad dbid/item id
+ *  0x2A = nonexistant field/item id
+ *  0x2F = closing session when no open
+ *  0x11 = bad list id 
  *
  *  other values are also possible...
  */
@@ -163,15 +168,27 @@ bool alcatel_done(void);
  * (length len, \0 is not treated as end) */
 void alcatel_send_packet(alc_type type, alc_type *data, alc_type len);
 
+/** receives ack from mobile
+ */
+alc_type *alcatel_recv_ack(alc_type type);
+
+/** receives data from mobile
+ *
+ * @param if true, packet is acknowledged
+ */
+alc_type *alcatel_recv_packet(bool ack);
+    
 /** attach to mobile, this must be used before any action
  */
 bool alcatel_attach(void);
 
-/** detach from mobile, must be used before done
+/** Detach from mobile, must be used before done.
+ * This causes message about synchronistaion disppears on phone display.
  */
 bool alcatel_detach(void);
 
-/** start synchronisation session
+/** Start synchronisation session.
+ * This causes message about synchronistaion appears on phone display.
  */
 bool alcatel_start_session(void);
 
@@ -215,7 +232,7 @@ char *alcatel_get_obj_list_item(alc_type type, alc_type list, int item);
 
 /** Creates category.
  */
-int alcatel_create_obj_list_item(alc_type type, alc_type list, char *item);
+int alcatel_create_obj_list_item(alc_type type, alc_type list, const char *item);
 
 /** Commits changes.
  */

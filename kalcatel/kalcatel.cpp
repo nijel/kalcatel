@@ -47,6 +47,7 @@
 #include <kedittoolbar.h>
 #include <kstddirs.h>
 #include <kled.h>
+#include <klineeditdlg.h>
 
 // application specific includes
 #include "kalcatel.h"
@@ -154,6 +155,11 @@ void KAlcatelApp::initActions() {
     newContact->setToolTip(i18n("New contact"));
     newEvent = new KAction(i18n("&Event"), QIconSet(SmallIcon("kalcatel-calendar.png"), BarIcon("kalcatel-calendar.png")), 0, this, SLOT(slotNewEvent()), actionCollection(),"new_event");
     newEvent->setToolTip(i18n("New event"));
+
+    newTodoCategory = new KAction(i18n("Todo category"), QIconSet(SmallIcon("kalcatel-todo.png"), BarIcon("kalcatel-todo.png")), 0, this, SLOT(slotNewTodoCategory()), actionCollection(),"new_todo_category");
+    newTodoCategory->setToolTip(i18n("New todo category"));
+    newContactCategory = new KAction(i18n("Contact category"), QIconSet(SmallIcon("kalcatel-contact.png"), BarIcon("kalcatel-contact.png")), 0, this, SLOT(slotNewContactCategory()), actionCollection(),"new_contact_category");
+    newContactCategory->setToolTip(i18n("New contact category"));
 
     mobileInfo = new KAction(i18n("&Information"), QIconSet(SmallIcon("kalcatel-mobile.png"), BarIcon("kalcatel-mobile.png")), 0, this, SLOT(slotMobileInfo()), actionCollection(),"mobile_info");
     mobileInfo->setToolTip(i18n("Mobile information"));
@@ -1064,4 +1070,22 @@ void KAlcatelApp::slotMobileCommit() {
     doc->commitChanges();
 
     slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
+}
+
+void KAlcatelApp::slotNewTodoCategory() {
+    QString value;
+    KLineEditDlg dlg( i18n("Enter new todo category name"), value, this );
+    if (dlg.exec()){
+        value = dlg.text();
+        getDocument()->addTodoCategory(value);
+    }
+}
+
+void KAlcatelApp::slotNewContactCategory() {
+    QString value;
+    KLineEditDlg dlg( i18n("Enter new contact category name"), value, this );
+    if (dlg.exec()){
+        value = dlg.text();
+        getDocument()->addContactCategory(value);
+    }
 }

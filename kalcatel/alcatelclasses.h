@@ -134,7 +134,6 @@ public:
 
     const char *getClassName() {static const char cn[]="AlcatelContact";return cn;}
     static const int max_field = 25;
-private:
     bool deleted_flags[max_field];
 };
 
@@ -195,7 +194,6 @@ public:
 
     const char *getClassName() {static const char cn[]="AlcatelCalendar";return cn;}
     static const int max_field = 22;
-private:
     bool deleted_flags[max_field];
 };
 
@@ -238,7 +236,6 @@ public:
 
     const char *getClassName() {static const char cn[]="AlcatelTodo";return cn;}
     static const int max_field = 9;
-private:
     bool deleted_flags[max_field];
 };
 
@@ -300,7 +297,7 @@ class AlcatelCategory : public AlcatelClass {
 public:
     /** creates class and sets name and id
       */
-    AlcatelCategory(char* name, int id, AlcatelStorage storage);
+    AlcatelCategory(const char *name, int id, AlcatelStorage storage);
     AlcatelCategory();
 
     bool operator==(const AlcatelCategory &cmp) const;

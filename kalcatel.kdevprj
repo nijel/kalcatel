@@ -32,7 +32,7 @@ ldadd=\s$(LIB_KFILE) $(LIB_KHTML) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
 ldflags=\s  \s
 
 [General]
-AMChanged=true
+AMChanged=false
 author=Michal Cihar
 configure_args=--prefix=/usr --enable-debug\s
 debug_args=

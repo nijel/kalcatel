@@ -895,6 +895,10 @@ void KAlcatelView::slotTreeChanged(QListViewItem *item) {
     if (item != NULL) {
         item->setOpen(true);
         int num = ((KAlcatelTreeViewItem *)item)->showWidget;
+        if (widgetstack->widget(num) == 0) {
+            ::message(MSG_ERROR, "Trying to raise non-existant widget id=%d from WidgetStack", num);
+            return;
+        }
         widgetstack->raiseWidget( num );
         QWidget *widget = widgetstack->visibleWidget();
 

@@ -4,6 +4,17 @@ KAlcatel - Changelog
 
 $Id$
 
+2002-05-08 Michal Cihar <cihar@email.cz>
+        * === released 0.3 ===
+        
+2002-05-08 Michal Cihar <cihar@email.cz>
+        * saving of deleted flags
+
+2002-05-07 Michal Cihar <cihar@email.cz>
+        * creating of categories
+        * fixed many crashes
+        * fixed creating of alarm
+
 2002-05-06 Michal Cihar <cihar@email.cz>
         * added editing of events
         * fixed editing of todos

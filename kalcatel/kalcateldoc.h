@@ -147,6 +147,9 @@ class KAlcatelDoc : public QObject
      */
     bool commitChanges();
 
+    void addTodoCategory(QString &name);
+    void addContactCategory(QString &name);
+
   public slots:
     /** calls repaint() on all views connected to the document object and is called by the view by which the document has been changed.
      * As this view normally repaints itself, it is excluded from the paintEvent.
@@ -199,6 +202,7 @@ class KAlcatelDoc : public QObject
     /** reads categories from mobile
       */
     bool readMobileCategories(AlcatelCategoryList *strList, alc_type sync, alc_type type, alc_type cat);
+    bool createMobileCategory(QString &name, AlcatelCategoryList *strList, alc_type sync, alc_type type, alc_type cat);
     /** reads items from mobile
       */
     bool readMobileItems(alc_type sync, alc_type type);

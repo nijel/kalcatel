@@ -16,6 +16,9 @@
     <Action name="new_todo"/>
     <Action name="new_contact"/>
     <Action name="new_event"/>
+    <Separator/>
+    <Action name="new_todo_category"/>
+    <Action name="new_contact_category"/>
   </Menu>
   <Menu name="mobile"><text>&amp;Mobile</text>
     <Action name="mobile_info"/>
@@ -45,6 +48,9 @@
     <Action name="new_todo"/>
     <Action name="new_contact"/>
     <Action name="new_event"/>
+    <Separator/>
+    <Action name="new_todo_category"/>
+    <Action name="new_contact_category"/>
 </ToolBar>
 </kpartgui>
 <!-- $Id$ -->

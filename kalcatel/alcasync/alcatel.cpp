@@ -189,7 +189,7 @@ void alcatel_recv_shorten(int size) {
     memmove(recv_buffer, recv_buffer + size, recv_buffer_pos);
 }
 
-alc_type *alcatel_recv_packet(int ack) {
+alc_type *alcatel_recv_packet(bool ack) {
     alc_type *data;
     alc_type num;
     alc_type size;
@@ -424,7 +424,7 @@ bool alcatel_select_type(alc_type type) {
     free(answer);
 
     if (result)
-        free(alcatel_recv_packet(1));
+        free(alcatel_recv_packet(1)); //[9] = session ID
     else
         alcatel_errno = answer[8];
 
@@ -720,7 +720,7 @@ bool alcatel_del_obj_list_items(alc_type type, alc_type list) {
     return true;
 }
 
-int alcatel_create_obj_list_item(alc_type type, alc_type list, char *item) {
+int alcatel_create_obj_list_item(alc_type type, alc_type list, const char *item) {
     alc_type buffer[256] = {0x00, 0x04, type, 0x0d, list, 0x0b };
     alc_type *data;
     int i;

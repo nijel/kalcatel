@@ -460,6 +460,7 @@ void EditEventDialog::slotOK() {
                 cont.Alarm2.setDate(QDate());
                 cont.Alarm2.setTime(QTime());
             }
+            cont.Alarm = cont.Alarm2;
             break;
         case ALC_CALENDAR_REPEATING:
             slist = QStringList::split(QRegExp("[:.]"), editStartTime->currentText(), false);

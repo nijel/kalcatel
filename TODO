@@ -9,8 +9,8 @@ for 0.2-alpha:
  - (DONE) merging of data
 
 for 0.3-beta:
- - saving of deleted flags
- - crash in AlcatelCalendar::getName
+ - (DONE) creating of categories
+ - (DONE) saving of deleted flags
  - (DONE) editing of calendar
  - (DONE) editing of contacts
  - (DONE) editing of todos

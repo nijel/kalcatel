@@ -307,6 +307,12 @@ void KAlcatelDoc::readDomContact(QDomElement el) {
     AlcatelContact Cont;
     Cont.Storage = StoragePC;
 
+    QString delf = el.attribute("deleted_fields");
+    if (!delf.isEmpty()) {
+        for(int i =0; i< MIN(AlcatelContact::max_field,delf.length()); i++)
+            Cont.deleted_flags[i] = delf[i] == '1';
+    }
+
     QString del = el.attribute("deleted");
     if (del == "yes") {
         Cont.Deleted = true;
@@ -398,6 +404,12 @@ void KAlcatelDoc::readDomEvent(QDomElement el) {
     Cal.Id = pcStorageCounter++;
     Cal.Storage = StoragePC;
 
+    QString delf = el.attribute("deleted_fields");
+    if (!delf.isEmpty()) {
+        for(int i =0; i< MIN(AlcatelCalendar::max_field,delf.length()); i++)
+            Cal.deleted_flags[i] = delf[i] == '1';
+    }
+
     QString del = el.attribute("deleted");
     if (del == "yes") {
         Cal.Deleted = true;
@@ -465,6 +477,12 @@ void KAlcatelDoc::readDomTodo(QDomElement el) {
     AlcatelTodo Cal;
     Cal.Id = pcStorageCounter++;
     Cal.Storage = StoragePC;
+
+    QString delf = el.attribute("deleted_fields");
+    if (!delf.isEmpty()) {
+        for(int i =0; i< MIN(AlcatelTodo::max_field,delf.length()); i++)
+            Cal.deleted_flags[i] = delf[i] == '1';
+    }
 
     QString del = el.attribute("deleted");
     if (del == "yes") {
@@ -859,6 +877,12 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
         AlcatelContactList::Iterator cit;
         for( cit = contacts->begin(); cit != contacts->end(); ++cit ) {
             *strm << "  <contact";
+
+            *strm << " deleted_fields=\"";
+            for (int i=0; i<AlcatelContact::max_field; i++)
+                *strm << ((*cit).deleted_flags[i] ? '1' : '0');
+            *strm << "\"";
+
             if ((*cit).Modified)
                 *strm << " modified=\"yes\"";
             if ((*cit).Deleted)
@@ -871,6 +895,8 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
                 *strm << "   <storage>" << (*cit).Storage << "</storage>" << endl;
                 (*cit).PrevId = (*cit).Id;
                 (*cit).PrevStorage = (*cit).Storage;
+                if ((*cit).Storage != StorageMobile)
+                    (*cit).Id = pcStorageCounter++;
                 (*cit).Storage = StoragePC;
             } else {
                 *strm << "   <id>" << (*cit).PrevId << "</id>" << endl;
@@ -961,6 +987,12 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
         AlcatelCalendarList::Iterator calit;
         for( calit = calendar->begin(); calit != calendar->end(); ++calit ) {
             *strm << "  <event";
+
+            *strm << " deleted_fields=\"";
+            for (int i=0; i<AlcatelCalendar::max_field; i++)
+                *strm << ((*calit).deleted_flags[i] ? '1' : '0');
+            *strm << "\"";
+
             if ((*calit).Modified)
                 *strm << " modified=\"yes\"";
             if ((*calit).Deleted)
@@ -1079,6 +1111,12 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
         AlcatelTodoList::Iterator tit;
         for( tit = todos->begin(); tit != todos->end(); ++tit ) {
             *strm << "  <todo";
+
+            *strm << " deleted_fields=\"";
+            for (int i=0; i<AlcatelTodo::max_field; i++)
+                *strm << ((*tit).deleted_flags[i] ? '1' : '0');
+            *strm << "\"";
+
             if ((*tit).Modified)
                 *strm << " modified=\"yes\"";
             if ((*tit).Deleted)
@@ -2203,12 +2241,12 @@ this shouldn't be here because it should be created on the fly
                         if (num == -1) {
                             KMessageBox::error(win, i18n("Creating of todo failed!"), i18n("Error"));
                         } else {
-                            ::message(MSG_INFO, "Created: %s (id = %d)", (*it).getName().latin1(), num);
                             (*it).Created = false;
                             (*it).Modified = false;
                             (*it).Storage = StorageMobile;
                             (*it).PrevStorage = StorageNone;
                             (*it).Id = num;
+                            ::message(MSG_INFO, "Created: %s (id = %d)", (*it).getName().latin1(), num);
                         }
                     }
                     alcatel_close_session(ALC_SYNC_TYPE_TODO);
@@ -2232,11 +2270,11 @@ this shouldn't be here because it should be created on the fly
                         }
 
                         alcatel_commit(ALC_SYNC_TYPE_TODO);
-                        ::message(MSG_INFO, "Modified: %s", (*it).getName().latin1());
                         (*it).Modified = false;
                         (*it).Storage = StorageMobile;
                         (*it).PrevStorage = StorageNone;
                         (*it).Id = id;
+                        ::message(MSG_INFO, "Modified: %s", (*it).getName().latin1());
                     }
                     alcatel_close_session(ALC_SYNC_TYPE_TODO);
                 }
@@ -2275,12 +2313,12 @@ this shouldn't be here because it should be created on the fly
                         if (num == -1) {
                             KMessageBox::error(win, i18n("Creating of event failed!"), i18n("Error"));
                         } else {
-                            ::message(MSG_INFO, "Created: %s (id = %d)", (*it).getName().latin1(), num);
                             (*it).Created = false;
                             (*it).Modified = false;
                             (*it).Storage = StorageMobile;
                             (*it).PrevStorage = StorageNone;
                             (*it).Id = num;
+                            ::message(MSG_INFO, "Created: %s (id = %d)", (*it).getName().latin1(), num);
                         }
                     }
                     alcatel_close_session(ALC_SYNC_TYPE_CALENDAR);
@@ -2304,11 +2342,11 @@ this shouldn't be here because it should be created on the fly
                         }
 
                         alcatel_commit(ALC_SYNC_TYPE_CALENDAR);
-                        ::message(MSG_INFO, "Modified: %s", (*it).getName().latin1());
                         (*it).Modified = false;
                         (*it).Storage = StorageMobile;
                         (*it).PrevStorage = StorageNone;
                         (*it).Id = id;
+                        ::message(MSG_INFO, "Modified: %s", (*it).getName().latin1());
                     }
                     alcatel_close_session(ALC_SYNC_TYPE_CALENDAR);
                 }
@@ -2349,12 +2387,12 @@ this shouldn't be here because it should be created on the fly
                         if (num == -1) {
                             KMessageBox::error(win, i18n("Creating of contact failed!"), i18n("Error"));
                         } else {
-                            ::message(MSG_INFO, "Created: %s (id = %d)", (*it).getName().latin1(), num);
                             (*it).Created = false;
                             (*it).Modified = false;
                             (*it).Storage = StorageMobile;
                             (*it).PrevStorage = StorageNone;
                             (*it).Id = num;
+                            ::message(MSG_INFO, "Created: %s (id = %d)", (*it).getName().latin1(), num);
                         }
                     }
                     alcatel_close_session(ALC_SYNC_TYPE_CONTACTS);
@@ -2378,11 +2416,11 @@ this shouldn't be here because it should be created on the fly
                         }
 
                         alcatel_commit(ALC_SYNC_TYPE_CONTACTS);
-                        ::message(MSG_INFO, "Modified: %s", (*it).getName().latin1());
                         (*it).Modified = false;
                         (*it).Storage = StorageMobile;
                         (*it).PrevStorage = StorageNone;
                         (*it).Id = id;
+                        ::message(MSG_INFO, "Modified: %s", (*it).getName().latin1());
                     }
                     alcatel_close_session(ALC_SYNC_TYPE_CONTACTS);
                 }
@@ -2402,4 +2440,75 @@ this shouldn't be here because it should be created on the fly
     win->slotStatusMsg(i18n("Items commited"),ID_DETAIL_MSG);
 
     return true;
+}
+
+
+bool KAlcatelDoc::createMobileCategory(QString &name, AlcatelCategoryList *strList, alc_type sync, alc_type type, alc_type cat) {
+    KAlcatelApp *win=(KAlcatelApp *) parent();
+    alcatel_attach();
+
+    alcatel_start_session();
+
+    if (alcatel_select_type(type) && alcatel_begin_transfer(sync)) {
+        int i = alcatel_create_obj_list_item(type, cat, name.latin1());
+
+        if (i == -1) {
+            KMessageBox::error(win, i18n("Creating of category failed!"), i18n("Error"));
+            alcatel_close_session(type);
+            alcatel_detach();
+            return false;
+        } else {
+            alcatel_commit(type);
+            ::message(MSG_INFO, "Category created with number %d", i);
+            AlcatelCategory cat(name.latin1(), i, StorageMobile);
+            strList->append(cat);
+        }
+
+    } else {
+        message(MSG_ERROR, "Can not open sync session!");
+        KMessageBox::error(win, i18n("Creating of category failed!"), i18n("Error"));
+        alcatel_close_session(type);
+        alcatel_detach();
+        return false;
+    }
+
+    alcatel_close_session(type);
+    alcatel_detach();
+    return true;
+}
+
+void KAlcatelDoc::addTodoCategory(QString &name) {
+    KAlcatelApp *win=(KAlcatelApp *) parent();
+
+    if (!win->modemConnect()) return;
+    alcatel_init();
+
+    createMobileCategory(name, todo_cats,  ALC_SYNC_TODO, ALC_SYNC_TYPE_TODO, ALC_LIST_TODO_CAT);
+
+    alcatel_done();
+
+    win->modemDisconnect();
+
+    todosVersion++;
+    version++;
+    modified=true;
+    slotUpdateAllViews(NULL);
+}
+
+void KAlcatelDoc::addContactCategory(QString &name) {
+    KAlcatelApp *win=(KAlcatelApp *) parent();
+
+    if (!win->modemConnect()) return;
+    alcatel_init();
+
+    createMobileCategory(name, contact_cats, ALC_SYNC_CONTACTS, ALC_SYNC_TYPE_CONTACTS, ALC_LIST_CONTACTS_CAT);
+
+    alcatel_done();
+
+    win->modemDisconnect();
+
+    contactsVersion++;
+    version++;
+    modified=true;
+    slotUpdateAllViews(NULL);
 }

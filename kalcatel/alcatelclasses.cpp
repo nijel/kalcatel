@@ -125,7 +125,12 @@ void *getAlcatelField(const QDateTime &data, AlcatelFieldType type) {
 
 void *getAlcatelField(const QString &data, AlcatelFieldType type) {
     if (type == _string || type == _phone) {
-        return (void *)strdup(data.latin1());
+        const char *s = data.latin1();
+        if (data.isNull() || s == NULL || s == 0) return NULL;
+        else {
+            message( MSG_DEBUG, "getAlcatelField( \"%s\", _string)", s);
+            return (void *)strdup(s);
+        }
     } else {
         message(MSG_WARNING, "Bad type conversion occured (QString -> %02d)!", type);
         return NULL;
@@ -164,13 +169,28 @@ AlcatelContact::~AlcatelContact() {
 }
 
 QString AlcatelContact::getName(void) {
-    return (FirstName.isEmpty())?
+    QString str;
+    if (FirstName.isEmpty()){
+        if (!LastName.isEmpty()){
+            str.append(LastName);
+        }
+    } else {
+        if (!LastName.isEmpty()){
+            str.append(LastName);
+            str.append(", ");
+        }
+        str.append(FirstName);
+    }
+    return str; /* TODO: configure how will be name shown ... */
+
+
+/*    return (FirstName.isEmpty())?
                             ((LastName.isEmpty())?
                                 QString(""):
                                 QString(LastName)):
                             ((LastName.isEmpty())?
                                 QString(FirstName):
-                                QString("%1, %2").arg(LastName).arg(FirstName)); /* TODO: configure how will be name shown ... */
+                                QString().append(LastName).append(", ").append(FirstName)); / * TODO: configure how will be name shown ... */
 }
 
 
@@ -364,7 +384,12 @@ QString AlcatelCalendar::RepeatingDetail(void) const {
     }
 }
 QString AlcatelCalendar::getName(void) {
-    return QString("%2 (%1)").arg((int)Storage).arg(Id);
+    QString str;
+    if (!Date.isNull()) str.append(Date.toString());
+    if (!StartTime.isNull()) str.append(StartTime.toString());
+    if (!EndTime.isNull()) str.append(EndTime.toString());
+    if (!Subject.isNull()) str.append(Subject);
+    return str;
 }
 
 void AlcatelCalendar::setField(int number, AlcatelFieldStruct *data) {
@@ -465,7 +490,7 @@ AlcatelTodo::~AlcatelTodo() {
 }
 
 QString AlcatelTodo::getName(void) {
-    return Subject;
+    return Subject.isNull() ? QString("") : Subject;
 }
 
 void AlcatelTodo::setField(int number, AlcatelFieldStruct *data) {
@@ -521,7 +546,7 @@ AlcatelMessage::AlcatelMessage() {
 }
 
 QString AlcatelMessage::getName(void) {
-    return Text;
+    return Text.isNull() ? QString("") : Text;
 }
 
 AlcatelMessage::~AlcatelMessage() {
@@ -534,10 +559,10 @@ AlcatelCall::~AlcatelCall() {
 }
 
 QString AlcatelCall::getName(void) {
-    return Name;
+    return Name.isNull() ? QString("") : Name;
 }
 
-AlcatelCategory::AlcatelCategory(char* name, int id, AlcatelStorage storage) {
+AlcatelCategory::AlcatelCategory(const char *name, int id, AlcatelStorage storage) {
     Name = QString().setLatin1(name);
     Id = id;
     Storage = storage;
@@ -549,7 +574,7 @@ AlcatelCategory::AlcatelCategory() {
 }
 
 QString AlcatelCategory::getName(void) {
-    return Name;
+    return Name.isNull() ? QString("") : Name;
 }
 
 AlcatelMessage *getMessageById(AlcatelMessageList *list, int id, AlcatelStorage type) {

@@ -272,15 +272,23 @@ class KAlcatelApp : public KMainWindow
     /** opens message editing dialog
      */
     void slotNewMessage();
-    /** opens message editing dialog
+    /** opens todo editing dialog
      */
     void slotNewTodo();
-    /** opens todo editing dialog
+    /** opens contact editing dialog
      */
     void slotNewContact();
     /** opens event editing dialog
      */
     void slotNewEvent();
+
+    /** creates new todo category
+     */
+    void slotNewTodoCategory();
+    /** creates new contact category
+     */
+    void slotNewContactCategory();
+
     /** connects to modem
      */
     bool modemConnect();
@@ -332,6 +340,8 @@ class KAlcatelApp : public KMainWindow
     KAction *newEvent;
     KAction *newContact;
     KAction *newTodo;
+    KAction *newContactCategory;
+    KAction *newTodoCategory;
 
     KAction *mobileInfo;
     KAction *mobileCommit;

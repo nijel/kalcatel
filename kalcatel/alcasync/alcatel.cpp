@@ -126,7 +126,7 @@ int recv_buffer_pos = 0;
 
 void alcatel_send_packet(alc_type type, alc_type *data, alc_type len) {
     static alc_type buffer[1024];
-    int size = 0, i, xor = 0;
+    int size = 0, i, checksum = 0;
     buffer[0] = 0x7E;
     buffer[1] = type;
     switch (type) {
@@ -154,8 +154,8 @@ void alcatel_send_packet(alc_type type, alc_type *data, alc_type len) {
             break;
     }
     for (i=0; i<size; i++)
-        xor ^= buffer[i];
-    buffer[size] = xor;
+        checksum ^= buffer[i];
+    buffer[size] = checksum;
     size ++;
     message(MSG_DEBUG,"Sending packet %s", hexdump(buffer, size, 1));
     modem_send_raw(buffer, size); 

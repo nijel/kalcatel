@@ -7,6 +7,7 @@ $Id$
 2002-02-25 Michal Cihar <cihar@email.cz>
         * added key configuration
         * added document information
+        * corrected sorting by date, time etc.
 
 2002-02-21 Michal Cihar <cihar@email.cz>
         * changed way of creating view, not used KJanusWidget anymore

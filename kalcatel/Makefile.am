@@ -3,7 +3,7 @@ bin_PROGRAMS = kalcatel
 kalcatel_SOURCES = alcatelclasses.cpp kalcatelview.cpp kalcateldoc.cpp kalcatel.cpp main.cpp 
 kalcatel_LDADD   = ./alcatool/libalcatool.a  $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBSOCKET)
 
-SUBDIRS = alcatool 
+SUBDIRS = alcatool images 
 
 EXTRA_DIST = main.cpp kalcatel.cpp kalcatel.h kalcateldoc.cpp kalcateldoc.h kalcatelview.cpp kalcatelview.h kalcatelui.rc kalcatel.desktop lo32-app-kalcatel.png lo16-app-kalcatel.png alcatelclasses.cpp alcatelclasses.h 
 

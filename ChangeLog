@@ -4,55 +4,61 @@ KAlcatel - Changelog
 
 $Id$
 
-2003-02-23 Michal Cihar <cihar@email.cz>
+2003-05-09 Michal Cihar <cihar at email dot cz>
+    * hopefully really fixed reply string parsing
+    * support for empty lockname to disable locking
+    * better report locking problems
+    * updated Czech translation
+
+2003-02-23 Michal Cihar <cihar at email dot cz>
     * === released 0.3.2 ===
 
-2003-02-23 Michal Cihar <cihar@email.cz>
+2003-02-23 Michal Cihar <cihar at email dot cz>
     * finally compiles and works with (and ONLY with) KDE 3/Qt 3
     * updated admin directory
     * fixed string parsing from AT replies
 
-2002-10-21 Michal Cihar <cihar@email.cz>
+2002-10-21 Michal Cihar <cihar at email dot cz>
     * === released 0.3.1 ===
 
-2002-10-13 Michal Cihar <cihar@email.cz>
+2002-10-13 Michal Cihar <cihar at email dot cz>
     * fixed deleting of some fields
     * implemented deleting of items
     * fixed some segfaults
     * fixed few compile time warnings
 
-2002-05-31 Michal Cihar <cihar@email.cz>
+2002-05-31 Michal Cihar <cihar at email dot cz>
     * finished czech translation
     * simplified some messages to make i18n easier
     * fixed some typos
     * really don't know how to allow work KDE/Qt 3 AND KDE/Qt 2.2
 
-2002-05-30 Michal Cihar <cihar@email.cz>
+2002-05-30 Michal Cihar <cihar at email dot cz>
     * initial fix for KDE/Qt 3
     * updated czech translation
     * updated autoconf/automake templates
 
-2002-05-23 Michal Cihar <cihar@email.cz>
+2002-05-23 Michal Cihar <cihar at email dot cz>
     * fixed typo (nuber -> number)
     * started Czech translation (still plenty missing)
     * some improvements in contact select dialog (still not final)
 
-2002-05-15 Michal Cihar <cihar@email.cz>
+2002-05-15 Michal Cihar <cihar at email dot cz>
     * added replacing of & in saved files
     * fixed labels for first/last name in edit dialog
 
-2002-05-08 Michal Cihar <cihar@email.cz>
+2002-05-08 Michal Cihar <cihar at email dot cz>
     * === released 0.3 ===
 
-2002-05-08 Michal Cihar <cihar@email.cz>
+2002-05-08 Michal Cihar <cihar at email dot cz>
     * saving of deleted flags
 
-2002-05-07 Michal Cihar <cihar@email.cz>
+2002-05-07 Michal Cihar <cihar at email dot cz>
     * creating of categories
     * fixed many crashes
     * fixed creating of alarm
 
-2002-05-06 Michal Cihar <cihar@email.cz>
+2002-05-06 Michal Cihar <cihar at email dot cz>
     * added editing of events
     * fixed editing of todos
     * fixed listing of daily alarms
@@ -60,7 +66,7 @@ $Id$
     * alcatool renamed to alcasync to avoid name confusions with Matthijs
           van Duin's tool for alcatel ADSL modems
 
-2002-04-30 Michal Cihar <cihar@email.cz>
+2002-04-30 Michal Cihar <cihar at email dot cz>
     * rewritten commiting of changes
     * commiting now for *some* items works
     * tweaks in debug messages
@@ -68,14 +74,14 @@ $Id$
     * fixed some C++ issues
     * added support for deleting parts of items
 
-2002-04-15 Michal Cihar <cihar@email.cz>
+2002-04-15 Michal Cihar <cihar at email dot cz>
     * unified listing of contact categories with mobile
     * finished initial framework for commiting changes
 
-2002-04-10 Michal Cihar <cihar@email.cz>
+2002-04-10 Michal Cihar <cihar at email dot cz>
     * initial framework for commiting changes
 
-2002-04-08 Michal Cihar <cihar@email.cz>
+2002-04-08 Michal Cihar <cihar at email dot cz>
     * todo edit dialog
     * UI tweaks (Read mobile -> Fetch, tooltips for actions)
     * undeleting of items
@@ -84,12 +90,12 @@ $Id$
     * contact/phone numbers select dialog
     * selecting numbers for messages from contacts
 
-2002-03-27 Michal Cihar <cihar@email.cz>
+2002-03-27 Michal Cihar <cihar at email dot cz>
     * deleting of items
     * fixed bug in merging which caused segfault
     * connecting to mobile now won't fail if it is already in binary mode
 
-2002-03-25 Michal Cihar <cihar@email.cz>
+2002-03-25 Michal Cihar <cihar at email dot cz>
     * added contact editing
     * added indication of modified/created/deleted items in listing
     * added saving of modified/created/deleted status
@@ -97,17 +103,17 @@ $Id$
     * added unified phone number validation
     * some code cleanups (alcatel classes and list view items)
 
-2002-03-19 Michal Cihar <cihar@email.cz>
+2002-03-19 Michal Cihar <cihar at email dot cz>
     * removed useless twice connecting on start when modem doesn't react
 
-2002-03-18 Michal Cihar <cihar@email.cz>
+2002-03-18 Michal Cihar <cihar at email dot cz>
     * modem now should be opened exclusively (if available)
     * added signal strength and battery status display + monitoring
     * modem status shown in statusbar
     * support for writing/sending messages
     * some fixes in decoding of PDU messages
 
-2002-03-15 Michal Cihar <cihar@email.cz>
+2002-03-15 Michal Cihar <cihar at email dot cz>
     * changed modem connecting to allow persistent connection and connecting on start
     * added detection of broken names when reading calls
     * added saving/loading of calls
@@ -115,89 +121,89 @@ $Id$
     * added saving/loading configuration
     * configuration a bit reorganised
 
-2002-03-13 Michal Cihar <cihar@email.cz>
+2002-03-13 Michal Cihar <cihar at email dot cz>
     * fixed some typos
 
-2002-03-07 Michal Cihar <cihar@email.cz>
+2002-03-07 Michal Cihar <cihar at email dot cz>
     * corrected error message when program can not write to device
     * added configuration of RTSCTS or XON/XOFF flow control
 
-2002-03-07 Michal Cihar <cihar@email.cz>
+2002-03-07 Michal Cihar <cihar at email dot cz>
     * === released 0.2.1 ===
 
-2002-03-06 Michal Cihar <cihar@email.cz>
+2002-03-06 Michal Cihar <cihar at email dot cz>
     * fixed crash when html template not found
 
-2002-03-05 Michal Cihar <cihar@email.cz>
+2002-03-05 Michal Cihar <cihar at email dot cz>
     * support for more than 50 items in contacts, calendar and todos
     * fixed displaying for none category
     * fixed loading of last opened file when there was none
 
-2002-03-05 Michal Cihar <cihar@email.cz>
+2002-03-05 Michal Cihar <cihar at email dot cz>
     * === released 0.2 ===
 
-2002-03-04 Michal Cihar <cihar@email.cz>
+2002-03-04 Michal Cihar <cihar at email dot cz>
     * merging functional for all types
     * fixed possible bug when comparing stored data
     * during saving is changed storage
 
-2002-03-03 Michal Cihar <cihar@email.cz>
+2002-03-03 Michal Cihar <cihar at email dot cz>
     * fixed plenty memory leaks
     * added merging
 
-2002-02-29 Michal Cihar <cihar@email.cz>
+2002-02-29 Michal Cihar <cihar at email dot cz>
     * added toolbars configuration
     * corrected debug level settings
 
-2002-02-28 Michal Cihar <cihar@email.cz>
+2002-02-28 Michal Cihar <cihar at email dot cz>
     * fixed compile time bug for some gcc/distributions
     * added automatical URL detection in custom fields
     * clickable links to contacts wherever they appear
 
-2002-02-25 Michal Cihar <cihar@email.cz>
+2002-02-25 Michal Cihar <cihar at email dot cz>
     * added key configuration
     * added document information
     * corrected sorting by date, time etc.
     * support for loading document
 
-2002-02-21 Michal Cihar <cihar@email.cz>
+2002-02-21 Michal Cihar <cihar at email dot cz>
     * changed way of creating view, not used KJanusWidget anymore
     * improved behavior when reading of data fails
     * added support for URL in custom fields
 
-2002-02-20 Michal Cihar <cihar@email.cz>
+2002-02-20 Michal Cihar <cihar at email dot cz>
     * added saving support
     * clickable email addresses in contact view
 
-2002-02-19 Michal Cihar <cihar@email.cz>
+2002-02-19 Michal Cihar <cihar at email dot cz>
     * added reading of calls and contacts from SIM
     * in information added own number
     * added documentation of classes
 
-2002-02-18 Michal Cihar <cihar@email.cz>
+2002-02-18 Michal Cihar <cihar at email dot cz>
     * corrected header in todo listing
     * in information added IMSI
 
-2002-02-17 Michal Cihar <cihar@email.cz>
+2002-02-17 Michal Cihar <cihar at email dot cz>
     * === released 0.1 ===
 
-2002-02-17 Michal Cihar <cihar@email.cz>
+2002-02-17 Michal Cihar <cihar at email dot cz>
     * added basic configuration
 
-2002-02-16 Michal Cihar <cihar@email.cz>
+2002-02-16 Michal Cihar <cihar at email dot cz>
     * contact, todo and calendar viewing works
 
-2002-02-15 Michal Cihar <cihar@email.cz>
+2002-02-15 Michal Cihar <cihar at email dot cz>
     * added of reading all binary data (shown are only contacts)
     * added phone number lookup (in messages)
 
-2002-02-14 Michal Cihar <cihar@email.cz>
+2002-02-14 Michal Cihar <cihar at email dot cz>
     * now supported text addresses (phone numbers) in pdu decoding
     * corrected behavior when reading messages more than once
 
-2002-02-13 Michal Cihar <cihar@email.cz>
+2002-02-13 Michal Cihar <cihar at email dot cz>
     * reading and listing messages
     * information dialog
 
-2002-02-11 Michal Cihar <cihar@email.cz>
+2002-02-11 Michal Cihar <cihar at email dot cz>
     * initial gui functionality

@@ -82,7 +82,8 @@ KAlcatelDoc::KAlcatelDoc(QWidget *parent, const char *name) : QObject(parent, na
 
   calls = new AlcatelCallList();
 
-  pcStorageCounter = 1;
+/* I hope that phone doesn't support more than 1000 contacts, which should allways have original ID */
+  pcStorageCounter = 1000;
 }
 
 KAlcatelDoc::~KAlcatelDoc()
@@ -296,7 +297,6 @@ void KAlcatelDoc::readDomMessage(QDomElement el) {
 void KAlcatelDoc::readDomContact(QDomElement el) {
     QDomNode n = el.firstChild();
     AlcatelContact *Cont = new AlcatelContact();
-    Cont->Id = pcStorageCounter++;
     Cont->Storage = StoragePC;
 
     while( !n.isNull() ) {
@@ -361,6 +361,11 @@ void KAlcatelDoc::readDomContact(QDomElement el) {
             }
         }
         n = n.nextSibling();
+    }
+    if (Cont->PrevStorage == StorageMobile) {
+        Cont->Id = Cont->PrevId;
+    } else {
+        Cont->Id = pcStorageCounter++;
     }
     ::message(MSG_DEBUG2, "Read contact %d", Cont->Id);
     contacts->append(*Cont);

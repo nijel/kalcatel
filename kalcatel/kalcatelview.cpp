@@ -446,12 +446,16 @@ void KAlcatelView::repaint() {
 
             AlcatelCalendarList::Iterator it;
             for( it = doc->calendar->begin(); it != doc->calendar->end(); ++it ) {
+                AlcatelContact *cont = NULL;
+                if ((* it).EventType == ALC_CALENDAR_CALL) {
+                    cont = getContactById(getDocument()->contacts, (*it).ContactID, (*it).Storage);
+                }
                 new KAlcatelCalendarViewItem (calendar_list, &(*it),
                         (* it).EventType == ALC_CALENDAR_ALARM ? i18n("N/A") : (* it).Date.isNull()?i18n("None"):(* it).Date.toString(),
                         (* it).EventType == ALC_CALENDAR_BIRTHDAY || (* it).EventType == ALC_CALENDAR_ALARM ? i18n("N/A") : (* it).StartTime.toString(),
                         (* it).EventType == ALC_CALENDAR_BIRTHDAY || (* it).EventType == ALC_CALENDAR_ALARM ? i18n("N/A") : (* it).EndTime.toString(),
                         (* it).EventType!=-1?CalendarTypes[(* it).EventType]:i18n("Unknown"),
-                        (* it).Subject,
+                        ((* it).Subject.isNull() && (* it).EventType == ALC_CALENDAR_CALL && cont != NULL) ? i18n("Call to %1").arg(cont->Name()) : (* it).Subject,
                         (* it).Alarm.isNull()?i18n("None"):(* it).Alarm.toString(),
                         (* it).Repeating(),
                         QString("%1 %2").
@@ -700,12 +704,13 @@ void KAlcatelView::slotMessageChanged(QListViewItem *item) {
 }
 
 void KAlcatelView::slotShowMessage(AlcatelMessage *what) {
+    QString text;
     if (what == NULL) {
         textview->setText( i18n("Failed reading message!"));
         return;
     }
     AlcatelContact *cont = getContactByPhone(getDocument()->contacts, &(what->Sender), &(((KAlcatelApp *)parent())->phone_prefix));
-    textview->setText( i18n(
+    text = i18n(
         "<b>From:</b> %1 (%2)<br>"
         "<b>Date:</b> %3<br>"
         "<b>Time:</b> %4<br>"
@@ -720,7 +725,17 @@ void KAlcatelView::slotShowMessage(AlcatelMessage *what) {
         arg(what->SMSC).
         arg(what->Id).
         arg(MessageTypes[what->Status]).
-        arg(what->Text));
+        arg(what->Text);
+
+    text.append(i18n("<b>Storage:</b> %1<br>").arg(StorageTypes[what->Storage]));
+    text.append(i18n("<b>Position:</b> %1").arg(what->Id));
+    if (what->Storage == StoragePC) {
+        text.append(i18n("<br><b>Previous storage:</b> %1<br>").arg(StorageTypes[what->PrevStorage]));
+        text.append(i18n("<b>Previous position:</b> %1").arg(what->PrevId));
+    }
+
+    textview->setText(text);
+
     textview->setMinimumHeight(textview->contentsHeight()); /* resize to show all contents*/
     vsplitter->setResizeMode( textview, QSplitter::FollowSizeHint );
 }
@@ -752,7 +767,14 @@ void KAlcatelView::slotShowTodo(AlcatelTodo *what) {
             text.append(i18n("<b>Category:</b> %1<br>").arg(cat->Name));
         }
     }
+
+    text.append(i18n("<b>Storage:</b> %1<br>").arg(StorageTypes[what->Storage]));
     text.append(i18n("<b>Position:</b> %1").arg(what->Id));
+    if (what->Storage == StoragePC) {
+        text.append(i18n("<br><b>Previous storage:</b> %1<br>").arg(StorageTypes[what->PrevStorage]));
+        text.append(i18n("<b>Previous position:</b> %1").arg(what->PrevId));
+    }
+
     textview->setText(text);
     textview->setMinimumHeight(textview->contentsHeight()); /* resize to show all contents*/
     vsplitter->setResizeMode( textview, QSplitter::FollowSizeHint );
@@ -786,7 +808,13 @@ void KAlcatelView::slotShowCalendar(AlcatelCalendar *what) {
     if (what->Private != -1) text.append(i18n("<b>Private:</b> %1<br>").arg(what->Private == 1?i18n("Yes"):i18n("No")));
     if (what->ContactID != -1 && what->ContactID != 0) text.append(i18n("<b>Contact:</b> %1<br>").arg(cont==NULL?QString("id=%1").arg(what->ContactID):cont->Name()));
 
+    text.append(i18n("<b>Storage:</b> %1<br>").arg(StorageTypes[what->Storage]));
     text.append(i18n("<b>Position:</b> %1").arg(what->Id));
+    if (what->Storage == StoragePC) {
+        text.append(i18n("<br><b>Previous storage:</b> %1<br>").arg(StorageTypes[what->PrevStorage]));
+        text.append(i18n("<b>Previous position:</b> %1").arg(what->PrevId));
+    }
+
     textview->setText(text);
     textview->setMinimumHeight(textview->contentsHeight()); /* resize to show all contents*/
     vsplitter->setResizeMode( textview, QSplitter::FollowSizeHint );
@@ -853,6 +881,10 @@ void KAlcatelView::slotShowContact(AlcatelContact *what) {
     }
     text.append(i18n("<b>Storage:</b> %1<br>").arg(StorageTypes[what->Storage]));
     text.append(i18n("<b>Position:</b> %1").arg(what->Id));
+    if (what->Storage == StoragePC) {
+        text.append(i18n("<br><b>Previous storage:</b> %1<br>").arg(StorageTypes[what->PrevStorage]));
+        text.append(i18n("<b>Previous position:</b> %1").arg(what->PrevId));
+    }
     textview->setText(text);
     textview->setMinimumHeight(textview->contentsHeight()); /* resize to show all contents*/
     vsplitter->setResizeMode( textview, QSplitter::FollowSizeHint );

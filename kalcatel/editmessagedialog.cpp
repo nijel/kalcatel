@@ -289,10 +289,13 @@ void EditMessageDialog::slotSendChanged(bool on) {
 
 void EditMessageDialog::slotTextChanged() {
     static QString prevtext;
+    int para,pos;
 
-    if (messageEdit->length() > 160) {
+    if (messageEdit->length() > 160 || messageEdit->paragraphs() > 1) {
         messageEdit->blockSignals(TRUE);
+        messageEdit->getCursorPosition(&para, &pos);
         messageEdit->setText(prevtext);
+        messageEdit->setCursorPosition(para, pos);
         messageEdit->blockSignals(FALSE);
     } else {
         prevtext = messageEdit->text();

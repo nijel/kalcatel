@@ -656,45 +656,37 @@ void KAlcatelApp::slotFileSaveAs() {
     slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }
 
-void KAlcatelApp::slotFileClose()
-{
-  slotStatusMsg(i18n("Closing file..."), ID_STATUS_MSG);
-	
-  close();
-// this causes crash:
-//  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
+void KAlcatelApp::slotFileClose() {
+    slotStatusMsg(i18n("Closing file..."), ID_STATUS_MSG);
+  	
+    close();
 }
 
-void KAlcatelApp::slotFilePrint()
-{
-  slotStatusMsg(i18n("Printing..."), ID_STATUS_MSG);
+void KAlcatelApp::slotFilePrint() {
+    slotStatusMsg(i18n("Printing..."), ID_STATUS_MSG);
 
-  QPrinter printer;
-  if (printer.setup(this))
-  {
-//    view->print(&printer);
-  }
-
-  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
-}
-
-void KAlcatelApp::slotFileQuit()
-{
-  slotStatusMsg(i18n("Exiting..."), ID_STATUS_MSG);
-  saveOptions();
-  // close the first window, the list makes the next one the first again.
-  // This ensures that queryClose() is called on each window to ask for closing
-  KMainWindow* w;
-  if(memberList)
-  {
-    for(w=memberList->first(); w!=0; w=memberList->first())
-    {
-      // only close the window if the closeEvent is accepted. If the user presses Cancel on the saveModified() dialog,
-      // the window and the application stay open.
-      if(!w->close())
-	break;
+    QPrinter printer;
+    if (printer.setup(this)) {
+        view->print(&printer);
     }
-  }	
+
+    slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
+}
+
+void KAlcatelApp::slotFileQuit() {
+    slotStatusMsg(i18n("Exiting..."), ID_STATUS_MSG);
+    saveOptions();
+    // close the first window, the list makes the next one the first again.
+    // This ensures that queryClose() is called on each window to ask for closing
+    KMainWindow* w;
+    if(memberList) {
+        for(w=memberList->first(); w!=0; w=memberList->first()) {
+            // only close the window if the closeEvent is accepted. If the user presses Cancel on the saveModified() dialog,
+            // the window and the application stay open.
+            if(!w->close())
+                break;
+      }
+    }	
 }
 
 void KAlcatelApp::slotEditCut()

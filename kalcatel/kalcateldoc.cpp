@@ -31,6 +31,9 @@
 #include <qstringlist.h>
 #include <qdatetime.h>
 #include <qtextstream.h>
+#include <qregexp.h>
+
+#include <qdom.h>
 
 // include files for KDE
 #include <klocale.h>
@@ -78,6 +81,8 @@ KAlcatelDoc::KAlcatelDoc(QWidget *parent, const char *name) : QObject(parent, na
   messages = new AlcatelMessageList();
 
   calls = new AlcatelCallList();
+
+  pcStorageCounter = 1;
 }
 
 KAlcatelDoc::~KAlcatelDoc()
@@ -93,6 +98,7 @@ void KAlcatelDoc::removeView(KAlcatelView *view)
 {
   pViewList->remove(view);
 }
+
 void KAlcatelDoc::setURL(const KURL &url)
 {
   doc_url=url;
@@ -161,34 +167,311 @@ bool KAlcatelDoc::newDocument() {
     /////////////////////////////////////////////////
     // TODO: Add your document initialization code here
     /////////////////////////////////////////////////
+    deleteContents();
     modified=false;
     doc_url.setFileName(i18n("Untitled"));
 
     return true;
 }
 
+
+QDateTime KAlcatelDoc::readDomDateTime(QDomElement el) {
+    QDateTime date;
+    QDomNode n = el.firstChild();
+    while( !n.isNull() ) {
+        QDomElement l = n.toElement();
+        if( !l.isNull() ) {
+            if (l.tagName() == "date") {
+                date.setDate(readDomDate(l));
+            } else if (l.tagName() == "time") {
+                date.setTime(readDomTime(l));
+            } else {
+                ::message(MSG_WARNING, "Unknown tag in document: %s", l.tagName().latin1());
+            }
+        }
+        n = n.nextSibling();
+    }
+    return date;
+}
+
+QDate KAlcatelDoc::readDomDate(QDomElement el) {
+    QDate date;
+    QDomNode n = el.firstChild();
+    while( !n.isNull() ) {
+        QDomElement l = n.toElement();
+        if( !l.isNull() ) {
+            if (l.tagName() == "day") {
+                date.setYMD(date.year(), date.month(), readDomInt(l));
+            } else if (l.tagName() == "month") {
+                date.setYMD(date.year(), readDomInt(l), date.day());
+            } else if (l.tagName() == "year") {
+                date.setYMD(readDomInt(l), date.month(), date.day());
+            } else {
+                ::message(MSG_WARNING, "Unknown tag in document: %s", l.tagName().latin1());
+            }
+        }
+        n = n.nextSibling();
+    }
+    return date;
+}
+
+QTime KAlcatelDoc::readDomTime(QDomElement el) {
+    QTime time;
+    QDomNode n = el.firstChild();
+    while( !n.isNull() ) {
+        QDomElement l = n.toElement();
+        if( !l.isNull() ) {
+            if (l.tagName() == "second") {
+                time.setHMS(time.hour(), time.minute(), readDomInt(l));
+            } else if (l.tagName() == "minute") {
+                time.setHMS(time.hour(), readDomInt(l), time.second());
+            } else if (l.tagName() == "hour") {
+                time.setHMS(readDomInt(l), time.minute(), time.second());
+            } else {
+                ::message(MSG_WARNING, "Unknown tag in document: %s", l.tagName().latin1());
+            }
+        }
+        n = n.nextSibling();
+    }
+    return time;
+}
+
+QString KAlcatelDoc::readDomString(QDomElement el) {
+    QDomNode i = el.firstChild();
+    QDomText t = i.toText();
+    if (!t.isNull()) {
+        return t.data();
+    } else {
+        return "";
+    }
+}
+
+int KAlcatelDoc::readDomInt(QDomElement el) {
+    QDomNode i = el.firstChild();
+    QDomText t = i.toText();
+    if (!t.isNull()) {
+        return t.data().toInt();
+    } else {
+        return 0;
+    }
+}
+
+void KAlcatelDoc::readDomMessage(QDomElement el) {
+    QDomNode n = el.firstChild();
+    AlcatelMessage *Msg = new AlcatelMessage();
+    Msg->Id = pcStorageCounter++;
+    Msg->Storage = StoragePC;
+
+    while( !n.isNull() ) {
+        QDomElement l = n.toElement();
+        if( !l.isNull() ) {
+            if (l.tagName() == "id") {
+                Msg->PrevId = readDomInt(l);
+            } else if (l.tagName() == "storage") {
+                Msg->PrevStorage = (AlcatelStorage)readDomInt(l);
+            } else if (l.tagName() == "status") {
+                Msg->Status = readDomInt(l);
+            } else if (l.tagName() == "length") {
+                Msg->Length = readDomInt(l);
+            } else if (l.tagName() == "raw") {
+                Msg->Raw = strdup(readDomString(l).latin1());
+            } else if (l.tagName() == "sender") {
+                Msg->Sender = readDomString(l);
+            } else if (l.tagName() == "text") {
+                Msg->Text = readDomString(l);
+            } else if (l.tagName() == "smsc") {
+                Msg->SMSC = readDomString(l);
+            } else if (l.tagName() == "date") {
+                Msg->Date = readDomDateTime(l);
+            } else {
+                ::message(MSG_WARNING, "Unknown tag in document: %s", l.tagName().latin1());
+            }
+        }
+        n = n.nextSibling();
+    }
+    ::message(MSG_DEBUG2, "Read message %d", Msg->Id);
+    messages->append(*Msg);
+}
+
+void KAlcatelDoc::readDomEvent(QDomElement el) {
+}
+
+void KAlcatelDoc::readDomTodo(QDomElement el) {
+}
+
+void KAlcatelDoc::readDomContact(QDomElement el) {
+}
+
+void KAlcatelDoc::readDomCategory(QDomElement el, AlcatelCategoryList *list) {
+}
+
 bool KAlcatelDoc::openDocument(const KURL& url, const char *format /*=0*/) {
     QString tmpfile;
-    KIO::NetAccess::download( url, tmpfile );
-    /////////////////////////////////////////////////
-    // TODO: Add your document opening code here
-    /////////////////////////////////////////////////
+    deleteContents();
+    if (KIO::NetAccess::download( url, tmpfile )) {
+        QDomDocument doc;
+        QFile f( tmpfile );
+        if ( !f.open( IO_ReadOnly ) ) {
+            KMessageBox::error((KAlcatelApp *) parent(), i18n("Opening of selected document (%1) failed.").arg(url.path()).append('\n').append(i18n("File can not be opened for reading.")), i18n("Error"));
+            return false;
+        }
+        if ( !doc.setContent( &f ) ) {
+            KMessageBox::error((KAlcatelApp *) parent(), i18n("Opening of selected document (%1) failed.").arg(url.path()).append('\n').append(i18n("File can not be parsed as XML.")), i18n("Error"));
+            f.close();
+            return false;
+        }
+        f.close();
 
-    KIO::NetAccess::removeTempFile( tmpfile );
+        QDomElement docElem = doc.documentElement();
 
-    doc_url = url;
-    KMessageBox::sorry((KAlcatelApp *) parent(), i18n("Loading not implemented yet... (URL: %1, doc: %2)").arg(url.path()).arg(doc_url.path()), i18n("Sorry"));
+        QTextStream cerr( stderr, IO_WriteOnly );
+
+#define chk_doc_ver if (document_version == 0) ::message(MSG_WARNING, "Unknown document version!"); else if (document_version > CURRENT_DOC_VERSION) ::message(MSG_WARNING, "Document version higher than supported!");
+
+        QDomNode n = docElem.firstChild();
+        int document_version = 0;
+        while( !n.isNull() ) {
+            QDomElement e = n.toElement(); // try to convert the node to an element.
+            if( !e.isNull() ) { // the node was really an element.
+                if (e.tagName() == "info") {
+                    ::message(MSG_DEBUG, "Parsing info");
+                    QDomNode m = e.firstChild();
+                    while( !m.isNull() ) {
+                        QDomElement l = m.toElement(); // try to convert the node to an element.
+                        if( !l.isNull() ) { // the node was really an element.
+                            if (l.tagName() == "version") {
+                                document_version = readDomInt(l);
+                                ::message(MSG_DEBUG2, "Document version %d", document_version);
+                            } else {
+                                ::message(MSG_WARNING, "Unknown tag in document: %s", e.tagName().latin1());
+                            }
+                        }
+                        m = m.nextSibling();
+                    }
+                } else if (e.tagName() == "messages") {
+                    ::message(MSG_DEBUG, "Parsing messages");
+                    chk_doc_ver
+                    QDomNode m = e.firstChild();
+                    while( !m.isNull() ) {
+                        QDomElement l = m.toElement(); // try to convert the node to an element.
+                        if( !l.isNull() ) { // the node was really an element.
+                            if (l.tagName() == "message") {
+                                readDomMessage(l);
+                            } else {
+                                ::message(MSG_WARNING, "Unknown tag in document: %s", e.tagName().latin1());
+                            }
+                        }
+                        m = m.nextSibling();
+                    }
+                    messagesVersion++;
+                } else if (e.tagName() == "contacts") {
+                    ::message(MSG_DEBUG, "Parsing contacts");
+                    chk_doc_ver
+                    QDomNode m = e.firstChild();
+                    while( !m.isNull() ) {
+                        QDomElement l = m.toElement(); // try to convert the node to an element.
+                        if( !l.isNull() ) { // the node was really an element.
+                            if (l.tagName() == "contact") {
+                                readDomContact(l);
+                            } else {
+                                ::message(MSG_WARNING, "Unknown tag in document: %s", e.tagName().latin1());
+                            }
+                        }
+                        m = m.nextSibling();
+                    }
+                    contactsVersion++;
+                } else if (e.tagName() == "calendar") {
+                    ::message(MSG_DEBUG, "Parsing calendar");
+                    chk_doc_ver
+                    QDomNode m = e.firstChild();
+                    while( !m.isNull() ) {
+                        QDomElement l = m.toElement(); // try to convert the node to an element.
+                        if( !l.isNull() ) { // the node was really an element.
+                            if (l.tagName() == "event") {
+                                readDomEvent(l);
+                            } else {
+                                ::message(MSG_WARNING, "Unknown tag in document: %s", e.tagName().latin1());
+                            }
+                        }
+                        m = m.nextSibling();
+                    }
+                    calendarVersion++;
+                } else if (e.tagName() == "todos") {
+                    ::message(MSG_DEBUG, "Parsing todos");
+                    chk_doc_ver
+                    QDomNode m = e.firstChild();
+                    while( !m.isNull() ) {
+                        QDomElement l = m.toElement(); // try to convert the node to an element.
+                        if( !l.isNull() ) { // the node was really an element.
+                            if (l.tagName() == "todo") {
+                                readDomTodo(l);
+                            } else {
+                                ::message(MSG_WARNING, "Unknown tag in document: %s", e.tagName().latin1());
+                            }
+                        }
+                        m = m.nextSibling();
+                    }
+                    todosVersion++;
+                } else if (e.tagName() == "todocategories") {
+                    ::message(MSG_DEBUG, "Parsing todocategories");
+                    chk_doc_ver
+                    QDomNode m = e.firstChild();
+                    while( !m.isNull() ) {
+                        QDomElement l = m.toElement(); // try to convert the node to an element.
+                        if( !l.isNull() ) { // the node was really an element.
+                            if (l.tagName() == "category") {
+                                readDomCategory(l, todo_cats);
+                            } else {
+                                ::message(MSG_WARNING, "Unknown tag in document: %s", e.tagName().latin1());
+                            }
+                        }
+                        m = m.nextSibling();
+                    }
+                    todosVersion++;
+                } else if (e.tagName() == "contactcategories") {
+                    ::message(MSG_DEBUG, "Parsing contactcategories");
+                    chk_doc_ver
+                    QDomNode m = e.firstChild();
+                    while( !m.isNull() ) {
+                        QDomElement l = m.toElement(); // try to convert the node to an element.
+                        if( !l.isNull() ) { // the node was really an element.
+                            if (l.tagName() == "category") {
+                                readDomCategory(l, contact_cats);
+                            } else {
+                                ::message(MSG_WARNING, "Unknown tag in document: %s", e.tagName().latin1());
+                            }
+                        }
+                        m = m.nextSibling();
+                    }
+                    contactsVersion++;
+                } else {
+                    ::message(MSG_WARNING, "Unknown tag in document: %s", e.tagName().latin1());
+                }
+            }
+            n = n.nextSibling();
+        }
+
+#undef chk_doc_ver
+
+        doc_url = url;
+
+        KIO::NetAccess::removeTempFile( tmpfile );
+
+        version++;
+        slotUpdateAllViews(NULL);
+    } else {
+        KMessageBox::error((KAlcatelApp *) parent(), i18n("Opening of selected document (%1) failed.").arg(url.path()).append('\n').append(i18n("Document not found.")), i18n("Error"));
+        return false;
+    }
 
     modified=false;
     return true;
 }
 
 bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
-    /////////////////////////////////////////////////
-    // TODO: Add your document saving code here
-    /////////////////////////////////////////////////
-
     KTempFile *tmp = new KTempFile();
+    QRegExp rlt("<");
+    QRegExp rgt(">");
 
     QTextStream *strm = tmp->textStream();
     strm->setEncoding(QTextStream::UnicodeUTF8);
@@ -197,24 +480,27 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
     *strm << "<!-- KAlcatel saved data -->\n";
     *strm << "<document>\n";
     *strm << " <info>\n";
-    *strm << "  <version>1</version>\n";
+    *strm << "  <version>" << CURRENT_DOC_VERSION << "</version>\n";
     *strm << " </info>\n";
     *strm << " <messages>\n";
     AlcatelMessageList::Iterator messagesit;
     for( messagesit = messages->begin(); messagesit != messages->end(); ++messagesit ) {
         *strm << "  <message>\n";
-        *strm << "   <id>";
-        *strm << (*messagesit).Id;
-        *strm << "</id>\n";
-        *strm << "   <storage>";
-        *strm << (*messagesit).Storage;
-        *strm << "</storage>\n";
-        *strm << "   <pid>";
-        *strm << (*messagesit).PrevId;
-        *strm << "</pid>\n";
-        *strm << "   <pstorage>";
-        *strm << (*messagesit).PrevStorage;
-        *strm << "</pstorage>\n";
+        if ((*messagesit).Storage != StoragePC) {
+            *strm << "   <id>";
+            *strm << (*messagesit).Id;
+            *strm << "</id>\n";
+            *strm << "   <storage>";
+            *strm << (*messagesit).Storage;
+            *strm << "</storage>\n";
+        } else {
+            *strm << "   <id>";
+            *strm << (*messagesit).PrevId;
+            *strm << "</id>\n";
+            *strm << "   <storage>";
+            *strm << (*messagesit).PrevStorage;
+            *strm << "</storage>\n";
+        }
         *strm << "   <status>";
         *strm << (*messagesit).Status;
         *strm << "</status>\n";
@@ -225,35 +511,37 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
         *strm << (*messagesit).Raw;
         *strm << "</raw>\n";
         *strm << "   <sender>";
-        *strm << (*messagesit).Sender;
+        *strm << (*messagesit).Sender.replace(rlt, "&lt;").replace(rgt, "&gt;");
         *strm << "</sender>\n";
         *strm << "   <date>\n";
-        *strm << "    <day>";
+        *strm << "    <date>\n";
+        *strm << "     <day>";
         *strm << (*messagesit).Date.date().day();
         *strm << "</day>\n";
-        *strm << "    <month>";
+        *strm << "     <month>";
         *strm << (*messagesit).Date.date().month();
         *strm << "</month>\n";
-        *strm << "    <year>";
+        *strm << "     <year>";
         *strm << (*messagesit).Date.date().year();
         *strm << "</year>\n";
-        *strm << "   </date>\n";
-        *strm << "   <time>\n";
-        *strm << "    <hour>";
+        *strm << "    </date>\n";
+        *strm << "    <time>\n";
+        *strm << "     <hour>";
         *strm << (*messagesit).Date.time().hour();
         *strm << "</hour>\n";
-        *strm << "    <minute>";
+        *strm << "     <minute>";
         *strm << (*messagesit).Date.time().minute();
         *strm << "</minute>\n";
-        *strm << "    <second>";
+        *strm << "     <second>";
         *strm << (*messagesit).Date.time().second();
         *strm << "</second>\n";
-        *strm << "   </time>\n";
+        *strm << "    </time>\n";
+        *strm << "   </date>\n";
         *strm << "   <text>";
-        *strm << (*messagesit).Text;
+        *strm << (*messagesit).Text.replace(rlt, "&lt;").replace(rgt, "&gt;");
         *strm << "</text>\n";
-        *strm << "   <messagesc>";
-        *strm << (*messagesit).SMSC;
+        *strm << "   <smsc>";
+        *strm << (*messagesit).SMSC.replace(rlt, "&lt;").replace(rgt, "&gt;");
         *strm << "</smsc>\n";
         *strm << "  </message>\n";
     }
@@ -262,42 +550,45 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
     AlcatelContactList::Iterator cit;
     for( cit = contacts->begin(); cit != contacts->end(); ++cit ) {
         *strm << "  <contact>\n";
-        *strm << "   <id>";
-        *strm << (*cit).Id;
-        *strm << "</id>\n";
-        *strm << "   <storage>";
-        *strm << (*cit).Storage;
-        *strm << "</storage>\n";
-        *strm << "   <pid>";
-        *strm << (*cit).PrevId;
-        *strm << "</pid>\n";
-        *strm << "   <pstorage>";
-        *strm << (*cit).PrevStorage;
-        *strm << "</pstorage>\n";
+        if ((*cit).Storage != StoragePC) {
+            *strm << "   <id>";
+            *strm << (*cit).Id;
+            *strm << "</id>\n";
+            *strm << "   <storage>";
+            *strm << (*cit).Storage;
+            *strm << "</storage>\n";
+        } else {
+            *strm << "   <id>";
+            *strm << (*cit).PrevId;
+            *strm << "</id>\n";
+            *strm << "   <storage>";
+            *strm << (*cit).PrevStorage;
+            *strm << "</storage>\n";
+        }
 
         if (!(*cit).LastName.isEmpty()) {
             *strm << "   <lastname>";
-            *strm << (*cit).LastName;
+            *strm << (*cit).LastName.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</lastname>\n";
         }
         if (!(*cit).FirstName.isEmpty()) {
             *strm << "   <firstname>";
-            *strm << (*cit).FirstName;
+            *strm << (*cit).FirstName.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</firstname>\n";
         }
         if (!(*cit).Company.isEmpty()) {
             *strm << "   <company>";
-            *strm << (*cit).Company;
+            *strm << (*cit).Company.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</company>\n";
         }
         if (!(*cit).JobTitle.isEmpty()) {
             *strm << "   <jobtitle>";
-            *strm << (*cit).JobTitle;
+            *strm << (*cit).JobTitle.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</jobtitle>\n";
         }
         if (!(*cit).Note.isEmpty()) {
             *strm << "   <note>";
-            *strm << (*cit).Note;
+            *strm << (*cit).Note.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</note>\n";
         }
         if ((*cit).Category != -1) {
@@ -312,92 +603,92 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
         }
         if (!(*cit).WorkNumber.isEmpty()) {
             *strm << "   <worknumber>";
-            *strm << (*cit).WorkNumber;
+            *strm << (*cit).WorkNumber.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</worknumber>\n";
         }
         if (!(*cit).MainNumber.isEmpty()) {
             *strm << "   <mainnumber>";
-            *strm << (*cit).MainNumber;
+            *strm << (*cit).MainNumber.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</mainnumber>\n";
         }
         if (!(*cit).FaxNumber.isEmpty()) {
             *strm << "   <faxnumber>";
-            *strm << (*cit).FaxNumber;
+            *strm << (*cit).FaxNumber.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</faxnumber>\n";
         }
         if (!(*cit).OtherNumber.isEmpty()) {
             *strm << "   <othernumber>";
-            *strm << (*cit).OtherNumber;
+            *strm << (*cit).OtherNumber.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</othernumber>\n";
         }
         if (!(*cit).PagerNumber.isEmpty()) {
             *strm << "   <pagernumber>";
-            *strm << (*cit).PagerNumber;
+            *strm << (*cit).PagerNumber.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</pagernumber>\n";
         }
         if (!(*cit).MobileNumber.isEmpty()) {
             *strm << "   <mobilenumber>";
-            *strm << (*cit).MobileNumber;
+            *strm << (*cit).MobileNumber.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</mobilenumber>\n";
         }
         if (!(*cit).HomeNumber.isEmpty()) {
             *strm << "   <homenumber>";
-            *strm << (*cit).HomeNumber;
+            *strm << (*cit).HomeNumber.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</homenumber>\n";
         }
         if (!(*cit).Email1.isEmpty()) {
             *strm << "   <email1>";
-            *strm << (*cit).Email1;
+            *strm << (*cit).Email1.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</email1>\n";
         }
         if (!(*cit).Email2.isEmpty()) {
             *strm << "   <email2>";
-            *strm << (*cit).Email2;
+            *strm << (*cit).Email2.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</email2>\n";
         }
         if (!(*cit).Address.isEmpty()) {
             *strm << "   <address>";
-            *strm << (*cit).Address;
+            *strm << (*cit).Address.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</address>\n";
         }
         if (!(*cit).City.isEmpty()) {
             *strm << "   <city>";
-            *strm << (*cit).City;
+            *strm << (*cit).City.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</city>\n";
         }
         if (!(*cit).State.isEmpty()) {
             *strm << "   <state>";
-            *strm << (*cit).State;
+            *strm << (*cit).State.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</state>\n";
         }
         if (!(*cit).Zip.isEmpty()) {
             *strm << "   <zip>";
-            *strm << (*cit).Zip;
+            *strm << (*cit).Zip.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</zip>\n";
         }
         if (!(*cit).Country.isEmpty()) {
             *strm << "   <country>";
-            *strm << (*cit).Country;
+            *strm << (*cit).Country.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</country>\n";
         }
         if (!(*cit).Custom1.isEmpty()) {
             *strm << "   <custom1>";
-            *strm << (*cit).Custom1;
+            *strm << (*cit).Custom1.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</custom1>\n";
         }
         if (!(*cit).Custom2.isEmpty()) {
             *strm << "   <custom2>";
-            *strm << (*cit).Custom2;
+            *strm << (*cit).Custom2.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</custom2>\n";
         }
         if (!(*cit).Custom3.isEmpty()) {
             *strm << "   <custom3>";
-            *strm << (*cit).Custom3;
+            *strm << (*cit).Custom3.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</custom3>\n";
         }
         if (!(*cit).Custom4.isEmpty()) {
             *strm << "   <custom4>";
-            *strm << (*cit).Custom4;
+            *strm << (*cit).Custom4.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</custom4>\n";
         }
         *strm << "  </contact>\n";
@@ -407,18 +698,21 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
     AlcatelCalendarList::Iterator calit;
     for( calit = calendar->begin(); calit != calendar->end(); ++calit ) {
         *strm << "  <event>\n";
-        *strm << "   <id>";
-        *strm << (*calit).Id;
-        *strm << "</id>\n";
-        *strm << "   <storage>";
-        *strm << (*calit).Storage;
-        *strm << "</storage>\n";
-        *strm << "   <pid>";
-        *strm << (*calit).PrevId;
-        *strm << "</pid>\n";
-        *strm << "   <pstorage>";
-        *strm << (*calit).PrevStorage;
-        *strm << "</pstorage>\n";
+        if ((*calit).Storage != StoragePC) {
+            *strm << "   <id>";
+            *strm << (*calit).Id;
+            *strm << "</id>\n";
+            *strm << "   <storage>";
+            *strm << (*calit).Storage;
+            *strm << "</storage>\n";
+        } else {
+            *strm << "   <id>";
+            *strm << (*calit).PrevId;
+            *strm << "</id>\n";
+            *strm << "   <storage>";
+            *strm << (*calit).PrevStorage;
+            *strm << "</storage>\n";
+        }
 
         *strm << "   <date>\n";
         *strm << "    <day>";
@@ -510,7 +804,7 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
 
         if (!(*calit).Subject.isEmpty()) {
             *strm << "   <subject>";
-            *strm << (*calit).Subject;
+            *strm << (*calit).Subject.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</subject>\n";
         }
 
@@ -602,22 +896,25 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
 
     for( tit = todos->begin(); tit != todos->end(); ++tit ) {
         *strm << "  <todo>\n";
-        *strm << "   <id>";
-        *strm << (*tit).Id;
-        *strm << "</id>\n";
-        *strm << "   <storage>";
-        *strm << (*tit).Storage;
-        *strm << "</storage>\n";
-        *strm << "   <pid>";
-        *strm << (*tit).PrevId;
-        *strm << "</pid>\n";
-        *strm << "   <pstorage>";
-        *strm << (*tit).PrevStorage;
-        *strm << "</pstorage>\n";
+        if ((*tit).Storage != StoragePC) {
+            *strm << "   <id>";
+            *strm << (*tit).Id;
+            *strm << "</id>\n";
+            *strm << "   <storage>";
+            *strm << (*tit).Storage;
+            *strm << "</storage>\n";
+        } else {
+            *strm << "   <id>";
+            *strm << (*tit).PrevId;
+            *strm << "</id>\n";
+            *strm << "   <storage>";
+            *strm << (*tit).PrevStorage;
+            *strm << "</storage>\n";
+        }
 
         if (!(*tit).Subject.isEmpty()) {
             *strm << "   <subject>";
-            *strm << (*tit).Subject;
+            *strm << (*tit).Subject.replace(rlt, "&lt;").replace(rgt, "&gt;");
             *strm << "</subject>\n";
         }
         if ((*tit).Completed != -1) {
@@ -693,20 +990,23 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
     *strm << " <todocategories>\n";
     for( catit = todo_cats->begin(); catit != todo_cats->end(); ++catit ) {
         *strm << "  <category>\n";
-        *strm << "   <id>";
-        *strm << (*catit).Id;
-        *strm << "</id>\n";
-        *strm << "   <storage>";
-        *strm << (*catit).Storage;
-        *strm << "</storage>\n";
-        *strm << "   <pid>";
-        *strm << (*catit).PrevId;
-        *strm << "</pid>\n";
-        *strm << "   <pstorage>";
-        *strm << (*catit).PrevStorage;
-        *strm << "</pstorage>\n";
+        if ((*catit).Storage != StoragePC) {
+            *strm << "   <id>";
+            *strm << (*catit).Id;
+            *strm << "</id>\n";
+            *strm << "   <storage>";
+            *strm << (*catit).Storage;
+            *strm << "</storage>\n";
+        } else {
+            *strm << "   <id>";
+            *strm << (*catit).PrevId;
+            *strm << "</id>\n";
+            *strm << "   <storage>";
+            *strm << (*catit).PrevStorage;
+            *strm << "</storage>\n";
+        }
         *strm << "   <name>";
-        *strm << (*catit).Name;
+        *strm << (*catit).Name.replace(rlt, "&lt;").replace(rgt, "&gt;");
         *strm << "</name>\n";
         *strm << "  </category>\n";
     }
@@ -715,30 +1015,28 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
     *strm << " <contactcategories>\n";
     for( catit = contact_cats->begin(); catit != contact_cats->end(); ++catit ) {
         *strm << "  <category>\n";
-        *strm << "   <id>";
-        *strm << (*catit).Id;
-        *strm << "</id>\n";
-        *strm << "   <storage>";
-        *strm << (*catit).Storage;
-        *strm << "</storage>\n";
-        *strm << "   <pid>";
-        *strm << (*catit).PrevId;
-        *strm << "</pid>\n";
-        *strm << "   <pstorage>";
-        *strm << (*catit).PrevStorage;
-        *strm << "</pstorage>\n";
+        if ((*catit).Storage != StoragePC) {
+            *strm << "   <id>";
+            *strm << (*catit).Id;
+            *strm << "</id>\n";
+            *strm << "   <storage>";
+            *strm << (*catit).Storage;
+            *strm << "</storage>\n";
+        } else {
+            *strm << "   <id>";
+            *strm << (*catit).PrevId;
+            *strm << "</id>\n";
+            *strm << "   <storage>";
+            *strm << (*catit).PrevStorage;
+            *strm << "</storage>\n";
+        }
         *strm << "   <name>";
-        *strm << (*catit).Name;
+        *strm << (*catit).Name.replace(rlt, "&lt;").replace(rgt, "&gt;");
         *strm << "</name>\n";
         *strm << "  </category>\n";
     }
     *strm << " </contactcategories>\n";
 
-    /*
-        *strm << "   <>";
-        *strm << (*it).;
-        *strm << "</>\n";
-        */
     *strm << "</document>\n";
 
     tmp->close();

@@ -27,7 +27,7 @@ sometimes (till 1.0):
  - czech translation
  - rewrite reading as separate thread and allow canceling (probably using QThread + QProgressDialog)
  - move modem initialization (?)
- - synchronisation with kab
+ - synchronisation with kab (and maybe also korganizer)
  - save and restore positions and size of interface (splitters, list headers, toolbars, ...)
  - read clock, set clock as they are in computer
  - contacts sim <-> mobile transfer

@@ -40,6 +40,9 @@
 
 #include "alcatelclasses.h"
 
+
+#define CURRENT_DOC_VERSION 1
+
 /** Used for selecting which type of mobile data we will work with
   */
 enum AlcDataType {
@@ -55,6 +58,8 @@ enum AlcDataType {
 // forward declaration of the KAlcatel classes
 class KAlcatelView;
 class KAlcatelApp;
+
+class QDomElement;
 
 /**	KAlcatelDoc provides a document object for a document-view model.
   *
@@ -167,6 +172,22 @@ class KAlcatelDoc : public QObject
       */
     AlcatelCallList *calls;
   private:
+    /** reads message from DOM document, el should be root element of message (<message>)
+      */
+    void readDomMessage(QDomElement el);
+    void readDomEvent(QDomElement el);
+    void readDomTodo(QDomElement el);
+    void readDomContact(QDomElement el);
+    void readDomCategory(QDomElement el, AlcatelCategoryList *list);
+
+    QString readDomString(QDomElement el);
+    int readDomInt(QDomElement el);
+    QTime readDomTime(QDomElement el);
+    QDate readDomDate(QDomElement el);
+    QDateTime readDomDateTime(QDomElement el);
+
+
+
     /** reads categories from mobile
       */
     bool readMobileCategories(AlcatelCategoryList *strList, alc_type sync, alc_type type, alc_type cat);
@@ -198,6 +219,8 @@ class KAlcatelDoc : public QObject
     /** todos version
       */
     int todosVersion;
+
+    int pcStorageCounter;
 };
 
 #endif // KALCATELDOC_H

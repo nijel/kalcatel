@@ -154,10 +154,11 @@ void KAlcatelApp::initStatusBar()
 
 void KAlcatelApp::initDocument() {
     doc = new KAlcatelDoc(this);
-    if (auto_open_last && !last_file.isEmpty())
+    if (auto_open_last && !last_file.isEmpty()) {
         doc->openDocument(last_file);
-    else
+    } else {
         doc->newDocument();
+    }
 }
 
 void KAlcatelApp::initView()
@@ -177,8 +178,8 @@ void KAlcatelApp::openDocumentFile(const KURL& url)
 {
   slotStatusMsg(i18n("Opening file..."), ID_STATUS_MSG);
 
-  doc->openDocument( url);
-  fileOpenRecent->addURL( url );
+  if (doc->openDocument( url))
+      fileOpenRecent->addURL( url );
   slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }
 
@@ -291,9 +292,10 @@ void KAlcatelApp::readProperties(KConfig* _cfg)
   	
     if(canRecover)
     {
-      doc->openDocument(_url);
-      doc->setModified();
-      setCaption(_url.fileName(),true);
+      if (doc->openDocument(_url)) {
+          doc->setModified();
+          setCaption(_url.fileName(),true);
+      }
       QFile::remove(tempname);
     }
   }
@@ -301,8 +303,8 @@ void KAlcatelApp::readProperties(KConfig* _cfg)
   {
     if(!filename.isEmpty())
     {
-      doc->openDocument(url);
-      setCaption(url.fileName(),false);
+      if (doc->openDocument(url))
+          setCaption(url.fileName(),false);
     }
   }
 }		
@@ -582,9 +584,10 @@ void KAlcatelApp::slotFileOpen()
         i18n("*.kalc|KAlcatel files (*.kalc)\n*|All files"), this, i18n("Open File..."));
     if(!url.isEmpty())
     {
-      doc->openDocument(url);
-      setCaption(url.fileName(), false);
-      fileOpenRecent->addURL( url );
+      if (doc->openDocument(url)) {
+          setCaption(url.fileName(), false);
+          fileOpenRecent->addURL( url );
+      }
     }
   }
   slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
@@ -600,8 +603,8 @@ void KAlcatelApp::slotFileOpenRecent(const KURL& url)
   }
   else
   {
-    doc->openDocument(url);
-    setCaption(url.fileName(), false);
+    if (doc->openDocument(url))
+        setCaption(url.fileName(), false);
   }
 
   slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);

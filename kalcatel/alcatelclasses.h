@@ -36,13 +36,22 @@
   *@author Michal Cihar
   */
 
-
+/** type of call
+  */
 enum CallType { CallMissed, CallReceived, CallDialled };
+/** type of storage
+  */
 enum AlcatelStorage {StoragePC, StorageSIM, StorageMobile } ;
 
+/** Generic class used only as base for other storage classes
+  */
 class AlcatelClass {
 public:
+    /** Position of record
+      */
     int Id;
+    /** Storage of record
+      */
 	enum AlcatelStorage Storage;
 };
 
@@ -52,13 +61,19 @@ extern QString CallTypes[];
 extern QString Priorities[];
 extern QString CalendarTypes[];
 
+/** class for storing contacts
+  */
 class AlcatelContact : public AlcatelClass {
 public:
 	AlcatelContact();
 	~AlcatelContact();
 	
-	void setField(int number, FIELD *data);
+    /** sets field read from mobile in this class
+      */
+	void setField(int number, struct AlcatelFieldStruct *data);
 	
+    /** returns formatted name of contact
+      */
 	QString Name(void);
 	
     QString LastName;
@@ -88,14 +103,22 @@ public:
     QString Custom4;
 };
 
+/** class for storing calendar
+  */
 class AlcatelCalendar : public AlcatelClass {
 public:
 	AlcatelCalendar();
 	~AlcatelCalendar();
 	
-	void setField(int number, FIELD *data);
+    /** sets field read from mobile in this class
+      */
+	void setField(int number, struct AlcatelFieldStruct *data);
 	
+    /** returns string with short information about repeating events
+      */
 	QString Repeating(void);
+    /** returns string with detailed information about repeating events
+      */
     QString RepeatingDetail(void);
 	
     QDate Date;
@@ -120,12 +143,16 @@ public:
     QDateTime Alarm2;
 };
 
+/** class for storing todos
+  */
 class AlcatelTodo : public AlcatelClass {
 public:
 	AlcatelTodo();
 	~AlcatelTodo();
 	
-	void setField(int number, FIELD *data);
+    /** sets field read from mobile in this class
+      */
+	void setField(int number, struct AlcatelFieldStruct *data);
 	
     QDate DueDate;
     int Completed;
@@ -137,6 +164,8 @@ public:
     int ContactID;
 };
 
+/** class for storing messages
+  */
 class AlcatelSMS : public AlcatelClass {
 public:
 	AlcatelSMS();
@@ -151,6 +180,8 @@ public:
     QString SMSC;
 };
 
+/** class for storing calls
+  */
 class AlcatelCall : public AlcatelClass {
 public:
 	AlcatelCall();
@@ -161,31 +192,65 @@ public:
     CallType Type;
 };
 
+/** class for storing categories
+  */
 class AlcatelCategory : public AlcatelClass {
 public:
+    /** creates class and sets name and id
+      */
 	AlcatelCategory(char* name, int id);
-	
 	AlcatelCategory();
+	
     QString Name;
 };
 
+/** list of contacts
+  */
 typedef QValueList<AlcatelContact> AlcatelContactList;
+/** list of calendar items
+  */
 typedef QValueList<AlcatelCalendar> AlcatelCalendarList;
+/** list of todos
+  */
 typedef QValueList<AlcatelTodo> AlcatelTodoList;
+/** list of messages
+  */
 typedef QValueList<AlcatelSMS> AlcatelSMSList;
-typedef QValueList<AlcatelCategory> AlcatelCategoryList;
+/** list of calls
+  */
 typedef QValueList<AlcatelCall> AlcatelCallList;
+/** list of categories
+  */
+typedef QValueList<AlcatelCategory> AlcatelCategoryList;
 
+/** find message by id
+  */
 AlcatelSMS *getSMSById(AlcatelSMSList *list, int id);
+/** returns category name
+  */
 QString *getCategoryName(AlcatelCategoryList *list, int id);
+/** compares two phone numbers, prefix should be international prefix
+  */
 int phoneCmp(QString *number1, QString *number2, QString *prefix);
+/** find contact by phone
+  */
 AlcatelContact *getContactByPhone(AlcatelContactList *list, QString *number, QString *prefix);
+/** find contact by id
+  */
 AlcatelContact *getContactById(AlcatelContactList *list, int id, AlcatelStorage type);
+/** find todo by id
+  */
 AlcatelTodo *getTodoById(AlcatelTodoList *list, int id);
+/** find calendar item by id
+  */
 AlcatelCalendar *getCalendarById(AlcatelCalendarList *list, int id);
 
+/** find call by id
+  */
 AlcatelCall *getCallById(AlcatelCallList *list, int id, CallType type);
 
+/** clears contacts of selected type
+  */
 void clearContacts(AlcatelContactList *list, AlcatelStorage type);
 
 #endif

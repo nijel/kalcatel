@@ -139,30 +139,53 @@ class KAlcatelApp : public KMainWindow
 
 
   public slots:
-    /** open a new application window by creating a new instance of KAlcatelApp */
-//    void slotFileNewWindow();
-    /** reads data from mobile */
+    /** open a new application window by creating a new instance of KAlcatelApp
+     */
+    void slotFileNewWindow();
+    /** reads all data from mobile
+      */
     void slotFileReadMobileAll();
+    /** reads todo data from mobile
+      */
     void slotFileReadMobileTodo();
+    /** reads message data from mobile
+      */
     void slotFileReadMobileSms();
+    /** reads calendar data from mobile
+      */
     void slotFileReadMobileCalendar();
+    /** reads call data from mobile
+      */
     void slotFileReadMobileCalls();
+    /** reads contacts data from SIM
+      */
     void slotFileReadMobileContactsSim();
+    /** reads contacts data from mobile
+      */
     void slotFileReadMobileContactsMobile();
+    /** shows mobile information
+      */
     void slotMobileInfo();
-    /** clears the document in the actual view to reuse it as the new document */
+    /** clears the document in the actual view to reuse it as the new document
+     */
     void slotFileNew();
-    /** open a file and load it into the document*/
+    /** open a file and load it into the document
+     */
     void slotFileOpen();
-    /** opens a file from the recent files menu */
+    /** opens a file from the recent files menu
+     */
     void slotFileOpenRecent(const KURL& url);
-    /** save a document */
+    /** save a document
+     */
     void slotFileSave();
-    /** save a document by a new filename*/
+    /** save a document by a new filename
+     */
     void slotFileSaveAs();
-    /** asks for saving if the file is modified, then closes the actual file and window*/
+    /** asks for saving if the file is modified, then closes the actual file and window
+     */
     void slotFileClose();
-    /** print the actual file */
+    /** print the actual file
+     */
     void slotFilePrint();
     /** closes all open windows by calling close() on each memberList item until the list is empty, then quits the application.
      * If queryClose() returns false because the user canceled the saveModified() dialog, the closing breaks.
@@ -187,7 +210,6 @@ class KAlcatelApp : public KMainWindow
     /** changes the statusbar contents for the standard label permanently, used to indicate current actions.
      * @param text the text that is displayed in the statusbar
      */
-//    void slotStatusMsg(const QString &text, int which = ID_STATUS_MSG, int clearDetail = true);
     void slotStatusMsg(const QString &text, int which, int clearDetail = true);
     /** sets default details status message
      */
@@ -215,10 +237,12 @@ class KAlcatelApp : public KMainWindow
     /** main status text
      */
     QString statusText;
+    /** detailed status text
+     */
     QString detailText;
 
     // KAction pointers to enable/disable actions
-//    KAction* fileNewWindow;
+    KAction* fileNewWindow;
 
     KAction* fileReadMobileAll;
     KAction* fileReadMobileTodo;

@@ -26,19 +26,36 @@
 
 class QString;
 
+/* SIM phonebook */
 #define PB_SIM "SM"
+/* Own number phonebook */
 #define PB_OWN "ON"
-
+/* Last dialling phonebook */
 #define PB_LAST_DIAL "LD"
+/* Received calls phonebook */
 #define PB_RECEIVED "RC"
+/* Missed calls phonebook */
 #define PB_MISSED "MC"
 
-typedef struct {
+/** Structure used to save contacts
+ */
+struct ContactData {
+    /** position
+      */
     int pos;
+    /** phone number
+      */
     char *number;
+    /** contact name
+      */
     QString *name;
-} CONTACT;
+};
 
-CONTACT *get_contacts(int from=1, int to=200);
+/** Reads contacts from current phonebook.
+ */
+struct ContactData *get_contacts(int from=1, int to=200);
+
+/** Selects currect phonebook.
+ */
 int select_phonebook(char *pbtype);
 #endif

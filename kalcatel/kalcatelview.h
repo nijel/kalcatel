@@ -37,7 +37,9 @@
 
 #include "alcatool/alcatel.h"
 
-typedef enum {
+/** Listing type, used for creting headers of list views
+  */
+enum AlcListType {
     alc_contacts,
     alc_contacts_sim,
     alc_contacts_mobile,
@@ -50,7 +52,7 @@ typedef enum {
     alc_messages,
     alc_messages_in,
     alc_messages_out
-    } AlcListType;
+    };
 
 class KAlcatelDoc;
 class KTextBrowser;
@@ -83,8 +85,9 @@ class KAlcatelView : public KJanusWidget
      */
     KAlcatelDoc *getDocument() const;
 
-    /** contains the implementation for printing functionality */
-//    void print(QPrinter *pPrinter);
+    /** contains the implementation for printing functionality
+    */
+    void print(QPrinter *pPrinter);
   public slots:
     void repaint();
     void slotMessageChanged(QListViewItem *item);

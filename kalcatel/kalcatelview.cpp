@@ -744,14 +744,12 @@ void KAlcatelView::slotShowContact(KTextBrowser *where, AlcatelContact *what) {
     where->setMinimumHeight(where->contentsHeight()); /* resize to show all contents*/
 }
 
-/*
-void KAlcatelView::print(QPrinter *pPrinter)
-{
-  QPainter printpainter;
-  printpainter.begin(pPrinter);
-	
-  // TODO: add your printing code here
+void KAlcatelView::print(QPrinter *pPrinter) {
+    QPainter printpainter;
+    printpainter.begin(pPrinter);
+  	
+    // TODO: add your printing code here
+    KMessageBox::sorry((KAlcatelApp *) parent(), i18n("Printing not implemented yet..."), i18n("Sorry"));
 
-  printpainter.end();
+    printpainter.end();
 }
-*/

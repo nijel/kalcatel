@@ -104,7 +104,7 @@ QString AlcatelContact::Name(void) {
 }
 
 
-void AlcatelContact::setField(int number, FIELD *data) {
+void AlcatelContact::setField(int number, struct AlcatelFieldStruct *data) {
     switch (number) {
         case 0: chk_type(_string) LastName.setLatin1((char *)((*data).data)); break;
         case 1: chk_type(_string) FirstName.setLatin1((char *)((*data).data)); break;
@@ -229,13 +229,13 @@ QString AlcatelCalendar::RepeatingDetail(void) {
     }
 }
 
-void AlcatelCalendar::setField(int number, FIELD *data) {
+void AlcatelCalendar::setField(int number, struct AlcatelFieldStruct *data) {
     switch (number) {
-        case 0: chk_type(_date) Date.setYMD(((DATE *)((*data).data))->year, ((DATE *)((*data).data))->month, ((DATE *)((*data).data))->day); break;
-        case 1: chk_type(_time) StartTime.setHMS (((TIME *)((*data).data))->hour, ((TIME *)((*data).data))->minute, ((TIME *)((*data).data))->second); break;
-        case 2: chk_type(_time) EndTime.setHMS (((TIME *)((*data).data))->hour, ((TIME *)((*data).data))->minute, ((TIME *)((*data).data))->second); break;
-        case 3: chk_type(_date) Alarm.setDate(QDate ( ((DATE *)((*data).data))->year, ((DATE *)((*data).data))->month, ((DATE *)((*data).data))->day)); break;
-        case 4: chk_type(_time) Alarm.setTime(QTime ( ((TIME *)((*data).data))->hour, ((TIME *)((*data).data))->minute, ((TIME *)((*data).data))->second)); break;
+        case 0: chk_type(_date) Date.setYMD(((struct AlcatelDateStruct *)((*data).data))->year, ((struct AlcatelDateStruct *)((*data).data))->month, ((struct AlcatelDateStruct *)((*data).data))->day); break;
+        case 1: chk_type(_time) StartTime.setHMS (((struct AlcatelTimeStruct *)((*data).data))->hour, ((struct AlcatelTimeStruct *)((*data).data))->minute, ((struct AlcatelTimeStruct *)((*data).data))->second); break;
+        case 2: chk_type(_time) EndTime.setHMS (((struct AlcatelTimeStruct *)((*data).data))->hour, ((struct AlcatelTimeStruct *)((*data).data))->minute, ((struct AlcatelTimeStruct *)((*data).data))->second); break;
+        case 3: chk_type(_date) Alarm.setDate(QDate ( ((struct AlcatelDateStruct *)((*data).data))->year, ((struct AlcatelDateStruct *)((*data).data))->month, ((struct AlcatelDateStruct *)((*data).data))->day)); break;
+        case 4: chk_type(_time) Alarm.setTime(QTime ( ((struct AlcatelTimeStruct *)((*data).data))->hour, ((struct AlcatelTimeStruct *)((*data).data))->minute, ((struct AlcatelTimeStruct *)((*data).data))->second)); break;
         case 5: chk_type(_string) Subject.setLatin1((char *)((*data).data)); break;
         case 6: chk_type(_bool) Private = *((int *)((*data).data)); break;
         case 7: chk_type(_enum) EventType = *((int *)((*data).data)); break;
@@ -247,10 +247,10 @@ void AlcatelCalendar::setField(int number, FIELD *data) {
         case 13: chk_type(_byte) Month = *((int *)((*data).data)); break;
 
         case 17: chk_type(_byte) Frequency = *((int *)((*data).data)); break;
-        case 18: chk_type(_date) StartDate.setYMD(((DATE *)((*data).data))->year, ((DATE *)((*data).data))->month, ((DATE *)((*data).data))->day); break;
-        case 19: chk_type(_date) StopDate.setYMD(((DATE *)((*data).data))->year, ((DATE *)((*data).data))->month, ((DATE *)((*data).data))->day); break;
-        case 20: chk_type(_date) Alarm2.setDate(QDate ( ((DATE *)((*data).data))->year, ((DATE *)((*data).data))->month, ((DATE *)((*data).data))->day)); break;
-        case 21: chk_type(_time) Alarm2.setTime(QTime ( ((TIME *)((*data).data))->hour, ((TIME *)((*data).data))->minute, ((TIME *)((*data).data))->second)); break;
+        case 18: chk_type(_date) StartDate.setYMD(((struct AlcatelDateStruct *)((*data).data))->year, ((struct AlcatelDateStruct *)((*data).data))->month, ((struct AlcatelDateStruct *)((*data).data))->day); break;
+        case 19: chk_type(_date) StopDate.setYMD(((struct AlcatelDateStruct *)((*data).data))->year, ((struct AlcatelDateStruct *)((*data).data))->month, ((struct AlcatelDateStruct *)((*data).data))->day); break;
+        case 20: chk_type(_date) Alarm2.setDate(QDate ( ((struct AlcatelDateStruct *)((*data).data))->year, ((struct AlcatelDateStruct *)((*data).data))->month, ((struct AlcatelDateStruct *)((*data).data))->day)); break;
+        case 21: chk_type(_time) Alarm2.setTime(QTime ( ((struct AlcatelTimeStruct *)((*data).data))->hour, ((struct AlcatelTimeStruct *)((*data).data))->minute, ((struct AlcatelTimeStruct *)((*data).data))->second)); break;
 
         default: message(MSG_WARNING, "Unknown field occured (%02d)!", number); break;
     }
@@ -267,12 +267,12 @@ AlcatelTodo::AlcatelTodo() {
 AlcatelTodo::~AlcatelTodo() {
 }
 
-void AlcatelTodo::setField(int number, FIELD *data) {
+void AlcatelTodo::setField(int number, struct AlcatelFieldStruct *data) {
     switch (number) {
-        case 0: chk_type(_date) DueDate.setYMD(((DATE *)((*data).data))->year, ((DATE *)((*data).data))->month, ((DATE *)((*data).data))->day); break;
+        case 0: chk_type(_date) DueDate.setYMD(((struct AlcatelDateStruct *)((*data).data))->year, ((struct AlcatelDateStruct *)((*data).data))->month, ((struct AlcatelDateStruct *)((*data).data))->day); break;
         case 1: chk_type(_bool) Completed = *((int *)((*data).data)); break;
-        case 2: chk_type(_date) Alarm.setDate(QDate ( ((DATE *)((*data).data))->year, ((DATE *)((*data).data))->month, ((DATE *)((*data).data))->day)); break;
-        case 3: chk_type(_time) Alarm.setTime(QTime ( ((TIME *)((*data).data))->hour, ((TIME *)((*data).data))->minute, ((TIME *)((*data).data))->second)); break;
+        case 2: chk_type(_date) Alarm.setDate(QDate ( ((struct AlcatelDateStruct *)((*data).data))->year, ((struct AlcatelDateStruct *)((*data).data))->month, ((struct AlcatelDateStruct *)((*data).data))->day)); break;
+        case 3: chk_type(_time) Alarm.setTime(QTime ( ((struct AlcatelTimeStruct *)((*data).data))->hour, ((struct AlcatelTimeStruct *)((*data).data))->minute, ((struct AlcatelTimeStruct *)((*data).data))->second)); break;
         case 4: chk_type(_string) Subject.setLatin1((char *)((*data).data)); break;
         case 5: chk_type(_bool) Private = *((int *)((*data).data)); break;
         case 6: chk_type(_byte) Category = *((int *)((*data).data)); break;

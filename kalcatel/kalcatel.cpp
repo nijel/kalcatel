@@ -87,8 +87,8 @@ KAlcatelApp::~KAlcatelApp()
 
 void KAlcatelApp::initActions()
 {
-//  fileNewWindow = new KAction(i18n("New &Window"), 0, 0, this, SLOT(slotFileNewWindow()), actionCollection(),"file_new_window");
-//MainBarIconSet
+  fileNewWindow = new KAction(i18n("New &Window"), 0, 0, this, SLOT(slotFileNewWindow()), actionCollection(),"file_new_window");
+
   fileReadMobileAll = new KAction(i18n("&Everything"), QIconSet(SmallIcon("kalcatel-mobile.png"), BarIcon("kalcatel-mobile.png")), 0, this, SLOT(slotFileReadMobileAll()), actionCollection(),"file_read_mobile");
   fileReadMobileTodo = new KAction(i18n("&Todos"), QIconSet(SmallIcon("kalcatel-todo.png"), BarIcon("kalcatel-todo.png")), 0, this, SLOT(slotFileReadMobileTodo()), actionCollection(),"file_read_mobile_todo");
   fileReadMobileSms = new KAction(i18n("Messa&ges"), QIconSet(SmallIcon("kalcatel-message.png"), BarIcon("kalcatel-message.png")), 0, this, SLOT(slotFileReadMobileSms()), actionCollection(),"file_read_mobile_sms");
@@ -116,7 +116,7 @@ void KAlcatelApp::initActions()
   preferencesEdit = KStdAction::preferences(this, SLOT(slotPreferencesEdit()), actionCollection());
   preferencesSave = KStdAction::saveOptions(this, SLOT(slotPreferencesSave()), actionCollection());
 
-//  fileNewWindow->setStatusText(i18n("Opens a new application window"));
+  fileNewWindow->setStatusText(i18n("Opens a new application window"));
   fileNew->setStatusText(i18n("Creates a new document"));
   fileOpen->setStatusText(i18n("Opens an existing document"));
   fileOpenRecent->setStatusText(i18n("Opens a recently used file"));
@@ -305,17 +305,16 @@ bool KAlcatelApp::queryExit()
 // SLOT IMPLEMENTATION
 /////////////////////////////////////////////////////////////////////
 
-/*
+
 void KAlcatelApp::slotFileNewWindow()
 {
-  slotStatusMsg(i18n("Opening a new application window..."));
+  slotStatusMsg(i18n("Opening a new application window..."), ID_STATUS_MSG);
 	
   KAlcatelApp *new_window= new KAlcatelApp();
   new_window->show();
 
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }
-*/
 
 void KAlcatelApp::slotFileReadMobileAll()
 {
@@ -369,7 +368,7 @@ void KAlcatelApp::slotFileReadMobileSms()
 void KAlcatelApp::slotMobileInfo() {
     char manuf[128], model[128], rev[128], sn[128], imsi[128], *s;
     int bat_percent, bat_state, sign_strength, sign_err;
-    CONTACT *cont;
+    struct ContactData *cont;
     slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
 
     char *devname;

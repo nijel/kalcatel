@@ -27,9 +27,6 @@
 
 #include <kdialog.h>
 
-/**Configuration dialog for KAlcatel application
-  *@author Michal Cihar
-  */
 
 class KJanusWidget;
 class QWidget;
@@ -38,22 +35,56 @@ class QLineEdit;
 class QComboBox;
 class KURLRequester;
 
+/**Configuration dialog for KAlcatel application
+  *@author Michal Cihar
+  */
 class KAlcatelConfigDialog : public KDialog  {
    Q_OBJECT
-public: 
+public:
+    /** Creates dialog
+      */
 	KAlcatelConfigDialog(QWidget *parent=0, const char *name=0);
+    /** Destroys dialog
+      */
 	~KAlcatelConfigDialog();
+    /** Executes dialog and loads configuration from application
+      */
     int exec ();
 public slots:
+    /** called when cancel pressed
+      */
     void slotCancel();
+    /** called when ok pressed, sets configuration in application
+      */
     void slotOK();
 private:
+    /** widget with configuration tabs
+      */
     KJanusWidget *janus;
+    /** mobile configuration frame
+      */
     QFrame *mobilePage;
+    /** other configuration frame
+      */
     QFrame *otherPage;
+    /** device edit
+      */
     KURLRequester *editDevice;
-    QLineEdit *editLock, *editInit, *editPrefix;
-    QComboBox *rateEdit, *debugEdit;
+    /** lock edit
+      */
+    QLineEdit *editLock;
+    /** init string edit
+      */
+    QLineEdit *editInit;
+    /** phone prefix edit
+      */
+    QLineEdit *editPrefix;
+    /** baud rate edit
+      */
+    QComboBox *rateEdit;
+    /** debug level edit
+      */
+    QComboBox *debugEdit;
 };
 
 #endif

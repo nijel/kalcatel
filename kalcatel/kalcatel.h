@@ -214,12 +214,15 @@ class KAlcatelApp : public KMainWindow
     /** sets default details status message
      */
     void slotDefaultDetailMsg();
-    /** opens configuration dialog
+    /** opens application configuration dialog
      */
     void slotPreferencesEdit();
     /** saves preferences
      */
     void slotPreferencesSave();
+    /** opens key configuration dialog
+     */
+    void slotConfigureKeys();
 
   private:
     /** the configuration object of the application */
@@ -267,6 +270,7 @@ class KAlcatelApp : public KMainWindow
 
     KAction* preferencesSave;
     KAction* preferencesEdit;
+    KAction *preferencesKeyBindings;
 
     KAlcatelConfigDialog *preferencesDialog;
 };

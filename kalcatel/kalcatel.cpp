@@ -41,6 +41,8 @@
 #include <kstdaction.h>
 #include <kiconloader.h>
 #include <kio/netaccess.h>
+#include <kkeydialog.h>
+
 
 // application specific includes
 #include "kalcatel.h"
@@ -85,9 +87,7 @@ KAlcatelApp::KAlcatelApp(QWidget* , const char* name):KMainWindow(0, name)
   editPaste->setEnabled(false);
 }
 
-KAlcatelApp::~KAlcatelApp()
-{
-
+KAlcatelApp::~KAlcatelApp() {
 }
 
 void KAlcatelApp::initActions()
@@ -118,6 +118,7 @@ void KAlcatelApp::initActions()
 
   preferencesEdit = KStdAction::preferences(this, SLOT(slotPreferencesEdit()), actionCollection());
   preferencesSave = KStdAction::saveOptions(this, SLOT(slotPreferencesSave()), actionCollection());
+  preferencesKeyBindings = KStdAction::keyBindings(this, SLOT(slotConfigureKeys()), actionCollection());
 
   fileNew->setStatusText(i18n("Creates a new document"));
   fileOpen->setStatusText(i18n("Opens an existing document"));
@@ -186,6 +187,7 @@ KAlcatelDoc *KAlcatelApp::getDocument() const
 {
   return doc;
 }
+
 
 void KAlcatelApp::saveOptions() {	
     config->setGroup("General Options");
@@ -793,4 +795,8 @@ void KAlcatelApp::slotPreferencesEdit() {
 
 void KAlcatelApp::slotPreferencesSave() {
     saveOptions();
+}
+
+void KAlcatelApp::slotConfigureKeys() {
+    KKeyDialog::configureKeys(actionCollection(), xmlFile());
 }

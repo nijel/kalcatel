@@ -206,6 +206,8 @@ void KAlcatelApp::saveOptions() {
 
     if (last_file.fileName()!=i18n("Untitled"))
         config->writeEntry("Last File", last_file.url());
+    else
+        config->writeEntry("Last File", "");
 
     config->setGroup("Data");
     config->writeEntry("Merge during read", mergeData);

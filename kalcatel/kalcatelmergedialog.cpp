@@ -150,8 +150,8 @@ AlcatelContact *KAlcatelMergeDialog::exec(AlcatelContact &c1, AlcatelContact &c2
         KAlcatelDoc *theDoc = theApp->getDocument();
         AlcatelCategory *cat1 = getCategoryById(theDoc->contact_cats, c1.Category, c1.Storage);
         AlcatelCategory *cat2 = getCategoryById(theDoc->contact_cats, c2.Category, c2.Storage);
-        QString s1 = cat1 == NULL ? i18n("Unknown") : cat1->Name;
-        QString s2 = cat2 == NULL ? i18n("Unknown") : cat2->Name;
+        QString s1 = c1.Category == 255 ? i18n("None") : cat1 == NULL ? i18n("Unknown") : cat1->Name;
+        QString s2 = c2.Category == 255 ? i18n("None") : cat2 == NULL ? i18n("Unknown") : cat2->Name;
         itemList.append(MergeItem(conflictGrid, i18n("Category"), s1, s2));
     }
     if (c1.Private != c2.Private)  { itemList.append(MergeItem(conflictGrid, i18n("Private"), c1.Private, c2.Private)); }
@@ -269,8 +269,8 @@ AlcatelTodo *KAlcatelMergeDialog::exec(AlcatelTodo &c1, AlcatelTodo &c2) {
         KAlcatelDoc *theDoc = theApp->getDocument();
         AlcatelCategory *cat1 = getCategoryById(theDoc->todo_cats, c1.Category, c1.Storage);
         AlcatelCategory *cat2 = getCategoryById(theDoc->todo_cats, c2.Category, c2.Storage);
-        QString s1 = cat1 == NULL ? i18n("Unknown") : cat1->Name;
-        QString s2 = cat2 == NULL ? i18n("Unknown") : cat2->Name;
+        QString s1 = c1.Category == 255 ? i18n("None") : cat1 == NULL ? i18n("Unknown") : cat1->Name;
+        QString s2 = c1.Category == 255 ? i18n("None") : cat2 == NULL ? i18n("Unknown") : cat2->Name;
         itemList.append(MergeItem(conflictGrid, i18n("Category"), s1, s2));
     }
     if (c1.Priority != c2.Priority)  { itemList.append(MergeItem(conflictGrid, i18n("Priority"), Priorities[c1.Priority], Priorities[c2.Priority])); }
@@ -979,7 +979,7 @@ MergeItem::MergeItem(QWidget *parent, QString name, int mobileData, int pcData, 
     MergeItem_init(parent, name, s1, s2, disableDelete);
 }
 
-MergeItem::MergeItem(const MergeItem  &item) {
+MergeItem::MergeItem(const MergeItem  &item):QObject() {
     nameLabel = item.nameLabel;
     pcLabel = item.pcLabel;
 

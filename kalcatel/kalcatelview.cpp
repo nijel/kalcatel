@@ -399,7 +399,7 @@ void KAlcatelView::repaint() {
             AlcatelTodoList::Iterator it;
             for( it = doc->todos->begin(); it != doc->todos->end(); ++it ) {
                 QString catname;
-                if ((* it).Category >= 0) {
+                if ((* it).Category >= 0 && (*it).Category < 255) {
                     if ((todo_cat_lists[(* it).Category] != NULL) && ((* it).Category < ALC_MAX_CATEGORIES)) {
                         new KAlcatelTodoCatViewItem (todo_cat_lists[(* it).Category], &(*it),
                                 (* it).Completed == -1 ? QString(""): (* it).Completed ? i18n("Yes") : i18n("No"),
@@ -560,7 +560,7 @@ void KAlcatelView::repaint() {
 
                 if ((* it).Storage == StorageMobile || (* it).Storage == StoragePC) {
                     QString catname;
-                    if ((* it).Category >= 0) {
+                    if ((* it).Category >= 0 && (* it).Category < 255) {
                         if ((contacts_cat_lists[(* it).Category] != NULL) && ((* it).Category < ALC_MAX_CATEGORIES)) {
                             new KAlcatelContactMobileCatViewItem (contacts_cat_lists[(* it).Category], &(*it),
                                     QString((* it).LastName),
@@ -715,11 +715,15 @@ void KAlcatelView::slotShowTodo(AlcatelTodo *what) {
         arg(what->ContactID).arg(cont->getName())
             ));
     if (what->Category != -1) {
-        AlcatelCategory *cat = getCategoryById(getDocument()->todo_cats, what->Category, StorageAny);
-        if (cat == NULL) {
-            text.append(i18n("<b>Category:</b> %1<br>").arg(i18n("Unknown (id=%1))").arg(what->Category)));
+        if (what->Category == 255) {
+            text.append(i18n("<b>Category:</b> %1<br>").arg(i18n("None")));
         } else {
-            text.append(i18n("<b>Category:</b> %1<br>").arg(cat->Name));
+            AlcatelCategory *cat = getCategoryById(getDocument()->todo_cats, what->Category, StorageAny);
+            if (cat == NULL) {
+                text.append(i18n("<b>Category:</b> %1<br>").arg(i18n("Unknown (id=%1))").arg(what->Category)));
+            } else {
+                text.append(i18n("<b>Category:</b> %1<br>").arg(cat->Name));
+            }
         }
     }
 
@@ -802,11 +806,15 @@ void KAlcatelView::slotShowContact(AlcatelContact *what) {
         if (!what->LastName.isEmpty()) text.append(i18n("<b>LastName:</b> %1<br>").arg(what->LastName));
 
         if (what->Category != -1) {
-            AlcatelCategory *cat = getCategoryById(getDocument()->contact_cats, what->Category, StorageAny);
-            if (cat == NULL) {
-                text.append(i18n("<b>Category:</b> %1<br>").arg(i18n("Unknown (id=%1))").arg(what->Category)));
+            if (what->Category == 255) {
+                text.append(i18n("<b>Category:</b> %1<br>").arg(i18n("None")));
             } else {
-                text.append(i18n("<b>Category:</b> %1<br>").arg(cat->Name));
+                AlcatelCategory *cat = getCategoryById(getDocument()->contact_cats, what->Category, StorageAny);
+                if (cat == NULL) {
+                    text.append(i18n("<b>Category:</b> %1<br>").arg(i18n("Unknown (id=%1))").arg(what->Category)));
+                } else {
+                    text.append(i18n("<b>Category:</b> %1<br>").arg(cat->Name));
+                }
             }
         }
 

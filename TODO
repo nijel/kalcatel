@@ -16,7 +16,7 @@ for 0.3-beta:
  - (DONE) sending/writing messages
  - write to mobile
  - (DONE) signal and battery monitoring
- - change category behavior in contacts - tree should look like:
+ - (DONE) change category behavior in contacts - tree should look like:
    * SIM (include previous sim)
    * general
    * category names...
@@ -25,6 +25,7 @@ for 0.4:
  - fix majority of reported bugs, this should be first "stable" release
 
 sometimes (probably till 1.0, but not planned yet):
+ - verify deleted items by content (optionally)
  - czech translation
  - searching
  - filters

@@ -4,6 +4,9 @@ KAlcatel - Changelog
 
 $Id$
 
+2002-04-15 Michal Cihar <cihar@email.cz>
+        * unified listing of contact categories with mobile
+
 2002-04-08 Michal Cihar <cihar@email.cz>
         * todo edit dialog
         * UI tweaks (Read mobile -> Fetch, tooltips for actions)

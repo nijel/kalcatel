@@ -75,7 +75,7 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : QWidget(parent, 
     hsplitter = new QSplitter( Qt::Horizontal, this );
     layout->addWidget( hsplitter, 0, 0);
     tree = new KListView( hsplitter );
-    tree->setSorting(-1);
+    tree->setSorting(0);
     tree->addColumn(QString());
     tree->header()->hide();
 
@@ -168,7 +168,7 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : QWidget(parent, 
 
     widgetstack->addWidget( contacts_cat_list = createListView( widgetstack, alc_contacts_mobile ), ID_CONTACTS_MOBILE );
 /* TODO: here should be another icon v*/
-    contacts_cat_item = new KAlcatelTreeViewItem(contacts_item, i18n("Categories"), SmallIcon("kalcatel-contact-mobile.png"), ID_CONTACTS_MOBILE );
+    contacts_cat_item = new KAlcatelTreeViewItem(contacts_item, i18n("General"), SmallIcon("kalcatel-contact-mobile.png"), ID_CONTACTS_MOBILE );
 
     widgetstack->addWidget( contacts_sim_list = createListView( widgetstack, alc_contacts_sim ), ID_CONTACTS_SIM );
     contacts_sim_item = new KAlcatelTreeViewItem(contacts_item, i18n("SIM"), SmallIcon("kalcatel-contact-sim.png"), ID_CONTACTS_SIM );
@@ -510,16 +510,19 @@ void KAlcatelView::repaint() {
                     contacts_cat_lists[i] = NULL;
                 }
 
-            QListViewItem * nextChild = contacts_cat_item->firstChild();
+            QListViewItem * nextChild = contacts_item->firstChild();
+
             QListViewItem * myChild;
             while( (myChild=nextChild)!=NULL ) {
                 nextChild = myChild->nextSibling();
-                delete ((KAlcatelTreeViewItem *)myChild);
+                if (((KAlcatelTreeViewItem *)myChild != contacts_cat_item) &&
+                    ((KAlcatelTreeViewItem *)myChild != contacts_sim_item))
+                    delete ((KAlcatelTreeViewItem *)myChild);
             }
 
             for( c_it = doc->contact_cats->begin(); c_it != doc->contact_cats->end(); ++c_it ) {
                 widgetstack->addWidget(contacts_cat_lists[(*c_it).Id] = createListView(widgetstack, alc_contacts_mobile_cat), ID_CONTACTS_CAT + (*c_it).Id );
-                new KAlcatelTreeViewItem(contacts_cat_item, (*c_it).Name, SmallIcon("kalcatel-contact-mobile.png"), ID_CONTACTS_CAT + (*c_it).Id );
+                new KAlcatelTreeViewItem(contacts_item, (*c_it).Name, SmallIcon("kalcatel-contact-mobile.png"), ID_CONTACTS_CAT + (*c_it).Id );
             }
 
             AlcatelContactList::Iterator it;

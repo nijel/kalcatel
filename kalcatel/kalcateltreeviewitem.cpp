@@ -43,3 +43,7 @@ KAlcatelTreeViewItem::KAlcatelTreeViewItem ( QListViewItem * parent, QString tex
 
 KAlcatelTreeViewItem::~KAlcatelTreeViewItem(){
 }
+
+QString KAlcatelTreeViewItem::key ( int column, bool ascending ) const {
+    return QString("%1").arg(showWidget, 5);
+}

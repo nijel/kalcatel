@@ -39,7 +39,8 @@ public:
     KAlcatelTreeViewItem ( QListView * parent, QString text, QPixmap icon, int widget );
     KAlcatelTreeViewItem ( QListViewItem * parent, QString text, QPixmap icon, int widget );
 
-	~KAlcatelTreeViewItem();
+    ~KAlcatelTreeViewItem();
+    QString key ( int column, bool ascending ) const;
     int showWidget;
 };
 

@@ -75,20 +75,26 @@ class KAlcatelListView;
 class KAlcatelTreeViewItem;
 
 #define ID_KALCATEL         0
-#define ID_TODOS            1
-#define ID_CALENDAR         2
-#define ID_CONTACTS         3
-#define ID_CONTACTS_SIM     4
-#define ID_CONTACTS_MOBILE  5
-#define ID_CALLS            7
-#define ID_CALLS_OUTGOING   8
-#define ID_CALLS_MISSED     9
-#define ID_CALLS_RECEIVED   10
-#define ID_MESSAGES         11
-#define ID_MESSAGES_SENT    12
-#define ID_MESSAGES_UNSENT  13
-#define ID_MESSAGES_READ    14
-#define ID_MESSAGES_UNREAD  15
+
+#define ID_TODOS            10
+
+#define ID_CALENDAR         20
+
+#define ID_CONTACTS         30
+#define ID_CONTACTS_SIM     31
+#define ID_CONTACTS_MOBILE  32
+
+#define ID_MESSAGES         40
+#define ID_MESSAGES_SENT    41
+#define ID_MESSAGES_UNSENT  42
+#define ID_MESSAGES_READ    43
+#define ID_MESSAGES_UNREAD  44
+
+#define ID_CALLS            50
+#define ID_CALLS_OUTGOING   51
+#define ID_CALLS_MISSED     52
+#define ID_CALLS_RECEIVED   53
+
 #define ID_TODOS_CAT        1000
 #define ID_CONTACTS_CAT     2000
 

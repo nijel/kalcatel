@@ -27,13 +27,7 @@ CFLAGS="$RPM_OPT_FLAGS" CXXFLAGS="$RPM_OPT_FLAGS" ./configure \
                  --prefix=/usr \
                 $LOCALFLAGS
 %build
-# Setup for parallel builds
-numprocs=`egrep -c ^cpu[0-9]+ /proc/stat || :`
-if [ "$numprocs" = "0" ]; then
-  numprocs=1
-fi
-
-make -j$numprocs
+make
 
 %install
 make install-strip DESTDIR=$RPM_BUILD_ROOT

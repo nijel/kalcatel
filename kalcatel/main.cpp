@@ -54,6 +54,8 @@ int main(int argc, char *argv[]) {
         "in their news (HTTP Referer can contain many information) and they\n"
         "downloaded few copies of it (from alcatel.de and alcatel.be) ;-)."),
         "onetouchen@www.alcatel.com", "http://www.alcatel.com");
+    aboutData.addCredit("George Voina", I18N_NOOP("for initial KDE/Qt 3 porting"),
+        "voina@george.as", "http://www.esat.kuleuven.ac.be/~gvoina");
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
 

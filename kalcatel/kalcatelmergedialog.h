@@ -27,6 +27,7 @@
 
 #include <qwidget.h>
 #include <kdialog.h>
+#include <qvaluelist.h> 
 
 class AlcatelMessage;
 class AlcatelContact;

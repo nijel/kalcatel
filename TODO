@@ -23,15 +23,24 @@ for 0.3-beta:
        + general
        + category names...
 
-for 0.4:
+for 0.4-beta:
+ - (almost DONE) support for KDE/Qt 3
+ - (started)  czech translation
+ - (started) improve contact/phone number selection dialog
+ - std dialogs cannot contain <br> etc in KDE/Qt 3
+ - after creating of item:
+	* focus to it
+	* update item view
+ - remember last screen for update...
+ - Qt 3 - text editor for messages
+
+for 0.5:
  - fix deleting of some fields
  - write for AT commands
  - try to investigate deleting of items
- - improve contact/phone number selection dialog
  - export/import data from csv (and maybe others - vcard)
- - czech translation
 
-for 0.5:
+for 0.6:
  - rewrite reading as separate thread and allow canceling (probably using
    QThread + QProgressDialog)
 

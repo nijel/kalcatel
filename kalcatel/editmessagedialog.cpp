@@ -110,9 +110,11 @@ EditMessageDialog::EditMessageDialog(AlcatelContactList *cont, QWidget *parent, 
     mainLayout->addWidget(buttonContacts,3,4);
     QWhatsThis::add(buttonContacts ,i18n("<b>Contacts</b><br>Use this button to add number from your contacts."));
 
-    messageEdit = new QMultiLineEdit(this);
+    messageEdit = new MULTI_LINE_EDIT(this);
+// TODO: this doesn't work fot Qt 3, so port it somehow....
+// If you implement something new with QMultiLineEdit, we suggest using QTextEdit instead and call QTextEdit::setTextFormat(Qt::PlainText)
     messageEdit->setMaxLength(160);
-    messageEdit->setWordWrap(QMultiLineEdit::WidgetWidth);
+    messageEdit->setWordWrap(MULTI_LINE_EDIT::WidgetWidth);
 
     mainLayout->addMultiCellWidget(messageEdit,4,4,0,4);
 
@@ -201,7 +203,7 @@ void EditMessageDialog::slotOK() {
             }
         } else {
             for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it ) {
-                if (PhoneNumberValidator::phoneNumberRegExp.find(*it, 0) == -1) {
+                if ((*it).find(PhoneNumberValidator::phoneNumberRegExp, 0) == -1) {
                     KMessageBox::error(this, i18n("%1 doesn't look like phone number!").arg(*it), i18n("Error"));
                     msg.append(i18n("%1 desn't look like phone number!").arg(*it).append("<br>"));
                     failed++;

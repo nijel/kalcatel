@@ -68,7 +68,7 @@ PhoneNumberValidator::State PhoneNumberValidator::validate ( QString &what, int 
                     wasEmpty = false;
                 }
                 if (*it == "+") return Intermediate;
-                if (phoneNumberPauseRegExp.find(*it, 0) == -1) return Invalid;
+                if ((*it).find(phoneNumberPauseRegExp, 0) == -1) return Invalid;
             }
         } else {
             for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it ) {
@@ -79,18 +79,18 @@ PhoneNumberValidator::State PhoneNumberValidator::validate ( QString &what, int 
                     wasEmpty = false;
                 }
                 if (*it == "+") return Intermediate;
-                if (phoneNumberRegExp.find(*it, 0) == -1) return Invalid;
+                if ((*it).find(phoneNumberRegExp, 0) == -1) return Invalid;
             }
         }
         return Acceptable;
     } else {
         if (pause) {
             if (what == "+") return Intermediate;
-            if (phoneNumberPauseRegExp.find(what, 0) == -1) return Invalid;
+            if (what.find(phoneNumberPauseRegExp, 0) == -1) return Invalid;
             return Acceptable;
         } else {
             if (what == "+") return Intermediate;
-            if (phoneNumberRegExp.find(what, 0) == -1) return Invalid;
+            if (what.find(phoneNumberRegExp, 0) == -1) return Invalid;
             return Acceptable;
         }
     }

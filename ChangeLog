@@ -4,8 +4,12 @@ KAlcatel - Changelog
 
 $Id$
 
+2002-05-30 Michal Cihar <cihar@email.cz>
+        * initial fix for KDE/Qt 3
+        * updated czech translation
+        * updated autoconf/automake templates
+
 2002-05-23 Michal Cihar <cihar@email.cz>
-        * updated to latest autoconf/automake templates
         * fixed typo (nuber -> number)
         * started Czech translation (still missing 369 of 480)
         * some improvements in contact select dialog (still not final)

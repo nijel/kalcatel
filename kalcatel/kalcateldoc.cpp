@@ -1760,7 +1760,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
         while (cont[i].pos != -1) {
             AlcatelCall Call;
             Call.Storage = StorageMobile;
-            Call.Type = CallDialled;
+            Call.Type = CallDialed;
             Call.Id = cont[i].pos;
             Call.Name = *(cont[i].name);
             delete cont[i].name;

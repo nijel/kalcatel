@@ -34,6 +34,7 @@
 #include <qfont.h>
 #include <qstring.h>
 #include <qgrid.h>
+#include <qlabel.h> 
 
 #include <qtextstream.h>
 #include <qfile.h>
@@ -156,13 +157,13 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : QWidget(parent, 
     calls_item = new KAlcatelTreeViewItem(kalcatel_item, i18n("Calls"), SmallIcon("kalcatel-call.png"), ID_CALLS );
 
     widgetstack->addWidget( calls_outgoing_list = createListView( widgetstack, alc_calls_type ), ID_CALLS_OUTGOING );
-    calls_outgoing_item = new KAlcatelTreeViewItem(calls_item, i18n("Outgoing"), SmallIcon("kalcatel-call-outgoing.png"), ID_CALLS_OUTGOING );
+    calls_outgoing_item = new KAlcatelTreeViewItem(calls_item, CallTypes[CallDialed], SmallIcon("kalcatel-call-outgoing.png"), ID_CALLS_OUTGOING );
 
     widgetstack->addWidget( calls_received_list = createListView( widgetstack, alc_calls_type ), ID_CALLS_RECEIVED );
-    calls_received_item = new KAlcatelTreeViewItem(calls_item, i18n("Received"), SmallIcon("kalcatel-call-received.png"), ID_CALLS_RECEIVED );
+    calls_received_item = new KAlcatelTreeViewItem(calls_item, CallTypes[CallReceived], SmallIcon("kalcatel-call-received.png"), ID_CALLS_RECEIVED );
 
     widgetstack->addWidget( calls_missed_list = createListView( widgetstack, alc_calls_type ), ID_CALLS_MISSED );
-    calls_missed_item = new KAlcatelTreeViewItem(calls_item, i18n("Missed"), SmallIcon("kalcatel-call-missed.png"), ID_CALLS_MISSED );
+    calls_missed_item = new KAlcatelTreeViewItem(calls_item, CallTypes[CallMissed], SmallIcon("kalcatel-call-missed.png"), ID_CALLS_MISSED );
 
     widgetstack->addWidget( contacts_list = createListView( widgetstack, alc_contacts ), ID_CONTACTS );
     contacts_item = new KAlcatelTreeViewItem(kalcatel_item, i18n("Contacts"), SmallIcon("kalcatel-contact.png"), ID_CONTACTS );
@@ -477,7 +478,7 @@ void KAlcatelView::repaint() {
                 AlcatelContact *cont = getContactByPhone(doc->contacts, &((* it).Number), &(((KAlcatelApp *)parent())->phone_prefix));
                 new KAlcatelCallViewItem (calls_list, &(* it), cont);
                 switch ((* it).Type) {
-                    case CallDialled:
+                    case CallDialed:
                         new KAlcatelCallCatViewItem (calls_outgoing_list, &(* it), cont);
                         break;
                     case CallMissed:
@@ -718,7 +719,7 @@ void KAlcatelView::slotShowTodo(AlcatelTodo *what) {
         } else {
             AlcatelCategory *cat = getCategoryById(getDocument()->todo_cats, what->Category, StorageAny);
             if (cat == NULL) {
-                text.append(i18n("<b>Category:</b> %1<br>").arg(i18n("Unknown (id=%1))").arg(what->Category)));
+                text.append(i18n("<b>Category:</b> %1<br>").arg(i18n("Unknown (id=%1)").arg(what->Category)));
             } else {
                 text.append(i18n("<b>Category:</b> %1<br>").arg(cat->Name));
             }

@@ -39,7 +39,7 @@
 
 QString MessageTypes[] = { i18n("Unread"), i18n("Read"), i18n("Unsent"), i18n("Sent") };
 QString StorageTypes[]= { i18n("None"), i18n("PC"), i18n("SIM"), i18n("Mobile") };
-QString CallTypes[] = { i18n("Missed"), i18n("Received"), i18n("Dialled") };
+QString CallTypes[] = { i18n("Missed"), i18n("Received"), i18n("Outgoing") };
 QString Priorities[] = { i18n("High"), i18n("Normal"), i18n("Low") };
 QString CalendarTypes[] = {
     i18n("Appointment"),
@@ -375,7 +375,7 @@ QString AlcatelCalendar::RepeatingDetail(void) const {
                 if (Month!=0)
                     text.append(i18n(" %1").arg(MonthNames[Month]));
                 else
-                    text.append(i18n(" each moth"));
+                    text.append(i18n(" each month"));
             }
             return text;
 

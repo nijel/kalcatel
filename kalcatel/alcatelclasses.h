@@ -38,7 +38,7 @@
 
 /** type of call
   */
-enum CallType { CallMissed = 0, CallReceived = 1, CallDialled = 2};
+enum CallType { CallMissed = 0, CallReceived = 1, CallDialed = 2};
 /** type of storage
   */
 enum AlcatelStorage {StorageNone = 0, StoragePC = 1, StorageSIM = 2, StorageMobile = 3, StorageAny = 0xff } ;

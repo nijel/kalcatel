@@ -149,13 +149,14 @@ void get_imsi(char *imsi,int len){
     char *pos;
     get_string("AT+CIMI\r\n", imsi, len);
     pos = strchr(imsi, ':');
-    memmove(imsi, pos+1, strlen(pos));
+    if (pos)
+        memmove(imsi, pos+1, strlen(pos));
 }
 
 void get_string(char *cmd, char *data, int len){
     char buffer[1000];
     char *loc1,*loc2;
-    modem_cmd(cmd,buffer,sizeof(buffer)-1,50,0);
+    modem_cmd(cmd,buffer,sizeof(buffer)-1,100,0);
     loc1 = strchr(buffer,'\n');
     if (loc1 != NULL) {
         loc1++;

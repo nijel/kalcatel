@@ -90,6 +90,8 @@ class KAlcatelApp : public KMainWindow
     QString mobile_init;
     int mobile_rate;
     int mobile_debug;
+    bool auto_open_last;
+    KURL last_file;
 
 
   protected:

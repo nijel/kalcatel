@@ -52,7 +52,10 @@ public:
     int Id;
     /** Storage of record
       */
-	enum AlcatelStorage Storage;
+	AlcatelStorage Storage;
+    /** Call type (used only for calls)
+      */
+    CallType Type;
 };
 
 extern QString StorageTypes[];
@@ -189,7 +192,6 @@ public:
 	
     QString Number;
     QString Name;
-    CallType Type;
 };
 
 /** class for storing categories

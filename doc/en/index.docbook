@@ -73,8 +73,8 @@ Please respect the format of the date (DD/MM/YYYY) and of the version
 (V.MM.LL), it could be used by automation scripts.
 Do NOT change these in the translation. -->
 
-<date>12/02/2002</date>
-<releaseinfo>0.1-rerelease</releaseinfo>
+<date>19/02/2002</date>
+<releaseinfo>0.2-alpha</releaseinfo>
 
 <!-- Abstract about this handbook -->
 

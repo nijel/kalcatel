@@ -33,6 +33,7 @@ class QWidget;
 class QFrame;
 class QLineEdit;
 class QComboBox;
+class QCheckBox;
 class KURLRequester;
 
 /**Configuration dialog for KAlcatel application
@@ -85,6 +86,9 @@ private:
     /** debug level edit
       */
     QComboBox *debugEdit;
+    /** auto open last file edit
+      */
+    QCheckBox *editAutoOpen;
 };
 
 #endif

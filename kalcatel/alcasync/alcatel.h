@@ -124,7 +124,7 @@ enum AlcatelFieldType {
 struct AlcatelFieldStruct {
     /** type of data
       */
-    enum AlcatelFieldType type;
+    AlcatelFieldType type;
     /** pointer to data of type determined by type field
       */
     void *data;

@@ -30,7 +30,7 @@
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
-
+#include <qcheckbox.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
 
@@ -139,13 +139,23 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
 
     label = new QLabel(otherPage);
     label->setText(i18n("Phone prefix:"));
-    otherLayout->addWidget(label, 1, 0);
+    otherLayout->addWidget(label, 0, 0);
 
     editPrefix = new QLineEdit(otherPage);
 
     QWhatsThis::add(editPrefix ,i18n("<b>Phone prefix</b><br>Write here prefix that is prepended to national number to get international number. This is used just for resolving contacts by phone (in messages). For example for Czech Republic use +420."));
 
-    otherLayout->addWidget(editPrefix, 1, 1);
+    otherLayout->addWidget(editPrefix, 0, 1);
+
+    label = new QLabel(otherPage);
+    label->setText(i18n("Open last document on start:"));
+    otherLayout->addWidget(label, 1, 0);
+
+    editAutoOpen = new QCheckBox(otherPage);
+
+    QWhatsThis::add(editAutoOpen ,i18n("<b>Open last document on start</b><br>If checked, application will try to open last working file on start."));
+
+    otherLayout->addWidget(editAutoOpen, 1, 1);
 
     mainLayout->addWidget( janus, 0, 0);
 
@@ -189,6 +199,7 @@ void KAlcatelConfigDialog::slotOK() {
     theApp->mobile_lock = editLock->text();
     theApp->mobile_init = editInit->text();
     theApp->phone_prefix = editPrefix->text();
+    theApp->auto_open_last = editAutoOpen->isChecked();
 
     switch (rateEdit->currentItem()) {
         case 0: theApp->mobile_rate = 2400; break;
@@ -212,6 +223,7 @@ int KAlcatelConfigDialog::exec () {
     editLock->setText(theApp->mobile_lock);
     editInit->setText(theApp->mobile_init);
     editPrefix->setText(theApp->phone_prefix);
+    editAutoOpen->setChecked(theApp->auto_open_last);
 
     switch (theApp->mobile_rate) {
         case 2400:   rateEdit->setCurrentItem(0); break;

@@ -61,20 +61,24 @@ KAlcatelApp::KAlcatelApp(QWidget* , const char* name):KMainWindow(0, name)
   // call inits to invoke all other construction parts
   initStatusBar();
   initActions();
+
+  readOptions();
+
   initDocument();
   initView();
 
 //  menuBar();
 	
-  readOptions();
 
   preferencesDialog = new KAlcatelConfigDialog(this);
 
   ///////////////////////////////////////////////////////////////////
   // disable actions at startup
+/*
   fileSave->setEnabled(false);
   fileSaveAs->setEnabled(false);
   filePrint->setEnabled(false);
+*/
   editCut->setEnabled(false);
   editCopy->setEnabled(false);
   editPaste->setEnabled(false);
@@ -149,10 +153,12 @@ void KAlcatelApp::initStatusBar()
   bar->setItemAlignment(ID_DETAIL_MSG, AlignLeft);*/
 }
 
-void KAlcatelApp::initDocument()
-{
-  doc = new KAlcatelDoc(this);
-  doc->newDocument();
+void KAlcatelApp::initDocument() {
+    doc = new KAlcatelDoc(this);
+    if (auto_open_last && !last_file.isEmpty())
+        doc->openDocument(last_file);
+    else
+        doc->newDocument();
 }
 
 void KAlcatelApp::initView()
@@ -190,6 +196,11 @@ void KAlcatelApp::saveOptions() {
     config->writeEntry("Show Statusbar",viewStatusBar->isChecked());
     config->writeEntry("ToolBarPos", (int) toolBar("mainToolBar")->barPos());
     fileOpenRecent->saveEntries(config,"Recent Files");
+    config->writeEntry("Open Last File", auto_open_last);
+    last_file = doc->URL();
+
+    if (last_file.fileName()!=i18n("Untitled"))
+        config->writeEntry("Last File", last_file.url());
 
     config->setGroup("Contacts");
     config->writeEntry("PhonePrefix", phone_prefix);
@@ -229,6 +240,8 @@ void KAlcatelApp::readOptions(){
     {
       resize(size);
     }
+    auto_open_last = config->readBoolEntry("Open Last File", false);
+    last_file = config->readEntry("Last File", "");
 
     config->setGroup("Contacts");
     phone_prefix = config->readEntry("PhonePrefix", "+420");
@@ -600,13 +613,16 @@ void KAlcatelApp::slotFileOpenRecent(const KURL& url)
   slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }
 
-void KAlcatelApp::slotFileSave()
-{
-  slotStatusMsg(i18n("Saving file..."), ID_STATUS_MSG);
-	
-  doc->saveDocument(doc->URL());
+void KAlcatelApp::slotFileSave() {
+    slotStatusMsg(i18n("Saving file..."), ID_STATUS_MSG);
+  	
+    if (doc->URL().fileName() == i18n("Untitled")) {
+        slotFileSaveAs();
+    } else {
+        doc->saveDocument(doc->URL());
+    };
 
-  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
+    slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }
 
 void KAlcatelApp::slotFileSaveAs()

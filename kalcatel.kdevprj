@@ -154,8 +154,8 @@ type=DATA
 
 [doc/kalcatel.1]
 dist=true
-install=true
-install_location=$$mandir/1/kalcatel.1
+install=false
+install_location=$$(mandir)/1/kalcatel.1
 type=DATA
 
 [kalcatel.kdevprj]

@@ -30,10 +30,12 @@
 #include <qwidget.h>
 #include <qstringlist.h>
 #include <qdatetime.h>
+#include <qtextstream.h>
 
 // include files for KDE
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <ktempfile.h>
 #include <kio/job.h>
 #include <kio/netaccess.h>
 
@@ -115,80 +117,99 @@ void KAlcatelDoc::slotUpdateAllViews(KAlcatelView *sender)
 
 }
 
-bool KAlcatelDoc::saveModified()
-{
-  bool completed=true;
+bool KAlcatelDoc::saveModified() {
+    bool completed=true;
 
-  if(modified)
-  {
-    KAlcatelApp *win=(KAlcatelApp *) parent();
-    int want_save = KMessageBox::warningYesNoCancel(win,
-                                         i18n("The current file has been modified.\n"
-                                              "Do you want to save it?"),
-                                         i18n("Warning"));
-    switch(want_save)
-    {
-      case KMessageBox::Yes:
-           if (doc_url.fileName() == i18n("Untitled"))
-           {
-             win->slotFileSaveAs();
-           }
-           else
-           {
-             saveDocument(URL());
-       	   };
-
-       	   deleteContents();
-           completed=true;
-           break;
-
-      case KMessageBox::No:
-           setModified(false);
-           deleteContents();
-           completed=true;
-           break;
-
-      case KMessageBox::Cancel:
-           completed=false;
-           break;
-
-      default:
-           completed=false;
-           break;
+    if(modified) {
+        KAlcatelApp *win=(KAlcatelApp *) parent();
+        int want_save = KMessageBox::warningYesNoCancel(win,
+                                             i18n("The current file has been modified.\n"
+                                                  "Do you want to save it?"),
+                                             i18n("Warning"));
+        switch(want_save){
+            case KMessageBox::Yes:
+                if (doc_url.fileName() == i18n("Untitled")) {
+                    win->slotFileSaveAs();
+                } else {
+                    saveDocument(URL());
+             	};
+             	deleteContents();
+                completed=true;
+                break;
+            case KMessageBox::No:
+                setModified(false);
+                deleteContents();
+                completed=true;
+                break;
+            case KMessageBox::Cancel:
+                completed=false;
+                break;
+            default:
+                completed=false;
+                break;
+        }
     }
-  }
 
-  return completed;
+    return completed;
 }
 
-void KAlcatelDoc::closeDocument()
-{
-  deleteContents();
+void KAlcatelDoc::closeDocument() {
+    deleteContents();
 }
 
-bool KAlcatelDoc::newDocument()
-{
-  /////////////////////////////////////////////////
-  // TODO: Add your document initialization code here
-  /////////////////////////////////////////////////
-  modified=false;
-  doc_url.setFileName(i18n("Untitled"));
+bool KAlcatelDoc::newDocument() {
+    /////////////////////////////////////////////////
+    // TODO: Add your document initialization code here
+    /////////////////////////////////////////////////
+    modified=false;
+    doc_url.setFileName(i18n("Untitled"));
 
-  return true;
+    return true;
 }
 
-bool KAlcatelDoc::openDocument(const KURL& url, const char *format /*=0*/)
-{
-  QString tmpfile;
-  KIO::NetAccess::download( url, tmpfile );
-  /////////////////////////////////////////////////
-  // TODO: Add your document opening code here
-  /////////////////////////////////////////////////
+bool KAlcatelDoc::openDocument(const KURL& url, const char *format /*=0*/) {
+    QString tmpfile;
+    KIO::NetAccess::download( url, tmpfile );
+    /////////////////////////////////////////////////
+    // TODO: Add your document opening code here
+    /////////////////////////////////////////////////
 
-  KIO::NetAccess::removeTempFile( tmpfile );
+    KIO::NetAccess::removeTempFile( tmpfile );
 
-  modified=false;
-  return true;
+    doc_url = url;
+
+    modified=false;
+    return true;
+}
+
+bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
+    /////////////////////////////////////////////////
+    // TODO: Add your document saving code here
+    /////////////////////////////////////////////////
+
+    KTempFile tmp;
+
+    QTextOStream strm(tmp.fstream());
+
+    strm << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+    strm << "<!-- KAlcatel saved data -->\n";
+    strm << "<document>\n";
+    strm << " <info>\n";
+    strm << "  <version>0.2</version>\n";
+    strm << " </info>\n";
+    strm << "</document>\n";
+
+    tmp.close();
+
+    KIO::NetAccess::upload( tmp.name(), url );
+
+    tmp.unlink();
+
+    KMessageBox::sorry((KAlcatelApp *) parent(), i18n("Saving not implemented yet... (URL: %1)").arg(url.path()), i18n("Sorry"));
+
+    doc_url = url;
+    modified=false;
+    return true;
 }
 
 int KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
@@ -601,17 +622,6 @@ bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1)
     modified=true;
     slotUpdateAllViews(NULL);
 
-    return true;
-}
-
-bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
-    /////////////////////////////////////////////////
-    // TODO: Add your document saving code here
-    /////////////////////////////////////////////////
-
-    KMessageBox::sorry((KAlcatelApp *) parent(), i18n("Saving not implemented yet..."), i18n("Sorry"));
-
-    modified=false;
     return true;
 }
 

@@ -388,7 +388,7 @@ void KAlcatelView::repaint() {
             QListViewItem * myChild;
             while( (myChild=nextChild)!=NULL ) {
                 nextChild = myChild->nextSibling();
-                ((KAlcatelTreeViewItem *)myChild)->~KAlcatelTreeViewItem();
+                delete ((KAlcatelTreeViewItem *)myChild);
             }
 
             for( c_it = doc->todo_cats->begin(); c_it != doc->todo_cats->end(); ++c_it ) {
@@ -531,7 +531,13 @@ void KAlcatelView::repaint() {
             QListViewItem * myChild;
             while( (myChild=nextChild)!=NULL ) {
                 nextChild = myChild->nextSibling();
-                ((KAlcatelTreeViewItem *)myChild)->~KAlcatelTreeViewItem();
+                delete ((KAlcatelTreeViewItem *)myChild);
+            }
+
+            nextChild = contacts_pc_item->firstChild();
+            while( (myChild=nextChild)!=NULL ) {
+                nextChild = myChild->nextSibling();
+                delete ((KAlcatelTreeViewItem *)myChild);
             }
 
             for( c_it = doc->contact_cats->begin(); c_it != doc->contact_cats->end(); ++c_it ) {

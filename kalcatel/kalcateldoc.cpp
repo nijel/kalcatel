@@ -1230,7 +1230,7 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
     KIO::NetAccess::upload( tmp->name(), url );
 
     tmp->unlink();
-    tmp->~KTempFile();
+    delete tmp;
 
     doc_url = url;
 

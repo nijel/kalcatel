@@ -290,7 +290,7 @@ alc_type *alcatel_recv_ack(alc_type type){
     }
 }
 
-bool alcatel_init(){
+bool alcatel_init(void){
     char answer[500];
     alc_type *data;
 
@@ -309,7 +309,7 @@ bool alcatel_init(){
     return true;
 }
 
-bool alcatel_attach(){
+bool alcatel_attach(void){
     alc_type *data;
     alc_type buffer[] = {0x00,0x00,0x7C,0x20};
 
@@ -326,7 +326,7 @@ bool alcatel_attach(){
     return true;
 }
 
-bool alcatel_detach(){
+bool alcatel_detach(void){
     alc_type *data;
     alc_type buffer[] = {0x00,0x01,0x7C,0x00};
 
@@ -343,7 +343,7 @@ bool alcatel_detach(){
     return true;
 }
 
-bool alcatel_done(){
+bool alcatel_done(void){
     alc_type *data;
 
     message(MSG_DETAIL,"Leaving Alcatel binary mode");
@@ -358,7 +358,7 @@ bool alcatel_done(){
     return true;
 }
 
-bool alcatel_start_session() {
+bool alcatel_start_session(void) {
     alc_type *data;
     alc_type buffer[] = {0x00, 0x04, 0x7C, 0x80, 0x12, 0x34, 0x56, 0x78};
 //                                               ^^^^^^^^^^^^^^^^^^^^^^ - this is DBID but it was always same...

@@ -152,11 +152,11 @@ extern int alcatel_errno;
 
 /** initialises binary mode
  */
-bool alcatel_init();
+bool alcatel_init(void);
 
 /** ends binary mode
  */
-bool alcatel_done();
+bool alcatel_done(void);
 
 /** send packet of type type, if type = ACL_DATA then data are read from data
  * (length len, \0 is not treated as end) */
@@ -164,15 +164,15 @@ void alcatel_send_packet(alc_type type, alc_type *data, alc_type len);
 
 /** attach to mobile, this must be used before any action
  */
-bool alcatel_attach();
+bool alcatel_attach(void);
 
 /** detach from mobile, must be used before done
  */
-bool alcatel_detach();
+bool alcatel_detach(void);
 
 /** start synchronisation session
  */
-bool alcatel_start_session();
+bool alcatel_start_session(void);
 
 /** close synchronisation session
  */

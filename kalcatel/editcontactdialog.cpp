@@ -73,10 +73,10 @@ EditContactDialog::EditContactDialog(AlcatelCategoryList *cat, AlcatelContactLis
     mainLayout->setRowStretch(1, -1);
 
     mainLayout->addWidget(new QLabel(i18n("First name"), this), 2, 0);
-    mainLayout->addWidget(editLastName = new QLineEdit(this), 2, 1);
+    mainLayout->addWidget(editFirstName = new QLineEdit(this), 2, 1);
 
     mainLayout->addWidget(new QLabel(i18n("Last name"), this), 2, 2);
-    mainLayout->addWidget(editFirstName = new QLineEdit(this), 2, 3);
+    mainLayout->addWidget(editLastName = new QLineEdit(this), 2, 3);
 
     line = new QFrame( this );
     line->setFrameStyle( QFrame::HLine | QFrame::Sunken );

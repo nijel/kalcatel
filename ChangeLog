@@ -6,6 +6,7 @@ $Id$
 
 2002-05-15 Michal Cihar <cihar@email.cz>
         * added replacing of & in saved files
+        * fixed labels for first/last name in edit dialog
 
 2002-05-08 Michal Cihar <cihar@email.cz>
         * === released 0.3 ===

@@ -34,6 +34,7 @@ class QFrame;
 class QLineEdit;
 class QComboBox;
 class QCheckBox;
+class QButtonGroup;
 class KURLRequester;
 
 /**Configuration dialog for KAlcatel application
@@ -65,6 +66,9 @@ private:
     /** mobile configuration frame
       */
     QFrame *mobilePage;
+    /** merging configuration frame
+      */
+    QFrame *mergePage;
     /** other configuration frame
       */
     QFrame *otherPage;
@@ -92,6 +96,10 @@ private:
     /** which field show as url edit
       */
     QComboBox *contactUrlEdit;
+    /**
+      */
+    QButtonGroup *mergeBox;
+    QButtonGroup *conflictBox;
 };
 
 #endif

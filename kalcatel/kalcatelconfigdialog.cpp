@@ -33,6 +33,8 @@
 #include <qcheckbox.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
+#include <qbuttongroup.h>
+#include <qradiobutton.h>
 
 #include <kdialog.h>
 #include <klocale.h>
@@ -131,6 +133,26 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
 
     mobileLayout->addWidget(debugEdit, 4, 1);
 
+    mergePage = janus->addPage (i18n("Merging"), i18n("Merging configuration"), DesktopIcon("kalcatel-configure.png"));
+    QGridLayout *mergeLayout = new QGridLayout( mergePage, 2, 1);
+
+    mergeLayout->setSpacing( 6 );
+    mergeLayout->setMargin( 8 );
+
+    mergeBox = new QButtonGroup (3, Qt::Vertical, i18n("How to merge data when reading from mobile"), mergePage);
+    new QRadioButton ( i18n("Attempt to merge data with same ids"), mergeBox);
+    new QRadioButton ( i18n("Delete all data stored in PC"), mergeBox);
+    new QRadioButton ( i18n("Keep all data (no merging)"), mergeBox);
+    QWhatsThis::add(mergeBox ,i18n("<b>Merge settings</b><br>Select here behavior when reading data from mobile and some data are also stored in PC. All data that have storage in mobile or SIM are automatically deleted and are not affected by this settings. For merging also look at next box what happens when conflict occurs. Keep all data doesn't do anything with data stored in PC, just adds data from mobile."));
+    mergeLayout->addMultiCellWidget ( mergeBox, 0, 0, 0, 1);
+
+    conflictBox = new QButtonGroup (3, Qt::Vertical, i18n("What happen when conflict during merge appears"), mergePage);
+    new QRadioButton ( i18n("Data stored in mobile win"), conflictBox);
+    new QRadioButton ( i18n("Data stored in PC win"), conflictBox);
+    new QRadioButton ( i18n("Ask user"), conflictBox);
+    QWhatsThis::add(conflictBox ,i18n("<b>Conflict settings</b><br>Select what happens when conflict during merging occurs. Ask user option will cause to show dialog for each conflict and user can select which fields does he want to use."));
+    mergeLayout->addMultiCellWidget ( conflictBox, 1, 1, 0, 1);
+
     otherPage = janus->addPage (i18n("Other"), i18n("Other configuration"), DesktopIcon("kalcatel-configure.png"));
     QGridLayout *otherLayout = new QGridLayout( otherPage, 2, 1);
 
@@ -217,6 +239,9 @@ void KAlcatelConfigDialog::slotOK() {
     theApp->phone_prefix = editPrefix->text();
     theApp->auto_open_last = editAutoOpen->isChecked();
 
+    theApp->mergeData = mergeBox->id(mergeBox->selected());
+    theApp->conflictAction = conflictBox->id(conflictBox->selected());
+
     switch (rateEdit->currentItem()) {
         case 0: theApp->mobile_rate = 2400; break;
         case 1: theApp->mobile_rate = 4800; break;
@@ -231,8 +256,6 @@ void KAlcatelConfigDialog::slotOK() {
     accept();
 }
 
-
-
 int KAlcatelConfigDialog::exec () {
     KAlcatelApp *theApp=(KAlcatelApp *) parentWidget();
 
@@ -241,6 +264,9 @@ int KAlcatelConfigDialog::exec () {
     editInit->setText(theApp->mobile_init);
     editPrefix->setText(theApp->phone_prefix);
     editAutoOpen->setChecked(theApp->auto_open_last);
+
+    mergeBox->setButton(theApp->mergeData);
+    conflictBox->setButton(theApp->conflictAction);
 
     switch (theApp->mobile_rate) {
         case 2400:   rateEdit->setCurrentItem(0); break;

@@ -4,6 +4,10 @@ KAlcatel - Changelog
 
 $Id$
 
+2002-02-29 Michal Cihar <cihar@email.cz>
+        * added toolbars configuration
+        * corrected debug level settings
+
 2002-02-28 Michal Cihar <cihar@email.cz>
         * fixed compile time bug for some gcc/distributions
         * added automatical URL detection in custom fields

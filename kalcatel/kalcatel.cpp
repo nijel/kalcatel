@@ -42,7 +42,7 @@
 #include <kiconloader.h>
 #include <kio/netaccess.h>
 #include <kkeydialog.h>
-
+#include <kedittoolbar.h>
 
 // application specific includes
 #include "kalcatel.h"
@@ -118,6 +118,7 @@ void KAlcatelApp::initActions()
 
   preferencesEdit = KStdAction::preferences(this, SLOT(slotPreferencesEdit()), actionCollection());
   preferencesSave = KStdAction::saveOptions(this, SLOT(slotPreferencesSave()), actionCollection());
+  preferencesToolbars = KStdAction::configureToolbars(this, SLOT(slotPreferencesToolbars()), actionCollection());
   preferencesKeyBindings = KStdAction::keyBindings(this, SLOT(slotConfigureKeys()), actionCollection());
 
   fileNew->setStatusText(i18n("Creates a new document"));
@@ -203,17 +204,20 @@ void KAlcatelApp::saveOptions() {
     if (last_file.fileName()!=i18n("Untitled"))
         config->writeEntry("Last File", last_file.url());
 
+    config->setGroup("Data");
+    config->writeEntry("Merge during read", mergeData);
+    config->writeEntry("Conflict action", conflictAction);
+
     config->setGroup("Contacts");
     config->writeEntry("Phone Prefix", phone_prefix);
     config->writeEntry("Use Custom Field as URL", contact_url);
-
 
     config->setGroup("Mobile");
     config->writeEntry("Device", mobile_device);
     config->writeEntry("Lock", mobile_lock);
     config->writeEntry("Init", mobile_init);
     config->writeEntry("Baud Rate", mobile_rate);
-    config->writeEntry("Debugging", mobile_debug);
+    config->writeEntry("Debug", mobile_debug);
 }
 
 
@@ -246,6 +250,10 @@ void KAlcatelApp::readOptions(){
     auto_open_last = config->readBoolEntry("Open Last File", false);
     last_file = config->readEntry("Last File", "");
 
+    config->setGroup("Data");
+    mergeData = config->readNumEntry("Merge during read", 0);
+    conflictAction = config->readNumEntry("Conflict action", 2);
+
     config->setGroup("Contacts");
     phone_prefix = config->readEntry("Phone Prefix", "+420");
     contact_url = config->readNumEntry("Use Custom Field as URL", -1);
@@ -255,7 +263,8 @@ void KAlcatelApp::readOptions(){
     mobile_lock = config->readPathEntry("Lock", "/var/lock/LCK..%s");
     mobile_init = config->readEntry("Init", "AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0");
     mobile_rate = config->readNumEntry("Baud Rate", 19200);
-    mobile_debug = config->readNumEntry("Debugging", MSG_DETAIL);
+    mobile_debug = config->readNumEntry("Debug", MSG_DETAIL);
+    msg_level = mobile_debug;
 }
 
 void KAlcatelApp::saveProperties(KConfig *_cfg)
@@ -802,4 +811,11 @@ void KAlcatelApp::slotPreferencesSave() {
 
 void KAlcatelApp::slotConfigureKeys() {
     KKeyDialog::configureKeys(actionCollection(), xmlFile());
+}
+
+void KAlcatelApp::slotPreferencesToolbars() {
+    KEditToolbar dlg(actionCollection());
+    if (dlg.exec()){
+        createGUI();
+    }
 }

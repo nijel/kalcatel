@@ -73,7 +73,7 @@ class KAlcatelApp : public KMainWindow
   public:
     /** construtor of KAlcatelApp, calls all init functions to create the application.
      */
-    KAlcatelApp(QWidget* parent=0, const char* name=0);
+    KAlcatelApp(QWidget *parent=0, const char *name=0);
     ~KAlcatelApp();
     /** opens a file specified by commandline option
      */
@@ -92,6 +92,8 @@ class KAlcatelApp : public KMainWindow
     int mobile_debug;
     bool auto_open_last;
     KURL last_file;
+    int mergeData;
+    int conflictAction;
 
     int contact_url;
 
@@ -223,6 +225,7 @@ class KAlcatelApp : public KMainWindow
     /** opens key configuration dialog
      */
     void slotConfigureKeys();
+    void slotPreferencesToolbars();
 
   private:
     /** the configuration object of the application */
@@ -245,32 +248,33 @@ class KAlcatelApp : public KMainWindow
     QString detailText;
 
     // KAction pointers to enable/disable actions
-    KAction* fileReadMobileAll;
-    KAction* fileReadMobileTodo;
-    KAction* fileReadMobileSms;
-    KAction* fileReadMobileCalendar;
-    KAction* fileReadMobileCalls;
-    KAction* fileReadMobileContactsSim;
-    KAction* fileReadMobileContactsMobile;
-    KAction* mobileInfo;
+    KAction *fileReadMobileAll;
+    KAction *fileReadMobileTodo;
+    KAction *fileReadMobileSms;
+    KAction *fileReadMobileCalendar;
+    KAction *fileReadMobileCalls;
+    KAction *fileReadMobileContactsSim;
+    KAction *fileReadMobileContactsMobile;
+    KAction *mobileInfo;
 
-    KAction* fileNew;
-    KAction* fileOpen;
-    KRecentFilesAction* fileOpenRecent;
-    KAction* fileSave;
-    KAction* fileSaveAs;
-    KAction* fileClose;
-    KAction* filePrint;
-    KAction* fileQuit;
-    KAction* editCut;
-    KAction* editCopy;
-    KAction* editPaste;
-    KToggleAction* viewToolBar;
-    KToggleAction* viewStatusBar;
+    KAction *fileNew;
+    KAction *fileOpen;
+    KRecentFilesAction *fileOpenRecent;
+    KAction *fileSave;
+    KAction *fileSaveAs;
+    KAction *fileClose;
+    KAction *filePrint;
+    KAction *fileQuit;
+    KAction *editCut;
+    KAction *editCopy;
+    KAction *editPaste;
+    KToggleAction *viewToolBar;
+    KToggleAction *viewStatusBar;
 
-    KAction* preferencesSave;
-    KAction* preferencesEdit;
+    KAction *preferencesSave;
+    KAction *preferencesEdit;
     KAction *preferencesKeyBindings;
+    KAction *preferencesToolbars;
 
     KAlcatelConfigDialog *preferencesDialog;
 };

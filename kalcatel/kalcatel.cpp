@@ -217,7 +217,9 @@ void KAlcatelApp::statusUpdate() {
     if (modemConnect()) {
         get_battery(&bat_state, &bat_percent);
 
-        if (bat_percent >= 61) 
+        if (bat_percent == -1)
+            fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/battery-__.png");
+        else if (bat_percent >= 61)
             fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/battery-99.png");
         else if (bat_percent >= 41) 
             fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/battery-66.png");
@@ -227,11 +229,15 @@ void KAlcatelApp::statusUpdate() {
             fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/battery-00.png");
 
         if (!fname.isNull()) batteryLabel->setPixmap(QPixmap(fname));
-        QToolTip::add(batteryLabel ,i18n("Battery charged at %1%, click to refresh").arg(bat_percent));
+        if (bat_percent == -1)
+            QToolTip::add(batteryLabel ,i18n("Unknown battery status, click to refresh"));
+        else
+            QToolTip::add(batteryLabel ,i18n("Battery charged at %1%, click to refresh").arg(bat_percent));
+
 
         get_signal(&sign_strength, &sign_err);
 
-        if (sign_strength == 99)
+        if (sign_strength == 99 || sign_strength == -1)
             fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/signal-_.png");
         else if (sign_strength >= 15) 
             fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/signal-5.png");
@@ -248,7 +254,7 @@ void KAlcatelApp::statusUpdate() {
 
         if (!fname.isNull()) signalLabel->setPixmap(QPixmap(fname));
 
-        if (sign_strength == 99)
+        if (sign_strength == 99 || sign_strength == -1)
              QToolTip::add(signalLabel ,i18n("Unknown signal strength, click to refresh"));
         else
              QToolTip::add(signalLabel ,i18n("Signal stregth is %1, click to refresh").arg(QString(mobil_signal_info[sign_strength])));

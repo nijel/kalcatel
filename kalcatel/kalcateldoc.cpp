@@ -1036,6 +1036,10 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
         for( callit = calls->begin(); callit != calls->end(); ++callit ) {
             *strm << "  <call>" << endl;
             if ((*callit).Storage != StoragePC) {
+                (*callit).PrevId = (*callit).Id;
+                (*callit).Id = pcStorageCounter++;
+                (*callit).PrevStorage = (*callit).Storage;
+                (*callit).Storage = StoragePC;
                 *strm << "   <id>" << (*callit).Id << "</id>" << endl;
                 *strm << "   <storage>" << (*callit).Storage << "</storage>" << endl;
             } else {
@@ -1095,6 +1099,7 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
     doc_url = url;
     modified=false;
     version++;
+    callsVersion++;
     todosVersion++;
     calendarVersion++;
     contactsVersion++;

@@ -398,13 +398,18 @@ void KAlcatelView::repaint() {
             AlcatelTodoList::Iterator it;
             for( it = doc->todos->begin(); it != doc->todos->end(); ++it ) {
                 QString catname;
+                AlcatelContact *cont = NULL;
+                if ((* it).ContactID != -1) {
+                    cont = getContactById(getDocument()->contacts, (*it).ContactID, (*it).Storage);
+                }
                 if ((* it).Category >= 0 && (*it).Category < 255) {
                     if ((todo_cat_lists[(* it).Category] != NULL) && ((* it).Category < ALC_MAX_CATEGORIES)) {
                         new KAlcatelTodoCatViewItem (todo_cat_lists[(* it).Category], &(*it),
                                 (* it).Completed == -1 ? QString(""): (* it).Completed ? i18n("Yes") : i18n("No"),
                                 (* it).Priority == -1 ? QString("") : Priorities[(* it).Priority],
                                 (* it).DueDate.isNull()?i18n("None"):(* it).DueDate.toString(),
-                                (* it).Subject,
+//                                (* it).Subject,
+                                ((* it).Subject.isNull() && (* it).ContactID != -1 && cont != NULL) ? i18n("Call to %1").arg(cont->getName()) : (* it).Subject,
                                 QString("%1 %2").
                                     arg(StorageTypes[(* it).Storage]).arg((* it).Id));
                     } else {
@@ -425,7 +430,8 @@ void KAlcatelView::repaint() {
                         (* it).Completed == -1 ? QString(""): (* it).Completed ? i18n("Yes") : i18n("No"),
                         (* it).Priority == -1 ? QString("") : Priorities[(* it).Priority],
                         (* it).DueDate.isNull()?i18n("None"):(* it).DueDate.toString(),
-                        (* it).Subject,
+//                        (* it).Subject,
+                        ((* it).Subject.isNull() && (* it).ContactID != -1 && cont != NULL) ? i18n("Call to %1").arg(cont->getName()) : (* it).Subject,
                         catname,
                         QString("%1 %2").
                             arg(StorageTypes[(* it).Storage]).arg((* it).Id));

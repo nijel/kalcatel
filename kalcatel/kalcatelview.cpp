@@ -54,7 +54,7 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : KJanusWidget(par
     setShowIconsInTreeList (true);
     setTreeListAutoResize (true);
 
-    for (i=0; i<ALCATEL_MAX_CATEGORIES; i++) {
+    for (i=0; i<ALC_MAX_CATEGORIES; i++) {
         contacts_cat_list[i] =  NULL;
         contacts_cat_view[i] =  NULL;
         todo_cat_list[i] =  NULL;
@@ -239,6 +239,7 @@ KListView *KAlcatelView::createListView(QWidget *parent, AlcListType type) {
             list->addColumn(i18n("Date"));
             list->addColumn(i18n("Start"));
             list->addColumn(i18n("End"));
+            list->addColumn(i18n("Type"));
             list->addColumn(i18n("Subject"));
             list->addColumn(i18n("Alarm"));
             list->addColumn(i18n("Repeat"));
@@ -327,7 +328,7 @@ void KAlcatelView::repaint() {
                         break;
                 }
                 AlcatelContact *cont = getContactByPhone(doc->contacts, &((* it).Sender), &prefix);
-                QListViewItem *newItem = new QListViewItem (messages_list,
+                new QListViewItem (messages_list,
                         QString((* it).Sender),
                         cont == NULL? QString("") : cont->Name(),
                         type,
@@ -336,7 +337,7 @@ void KAlcatelView::repaint() {
                         QString((* it).Text),
                         QString().sprintf("%d", (* it).Id));
 
-                newItem = new QListViewItem (list,
+                new QListViewItem (list,
                         QString((* it).Sender),
                         cont == NULL? QString("") : cont->Name(),
                         (* it).Date.date().toString(),
@@ -358,7 +359,7 @@ void KAlcatelView::repaint() {
 
             todo_list->clear();
 
-            for (i=0; i<ALCATEL_MAX_CATEGORIES; i++)
+            for (i=0; i<ALC_MAX_CATEGORIES; i++)
                 if (todo_cat_list[i] !=  NULL) {
                     ((QVBox *)(todo_cat_list[i]->parent()->parent()))->~QVBox();
                     todo_cat_list[i] = NULL;
@@ -385,7 +386,7 @@ void KAlcatelView::repaint() {
             }
             AlcatelTodoList::Iterator it;
             for( it = doc->todo->begin(); it != doc->todo->end(); ++it ) {
-                QListViewItem *newItem = new QListViewItem (todo_list,
+                new QListViewItem (todo_list,
                         (* it).Completed == -1 ? QString(""): (* it).Completed ? i18n("Yes") : i18n("No"),
                         (* it).Priority == -1 ? QString("") : Priorities[(* it).Priority],
                         (* it).DueDate.isNull()?i18n("None"):(* it).DueDate.toString(),
@@ -393,8 +394,8 @@ void KAlcatelView::repaint() {
                         *(getCategoryName(doc->todo_cats, (*it).Category)),
                         QString("%1").arg((* it).Id));
 
-                if (((* it).Category >= 0) && (todo_cat_list[(* it).Category] != NULL) && ((* it).Category < ALCATEL_MAX_CATEGORIES)) {
-                    newItem = new QListViewItem (todo_cat_list[(* it).Category],
+                if (((* it).Category >= 0) && (todo_cat_list[(* it).Category] != NULL) && ((* it).Category < ALC_MAX_CATEGORIES)) {
+                    new QListViewItem (todo_cat_list[(* it).Category],
                             (* it).Completed == -1 ? QString(""): (* it).Completed ? i18n("Yes") : i18n("No"),
                             (* it).Priority == -1 ? QString("") : Priorities[(* it).Priority],
                             (* it).DueDate.isNull()?i18n("None"):(* it).DueDate.toString(),
@@ -403,10 +404,32 @@ void KAlcatelView::repaint() {
                 } else {
                     ::message(MSG_WARNING, "Can not insert to category list (%d)", (* it).Category);
                 }
-            } /* for cycle over contacts */
+            } /* for cycle over todos */
 
             showPage(0);
         } /* change in todos */
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        if (doc->getCalendarVersion() != calendarVersion|| doc->getContactVersion() != contactVersion) {
+            /* we should update this also when contacts change, because there are names of contact */
+            calendarVersion = doc->getCalendarVersion();
+
+            calendar_list->clear();
+
+            AlcatelCalendarList::Iterator it;
+            for( it = doc->calendar->begin(); it != doc->calendar->end(); ++it ) {
+                new QListViewItem (calendar_list,
+                        (* it).Date.isNull()?i18n("None"):(* it).Date.toString(),
+                        (* it).EventType == ALC_CALENDAR_BIRTHDAY ? i18n("N/A") : (* it).StartTime.toString(),
+                        (* it).EventType == ALC_CALENDAR_BIRTHDAY ? i18n("N/A") : (* it).EndTime.toString(),
+                        (* it).EventType!=-1?CalendarTypes[(* it).EventType]:i18n("Unknown"),
+                        (* it).Subject,
+                        (* it).Alarm.isNull()?i18n("None"):(* it).Alarm.toString(),
+                        (* it).Repeating(),
+                        QString("%1").arg((* it).Id));
+            } /* for cycle over items */
+
+            showPage(1);
+        } /* change in calendar */
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (doc->getContactVersion() != contactVersion) {
             contactVersion = doc->getContactVersion();
@@ -417,7 +440,7 @@ void KAlcatelView::repaint() {
             contacts_sim_list->clear();
             contacts_mobile_list->clear();
 
-            for (i=0; i<ALCATEL_MAX_CATEGORIES; i++)
+            for (i=0; i<ALC_MAX_CATEGORIES; i++)
                 if (contacts_cat_list[i] !=  NULL) {
                     ((QVBox *)(contacts_cat_list[i]->parent()->parent()))->~QVBox();
                     contacts_cat_list[i] = NULL;
@@ -445,7 +468,7 @@ void KAlcatelView::repaint() {
             }
             AlcatelContactList::Iterator it;
             for( it = doc->contacts->begin(); it != doc->contacts->end(); ++it ) {
-                QListViewItem *newItem = new QListViewItem (contacts_list,
+                new QListViewItem (contacts_list,
                         (* it).Name(),
                         QString(!(* it).MainNumber.isEmpty()?(* it).MainNumber: /* try to find non-empty phone */
                                     !(* it).MobileNumber.isEmpty()?(* it).MobileNumber:
@@ -462,8 +485,8 @@ void KAlcatelView::repaint() {
                         );
 
                 if ((* it).Storage == AlcatelContact::Mobile) {
-                    if (((* it).Category >= 0) && (contacts_cat_list[(* it).Category] != NULL) && ((* it).Category < ALCATEL_MAX_CATEGORIES)) {
-                        newItem = new QListViewItem (contacts_cat_list[(* it).Category],
+                    if (((* it).Category >= 0) && (contacts_cat_list[(* it).Category] != NULL) && ((* it).Category < ALC_MAX_CATEGORIES)) {
+                        new QListViewItem (contacts_cat_list[(* it).Category],
                                 QString((* it).LastName),
                                 QString((* it).FirstName),
                                 QString((* it).MobileNumber),
@@ -474,7 +497,7 @@ void KAlcatelView::repaint() {
                     } else {
                         ::message(MSG_WARNING, "Can not insert to category list (%d)", (* it).Category);
                     }
-                    newItem = new QListViewItem (contacts_mobile_list,
+                    new QListViewItem (contacts_mobile_list,
                             QString((* it).LastName),
                             QString((* it).FirstName),
                             *(getCategoryName(doc->contact_cats, (* it).Category)),
@@ -485,7 +508,7 @@ void KAlcatelView::repaint() {
                             QString("%1").arg((* it).Id));
                 } /* storage=mobile */
                 else {
-                    newItem = new QListViewItem (contacts_sim_list,
+                    new QListViewItem (contacts_sim_list,
                             QString((* it).LastName),
                             QString((* it).MainNumber),
                             QString("%1").arg((* it).Id));
@@ -495,6 +518,8 @@ void KAlcatelView::repaint() {
             showPage(2);
         } /* change in contacts */
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        if (unread_sms)
+            showPage(10); /* allways show unread messages, if any */
     } /* any change */
     KJanusWidget::repaint();
 }
@@ -559,8 +584,6 @@ void KAlcatelView::slotShowTodo(QTextView *where, AlcatelTodo *what) {
         where->setText( i18n("Failed reading todo!"));
         return;
     }
-//    QDate DueDate;
-//    QDateTime Alarm;
 
     AlcatelContact *cont=getContactById(getDocument()->contacts, what->ContactID);
     if (!what->Subject.isEmpty()) text.append(i18n("<b>Subject:</b> %1<br>").arg(what->Subject));
@@ -577,6 +600,49 @@ void KAlcatelView::slotShowTodo(QTextView *where, AlcatelTodo *what) {
 }
 
 void KAlcatelView::slotCalendarChanged(QListViewItem *item) {
+    slotShowCalendar(calendar_view, getCalendarById(getDocument()->calendar, item->text(7).toInt()));
+}
+
+void KAlcatelView::slotShowCalendar(QTextView *where, AlcatelCalendar *what) {
+    QString text;
+    if (what == NULL) {
+        where->setText( i18n("Failed reading calendar item!"));
+        return;
+    }
+/*	QString Repeating(void);
+	
+*/    /* repeating events: */
+/*    int DayOfWeek;
+    int Day;
+    int WeekOfMonth;
+    int Month;
+    int Frequency;
+    QDate StartDate;
+    QDate StopDate;*/
+
+
+    AlcatelContact *cont=getContactById(getDocument()->contacts, what->ContactID);
+
+    if (!what->Subject.isEmpty()) text.append(i18n("<b>Subject:</b> %1<br>").arg(what->Subject));
+    if (!what->Date.isNull()) text.append(i18n("<b>Date:</b> %1<br>").arg(what->Date.toString()));
+    if (what->EventType != ALC_CALENDAR_BIRTHDAY) {
+        text.append(i18n("<b>StartTime:</b> %1<br>").arg(what->StartTime.toString()));
+        text.append(i18n("<b>EndTime:</b> %1<br>").arg(what->EndTime.toString()));
+    }
+
+    text.append(i18n("<b>EventType:</b> %1<br>").arg((what->EventType!=-1)?CalendarTypes[what->EventType]:i18n("Unknown")));
+    text.append(i18n("<b>Repeating:</b> %1<br>").arg(what->RepeatingDetail()));
+
+    if (!what->Alarm.isNull()) text.append(i18n("<b>Alarm:</b> %1<br>").arg(what->Alarm.toString()));
+    text.append(i18n("<b>Alarm-t:</b> %1<br>").arg(what->Alarm.time().toString()));
+    if (!what->Alarm2.isNull()) text.append(i18n("<b>Alarm2:</b> %1<br>").arg(what->Alarm2.toString()));
+    text.append(i18n("<b>Alarm2-t:</b> %1<br>").arg(what->Alarm2.time().toString()));
+    if (what->Private != -1) text.append(i18n("<b>Private:</b> %1<br>").arg(what->Private == 1?i18n("Yes"):i18n("No")));
+    if (what->ContactID != -1 && what->ContactID != 0) text.append(i18n("<b>Contact:</b> %1<br>").arg(cont==NULL?QString("id=%1").arg(what->ContactID):cont->Name()));
+
+    text.append(i18n("<b>Position:</b> %1").arg(what->Id));
+    where->setText(text);
+    where->setMinimumHeight(where->contentsHeight()); /* resize to show all contents*/
 }
 
 void KAlcatelView::slotContactChanged(QListViewItem *item) {

@@ -477,6 +477,7 @@ bool KAlcatelDoc::readMobile(AlcReadType what = alcatel_read_all, int category =
             win->slotStatusMsg(i18n("Reading calendar items"),ID_DETAIL_MSG);
             if (!readMobileItems(ALC_SYNC_CALENDAR, ALC_SYNC_TYPE_CALENDAR))
                 KMessageBox::error(win, i18n("Reading calendar items failed!"), i18n("Error"));
+            calendarVersion++;
         }
 
         if (what == alcatel_read_todo || what == alcatel_read_all) {

@@ -29,13 +29,13 @@
 #include <config.h>
 #endif
 
-#define ALCATEL_MAX_CATEGORIES 255 /* TODO: this should be examined more exactly and moved to alcatel.h */
-
 // include files for Qt
 #include <qvbox.h>
 
 //#include <qwidget.h>
 #include <kjanuswidget.h>
+
+#include "alcatool/alcatel.h"
 
 typedef enum {
     alc_contacts,
@@ -102,21 +102,22 @@ class KAlcatelView : public KJanusWidget
     void slotShowMessage(QTextView *where, AlcatelSMS *what);
     void slotShowContact(QTextView *where, AlcatelContact *what);
     void slotShowTodo(QTextView *where, AlcatelTodo *what);
+    void slotShowCalendar(QTextView *where, AlcatelCalendar *what);
 	
   private:
     QVBox *todo, *calendar,
         *contacts, *contacts_sim, *contacts_mobile,
         *calls, *calls_ld, *calls_mc, *calls_rc,
         *messages, *msg_read, *msg_unread, *msg_sent, *msg_unsent;
-    KListView *todo_list, *todo_cat_list[ALCATEL_MAX_CATEGORIES],
+    KListView *todo_list, *todo_cat_list[ALC_MAX_CATEGORIES],
         *calendar_list,
-        *contacts_list, *contacts_sim_list, *contacts_mobile_list, *contacts_cat_list[ALCATEL_MAX_CATEGORIES],
+        *contacts_list, *contacts_sim_list, *contacts_mobile_list, *contacts_cat_list[ALC_MAX_CATEGORIES],
         *calls_list, *calls_ld_list, *calls_mc_list, *calls_rc_list,
         *messages_list, *msg_read_list, *msg_unread_list, *msg_sent_list, *msg_unsent_list;
 
     QTextView *message, *message_read, *message_unread, *message_sent, *message_unsent,
-        *todo_view, *calendar_view, *todo_cat_view[ALCATEL_MAX_CATEGORIES],
-        *contact_view, *contact_sim_view, *contact_mobile_view, *contacts_cat_view[ALCATEL_MAX_CATEGORIES];
+        *todo_view, *calendar_view, *todo_cat_view[ALC_MAX_CATEGORIES],
+        *contact_view, *contact_sim_view, *contact_mobile_view, *contacts_cat_view[ALC_MAX_CATEGORIES];
 
     KListView *createListView(QWidget *parent, AlcListType type);
 

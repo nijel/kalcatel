@@ -99,9 +99,9 @@ char alc_calendar_field_names[ALC_CALENDAR_FIELDS][20] = {
     "Frequency",
     "StartDate",
     "StopDate",
-    /* Following two were created by IntelliSync, but it couldn't read it back... */
-    "KNOWN UNKNOWN (20)",    /* this contains date, probably same as AlarmDate */
-    "KNOWN UNKNOWN (21)"     /* this contains time, probably same as AlarmTime */
+    /* Following two used when EventType is alarm */
+    "AlarmDate2",
+    "AlarmTime2"
 };
 
 char alc_todo_field_names[ALC_TODO_FIELDS][20] = {
@@ -365,6 +365,7 @@ int sync_select_type(alc_type type) {
 //    free(alcatel_recv_packet(1));
 
     answer = alcatel_recv_packet(1);
+    if (!answer) return -1;
 
     result = answer[8];
     

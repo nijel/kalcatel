@@ -39,6 +39,42 @@
 
 QString SMSTypes[] = { i18n("Unread"), i18n("Read"), i18n("Unsent"), i18n("Sent")};
 QString Priorities[] = { i18n("High"), i18n("Normal"), i18n("Low") };
+QString CalendarTypes[] = {
+    i18n("Appointment"),
+    i18n("Unknown(1)"),
+    i18n("Birthday"),
+    i18n("Call"),
+    i18n("Alarm"),
+    i18n("Unknown(5)"),
+    i18n("Unknown(6)"),
+    i18n("Unknown(7)"),
+    i18n("Unknown(8)"),
+    i18n("Repeating") };
+
+QString DayNames[] = {
+    i18n("Sunday"),
+    i18n("Monday"),
+    i18n("Tuesday"),
+    i18n("Wednesday"),
+    i18n("Thursday"),
+    i18n("Friday"),
+    i18n("Saturday"),
+    i18n("Sunday") };
+
+QString MonthNames[] = {
+    i18n("None"),
+    i18n("January"),
+    i18n("February"),
+    i18n("March"),
+    i18n("April"),
+    i18n("May"),
+    i18n("June"),
+    i18n("July"),
+    i18n("August"),
+    i18n("September"),
+    i18n("October"),
+    i18n("November"),
+    i18n("December") };
 
 /*
 AlcatelClasses::AlcatelClasses() {
@@ -56,13 +92,13 @@ AlcatelContact::~AlcatelContact() {
 }
 
 QString AlcatelContact::Name(void) {
-    return (this->FirstName.isEmpty())?
-                            ((this->LastName.isEmpty())?
+    return (FirstName.isEmpty())?
+                            ((LastName.isEmpty())?
                                 QString("?"):
-                                QString(this->LastName)):
-                            ((this->LastName.isEmpty())?
-                                QString(this->FirstName):
-                                QString("%1, %2").arg(this->LastName).arg(this->FirstName));
+                                QString(LastName)):
+                            ((LastName.isEmpty())?
+                                QString(FirstName):
+                                QString("%1, %2").arg(LastName).arg(FirstName));
 }
 
 
@@ -113,6 +149,82 @@ AlcatelCalendar::AlcatelCalendar() {
 AlcatelCalendar::~AlcatelCalendar() {
 }
 
+QString AlcatelCalendar::Repeating(void) {
+    static QString birthday = i18n("Each year (birthday)");
+    static QString none = i18n("None");
+    static QString unknown = i18n("Unknown");
+    static QString forever = i18n("Forever");
+    switch (EventType) {
+        case ALC_CALENDAR_BIRTHDAY:
+            return birthday;
+        case ALC_CALENDAR_APPOINTMENT:
+        case ALC_CALENDAR_CALL:
+            return none;
+        case ALC_CALENDAR_REPEATING:
+            if (StartDate.isNull() && StopDate.isNull())
+                return forever;
+            else if (StartDate.isNull())
+                return i18n("Till %2").arg(StopDate.toString());
+            else if (StopDate.isNull())
+                return i18n("From %1").arg(StartDate.toString());
+            else
+                return i18n("From %1 till %2").arg(StartDate.toString()).arg(StopDate.toString());
+        default:
+            return unknown;
+    }
+}
+
+QString AlcatelCalendar::RepeatingDetail(void) {
+    static QString birthday = i18n("Each year (birthday)");
+    static QString none = i18n("None");
+    static QString unknown = i18n("Unknown");
+    static QString forever = i18n("Forever");
+    QString text;
+    switch (EventType) {
+        case ALC_CALENDAR_BIRTHDAY:
+            return birthday;
+        case ALC_CALENDAR_APPOINTMENT:
+        case ALC_CALENDAR_CALL:
+            return none;
+        case ALC_CALENDAR_REPEATING:
+            if (StartDate.isNull() && StopDate.isNull())
+                text.append(forever);
+            else if (StartDate.isNull())
+                text.append(i18n("Till %2").arg(StopDate.toString()));
+            else if (StopDate.isNull())
+                text.append(i18n("From %1").arg(StartDate.toString()));
+            else
+                text.append(i18n("From %1 till %2").arg(StartDate.toString()).arg(StopDate.toString()));
+
+            if (Frequency==1)
+                text.append(i18n(" on each"));
+            else if (Frequency>1)
+                text.append(i18n(" on each %1.").arg(Frequency));
+            else
+                return text;
+
+            if (DayOfWeek!=0) {
+                text.append(i18n(" %1").arg(DayNames[DayOfWeek]));
+                if (WeekOfMonth!=0)
+                    text.append(i18n(" in %1. week of").arg(WeekOfMonth));
+                if (Month!=0)
+                    text.append(i18n(" %1").arg(MonthNames[Month]));
+                else
+                    text.append(i18n(" month"));
+            } else if (Day!=0) {
+                text.append(i18n(" %1. day of").arg(Day));
+                if (Month!=0)
+                    text.append(i18n(" %1").arg(MonthNames[Month]));
+                else
+                    text.append(i18n(" each moth"));
+            }
+            return text;
+
+        default:
+            return unknown;
+    }
+}
+
 void AlcatelCalendar::setField(int number, FIELD *data) {
     switch (number) {
         case 0: chk_type(_date) Date.setYMD(((DATE *)((*data).data))->year, ((DATE *)((*data).data))->month, ((DATE *)((*data).data))->day); break;
@@ -133,8 +245,8 @@ void AlcatelCalendar::setField(int number, FIELD *data) {
         case 17: chk_type(_byte) Frequency = *((int *)((*data).data)); break;
         case 18: chk_type(_date) StartDate.setYMD(((DATE *)((*data).data))->year, ((DATE *)((*data).data))->month, ((DATE *)((*data).data))->day); break;
         case 19: chk_type(_date) StopDate.setYMD(((DATE *)((*data).data))->year, ((DATE *)((*data).data))->month, ((DATE *)((*data).data))->day); break;
-        case 20: chk_type(_date) UnknownDate.setYMD(((DATE *)((*data).data))->year, ((DATE *)((*data).data))->month, ((DATE *)((*data).data))->day); break;
-        case 21: chk_type(_time) UnknownTime.setHMS (((TIME *)((*data).data))->hour, ((TIME *)((*data).data))->minute, ((TIME *)((*data).data))->second); break;
+        case 20: chk_type(_date) Alarm2.date().setYMD(((DATE *)((*data).data))->year, ((DATE *)((*data).data))->month, ((DATE *)((*data).data))->day); break;
+        case 21: chk_type(_time) Alarm2.time().setHMS (((TIME *)((*data).data))->hour, ((TIME *)((*data).data))->minute, ((TIME *)((*data).data))->second); break;
 
         default: message(MSG_WARNING, "Unknown field occured (%02d)!", number); break;
     }
@@ -249,6 +361,15 @@ AlcatelContact *getContactById(AlcatelContactList *list, int id) {
 
 AlcatelTodo *getTodoById(AlcatelTodoList *list, int id) {
     AlcatelTodoList::Iterator it;
+    for( it = list->begin(); it != list->end(); ++it ) {
+        if ((* it).Id == id)
+            return &(*it);
+    }
+    return NULL;
+}
+	
+AlcatelCalendar *getCalendarById(AlcatelCalendarList *list, int id) {
+    AlcatelCalendarList::Iterator it;
     for( it = list->begin(); it != list->end(); ++it ) {
         if ((* it).Id == id)
             return &(*it);

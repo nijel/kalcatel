@@ -43,6 +43,7 @@ public:
 
 extern QString SMSTypes[];
 extern QString Priorities[];
+extern QString CalendarTypes[];
 
 
 class AlcatelContact : public AlcatelClass {
@@ -57,6 +58,7 @@ public:
 	enum ContactStorage Storage;
 	
 	QString Name(void);
+	
     QString LastName;
     QString FirstName;
     QString Company;
@@ -91,6 +93,9 @@ public:
 	
 	void setField(int number, FIELD *data);
 	
+	QString Repeating(void);
+    QString RepeatingDetail(void);
+	
     QDate Date;
     QTime StartTime;
     QTime EndTime;
@@ -109,9 +114,8 @@ public:
     QDate StartDate;
     QDate StopDate;
 
-    /* Following two were created by IntelliSync, but it couldn't read it back... */
-    QDate UnknownDate;        /* this contains date, probably same as AlarmDate */
-    QTime UnknownTime;        /* this contains time, probably same as AlarmTime */
+    /* used when EventType is alarm */
+    QDateTime Alarm2;
 };
 
 class AlcatelTodo : public AlcatelClass {
@@ -148,6 +152,7 @@ public:
 class AlcatelCategory : public AlcatelClass {
 public:
 	AlcatelCategory(char* name, int id);
+	
 	AlcatelCategory();
     QString Name;
 };
@@ -164,5 +169,6 @@ int phoneCmp(QString *number1, QString *number2, QString *prefix);
 AlcatelContact *getContactByPhone(AlcatelContactList *list, QString *number, QString *prefix);
 AlcatelContact *getContactById(AlcatelContactList *list, int id);
 AlcatelTodo *getTodoById(AlcatelTodoList *list, int id);
+AlcatelCalendar *getCalendarById(AlcatelCalendarList *list, int id);
 
 #endif

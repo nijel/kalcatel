@@ -56,7 +56,7 @@ enum AlcListType {
 
 class KAlcatelDoc;
 class KTextBrowser;
-class AlcatelSMS;
+class AlcatelMessage;
 class AlcatelContact;
 class AlcatelCalendar;
 class AlcatelTodo;
@@ -102,7 +102,7 @@ class KAlcatelView : public KJanusWidget
     void slotContactSimChanged(QListViewItem *item);
     void slotContactMobileChanged(QListViewItem *item);
     void slotContactMobileCatChanged(QListViewItem *item);
-    void slotShowMessage(KTextBrowser *where, AlcatelSMS *what);
+    void slotShowMessage(KTextBrowser *where, AlcatelMessage *what);
     void slotShowContact(KTextBrowser *where, AlcatelContact *what);
     void slotShowTodo(KTextBrowser *where, AlcatelTodo *what);
     void slotShowCalendar(KTextBrowser *where, AlcatelCalendar *what);

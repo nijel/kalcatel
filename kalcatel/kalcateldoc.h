@@ -162,7 +162,7 @@ class KAlcatelDoc : public QObject
     AlcatelTodoList *todo;
     /** messages
       */
-    AlcatelSMSList *sms;
+    AlcatelMessageList *sms;
     /** calls
       */
     AlcatelCallList *calls;

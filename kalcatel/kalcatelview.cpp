@@ -299,7 +299,7 @@ void KAlcatelView::repaint() {
         if (doc->getSMSVersion() != smsVersion || doc->getContactVersion() != contactVersion) {
             /* we should update this also when contacts change, because there are names of sender */
             smsVersion = doc->getSMSVersion();
-            AlcatelSMSList::Iterator it;
+            AlcatelMessageList::Iterator it;
             KListView *list;
             QString type;
 
@@ -310,19 +310,19 @@ void KAlcatelView::repaint() {
             msg_sent_list->clear();
 
             for( it = doc->sms->begin(); it != doc->sms->end(); ++it ) {
-                type =  SMSTypes[(* it).Status];
+                type =  MessageTypes[(* it).Status];
                 switch ((* it).Status) {
-                    case SMS_UNREAD:
+                    case MESSAGE_UNREAD:
                         list = msg_unread_list;
                         unread_sms++;
                         break;
-                    case SMS_READ:
+                    case MESSAGE_READ:
                         list = msg_read_list;
                         break;
-                    case SMS_UNSENT:
+                    case MESSAGE_UNSENT:
                         list = msg_unsent_list;
                         break;
-                    case SMS_SENT:
+                    case MESSAGE_SENT:
                         list = msg_sent_list;
                         break;
                 }
@@ -571,26 +571,26 @@ void KAlcatelView::repaint() {
 }
 
 void KAlcatelView::slotMessageChanged(QListViewItem *item) {
-    slotShowMessage(message, getSMSById(getDocument()->sms, item->text(6).toInt()));
+    slotShowMessage(message, getMessageById(getDocument()->sms, item->text(6).toInt()));
 }
 
 void KAlcatelView::slotReadMessageChanged(QListViewItem *item) {
-    slotShowMessage(message_read, getSMSById(getDocument()->sms, item->text(5).toInt()));
+    slotShowMessage(message_read, getMessageById(getDocument()->sms, item->text(5).toInt()));
 }
 
 void KAlcatelView::slotUnreadMessageChanged(QListViewItem *item) {
-    slotShowMessage(message_unread, getSMSById(getDocument()->sms, item->text(5).toInt()));
+    slotShowMessage(message_unread, getMessageById(getDocument()->sms, item->text(5).toInt()));
 }
 
 void KAlcatelView::slotSentMessageChanged(QListViewItem *item) {
-    slotShowMessage(message_sent, getSMSById(getDocument()->sms, item->text(5).toInt()));
+    slotShowMessage(message_sent, getMessageById(getDocument()->sms, item->text(5).toInt()));
 }
 
 void KAlcatelView::slotUnsentMessageChanged(QListViewItem *item) {
-    slotShowMessage(message_sent, getSMSById(getDocument()->sms, item->text(5).toInt()));
+    slotShowMessage(message_sent, getMessageById(getDocument()->sms, item->text(5).toInt()));
 }
 
-void KAlcatelView::slotShowMessage(KTextBrowser *where, AlcatelSMS *what) {
+void KAlcatelView::slotShowMessage(KTextBrowser *where, AlcatelMessage *what) {
     if (what == NULL) {
         where->setText( i18n("Failed reading message!"));
         return;
@@ -610,7 +610,7 @@ void KAlcatelView::slotShowMessage(KTextBrowser *where, AlcatelSMS *what) {
         arg(what->Date.time().toString()).
         arg(what->SMSC).
         arg(what->Id).
-        arg(SMSTypes[what->Status]).
+        arg(MessageTypes[what->Status]).
         arg(what->Text));
     where->setMinimumHeight(where->contentsHeight()); /* resize to show all contents*/
 }

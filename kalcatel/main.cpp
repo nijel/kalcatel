@@ -32,7 +32,7 @@ static const char *description = I18N_NOOP("KAlcatel - Application to work with 
 	
 static KCmdLineOptions options[] =
 {
-//  { "+[File]", I18N_NOOP("file to open"), 0 },
+  { "+[File]", I18N_NOOP("file to open"), 0 },
   { 0, 0, 0 }
   // INSERT YOUR COMMANDLINE OPTIONS HERE
 };
@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 		}
 		else
 		{
-		  kalcatel->openDocumentFile();
+//	      kalcatel->openDocumentFile();
 		}
 		args->clear();
   }

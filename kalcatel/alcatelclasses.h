@@ -41,25 +41,36 @@
 enum CallType { CallMissed, CallReceived, CallDialled };
 /** type of storage
   */
-enum AlcatelStorage {StoragePC, StorageSIM, StorageMobile } ;
+enum AlcatelStorage {StorageNone, StoragePC, StorageSIM, StorageMobile } ;
 
 /** Generic class used only as base for other storage classes
   */
 class AlcatelClass {
 public:
+    AlcatelClass();
     /** Position of record
       */
     int Id;
     /** Storage of record
       */
 	AlcatelStorage Storage;
+    /** Previous position of record (used only for StoragePC)
+      */
+    int PrevId;
+    /** Previous storage of record (used only for StoragePC)
+      */
+	AlcatelStorage PrevStorage;
     /** Call type (used only for calls)
       */
     CallType Type;
+    /** Whether record has been modified, used for saving into mobile.
+      * Takes affect only fo StorageMobile and StorageSIM.
+      */
+    bool Modified;
 };
 
 extern QString StorageTypes[];
-extern QString SMSTypes[];
+extern QString MessageTypes[];
 extern QString CallTypes[];
 extern QString Priorities[];
 extern QString CalendarTypes[];
@@ -169,10 +180,10 @@ public:
 
 /** class for storing messages
   */
-class AlcatelSMS : public AlcatelClass {
+class AlcatelMessage : public AlcatelClass {
 public:
-	AlcatelSMS();
-	~AlcatelSMS();
+	AlcatelMessage();
+	~AlcatelMessage();
 	
     int Status;
     int Length;
@@ -200,7 +211,7 @@ class AlcatelCategory : public AlcatelClass {
 public:
     /** creates class and sets name and id
       */
-	AlcatelCategory(char* name, int id);
+	AlcatelCategory(char* name, int id, AlcatelStorage storage);
 	AlcatelCategory();
 	
     QString Name;
@@ -217,7 +228,7 @@ typedef QValueList<AlcatelCalendar> AlcatelCalendarList;
 typedef QValueList<AlcatelTodo> AlcatelTodoList;
 /** list of messages
   */
-typedef QValueList<AlcatelSMS> AlcatelSMSList;
+typedef QValueList<AlcatelMessage> AlcatelMessageList;
 /** list of calls
   */
 typedef QValueList<AlcatelCall> AlcatelCallList;
@@ -227,7 +238,7 @@ typedef QValueList<AlcatelCategory> AlcatelCategoryList;
 
 /** find message by id
   */
-AlcatelSMS *getSMSById(AlcatelSMSList *list, int id);
+AlcatelMessage *getMessageById(AlcatelMessageList *list, int id);
 /** returns category name
   */
 QString *getCategoryName(AlcatelCategoryList *list, int id);
@@ -254,5 +265,20 @@ AlcatelCall *getCallById(AlcatelCallList *list, int id, CallType type);
 /** clears contacts of selected type
   */
 void clearContacts(AlcatelContactList *list, AlcatelStorage type);
+/** clears calendar events of selected type
+  */
+void clearCalendar(AlcatelCalendarList *list, AlcatelStorage type);
+/** clears todos of selected type
+  */
+void clearTodos(AlcatelTodoList *list, AlcatelStorage type);
+/** clears messages of selected type
+  */
+void clearMessages(AlcatelMessageList *list, AlcatelStorage type);
+/** clears calls of selected type
+  */
+void clearCalls(AlcatelCallList *list, AlcatelStorage type);
+/** clears categories of selected type
+  */
+void clearCategories(AlcatelCategoryList *list, AlcatelStorage type);
 
 #endif

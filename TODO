@@ -10,7 +10,8 @@ for 0.1-prerelease:
 
 for 0.2-alpha:
  - (DONE) reading of everything - add calls and contacts from SIM
- - saving of document
+ - (DONE) saving of document
+ - loading of document
  - export to csv (and maybe others)
 
 for 0.3-beta:

@@ -75,7 +75,7 @@ KAlcatelDoc::KAlcatelDoc(QWidget *parent, const char *name) : QObject(parent, na
   contacts = new AlcatelContactList();
   calendar = new AlcatelCalendarList();
   todo = new AlcatelTodoList();
-  sms = new AlcatelSMSList();
+  sms = new AlcatelMessageList();
 
   calls = new AlcatelCallList();
 }
@@ -177,6 +177,7 @@ bool KAlcatelDoc::openDocument(const KURL& url, const char *format /*=0*/) {
     KIO::NetAccess::removeTempFile( tmpfile );
 
     doc_url = url;
+    KMessageBox::sorry((KAlcatelApp *) parent(), i18n("Loading not implemented yet... (URL: %1, doc: %2)").arg(url.path()).arg(doc_url.path()), i18n("Sorry"));
 
     modified=false;
     return true;
@@ -187,27 +188,568 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
     // TODO: Add your document saving code here
     /////////////////////////////////////////////////
 
-    KTempFile tmp;
+    KTempFile *tmp = new KTempFile();
 
-    QTextOStream strm(tmp.fstream());
+    QTextStream *strm = tmp->textStream();
+    strm->setEncoding(QTextStream::UnicodeUTF8);
 
-    strm << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    strm << "<!-- KAlcatel saved data -->\n";
-    strm << "<document>\n";
-    strm << " <info>\n";
-    strm << "  <version>0.2</version>\n";
-    strm << " </info>\n";
-    strm << "</document>\n";
+    *strm << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+    *strm << "<!-- KAlcatel saved data -->\n";
+    *strm << "<document>\n";
+    *strm << " <info>\n";
+    *strm << "  <version>1</version>\n";
+    *strm << " </info>\n";
+    *strm << " <messages>\n";
+    AlcatelMessageList::Iterator smsit;
+    for( smsit = sms->begin(); smsit != sms->end(); ++smsit ) {
+        *strm << "  <message>\n";
+        *strm << "   <id>";
+        *strm << (*smsit).Id;
+        *strm << "</id>\n";
+        *strm << "   <storage>";
+        *strm << (*smsit).Storage;
+        *strm << "</storage>\n";
+        *strm << "   <pid>";
+        *strm << (*smsit).PrevId;
+        *strm << "</pid>\n";
+        *strm << "   <pstorage>";
+        *strm << (*smsit).PrevStorage;
+        *strm << "</pstorage>\n";
+        *strm << "   <status>";
+        *strm << (*smsit).Status;
+        *strm << "</status>\n";
+        *strm << "   <length>";
+        *strm << (*smsit).Length;
+        *strm << "</length>\n";
+        *strm << "   <raw>";
+        *strm << (*smsit).Raw;
+        *strm << "</raw>\n";
+        *strm << "   <sender>";
+        *strm << (*smsit).Sender;
+        *strm << "</sender>\n";
+        *strm << "   <date>\n";
+        *strm << "    <day>";
+        *strm << (*smsit).Date.date().day();
+        *strm << "</day>\n";
+        *strm << "    <month>";
+        *strm << (*smsit).Date.date().month();
+        *strm << "</month>\n";
+        *strm << "    <year>";
+        *strm << (*smsit).Date.date().year();
+        *strm << "</year>\n";
+        *strm << "   </date>\n";
+        *strm << "   <time>\n";
+        *strm << "    <hour>";
+        *strm << (*smsit).Date.time().hour();
+        *strm << "</hour>\n";
+        *strm << "    <minute>";
+        *strm << (*smsit).Date.time().minute();
+        *strm << "</minute>\n";
+        *strm << "    <second>";
+        *strm << (*smsit).Date.time().second();
+        *strm << "</second>\n";
+        *strm << "   </time>\n";
+        *strm << "   <text>";
+        *strm << (*smsit).Text;
+        *strm << "</text>\n";
+        *strm << "   <smsc>";
+        *strm << (*smsit).SMSC;
+        *strm << "</smsc>\n";
+        *strm << "  </message>\n";
+    }
+    *strm << " </messages>\n";
+    *strm << " <contacts>\n";
+    AlcatelContactList::Iterator cit;
+    for( cit = contacts->begin(); cit != contacts->end(); ++cit ) {
+        *strm << "  <contact>\n";
+        *strm << "   <id>";
+        *strm << (*cit).Id;
+        *strm << "</id>\n";
+        *strm << "   <storage>";
+        *strm << (*cit).Storage;
+        *strm << "</storage>\n";
+        *strm << "   <pid>";
+        *strm << (*cit).PrevId;
+        *strm << "</pid>\n";
+        *strm << "   <pstorage>";
+        *strm << (*cit).PrevStorage;
+        *strm << "</pstorage>\n";
 
-    tmp.close();
+        if (!(*cit).LastName.isEmpty()) {
+            *strm << "   <lastname>";
+            *strm << (*cit).LastName;
+            *strm << "</lastname>\n";
+        }
+        if (!(*cit).FirstName.isEmpty()) {
+            *strm << "   <firstname>";
+            *strm << (*cit).FirstName;
+            *strm << "</firstname>\n";
+        }
+        if (!(*cit).Company.isEmpty()) {
+            *strm << "   <company>";
+            *strm << (*cit).Company;
+            *strm << "</company>\n";
+        }
+        if (!(*cit).JobTitle.isEmpty()) {
+            *strm << "   <jobtitle>";
+            *strm << (*cit).JobTitle;
+            *strm << "</jobtitle>\n";
+        }
+        if (!(*cit).Note.isEmpty()) {
+            *strm << "   <note>";
+            *strm << (*cit).Note;
+            *strm << "</note>\n";
+        }
+        if ((*cit).Category != -1) {
+            *strm << "   <category>";
+            *strm << (*cit).Category;
+            *strm << "</category>\n";
+        }
+        if ((*cit).Private != -1) {
+            *strm << "   <private>";
+            *strm << (*cit).Private;
+            *strm << "</private>\n";
+        }
+        if (!(*cit).WorkNumber.isEmpty()) {
+            *strm << "   <worknumber>";
+            *strm << (*cit).WorkNumber;
+            *strm << "</worknumber>\n";
+        }
+        if (!(*cit).MainNumber.isEmpty()) {
+            *strm << "   <mainnumber>";
+            *strm << (*cit).MainNumber;
+            *strm << "</mainnumber>\n";
+        }
+        if (!(*cit).FaxNumber.isEmpty()) {
+            *strm << "   <faxnumber>";
+            *strm << (*cit).FaxNumber;
+            *strm << "</faxnumber>\n";
+        }
+        if (!(*cit).OtherNumber.isEmpty()) {
+            *strm << "   <othernumber>";
+            *strm << (*cit).OtherNumber;
+            *strm << "</othernumber>\n";
+        }
+        if (!(*cit).PagerNumber.isEmpty()) {
+            *strm << "   <pagernumber>";
+            *strm << (*cit).PagerNumber;
+            *strm << "</pagernumber>\n";
+        }
+        if (!(*cit).MobileNumber.isEmpty()) {
+            *strm << "   <mobilenumber>";
+            *strm << (*cit).MobileNumber;
+            *strm << "</mobilenumber>\n";
+        }
+        if (!(*cit).HomeNumber.isEmpty()) {
+            *strm << "   <homenumber>";
+            *strm << (*cit).HomeNumber;
+            *strm << "</homenumber>\n";
+        }
+        if (!(*cit).Email1.isEmpty()) {
+            *strm << "   <email1>";
+            *strm << (*cit).Email1;
+            *strm << "</email1>\n";
+        }
+        if (!(*cit).Email2.isEmpty()) {
+            *strm << "   <email2>";
+            *strm << (*cit).Email2;
+            *strm << "</email2>\n";
+        }
+        if (!(*cit).Address.isEmpty()) {
+            *strm << "   <address>";
+            *strm << (*cit).Address;
+            *strm << "</address>\n";
+        }
+        if (!(*cit).City.isEmpty()) {
+            *strm << "   <city>";
+            *strm << (*cit).City;
+            *strm << "</city>\n";
+        }
+        if (!(*cit).State.isEmpty()) {
+            *strm << "   <state>";
+            *strm << (*cit).State;
+            *strm << "</state>\n";
+        }
+        if (!(*cit).Zip.isEmpty()) {
+            *strm << "   <zip>";
+            *strm << (*cit).Zip;
+            *strm << "</zip>\n";
+        }
+        if (!(*cit).Country.isEmpty()) {
+            *strm << "   <country>";
+            *strm << (*cit).Country;
+            *strm << "</country>\n";
+        }
+        if (!(*cit).Custom1.isEmpty()) {
+            *strm << "   <custom1>";
+            *strm << (*cit).Custom1;
+            *strm << "</custom1>\n";
+        }
+        if (!(*cit).Custom2.isEmpty()) {
+            *strm << "   <custom2>";
+            *strm << (*cit).Custom2;
+            *strm << "</custom2>\n";
+        }
+        if (!(*cit).Custom3.isEmpty()) {
+            *strm << "   <custom3>";
+            *strm << (*cit).Custom3;
+            *strm << "</custom3>\n";
+        }
+        if (!(*cit).Custom4.isEmpty()) {
+            *strm << "   <custom4>";
+            *strm << (*cit).Custom4;
+            *strm << "</custom4>\n";
+        }
+        *strm << "  </contact>\n";
+    }
+    *strm << " </contacts>\n";
+    *strm << " <calendar>\n";
+    AlcatelCalendarList::Iterator calit;
+    for( calit = calendar->begin(); calit != calendar->end(); ++calit ) {
+        *strm << "  <event>\n";
+        *strm << "   <id>";
+        *strm << (*calit).Id;
+        *strm << "</id>\n";
+        *strm << "   <storage>";
+        *strm << (*calit).Storage;
+        *strm << "</storage>\n";
+        *strm << "   <pid>";
+        *strm << (*calit).PrevId;
+        *strm << "</pid>\n";
+        *strm << "   <pstorage>";
+        *strm << (*calit).PrevStorage;
+        *strm << "</pstorage>\n";
 
-    KIO::NetAccess::upload( tmp.name(), url );
+        *strm << "   <date>\n";
+        *strm << "    <day>";
+        *strm << (*calit).Date.day();
+        *strm << "</day>\n";
+        *strm << "    <month>";
+        *strm << (*calit).Date.month();
+        *strm << "</month>\n";
+        *strm << "    <year>";
+        *strm << (*calit).Date.year();
+        *strm << "</year>\n";
+        *strm << "   </date>\n";
 
-    tmp.unlink();
+        if ((*calit).EventType != ALC_CALENDAR_BIRTHDAY && (*calit).EventType != ALC_CALENDAR_ALARM) {
+            *strm << "   <starttime>\n";
+            *strm << "    <hour>";
+            *strm << (*calit).StartTime.hour();
+            *strm << "</hour>\n";
+            *strm << "    <minute>";
+            *strm << (*calit).StartTime.minute();
+            *strm << "</minute>\n";
+            *strm << "    <second>";
+            *strm << (*calit).StartTime.second();
+            *strm << "</second>\n";
+            *strm << "   </starttime>\n";
 
-    KMessageBox::sorry((KAlcatelApp *) parent(), i18n("Saving not implemented yet... (URL: %1)").arg(url.path()), i18n("Sorry"));
+            *strm << "   <endtime>\n";
+            *strm << "    <hour>";
+            *strm << (*calit).EndTime.hour();
+            *strm << "</hour>\n";
+            *strm << "    <minute>";
+            *strm << (*calit).EndTime.minute();
+            *strm << "</minute>\n";
+            *strm << "    <second>";
+            *strm << (*calit).EndTime.second();
+            *strm << "</second>\n";
+            *strm << "   </endtime>\n";
+        }
+
+        if (!(*calit).Alarm.isNull()) {
+            *strm << "   <alarmdate>\n";
+            *strm << "    <day>";
+            *strm << (*calit).Alarm.date().day();
+            *strm << "</day>\n";
+            *strm << "    <month>";
+            *strm << (*calit).Alarm.date().month();
+            *strm << "</month>\n";
+            *strm << "    <year>";
+            *strm << (*calit).Alarm.date().year();
+            *strm << "</year>\n";
+            *strm << "   </alarmdate>\n";
+            *strm << "   <alarmtime>\n";
+            *strm << "    <hour>";
+            *strm << (*calit).Alarm.time().hour();
+            *strm << "</hour>\n";
+            *strm << "    <minute>";
+            *strm << (*calit).Alarm.time().minute();
+            *strm << "</minute>\n";
+            *strm << "    <second>";
+            *strm << (*calit).Alarm.time().second();
+            *strm << "</second>\n";
+            *strm << "   </alarmtime>\n";
+        }
+
+        if (!(*calit).Alarm2.isNull()) {
+            *strm << "   <alarm2date>\n";
+            *strm << "    <day>";
+            *strm << (*calit).Alarm2.date().day();
+            *strm << "</day>\n";
+            *strm << "    <month>";
+            *strm << (*calit).Alarm2.date().month();
+            *strm << "</month>\n";
+            *strm << "    <year>";
+            *strm << (*calit).Alarm2.date().year();
+            *strm << "</year>\n";
+            *strm << "   </alarm2date>\n";
+            *strm << "   <alarm2time>\n";
+            *strm << "    <hour>";
+            *strm << (*calit).Alarm2.time().hour();
+            *strm << "</hour>\n";
+            *strm << "    <minute>";
+            *strm << (*calit).Alarm2.time().minute();
+            *strm << "</minute>\n";
+            *strm << "    <second>";
+            *strm << (*calit).Alarm2.time().second();
+            *strm << "</second>\n";
+            *strm << "   </alarm2time>\n";
+        }
+
+        if (!(*calit).Subject.isEmpty()) {
+            *strm << "   <subject>";
+            *strm << (*calit).Subject;
+            *strm << "</subject>\n";
+        }
+
+        if ((*calit).Private != -1) {
+            *strm << "   <private>";
+            *strm << (*calit).Private;
+            *strm << "</private>\n";
+        }
+
+        if ((*calit).EventType != -1) {
+            *strm << "   <eventtype>";
+            *strm << (*calit).EventType;
+            *strm << "</eventtype>\n";
+        }
+
+        if ((*calit).ContactID != -1) {
+            *strm << "   <contactid>";
+            *strm << (*calit).ContactID;
+            *strm << "</contactid>\n";
+        }
+
+
+
+        if ((*calit).EventType == ALC_CALENDAR_REPEATING) {
+            if ((*calit).DayOfWeek != -1) {
+                *strm << "   <dayofweek>";
+                *strm << (*calit).DayOfWeek;
+                *strm << "</dayofweek>\n";
+            }
+
+            if ((*calit).Day != -1) {
+                *strm << "   <day>";
+                *strm << (*calit).Day;
+                *strm << "</day>\n";
+            }
+
+            if ((*calit).WeekOfMonth != -1) {
+                *strm << "   <weekofmonth>";
+                *strm << (*calit).WeekOfMonth;
+                *strm << "</weekofmonth>\n";
+            }
+
+            if ((*calit).Month != -1) {
+                *strm << "   <month>";
+                *strm << (*calit).Month;
+                *strm << "</month>\n";
+            }
+
+            if ((*calit).Frequency != -1) {
+                *strm << "   <frequency>";
+                *strm << (*calit).Frequency;
+                *strm << "</frequency>\n";
+            }
+
+            if (!(*calit).StopDate.isNull()) {
+                *strm << "   <stopdate>\n";
+                *strm << "    <day>";
+                *strm << (*calit).StopDate.day();
+                *strm << "</day>\n";
+                *strm << "    <month>";
+                *strm << (*calit).StopDate.month();
+                *strm << "</month>\n";
+                *strm << "    <year>";
+                *strm << (*calit).StopDate.year();
+                *strm << "</year>\n";
+                *strm << "   </stopdate>\n";
+            }
+
+            if (!(*calit).StopDate.isNull()) {
+                *strm << "   <startdate>\n";
+                *strm << "    <day>";
+                *strm << (*calit).StartDate.day();
+                *strm << "</day>\n";
+                *strm << "    <month>";
+                *strm << (*calit).StartDate.month();
+                *strm << "</month>\n";
+                *strm << "    <year>";
+                *strm << (*calit).StartDate.year();
+                *strm << "</year>\n";
+                *strm << "   </startdate>\n";
+            }
+        }
+
+        *strm << "  </event>\n";
+    }
+    *strm << " </calendar>\n";
+    *strm << " <todos>\n";
+    AlcatelTodoList::Iterator tit;
+
+    for( tit = todo->begin(); tit != todo->end(); ++tit ) {
+        *strm << "  <todo>\n";
+        *strm << "   <id>";
+        *strm << (*tit).Id;
+        *strm << "</id>\n";
+        *strm << "   <storage>";
+        *strm << (*tit).Storage;
+        *strm << "</storage>\n";
+        *strm << "   <pid>";
+        *strm << (*tit).PrevId;
+        *strm << "</pid>\n";
+        *strm << "   <pstorage>";
+        *strm << (*tit).PrevStorage;
+        *strm << "</pstorage>\n";
+
+        if (!(*tit).Subject.isEmpty()) {
+            *strm << "   <subject>";
+            *strm << (*tit).Subject;
+            *strm << "</subject>\n";
+        }
+        if ((*tit).Completed != -1) {
+            *strm << "   <completed>";
+            *strm << (*tit).Completed;
+            *strm << "</completed>\n";
+        }
+        if ((*tit).Private != -1) {
+            *strm << "   <private>";
+            *strm << (*tit).Private;
+            *strm << "</private>\n";
+        }
+        if ((*tit).Category != -1) {
+            *strm << "   <category>";
+            *strm << (*tit).Category;
+            *strm << "</category>\n";
+        }
+        if ((*tit).Priority != -1) {
+            *strm << "   <priority>";
+            *strm << (*tit).Priority;
+            *strm << "</priority>\n";
+        }
+        if ((*tit).ContactID != -1) {
+            *strm << "   <contactid>";
+            *strm << (*tit).ContactID;
+            *strm << "</contactid>\n";
+        }
+        if (!(*tit).DueDate.isNull()) {
+            *strm << "   <duedate>\n";
+            *strm << "    <day>";
+            *strm << (*tit).DueDate.day();
+            *strm << "</day>\n";
+            *strm << "    <month>";
+            *strm << (*tit).DueDate.month();
+            *strm << "</month>\n";
+            *strm << "    <year>";
+            *strm << (*tit).DueDate.year();
+            *strm << "</year>\n";
+            *strm << "   </duedate>\n";
+        }
+
+        if (!(*tit).Alarm.isNull()) {
+            *strm << "   <alarmdate>\n";
+            *strm << "    <day>";
+            *strm << (*tit).Alarm.date().day();
+            *strm << "</day>\n";
+            *strm << "    <month>";
+            *strm << (*tit).Alarm.date().month();
+            *strm << "</month>\n";
+            *strm << "    <year>";
+            *strm << (*tit).Alarm.date().year();
+            *strm << "</year>\n";
+            *strm << "   </alarmdate>\n";
+            *strm << "   <alarmtime>\n";
+            *strm << "    <hour>";
+            *strm << (*tit).Alarm.time().hour();
+            *strm << "</hour>\n";
+            *strm << "    <minute>";
+            *strm << (*tit).Alarm.time().minute();
+            *strm << "</minute>\n";
+            *strm << "    <second>";
+            *strm << (*tit).Alarm.time().second();
+            *strm << "</second>\n";
+            *strm << "   </alarmtime>\n";
+        }
+
+        *strm << "  </todo>\n";
+    }
+    *strm << " </todos>\n";
+
+    AlcatelCategoryList::Iterator catit;
+
+    *strm << " <todocategories>\n";
+    for( catit = todo_cats->begin(); catit != todo_cats->end(); ++catit ) {
+        *strm << "  <category>\n";
+        *strm << "   <id>";
+        *strm << (*catit).Id;
+        *strm << "</id>\n";
+        *strm << "   <storage>";
+        *strm << (*catit).Storage;
+        *strm << "</storage>\n";
+        *strm << "   <pid>";
+        *strm << (*catit).PrevId;
+        *strm << "</pid>\n";
+        *strm << "   <pstorage>";
+        *strm << (*catit).PrevStorage;
+        *strm << "</pstorage>\n";
+        *strm << "   <name>";
+        *strm << (*catit).Name;
+        *strm << "</name>\n";
+        *strm << "  </category>\n";
+    }
+    *strm << " </todocategories>\n";
+
+    *strm << " <contactcategories>\n";
+    for( catit = contact_cats->begin(); catit != contact_cats->end(); ++catit ) {
+        *strm << "  <category>\n";
+        *strm << "   <id>";
+        *strm << (*catit).Id;
+        *strm << "</id>\n";
+        *strm << "   <storage>";
+        *strm << (*catit).Storage;
+        *strm << "</storage>\n";
+        *strm << "   <pid>";
+        *strm << (*catit).PrevId;
+        *strm << "</pid>\n";
+        *strm << "   <pstorage>";
+        *strm << (*catit).PrevStorage;
+        *strm << "</pstorage>\n";
+        *strm << "   <name>";
+        *strm << (*catit).Name;
+        *strm << "</name>\n";
+        *strm << "  </category>\n";
+    }
+    *strm << " </contactcategories>\n";
+
+    /*
+        *strm << "   <>";
+        *strm << (*it).;
+        *strm << "</>\n";
+        */
+    *strm << "</document>\n";
+
+    tmp->close();
+
+    KIO::NetAccess::upload( tmp->name(), url );
+
+    tmp->unlink();
+    tmp->~KTempFile();
 
     doc_url = url;
+
     modified=false;
     return true;
 }
@@ -225,11 +767,11 @@ int KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
     switch (sync) {
         case ALC_SYNC_CALENDAR:
             count = ALC_CALENDAR_FIELDS;
-            calendar->clear();
+            clearCalendar(calendar, StorageMobile);
             break;
         case ALC_SYNC_TODO:
             count = ALC_TODO_FIELDS;
-            todo->clear();
+            clearTodos(todo, StorageMobile);
             break;
         case ALC_SYNC_CONTACTS:
             count = ALC_CONTACTS_FIELDS;
@@ -270,10 +812,12 @@ int KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
                 case ALC_SYNC_CALENDAR:
                     Calendar = new AlcatelCalendar();
                     Calendar->Id = ids[i];
+                    Calendar->Storage = StorageMobile;
                     break;
                 case ALC_SYNC_TODO:
                     Todo = new AlcatelTodo();
                     Todo->Id = ids[i];
+                    Todo->Storage = StorageMobile;
                     break;
                 case ALC_SYNC_CONTACTS:
                     Contact = new AlcatelContact();
@@ -348,11 +892,11 @@ int KAlcatelDoc::readMobileCategories(AlcatelCategoryList *strList, alc_type syn
 
         message(MSG_INFO, "Received %d categories:", list[0]);
 
-        strList->clear();
+        clearCategories(strList, StorageMobile);
 
         for (i = 1; i <= list[0]; i++) {
             result = sync_get_obj_list_item(type, cat, list[i]);
-            strList->append(AlcatelCategory(result, list[i]));
+            strList->append(AlcatelCategory(result, list[i], StorageMobile));
             message (MSG_DEBUG, "Read category name: %02d: %s", list[i],  result);
             free(result);
         }
@@ -441,15 +985,16 @@ bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1)
      }
 
     if (what == alcatel_sms || what == alcatel_all) {
-        struct SMSData *msg;
+        MessageData *msg;
         win->slotStatusMsg(i18n("Reading messages"),ID_DETAIL_MSG);
-        sms->clear();
+        clearMessages(sms, StorageSIM);
         msg = get_smss();
 
         i = 0;
         while (msg[i].pos != -1) {
-            AlcatelSMS *Msg = new AlcatelSMS();
+            AlcatelMessage *Msg = new AlcatelMessage();
             Msg->Date = QDateTime();
+            Msg->Storage = StorageSIM;
             Msg->Date.setTime_t(msg[i].date);
             Msg->Length = msg[i].len;
             Msg->Id = msg[i].pos;
@@ -474,13 +1019,14 @@ bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1)
     if (what == alcatel_calls || what == alcatel_all) {
         struct ContactData *cont;
         win->slotStatusMsg(i18n("Reading calls"),ID_DETAIL_MSG);
-        calls->clear();
+        clearCalls(calls, StorageMobile);
 
         select_phonebook(PB_LAST_DIAL);
         cont = get_contacts(1, 10);
         i = 0;
         while (cont[i].pos != -1) {
             AlcatelCall *Call = new AlcatelCall();
+            Call->Storage = StorageMobile;
             Call->Type = CallDialled;
             Call->Id = cont[i].pos;
             Call->Name = *(cont[i].name);
@@ -495,6 +1041,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1)
         i = 0;
         while (cont[i].pos != -1) {
             AlcatelCall *Call = new AlcatelCall();
+            Call->Storage = StorageMobile;
             Call->Type = CallReceived;
             Call->Id = cont[i].pos;
             Call->Name = *(cont[i].name);
@@ -509,6 +1056,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1)
         i = 0;
         while (cont[i].pos != -1) {
             AlcatelCall *Call = new AlcatelCall();
+            Call->Storage = StorageMobile;
             Call->Type = CallMissed;
             Call->Id = cont[i].pos;
             Call->Name = *(cont[i].name);

@@ -40,6 +40,7 @@
 #include <kconfig.h>
 #include <kstdaction.h>
 #include <kiconloader.h>
+#include <kio/netaccess.h>
 
 // application specific includes
 #include "kalcatel.h"
@@ -279,6 +280,7 @@ void KAlcatelApp::readProperties(KConfig* _cfg)
   QString filename = _cfg->readEntry("filename", "");
   KURL url(filename);
   bool modified = _cfg->readBoolEntry("modified", false);
+
   if(modified)
   {
     bool canRecover;
@@ -585,7 +587,7 @@ void KAlcatelApp::slotFileOpen()
   else
   {	
     KURL url=KFileDialog::getOpenURL(QString::null,
-        i18n("*.kalc|KAlcatel files\n*|All files"), this, i18n("Open File..."));
+        i18n("*.kalc|KAlcatel files (*.kalc)\n*|All files"), this, i18n("Open File..."));
     if(!url.isEmpty())
     {
       doc->openDocument(url);
@@ -599,7 +601,7 @@ void KAlcatelApp::slotFileOpen()
 void KAlcatelApp::slotFileOpenRecent(const KURL& url)
 {
   slotStatusMsg(i18n("Opening file..."), ID_STATUS_MSG);
-	
+
   if(!doc->saveModified())
   {
      // here saving wasn't successful
@@ -625,20 +627,46 @@ void KAlcatelApp::slotFileSave() {
     slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }
 
-void KAlcatelApp::slotFileSaveAs()
-{
-  slotStatusMsg(i18n("Saving file with a new filename..."), ID_STATUS_MSG);
+void KAlcatelApp::slotFileSaveAs() {
+    slotStatusMsg(i18n("Saving file with a new filename..."), ID_STATUS_MSG);
 
-  KURL url=KFileDialog::getSaveURL(QDir::currentDirPath(),
-        i18n("*|All files"), this, i18n("Save as..."));
-  if(!url.isEmpty())
-  {
-    doc->saveDocument(url);
-    fileOpenRecent->addURL(url);
-    setCaption(url.fileName(),doc->isModified());
-  }
+    KURL url=KFileDialog::getSaveURL(QDir::currentDirPath(),
+          i18n("*.kalc|KAlcatel files (*.kalc)\n*|All files"), this, i18n("Save as..."));
+    if(!url.isEmpty()) {
+        QString filename = url.fileName();
+        if (!filename.contains('.')) {
+            filename.append(".kalc");
+            url.setFileName(filename);
+        }
+        if (KIO::NetAccess::exists(url)) {
+            int want_save = KMessageBox::warningYesNoCancel(this,
+                                                 i18n("The selected file exists.\n"
+                                                      "Do you want to overwrite it?"),
+                                                 i18n("Warning"));
+            switch(want_save){
+                case KMessageBox::Yes:
+                    break;
+                case KMessageBox::No:
+                    slotFileSaveAs();
+                    return;
+                    break;
+                case KMessageBox::Cancel:
+                    slotStatusMsg(i18n("Canceled."), ID_STATUS_MSG);
+                    return;
+                    break;
+                default:
+                    slotFileSaveAs();
+                    return;
+                    break;
+            }
+        }
 
-  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
+        doc->saveDocument(url);
+        fileOpenRecent->addURL(url);
+        setCaption(url.fileName(),doc->isModified());
+    }
+
+    slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }
 
 void KAlcatelApp::slotFileClose()

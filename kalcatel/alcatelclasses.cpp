@@ -37,7 +37,7 @@
 #define chk_type(which) if ((*data).type != which) message( MSG_ERROR, "Type check failed for item %d!", number); else
 
 
-QString SMSTypes[] = { i18n("Unread"), i18n("Read"), i18n("Unsent"), i18n("Sent") };
+QString MessageTypes[] = { i18n("Unread"), i18n("Read"), i18n("Unsent"), i18n("Sent") };
 QString StorageTypes[]= { i18n("PC"), i18n("SIM"), i18n("Mobile") };
 QString CallTypes[] = { i18n("Missed"), i18n("Received"), i18n("Dialled") };
 QString Priorities[] = { i18n("High"), i18n("Normal"), i18n("Low") };
@@ -77,6 +77,14 @@ QString MonthNames[] = {
     i18n("October"),
     i18n("November"),
     i18n("December") };
+
+AlcatelClass::AlcatelClass() {
+    Id = -1;
+    Storage = StorageNone;
+    PrevId = -1;
+    PrevStorage = StorageNone;
+    Modified = false;
+}
 
 AlcatelContact::AlcatelContact() {
     Category = -1;
@@ -276,14 +284,14 @@ void AlcatelTodo::setField(int number, struct AlcatelFieldStruct *data) {
     }
 }
 
-AlcatelSMS::AlcatelSMS() {
+AlcatelMessage::AlcatelMessage() {
     Id = -1;
     Status = -1;
     Length = -1;
     Raw = NULL;
 }
 
-AlcatelSMS::~AlcatelSMS() {
+AlcatelMessage::~AlcatelMessage() {
     if (Raw != NULL) {
         free( Raw );
         Raw = NULL;
@@ -296,9 +304,10 @@ AlcatelCall::AlcatelCall() {
 AlcatelCall::~AlcatelCall() {
 }
 
-AlcatelCategory::AlcatelCategory(char* name, int id) {
+AlcatelCategory::AlcatelCategory(char* name, int id, AlcatelStorage storage) {
     Name = QString().setLatin1(name);
     Id = id;
+    Storage = storage;
 }
 
 AlcatelCategory::AlcatelCategory() {
@@ -306,8 +315,8 @@ AlcatelCategory::AlcatelCategory() {
     Id = -1;
 }
 
-AlcatelSMS *getSMSById(AlcatelSMSList *list, int id) {
-    AlcatelSMSList::Iterator it;
+AlcatelMessage *getMessageById(AlcatelMessageList *list, int id) {
+    AlcatelMessageList::Iterator it;
     for( it = list->begin(); it != list->end(); ++it ) {
         if ((* it).Id == id)
             return &(*it);
@@ -397,8 +406,63 @@ AlcatelCall *getCallById(AlcatelCallList *list, int id, CallType type) {
     return NULL;
 }
 
-void clearContacts(AlcatelContactList *list, AlcatelStorage type){
+void clearContacts(AlcatelContactList *list, AlcatelStorage type) {
     AlcatelContactList::Iterator it;
+    it = list->begin();
+    while (it != list->end()) {
+        if ((* it).Storage == type )
+            it = list->remove(it);
+        else
+            it++;
+    }
+}
+
+void clearCalendar(AlcatelCalendarList *list, AlcatelStorage type) {
+    AlcatelCalendarList::Iterator it;
+    it = list->begin();
+    while (it != list->end()) {
+        if ((* it).Storage == type )
+            it = list->remove(it);
+        else
+            it++;
+    }
+}
+
+void clearTodos(AlcatelTodoList *list, AlcatelStorage type) {
+    AlcatelTodoList::Iterator it;
+    it = list->begin();
+    while (it != list->end()) {
+        if ((* it).Storage == type )
+            it = list->remove(it);
+        else
+            it++;
+    }
+}
+
+void clearMessages(AlcatelMessageList *list, AlcatelStorage type) {
+    AlcatelMessageList::Iterator it;
+    it = list->begin();
+    while (it != list->end()) {
+        if ((* it).Storage == type )
+            it = list->remove(it);
+        else
+            it++;
+    }
+}
+
+void clearCalls(AlcatelCallList *list, AlcatelStorage type) {
+    AlcatelCallList::Iterator it;
+    it = list->begin();
+    while (it != list->end()) {
+        if ((* it).Storage == type )
+            it = list->remove(it);
+        else
+            it++;
+    }
+}
+
+void clearCategories(AlcatelCategoryList *list, AlcatelStorage type) {
+    AlcatelCategoryList::Iterator it;
     it = list->begin();
     while (it != list->end()) {
         if ((* it).Storage == type )

@@ -358,7 +358,7 @@ void EditContactDialog::slotOK() {
         cont.Created = true;
         if (cont.Storage == StoragePC) cont.Id = theDoc->getPCStorageId();
         list->append(cont);
-        theDoc->udpateDocument(alcatel_contacts);
+        theDoc->updateDocument(alcatel_contacts);
     } else {
         cont.Created = contact->Created;
         cont.Deleted = contact->Deleted;
@@ -369,7 +369,7 @@ void EditContactDialog::slotOK() {
             list->remove(*contact);
             cont.Modified = true;
             list->append(cont);
-            theDoc->udpateDocument(alcatel_contacts);
+            theDoc->updateDocument(alcatel_contacts);
         }
     }
 

@@ -142,7 +142,7 @@ class KAlcatelDoc : public QObject
     int getPCStorageId();
     /** updates some part (or whole) document
      */
-    void udpateDocument(AlcDataType which);
+    void updateDocument(AlcDataType which);
 
   public slots:
     /** calls repaint() on all views connected to the document object and is called by the view by which the document has been changed.

@@ -206,6 +206,7 @@ KAlcatelListView *KAlcatelView::createListView(QWidget *parent, AlcListType type
             list->addColumn(i18n("Position"));
             connect( list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
             connect( list, SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotContactDoubleClicked(QListViewItem *) ) );
+            connect( list, SIGNAL( deletePressed( QListViewItem * ) ), this, SLOT( slotContactDelete(QListViewItem *) ) );
             connect( list, SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( slotContactDoubleClicked(QListViewItem *) ) );
             break;
         case alc_contacts_mobile:
@@ -220,6 +221,7 @@ KAlcatelListView *KAlcatelView::createListView(QWidget *parent, AlcListType type
             connect( list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
             connect( list, SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotContactDoubleClicked(QListViewItem *) ) );
             connect( list, SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( slotContactDoubleClicked(QListViewItem *) ) );
+            connect( list, SIGNAL( deletePressed( QListViewItem * ) ), this, SLOT( slotContactDelete(QListViewItem *) ) );
             break;
         case alc_contacts_mobile_cat:
             list->addColumn(i18n("Last name"));
@@ -232,6 +234,7 @@ KAlcatelListView *KAlcatelView::createListView(QWidget *parent, AlcListType type
             connect( list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
             connect( list, SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotContactDoubleClicked(QListViewItem *) ) );
             connect( list, SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( slotContactDoubleClicked(QListViewItem *) ) );
+            connect( list, SIGNAL( deletePressed( QListViewItem * ) ), this, SLOT( slotContactDelete(QListViewItem *) ) );
             break;
         case alc_todos:
             list->addColumn(i18n("Completed"));
@@ -243,6 +246,7 @@ KAlcatelListView *KAlcatelView::createListView(QWidget *parent, AlcListType type
             connect( list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotTodoChanged(QListViewItem *) ) );
             connect( list, SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotTodoDoubleClicked(QListViewItem *) ) );
             connect( list, SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( slotTodoDoubleClicked(QListViewItem *) ) );
+            connect( list, SIGNAL( deletePressed( QListViewItem * ) ), this, SLOT( slotTodoDelete(QListViewItem *) ) );
             break;
         case alc_todos_cat:
             list->addColumn(i18n("Completed"));
@@ -253,6 +257,7 @@ KAlcatelListView *KAlcatelView::createListView(QWidget *parent, AlcListType type
             connect( list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotTodoChanged(QListViewItem *) ) );
             connect( list, SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotTodoDoubleClicked(QListViewItem *) ) );
             connect( list, SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( slotTodoDoubleClicked(QListViewItem *) ) );
+            connect( list, SIGNAL( deletePressed( QListViewItem * ) ), this, SLOT( slotTodoDelete(QListViewItem *) ) );
             break;
         case alc_calendar:
             list->addColumn(i18n("Date"));
@@ -266,6 +271,7 @@ KAlcatelListView *KAlcatelView::createListView(QWidget *parent, AlcListType type
             connect( list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotCalendarChanged(QListViewItem *) ) );
             connect( list, SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotCalendarDoubleClicked(QListViewItem *) ) );
             connect( list, SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( slotCalendarDoubleClicked(QListViewItem *) ) );
+            connect( list, SIGNAL( deletePressed( QListViewItem * ) ), this, SLOT( slotCalendarDelete(QListViewItem *) ) );
             break;
         case alc_calls_type:
             list->addColumn(i18n("Number"));
@@ -291,6 +297,7 @@ KAlcatelListView *KAlcatelView::createListView(QWidget *parent, AlcListType type
             list->addColumn(i18n("Text"));
             list->addColumn(i18n("Position"));
             connect( list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotMessageChanged(QListViewItem *) ) );
+            connect( list, SIGNAL( deletePressed( QListViewItem * ) ), this, SLOT( slotMessageDelete(QListViewItem *) ) );
             break;
         case alc_messages_in:
             list->addColumn(i18n("From"));
@@ -300,6 +307,7 @@ KAlcatelListView *KAlcatelView::createListView(QWidget *parent, AlcListType type
             list->addColumn(i18n("Text"));
             list->addColumn(i18n("Position"));
             connect( list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotMessageChanged(QListViewItem *) ) );
+            connect( list, SIGNAL( deletePressed( QListViewItem * ) ), this, SLOT( slotMessageDelete(QListViewItem *) ) );
             break;
         case alc_messages_out:
             list->addColumn(i18n("To"));
@@ -309,6 +317,7 @@ KAlcatelListView *KAlcatelView::createListView(QWidget *parent, AlcListType type
             list->addColumn(i18n("Text"));
             list->addColumn(i18n("Position"));
             connect( list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotMessageChanged(QListViewItem *) ) );
+            connect( list, SIGNAL( deletePressed( QListViewItem * ) ), this, SLOT( slotMessageDelete(QListViewItem *) ) );
             break;
     }
 
@@ -322,6 +331,7 @@ KAlcatelDoc *KAlcatelView::getDocument() const {
 
 void KAlcatelView::repaint() {
     KAlcatelDoc *doc = getDocument();
+    /* TODO: we should at first store position of current view and try to restore it */
     int unread_sms = 0;
     if (doc->getVersion() != docVersion) {
         docVersion = doc->getVersion();
@@ -1005,3 +1015,60 @@ void KAlcatelView::slotContactDoubleClicked(QListViewItem *item) {
         edit.exec();
     }
 }
+
+void KAlcatelView::slotTodoDelete(QListViewItem *item) {
+    KAlcatelDoc *theDoc = getDocument();
+    AlcatelClass *data = ((KAlcatelDataItem *) item)->alcatelData;
+    if (data->Storage == StoragePC && data->PrevStorage == StorageNone) {
+        theDoc->todos->remove(*(AlcatelTodo *)data);
+    } else {
+        AlcatelTodo cont(*(AlcatelTodo *)data);
+        theDoc->todos->remove(*(AlcatelTodo *)data);
+        cont.Deleted = true;
+        theDoc->todos->append(cont);
+    }
+    theDoc->updateDocument(alcatel_todos);
+}
+
+void KAlcatelView::slotMessageDelete(QListViewItem *item) {
+    KAlcatelDoc *theDoc = getDocument();
+    AlcatelClass *data = ((KAlcatelDataItem *) item)->alcatelData;
+    if (data->Storage == StoragePC && data->PrevStorage == StorageNone) {
+        theDoc->messages->remove(*(AlcatelMessage *)data);
+    } else {
+        AlcatelMessage cont = *(AlcatelMessage *)data;
+        theDoc->messages->remove(*(AlcatelMessage *)data);
+        cont.Deleted = true;
+        theDoc->messages->append(cont);
+    }
+    theDoc->updateDocument(alcatel_messages);
+}
+
+void KAlcatelView::slotCalendarDelete(QListViewItem *item) {
+    KAlcatelDoc *theDoc = getDocument();
+    AlcatelClass *data = ((KAlcatelDataItem *) item)->alcatelData;
+    if (data->Storage == StoragePC && data->PrevStorage == StorageNone) {
+        theDoc->calendar->remove(*(AlcatelCalendar *)data);
+    } else {
+        AlcatelCalendar cont = *(AlcatelCalendar *)data;
+        theDoc->calendar->remove(*(AlcatelCalendar *)data);
+        cont.Deleted = true;
+        theDoc->calendar->append(cont);
+    }
+    theDoc->updateDocument(alcatel_calendar);
+}
+
+void KAlcatelView::slotContactDelete(QListViewItem *item) {
+    KAlcatelDoc *theDoc = getDocument();
+    AlcatelClass *data = ((KAlcatelDataItem *) item)->alcatelData;
+    if (data->Storage == StoragePC && data->PrevStorage == StorageNone) {
+        theDoc->contacts->remove(*(AlcatelContact *)data);
+    } else {
+        AlcatelContact cont = *(AlcatelContact *)data;
+        theDoc->contacts->remove(*(AlcatelContact *)data);
+        cont.Deleted = true;
+        theDoc->contacts->append(cont);
+    }
+    theDoc->updateDocument(alcatel_contacts);
+}
+

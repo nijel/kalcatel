@@ -138,6 +138,11 @@ class KAlcatelView : public QWidget {
     void slotCalendarDoubleClicked(QListViewItem *item);
     void slotContactDoubleClicked(QListViewItem *item);
 
+    void slotTodoDelete(QListViewItem *item);
+    void slotMessageDelete(QListViewItem *item);
+    void slotCalendarDelete(QListViewItem *item);
+    void slotContactDelete(QListViewItem *item);
+
     void slotShowCall(AlcatelCall *what);
     void slotShowMessage(AlcatelMessage *what);
     void slotShowContact(AlcatelContact *what);

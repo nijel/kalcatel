@@ -38,6 +38,8 @@ public:
     KAlcatelListView(QWidget *parent=0, const char *name=0);
     ~KAlcatelListView();
     virtual void  keyPressEvent (QKeyEvent *event);
+signals:
+    void deletePressed(QListViewItem * item);
 };
 
 #endif

@@ -1388,7 +1388,7 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
                 AlcatelCalendarList::Iterator it;
                 AlcatelCalendar *item;
                 for( it = local_calendar.begin(); it != local_calendar.end(); /*++it*/ ) {
-                    if ((item = getCalendarByPrevId(calendar, (*it).Id, (*it).Storage))) {
+                    if ((item = getCalendarByPrevId(calendar, (*it).Id, (*it).Storage))!=NULL) {
                         if (!(item->isSame(*it))) {
                             ::message(MSG_DEBUG, "MERGE:Something different -> merging (%s)", item->getName().latin1());
                             if (win->conflictAction == 0) {
@@ -1425,13 +1425,15 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
                         calendar->append((*it));
                         it = local_calendar.remove(it);
                     }
+                    calendarVersion++;
+                    slotUpdateAllViews(NULL);
                 }
                 break; }
             case ALC_SYNC_TODO: {
                 AlcatelTodoList::Iterator it;
                 AlcatelTodo *item;
                 for( it = local_todos.begin(); it != local_todos.end(); /*++it*/ ) {
-                    if ((item = getTodoByPrevId(todos, (*it).Id, (*it).Storage))) {
+                    if ((item = getTodoByPrevId(todos, (*it).Id, (*it).Storage))!=NULL) {
                         if (!(item->isSame(*it))) {
                             ::message(MSG_DEBUG, "MERGE:Something different -> merging (%s)", item->getName().latin1());
                             if (win->conflictAction == 0) {
@@ -1468,13 +1470,15 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
                         todos->append((*it));
                         it = local_todos.remove(it);
                     }
+                    todosVersion++;
+                    slotUpdateAllViews(NULL);
                 }
                 break; }
             case ALC_SYNC_CONTACTS: {
                 AlcatelContactList::Iterator it;
                 AlcatelContact *item;
                 for( it = local_contacts.begin(); it != local_contacts.end(); /*++it*/ ) {
-                    if ((item = getContactByPrevId(contacts, (*it).Id, (*it).Storage))) {
+                    if ((item = getContactByPrevId(contacts, (*it).Id, (*it).Storage))!=NULL) {
                         if (!(item->isSame(*it))) {
                             ::message(MSG_DEBUG, "MERGE:Something different -> merging (%s)", item->getName().latin1());
                             if (win->conflictAction == 0) {
@@ -1512,6 +1516,8 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
                         contacts->append((*it));
                         it = local_contacts.remove(it);
                     }
+                    contactsVersion++;
+                    slotUpdateAllViews(NULL);
                 }
                 break; }
         }
@@ -1559,7 +1565,7 @@ bool KAlcatelDoc::readMobileCategories(AlcatelCategoryList *strList, alc_type sy
 
             AlcatelCategory *item;
             AlcatelCategory cat(result, list[i], StorageMobile);
-            if ((item = getCategoryByPrevId(strList, list[i], StorageAny))) {
+            if ((item = getCategoryByPrevId(strList, list[i], StorageAny))!=NULL) {
                 if (!(item->isSame(cat))) {
                     ::message(MSG_DEBUG, "MERGE:Something different -> merging (%s)", item->getName().latin1());
                     if (win->conflictAction == 0) {
@@ -1584,6 +1590,9 @@ bool KAlcatelDoc::readMobileCategories(AlcatelCategoryList *strList, alc_type sy
             }
 
             message (MSG_DEBUG, "Read category name: %02d: %s", list[i],  result);
+            contactsVersion++;
+            todosVersion++;
+            slotUpdateAllViews(NULL);
             free(result);
         }
 
@@ -1631,7 +1640,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
             free(msg[i].ascii);
 
             AlcatelMessage *item;
-            if ((item = getMessageByPrevId(messages, Msg.Id, StorageSIM))) {
+            if ((item = getMessageByPrevId(messages, Msg.Id, StorageSIM))!=NULL) {
                 if (!(item->isSame(Msg))) {
                     ::message(MSG_DEBUG, "MERGE:Something different -> merging (%s)", item->getName().latin1());
                     if (win->conflictAction == 0) {
@@ -1665,12 +1674,13 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
                 messages->append(Msg);
             }
 
+            messagesVersion++;
+            slotUpdateAllViews(NULL);
             i++;
         }
         free(msg);
-
         win->slotStatusMsg(i18n("SMS messages read"),ID_DETAIL_MSG);
-        messagesVersion++;
+
     }
 
     if (what == alcatel_calls || what == alcatel_all) {
@@ -1691,7 +1701,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
             Call.Number = cont[i].number;
             free(cont[i].number);
             AlcatelCall *item;
-            if ((item = getCallByPrevId(calls, Call.Id, StorageMobile, Call.Type))) {
+            if ((item = getCallByPrevId(calls, Call.Id, StorageMobile, Call.Type))!=NULL) {
                 if (!(item->isSame(Call))) {
                     ::message(MSG_DEBUG, "MERGE:Something different -> merging (%s)", item->getName().latin1());
                     if (win->conflictAction == 0) {
@@ -1724,6 +1734,8 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
                 ::message(MSG_DEBUG, "MERGE:None correspondent record found (%s)", Call.getName().latin1());
                 calls->append(Call);
             }
+            callsVersion++;
+            slotUpdateAllViews(NULL);
             i++;
         }
         free(cont);
@@ -1741,7 +1753,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
             Call.Number = cont[i].number;
             free(cont[i].number);
             AlcatelCall *item;
-            if ((item = getCallByPrevId(calls, Call.Id, StorageMobile, Call.Type))) {
+            if ((item = getCallByPrevId(calls, Call.Id, StorageMobile, Call.Type))!=NULL) {
                 if (!(item->isSame(Call))) {
                     ::message(MSG_DEBUG, "MERGE:Something different -> merging (%s)", item->getName().latin1());
                     if (win->conflictAction == 0) {
@@ -1774,6 +1786,8 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
                 ::message(MSG_DEBUG, "MERGE:None correspondent record found (%s)", Call.getName().latin1());
                 calls->append(Call);
             }
+            callsVersion++;
+            slotUpdateAllViews(NULL);
             i++;
         }
         free(cont);
@@ -1792,7 +1806,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
             free(cont[i].number);
 
             AlcatelCall *item;
-            if ((item = getCallByPrevId(calls, Call.Id, StorageMobile, Call.Type))) {
+            if ((item = getCallByPrevId(calls, Call.Id, StorageMobile, Call.Type))!=NULL) {
                 if (!(item->isSame(Call))) {
                     ::message(MSG_DEBUG, "MERGE:Something different -> merging (%s)", item->getName().latin1());
                     if (win->conflictAction == 0) {
@@ -1826,12 +1840,13 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
                 calls->append(Call);
             }
 
+            callsVersion++;
+            slotUpdateAllViews(NULL);
             i++;
         }
         free(cont);
 
         win->slotStatusMsg(i18n("Calls read"),ID_DETAIL_MSG);
-        callsVersion++;
     }
 
     if (what == alcatel_contacts || what == alcatel_contacts_sim || what == alcatel_all) {
@@ -1852,7 +1867,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
             free(cont[i].number);
 
             AlcatelContact *item;
-            if ((item = getContactByPrevId(contacts, Cont.Id, StorageSIM))) {
+            if ((item = getContactByPrevId(contacts, Cont.Id, StorageSIM))!=NULL) {
                 if (!(item->isSame(Cont))) {
                     ::message(MSG_DEBUG, "MERGE:Something different -> merging (%s)", item->getName().latin1());
                     if (win->conflictAction == 0) {
@@ -1886,12 +1901,13 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
                 contacts->append(Cont);
             }
 
+            contactsVersion++;
+            slotUpdateAllViews(NULL);
             i++;
         }
         free(cont);
 
         win->slotStatusMsg(i18n("SIM contacts read"),ID_DETAIL_MSG);
-        contactsVersion++;
     }
 
     if (what == alcatel_contacts || what == alcatel_todos || what == alcatel_calendar || what == alcatel_contacts_mobile || what == alcatel_all) {
@@ -2025,7 +2041,7 @@ int KAlcatelDoc::getPCStorageId() {
     return pcStorageCounter++;
 }
 
-void KAlcatelDoc::udpateDocument(AlcDataType which) {
+void KAlcatelDoc::updateDocument(AlcDataType which) {
     modified=true;
 
     version++;

@@ -539,26 +539,32 @@ bool KAlcatelApp::modemConnect() {
     this->slotStatusMsg(i18n("Setting serial port"),ID_DETAIL_MSG);
     modem_setup();
     this->slotStatusMsg(i18n("Initializing modem"),ID_DETAIL_MSG);
+
     if (!modem_init()) {
-        switch (modem_errno) {
-            case ERR_MDM_AT:
-                KMessageBox::error(this, i18n("Modem doesn't react on AT command."), i18n("Error"));
-                modem_close();
-                return false;
-            case ERR_MDM_PDU:
-                KMessageBox::error(this, i18n("Failed selecting PDU mode."), i18n("Error"));
-                modem_close();
-                return false;
-            case ERR_MDM_WRITE:
-                KMessageBox::error(this, i18n("Can not write to selected device."), i18n("Error"));
-                modem_close();
-                return false;
-            default:
-                KMessageBox::error(this, i18n("Failed initializing modem.\nUnknown error (%1).").arg(modem_errno), i18n("Error"));
-                modem_close();
-                return false;
+        /* just try to detach if previous connection failed */
+        alcatel_detach();
+        alcatel_done();
+        if (!modem_init()) {
+            switch (modem_errno) {
+                case ERR_MDM_AT:
+                    KMessageBox::error(this, i18n("Modem doesn't react on AT command."), i18n("Error"));
+                    modem_close();
+                    return false;
+                case ERR_MDM_PDU:
+                    KMessageBox::error(this, i18n("Failed selecting PDU mode."), i18n("Error"));
+                    modem_close();
+                    return false;
+                case ERR_MDM_WRITE:
+                    KMessageBox::error(this, i18n("Can not write to selected device."), i18n("Error"));
+                    modem_close();
+                    return false;
+                default:
+                    KMessageBox::error(this, i18n("Failed initializing modem.\nUnknown error (%1).").arg(modem_errno), i18n("Error"));
+                    modem_close();
+                    return false;
+            }
+            return false;
         }
-        return false;
     }
     modemLocked = true;
     modemConnected = true;

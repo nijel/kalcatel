@@ -67,7 +67,7 @@ public:
     bool Modified;
     bool Created;
     bool Deleted;
-    virtual const char *getClassName() = 0;
+    virtual const char *getClassName() {static const char cn[]="AlcatelClass";return cn;};
     /** returns formatted printable name of class
       */
     virtual QString getName(void) = 0;

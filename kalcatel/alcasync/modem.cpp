@@ -33,6 +33,17 @@
 #define SLEEP_INIT      100000
 
 int modem_initialised=0;
+int modem_errno;
+
+int modem;
+int rate;
+
+int baudrate;
+char device[100];
+char lockname[100];
+char initstring[100];
+
+termios oldtio;
 
 void modem_start_raw(void) {
 //    struct termios newtio;

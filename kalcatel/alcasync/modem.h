@@ -25,20 +25,20 @@
 #define ERR_MDM_LOCK    3
 #define ERR_MDM_OPEN    4
 
-int modem_errno;
+extern int modem_errno;
 
-int modem;
-int rate;
+//int modem;
+extern int rate;
+extern int baudrate;
 
-int baudrate;
-char device[100];
-char lockname[100];
-char initstring[100];
+extern char device[100];
+extern char lockname[100];
+extern char initstring[100];
 //char initstring[100]="AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0";
 //char modemname[100];
 //char smsc[100];
-char mode[10];
-struct termios oldtio;
+//char mode[10];
+//struct termios oldtio;
 
 /* write command to modem and wait for answer until:
      1. timeout is reached

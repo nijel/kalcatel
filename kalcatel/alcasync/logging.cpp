@@ -28,6 +28,7 @@
 #include "common.h"
 #include "logging.h"
 
+int  msg_level;
 
 char msg_level_info[][8] = {
         "DEBUG2",

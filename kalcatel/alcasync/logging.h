@@ -13,7 +13,7 @@
 #define MSG_WARNING 4
 #define MSG_ERROR   5
 
-int  msg_level;
+extern int  msg_level;
 
 void message(int severity,char* format, ...);
 

@@ -177,7 +177,8 @@ class KAlcatelApp : public KMainWindow
     /** changes the statusbar contents for the standard label permanently, used to indicate current actions.
      * @param text the text that is displayed in the statusbar
      */
-    void slotStatusMsg(const QString &text, int which = ID_STATUS_MSG, int clearDetail = true);
+//    void slotStatusMsg(const QString &text, int which = ID_STATUS_MSG, int clearDetail = true);
+    void slotStatusMsg(const QString &text, int which, int clearDetail = true);
     /** sets default details status message
      */
     void slotDefaultDetailMsg();

@@ -156,11 +156,11 @@ void KAlcatelApp::initView()
 
 void KAlcatelApp::openDocumentFile(const KURL& url)
 {
-  slotStatusMsg(i18n("Opening file..."));
+  slotStatusMsg(i18n("Opening file..."), ID_STATUS_MSG);
 
   doc->openDocument( url);
   fileOpenRecent->addURL( url );
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }
 
 
@@ -288,56 +288,56 @@ void KAlcatelApp::slotFileNewWindow()
 
 void KAlcatelApp::slotFileReadMobileAll()
 {
-  slotStatusMsg(i18n("Reading data from mobile..."));
+  slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
   doc->readMobile(alcatel_read_all,-1);
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
 void KAlcatelApp::slotFileReadMobileTodo()
 {
-  slotStatusMsg(i18n("Reading data from mobile..."));
+  slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
   doc->readMobile(alcatel_read_todo,-1);
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
 void KAlcatelApp::slotFileReadMobileContactsSim()
 {
-  slotStatusMsg(i18n("Reading data from mobile..."));
+  slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
   doc->readMobile(alcatel_read_contacts_sim,-1);
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
 void KAlcatelApp::slotFileReadMobileContactsMobile()
 {
-  slotStatusMsg(i18n("Reading data from mobile..."));
+  slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
   doc->readMobile(alcatel_read_contacts_mobile,-1);
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
 void KAlcatelApp::slotFileReadMobileCalendar()
 {
-  slotStatusMsg(i18n("Reading data from mobile..."));
+  slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
   doc->readMobile(alcatel_read_calendar,-1);
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
 void KAlcatelApp::slotFileReadMobileCalls()
 {
-  slotStatusMsg(i18n("Reading data from mobile..."));
+  slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
   doc->readMobile(alcatel_read_calls,-1);
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
 void KAlcatelApp::slotFileReadMobileSms()
 {
-  slotStatusMsg(i18n("Reading data from mobile..."));
+  slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
   doc->readMobile(alcatel_read_sms,-1);
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
 void KAlcatelApp::slotFileNew()
 {
-  slotStatusMsg(i18n("Creating new document..."));
+  slotStatusMsg(i18n("Creating new document..."), ID_STATUS_MSG);
 
   if(!doc->saveModified())
   {
@@ -350,12 +350,12 @@ void KAlcatelApp::slotFileNew()
     setCaption(doc->URL().fileName(), false);
   }
 
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }
 
 void KAlcatelApp::slotFileOpen()
 {
-  slotStatusMsg(i18n("Opening file..."));
+  slotStatusMsg(i18n("Opening file..."), ID_STATUS_MSG);
 	
   if(!doc->saveModified())
   {
@@ -373,12 +373,12 @@ void KAlcatelApp::slotFileOpen()
       fileOpenRecent->addURL( url );
     }
   }
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }
 
 void KAlcatelApp::slotFileOpenRecent(const KURL& url)
 {
-  slotStatusMsg(i18n("Opening file..."));
+  slotStatusMsg(i18n("Opening file..."), ID_STATUS_MSG);
 	
   if(!doc->saveModified())
   {
@@ -390,21 +390,21 @@ void KAlcatelApp::slotFileOpenRecent(const KURL& url)
     setCaption(url.fileName(), false);
   }
 
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }
 
 void KAlcatelApp::slotFileSave()
 {
-  slotStatusMsg(i18n("Saving file..."));
+  slotStatusMsg(i18n("Saving file..."), ID_STATUS_MSG);
 	
   doc->saveDocument(doc->URL());
 
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }
 
 void KAlcatelApp::slotFileSaveAs()
 {
-  slotStatusMsg(i18n("Saving file with a new filename..."));
+  slotStatusMsg(i18n("Saving file with a new filename..."), ID_STATUS_MSG);
 
   KURL url=KFileDialog::getSaveURL(QDir::currentDirPath(),
         i18n("*|All files"), this, i18n("Save as..."));
@@ -415,21 +415,21 @@ void KAlcatelApp::slotFileSaveAs()
     setCaption(url.fileName(),doc->isModified());
   }
 
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }
 
 void KAlcatelApp::slotFileClose()
 {
-  slotStatusMsg(i18n("Closing file..."));
+  slotStatusMsg(i18n("Closing file..."), ID_STATUS_MSG);
 	
   close();
 
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }
 
 void KAlcatelApp::slotFilePrint()
 {
-  slotStatusMsg(i18n("Printing..."));
+  slotStatusMsg(i18n("Printing..."), ID_STATUS_MSG);
 
   QPrinter printer;
   if (printer.setup(this))
@@ -437,12 +437,12 @@ void KAlcatelApp::slotFilePrint()
 //    view->print(&printer);
   }
 
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }
 
 void KAlcatelApp::slotFileQuit()
 {
-  slotStatusMsg(i18n("Exiting..."));
+  slotStatusMsg(i18n("Exiting..."), ID_STATUS_MSG);
   saveOptions();
   // close the first window, the list makes the next one the first again.
   // This ensures that queryClose() is called on each window to ask for closing
@@ -461,28 +461,28 @@ void KAlcatelApp::slotFileQuit()
 
 void KAlcatelApp::slotEditCut()
 {
-  slotStatusMsg(i18n("Cutting selection..."));
+  slotStatusMsg(i18n("Cutting selection..."), ID_STATUS_MSG);
 
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }
 
 void KAlcatelApp::slotEditCopy()
 {
-  slotStatusMsg(i18n("Copying selection to clipboard..."));
+  slotStatusMsg(i18n("Copying selection to clipboard..."), ID_STATUS_MSG);
 
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }
 
 void KAlcatelApp::slotEditPaste()
 {
-  slotStatusMsg(i18n("Inserting clipboard contents..."));
+  slotStatusMsg(i18n("Inserting clipboard contents..."), ID_STATUS_MSG);
 
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }
 
 void KAlcatelApp::slotViewToolBar()
 {
-  slotStatusMsg(i18n("Toggling toolbar..."));
+  slotStatusMsg(i18n("Toggling toolbar..."), ID_STATUS_MSG);
   ///////////////////////////////////////////////////////////////////
   // turn Toolbar on or off
   if(!viewToolBar->isChecked())
@@ -494,12 +494,12 @@ void KAlcatelApp::slotViewToolBar()
     toolBar("mainToolBar")->show();
   }		
 
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }
 
 void KAlcatelApp::slotViewStatusBar()
 {
-  slotStatusMsg(i18n("Toggle the statusbar..."));
+  slotStatusMsg(i18n("Toggle the statusbar..."), ID_STATUS_MSG);
   ///////////////////////////////////////////////////////////////////
   //turn Statusbar on or off
   if(!viewStatusBar->isChecked())
@@ -511,15 +511,17 @@ void KAlcatelApp::slotViewStatusBar()
     statusBar()->show();
   }
 
-  slotStatusMsg(i18n("Ready."));
+  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }
 
 
-void KAlcatelApp::slotStatusMsg(const QString &text, int which = ID_STATUS_MSG, int clearDetail = true)
+//void KAlcatelApp::slotStatusMsg(const QString &text, int which = ID_STATUS_MSG, int clearDetail = true)
+void KAlcatelApp::slotStatusMsg(const QString &text, int which, int clearDetail = true)
 {
   ///////////////////////////////////////////////////////////////////
   // change status message permanently
   QString *msg = new QString();
+  setDisabled(true);
   statusBar()->clear();
   if (which == ID_STATUS_MSG) {
         statusText = text;
@@ -537,13 +539,8 @@ void KAlcatelApp::slotStatusMsg(const QString &text, int which = ID_STATUS_MSG, 
         msg->append(I18N_NOOP(")"));
   }
 //  statusBar()->changeItem(text, which);
-  setDisabled(true);
   statusBar()->message(*msg);
-  setUpdatesEnabled(TRUE);
-  statusBar()->repaint();
-  statusBar()->update();
-  repaint();
-  update();
+  setUpdatesEnabled(true);
   setEnabled(true);
 }
 

@@ -124,6 +124,9 @@ KListView *KAlcatelView::createListView(QVBox *parent, AlcListType type)
     KListView *list;
     list = new KListView(parent);
 
+    list->setAllColumnsShowFocus(true);
+    list->setShowSortIndicator(true);
+
     switch (type) {
         case alc_contacts:
         case alc_contacts_sim:

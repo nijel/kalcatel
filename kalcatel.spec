@@ -3,7 +3,7 @@
 # the error to ian geiser <geiseri@msoe.edu>
 Summary:   KDE application to manage Alcatel 50x and 70x phone
 Name:      kalcatel
-Version:   0.3.2
+Version:   0.3.3
 Release:   1
 Copyright: GPL
 Vendor:    Michal Cihar <cihar@email.cz>
@@ -25,6 +25,7 @@ but it works well for me.
 %setup
 CFLAGS="$RPM_OPT_FLAGS" CXXFLAGS="$RPM_OPT_FLAGS" ./configure \
                  --prefix=/usr \
+                 --mandir=%{_mandir} \
                 $LOCALFLAGS
 %build
 make
@@ -33,9 +34,8 @@ make
 make install-strip DESTDIR=$RPM_BUILD_ROOT
 
 cd $RPM_BUILD_ROOT
-gzip -9 usr/man/man1/kalcatel.1
 find . -type d | sed '1,2d;s,^\.,\%attr(-\,root\,root) \%dir ,' > $RPM_BUILD_DIR/file.list.kalcatel
-find . -type f | sed 's,^\.,\%attr(-\,root\,root) ,' >> $RPM_BUILD_DIR/file.list.kalcatel
+find . -type f | grep -v %{_mandir} | sed 's,^\.,\%attr(-\,root\,root) ,' >> $RPM_BUILD_DIR/file.list.kalcatel
 find . -type l | sed 's,^\.,\%attr(-\,root\,root) ,' >> $RPM_BUILD_DIR/file.list.kalcatel
 
 %clean
@@ -45,3 +45,4 @@ rm -rf ../file.list.kalcatel
 
 
 %files -f ../file.list.kalcatel
+${_mandir}/*/*

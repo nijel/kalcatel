@@ -1,7 +1,7 @@
 /*
  * kalcatelmergedialog.h
  *
- * TODO: description
+ * dialog for merging when conflict occurs
  *
  * Copyright (c) 2002 by Michal Cihar <cihar@email.cz>
  * 
@@ -56,11 +56,11 @@ class MergeItem : public QObject {
    Q_OBJECT
    friend class KAlcatelMergeDialog;
 public:
-    MergeItem(QWidget *parent, QString name, QString mobileText, QString pcText);
-    MergeItem(QWidget *parent, QString name, QDate mobileData, QDate pcData);
-    MergeItem(QWidget *parent, QString name, QTime mobileData, QTime pcData);
-    MergeItem(QWidget *parent, QString name, QDateTime mobileData, QDateTime pcData);
-    MergeItem(QWidget *parent, QString name, int mobileData, int pcData);
+    MergeItem(QWidget *parent, QString name, QString mobileText, QString pcText, bool disableDelete = false);
+    MergeItem(QWidget *parent, QString name, QDate mobileData, QDate pcData, bool disableDelete = false);
+    MergeItem(QWidget *parent, QString name, QTime mobileData, QTime pcData, bool disableDelete = false);
+    MergeItem(QWidget *parent, QString name, QDateTime mobileData, QDateTime pcData, bool disableDelete = false);
+    MergeItem(QWidget *parent, QString name, int mobileData, int pcData, bool disableDelete = false);
     MergeItem(const MergeItem  &item);
     MergeItem();
 	~MergeItem(void);
@@ -71,7 +71,7 @@ public slots:
     void deleteToggle(bool state);
     void mobileToggle(bool state);
 private:
-    void MergeItem_init(QWidget *parent, QString name, QString mobileText, QString pcText);
+    void MergeItem_init(QWidget *parent, QString name, QString mobileText, QString pcText, bool disableDelete = false);
     QRadioButton *mobileCheck, *deleteCheck, *pcCheck;
     QLabel *mobileLabel, *pcLabel, *nameLabel;
 };

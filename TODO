@@ -13,9 +13,8 @@ for 0.2-alpha:
  - (DONE) saving of document
  - (DONE) loading of document
 merging
-split all listing of data (pc/mobile/sim)
+ - ids should be int !!!!!!!!!!
 remove empty pc categories after sync
-icon for pc storage
 
 for 0.3-beta:
  - editing of calendar/contacts/...

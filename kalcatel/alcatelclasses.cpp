@@ -313,7 +313,7 @@ AlcatelCategory::AlcatelCategory() {
 AlcatelMessage *getMessageById(AlcatelMessageList *list, int id, AlcatelStorage type) {
     AlcatelMessageList::Iterator it;
     for( it = list->begin(); it != list->end(); ++it ) {
-        if ((* it).Id == id && (* it).Storage == type)
+        if ((* it).Id == id && (type == StorageAny || (* it).Storage == type))
             return &(*it);
     }
     return NULL;
@@ -322,7 +322,7 @@ AlcatelMessage *getMessageById(AlcatelMessageList *list, int id, AlcatelStorage 
 AlcatelCategory *getCategoryById(AlcatelCategoryList *list, int id, AlcatelStorage type) {
     AlcatelCategoryList::Iterator it;
     for( it = list->begin(); it != list->end(); ++it ) {
-        if ((* it).Id == id && (* it).Storage == type)
+        if ((* it).Id == id && (type == StorageAny || (* it).Storage == type))
             return &(*it);
     }
     return NULL;
@@ -367,7 +367,7 @@ AlcatelContact *getContactByPhone(AlcatelContactList *list, QString *number, QSt
 AlcatelContact *getContactById(AlcatelContactList *list, int id, AlcatelStorage type) {
     AlcatelContactList::Iterator it;
     for( it = list->begin(); it != list->end(); ++it ) {
-        if ((* it).Id == id && (* it).Storage == type)
+        if ((* it).Id == id && (type == StorageAny || (* it).Storage == type))
             return &(*it);
     }
     return NULL;
@@ -376,7 +376,7 @@ AlcatelContact *getContactById(AlcatelContactList *list, int id, AlcatelStorage 
 AlcatelTodo *getTodoById(AlcatelTodoList *list, int id, AlcatelStorage type) {
     AlcatelTodoList::Iterator it;
     for( it = list->begin(); it != list->end(); ++it ) {
-        if ((* it).Id == id && (* it).Storage == type)
+        if ((* it).Id == id && (type == StorageAny || (* it).Storage == type))
             return &(*it);
     }
     return NULL;
@@ -385,7 +385,7 @@ AlcatelTodo *getTodoById(AlcatelTodoList *list, int id, AlcatelStorage type) {
 AlcatelCalendar *getCalendarById(AlcatelCalendarList *list, int id, AlcatelStorage type) {
     AlcatelCalendarList::Iterator it;
     for( it = list->begin(); it != list->end(); ++it ) {
-        if ((* it).Id == id && (* it).Storage == type)
+        if ((* it).Id == id && (type == StorageAny || (* it).Storage == type))
             return &(*it);
     }
     return NULL;
@@ -404,7 +404,7 @@ void clearContacts(AlcatelContactList *list, AlcatelStorage type) {
     AlcatelContactList::Iterator it;
     it = list->begin();
     while (it != list->end()) {
-        if ((* it).Storage == type )
+        if (type == StorageAny || (* it).Storage == type )
             it = list->remove(it);
         else
             it++;
@@ -415,7 +415,7 @@ void clearCalendar(AlcatelCalendarList *list, AlcatelStorage type) {
     AlcatelCalendarList::Iterator it;
     it = list->begin();
     while (it != list->end()) {
-        if ((* it).Storage == type )
+        if (type == StorageAny || (* it).Storage == type )
             it = list->remove(it);
         else
             it++;
@@ -426,7 +426,7 @@ void clearTodos(AlcatelTodoList *list, AlcatelStorage type) {
     AlcatelTodoList::Iterator it;
     it = list->begin();
     while (it != list->end()) {
-        if ((* it).Storage == type )
+        if (type == StorageAny || (* it).Storage == type )
             it = list->remove(it);
         else
             it++;
@@ -437,7 +437,7 @@ void clearMessages(AlcatelMessageList *list, AlcatelStorage type) {
     AlcatelMessageList::Iterator it;
     it = list->begin();
     while (it != list->end()) {
-        if ((* it).Storage == type )
+        if (type == StorageAny || (* it).Storage == type )
             it = list->remove(it);
         else
             it++;
@@ -448,7 +448,7 @@ void clearCalls(AlcatelCallList *list, AlcatelStorage type) {
     AlcatelCallList::Iterator it;
     it = list->begin();
     while (it != list->end()) {
-        if ((* it).Storage == type )
+        if (type == StorageAny || (* it).Storage == type )
             it = list->remove(it);
         else
             it++;
@@ -459,17 +459,17 @@ void clearCategories(AlcatelCategoryList *list, AlcatelStorage type) {
     AlcatelCategoryList::Iterator it;
     it = list->begin();
     while (it != list->end()) {
-        if ((* it).Storage == type )
+        if (type == StorageAny || (* it).Storage == type )
             it = list->remove(it);
         else
             it++;
     }
 }
 
-AlcatelMessage *getMessageByPrevPrevId(AlcatelMessageList *list, int id, AlcatelStorage type) {
+AlcatelMessage *getMessageByPrevId(AlcatelMessageList *list, int id, AlcatelStorage type) {
     AlcatelMessageList::Iterator it;
     for( it = list->begin(); it != list->end(); ++it ) {
-        if ((* it).PrevId == id && (* it).PrevStorage == type)
+        if ((* it).PrevId == id && (type == StorageAny || (* it).PrevStorage == type))
             return &(*it);
     }
     return NULL;
@@ -478,7 +478,7 @@ AlcatelMessage *getMessageByPrevPrevId(AlcatelMessageList *list, int id, Alcatel
 AlcatelCategory *getCategoryByPrevId(AlcatelCategoryList *list, int id, AlcatelStorage type) {
     AlcatelCategoryList::Iterator it;
     for( it = list->begin(); it != list->end(); ++it ) {
-        if ((* it).PrevId == id && (* it).PrevStorage == type)
+        if ((* it).PrevId == id && (type == StorageAny || (* it).PrevStorage == type))
             return &(*it);
     }
     return NULL;
@@ -487,7 +487,7 @@ AlcatelCategory *getCategoryByPrevId(AlcatelCategoryList *list, int id, AlcatelS
 AlcatelContact *getContactByPrevId(AlcatelContactList *list, int id, AlcatelStorage type) {
     AlcatelContactList::Iterator it;
     for( it = list->begin(); it != list->end(); ++it ) {
-        if ((* it).PrevId == id && (* it).PrevStorage == type)
+        if ((* it).PrevId == id && (type == StorageAny || (* it).PrevStorage == type))
             return &(*it);
     }
     return NULL;
@@ -496,7 +496,7 @@ AlcatelContact *getContactByPrevId(AlcatelContactList *list, int id, AlcatelStor
 AlcatelTodo *getTodoByPrevId(AlcatelTodoList *list, int id, AlcatelStorage type) {
     AlcatelTodoList::Iterator it;
     for( it = list->begin(); it != list->end(); ++it ) {
-        if ((* it).PrevId == id && (* it).PrevStorage == type)
+        if ((* it).PrevId == id && (type == StorageAny || (* it).PrevStorage == type))
             return &(*it);
     }
     return NULL;
@@ -505,7 +505,7 @@ AlcatelTodo *getTodoByPrevId(AlcatelTodoList *list, int id, AlcatelStorage type)
 AlcatelCalendar *getCalendarByPrevId(AlcatelCalendarList *list, int id, AlcatelStorage type) {
     AlcatelCalendarList::Iterator it;
     for( it = list->begin(); it != list->end(); ++it ) {
-        if ((* it).PrevId == id && (* it).PrevStorage == type)
+        if ((* it).PrevId == id && (type == StorageAny || (* it).PrevStorage == type))
             return &(*it);
     }
     return NULL;
@@ -513,11 +513,14 @@ AlcatelCalendar *getCalendarByPrevId(AlcatelCalendarList *list, int id, AlcatelS
 
 bool AlcatelCalendar::operator==(const AlcatelCalendar &cmp) {
     return
+        (Id == cmp.Id) &&
+        (Storage == cmp.Storage) &&
+        (PrevId == cmp.PrevId) &&
+        (PrevStorage == cmp.PrevStorage) &&
         (Date == cmp.Date) &&
         (StartTime == cmp.StartTime) &&
         (EndTime == cmp.EndTime) &&
         (Alarm == cmp.Alarm) &&
-//        (Subject == cmp.Subject) &&
         ((Subject.isEmpty() && cmp.Subject.isEmpty()) || (Subject == cmp.Subject)) &&
         (Private == cmp.Private) &&
         (EventType == cmp.EventType) &&
@@ -534,10 +537,13 @@ bool AlcatelCalendar::operator==(const AlcatelCalendar &cmp) {
 
 bool AlcatelTodo::operator==(const AlcatelTodo &cmp) {
     return
+        (Id == cmp.Id) &&
+        (Storage == cmp.Storage) &&
+        (PrevId == cmp.PrevId) &&
+        (PrevStorage == cmp.PrevStorage) &&
         (DueDate == cmp.DueDate) &&
         (Completed == cmp.Completed) &&
         (Alarm == cmp.Alarm) &&
-//        (Subject == cmp.Subject) &&
         ((Subject.isEmpty() && cmp.Subject.isEmpty()) || (Subject == cmp.Subject)) &&
         (Private == cmp.Private) &&
         (Category == cmp.Category) &&
@@ -547,6 +553,10 @@ bool AlcatelTodo::operator==(const AlcatelTodo &cmp) {
 
 bool AlcatelContact::operator==(const AlcatelContact &cmp) {
     return
+        (Id == cmp.Id) &&
+        (Storage == cmp.Storage) &&
+        (PrevId == cmp.PrevId) &&
+        (PrevStorage == cmp.PrevStorage) &&
         ((LastName.isEmpty() && cmp.LastName.isEmpty()) || (LastName == cmp.LastName)) &&
         ((FirstName.isEmpty() && cmp.FirstName.isEmpty()) || (FirstName == cmp.FirstName)) &&
         ((Company.isEmpty() && cmp.Company.isEmpty()) || (Company == cmp.Company)) &&
@@ -575,11 +585,106 @@ bool AlcatelContact::operator==(const AlcatelContact &cmp) {
 }
 
 bool AlcatelCategory::operator==(const AlcatelCategory &cmp) {
-    return ((Name.isEmpty() && cmp.Name.isEmpty()) || (Name == cmp.Name));
-//    return Name==cmp.Name;
+    return
+        (Id == cmp.Id) &&
+        (Storage == cmp.Storage) &&
+        (PrevId == cmp.PrevId) &&
+        (PrevStorage == cmp.PrevStorage) &&
+        ((Name.isEmpty() && cmp.Name.isEmpty()) || (Name == cmp.Name));
 }
 
 bool AlcatelMessage::operator==(const AlcatelMessage &cmp) {
+    return
+        (Id == cmp.Id) &&
+        (Storage == cmp.Storage) &&
+        (PrevId == cmp.PrevId) &&
+        (PrevStorage == cmp.PrevStorage) &&
+        (Status == cmp.Status) &&
+        (Length == cmp.Length) &&
+        (Date == cmp.Date) &&
+        ((Raw.isEmpty() && cmp.Raw.isEmpty()) || (Raw == cmp.Raw)) &&
+        ((Sender.isEmpty() && cmp.Sender.isEmpty()) || (Sender == cmp.Sender)) &&
+        ((Text.isEmpty() && cmp.Text.isEmpty()) || (Text == cmp.Text)) &&
+        ((SMSC.isEmpty() && cmp.SMSC.isEmpty()) || (SMSC == cmp.SMSC));
+}
+
+bool AlcatelCall::operator==(const AlcatelCall &cmp) {
+    return
+        (Id == cmp.Id) &&
+        (Storage == cmp.Storage) &&
+        (PrevId == cmp.PrevId) &&
+        (PrevStorage == cmp.PrevStorage) &&
+        (Type == cmp.Type) &&
+        (Number == cmp.Number) &&
+        ((Name.isEmpty() && cmp.Name.isEmpty()) || (Name == cmp.Name));
+}
+
+bool AlcatelCalendar::isSame(const AlcatelCalendar &cmp) {
+    return
+        (Date == cmp.Date) &&
+        (StartTime == cmp.StartTime) &&
+        (EndTime == cmp.EndTime) &&
+        (Alarm == cmp.Alarm) &&
+        ((Subject.isEmpty() && cmp.Subject.isEmpty()) || (Subject == cmp.Subject)) &&
+        (Private == cmp.Private) &&
+        (EventType == cmp.EventType) &&
+        (ContactID == cmp.ContactID) &&
+        (DayOfWeek == cmp.DayOfWeek) &&
+        (Day == cmp.Day) &&
+        (WeekOfMonth == cmp.WeekOfMonth) &&
+        (Month == cmp.Month) &&
+        (Frequency == cmp.Frequency) &&
+        (StartDate == cmp.StartDate) &&
+        (StopDate == cmp.StopDate) &&
+        (Alarm2 == cmp.Alarm2);
+}
+
+bool AlcatelTodo::isSame(const AlcatelTodo &cmp) {
+    return
+        (DueDate == cmp.DueDate) &&
+        (Completed == cmp.Completed) &&
+        (Alarm == cmp.Alarm) &&
+        ((Subject.isEmpty() && cmp.Subject.isEmpty()) || (Subject == cmp.Subject)) &&
+        (Private == cmp.Private) &&
+        (Category == cmp.Category) &&
+        (Priority == cmp.Priority) &&
+        (ContactID == cmp.ContactID);
+}
+
+bool AlcatelContact::isSame(const AlcatelContact &cmp) {
+    return
+        ((LastName.isEmpty() && cmp.LastName.isEmpty()) || (LastName == cmp.LastName)) &&
+        ((FirstName.isEmpty() && cmp.FirstName.isEmpty()) || (FirstName == cmp.FirstName)) &&
+        ((Company.isEmpty() && cmp.Company.isEmpty()) || (Company == cmp.Company)) &&
+        ((JobTitle.isEmpty() && cmp.JobTitle.isEmpty()) || (JobTitle == cmp.JobTitle)) &&
+        ((Note.isEmpty() && cmp.Note.isEmpty()) || (Note == cmp.Note)) &&
+        (Category == cmp.Category) &&
+        (Private == cmp.Private) &&
+        ((WorkNumber.isEmpty() && cmp.WorkNumber.isEmpty()) || (WorkNumber == cmp.WorkNumber)) &&
+        ((MainNumber.isEmpty() && cmp.MainNumber.isEmpty()) || (MainNumber == cmp.MainNumber)) &&
+        ((FaxNumber.isEmpty() && cmp.FaxNumber.isEmpty()) || (FaxNumber == cmp.FaxNumber)) &&
+        ((OtherNumber.isEmpty() && cmp.OtherNumber.isEmpty()) || (OtherNumber == cmp.OtherNumber)) &&
+        ((PagerNumber.isEmpty() && cmp.PagerNumber.isEmpty()) || (PagerNumber == cmp.PagerNumber)) &&
+        ((MobileNumber.isEmpty() && cmp.MobileNumber.isEmpty()) || (MobileNumber == cmp.MobileNumber)) &&
+        ((HomeNumber.isEmpty() && cmp.HomeNumber.isEmpty()) || (HomeNumber == cmp.HomeNumber)) &&
+        ((Email1.isEmpty() && cmp.Email1.isEmpty()) || (Email1 == cmp.Email1)) &&
+        ((Email2.isEmpty() && cmp.Email2.isEmpty()) || (Email2 == cmp.Email2)) &&
+        ((Address.isEmpty() && cmp.Address.isEmpty()) || (Address == cmp.Address)) &&
+        ((City.isEmpty() && cmp.City.isEmpty()) || (City == cmp.City)) &&
+        ((State.isEmpty() && cmp.State.isEmpty()) || (State == cmp.State)) &&
+        ((Zip.isEmpty() && cmp.Zip.isEmpty()) || (Zip == cmp.Zip)) &&
+        ((Country.isEmpty() && cmp.Country.isEmpty()) || (Country == cmp.Country)) &&
+        ((Custom1.isEmpty() && cmp.Custom1.isEmpty()) || (Custom1 == cmp.Custom1)) &&
+        ((Custom2.isEmpty() && cmp.Custom2.isEmpty()) || (Custom2 == cmp.Custom2)) &&
+        ((Custom3.isEmpty() && cmp.Custom3.isEmpty()) || (Custom3 == cmp.Custom3)) &&
+        ((Custom4.isEmpty() && cmp.Custom4.isEmpty()) || (Custom4 == cmp.Custom4));
+}
+
+bool AlcatelCategory::isSame(const AlcatelCategory &cmp) {
+    return ((Name.isEmpty() && cmp.Name.isEmpty()) || (Name == cmp.Name));
+}
+
+bool AlcatelMessage::isSame(const AlcatelMessage &cmp) {
     return
         (Status == cmp.Status) &&
         (Length == cmp.Length) &&
@@ -588,17 +693,11 @@ bool AlcatelMessage::operator==(const AlcatelMessage &cmp) {
         ((Sender.isEmpty() && cmp.Sender.isEmpty()) || (Sender == cmp.Sender)) &&
         ((Text.isEmpty() && cmp.Text.isEmpty()) || (Text == cmp.Text)) &&
         ((SMSC.isEmpty() && cmp.SMSC.isEmpty()) || (SMSC == cmp.SMSC));
-
-/*        (Raw == cmp.Raw) &&
-        (Sender == cmp.Sender) &&
-        (Text == cmp.Text) &&
-        (SMSC == cmp.SMSC);*/
 }
 
-bool AlcatelCall::operator==(const AlcatelCall &cmp) {
+bool AlcatelCall::isSame(const AlcatelCall &cmp) {
     return
         (Type == cmp.Type) &&
         (Number == cmp.Number) &&
         ((Name.isEmpty() && cmp.Name.isEmpty()) || (Name == cmp.Name));
-//        (Name == cmp.Name);
 }

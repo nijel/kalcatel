@@ -803,12 +803,14 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
             *strm << "    <year>" << (*calit).Date.year() << "</year>" << endl;
             *strm << "   </date>" << endl;
         }
-        if ((*calit).EventType != ALC_CALENDAR_BIRTHDAY && (*calit).EventType != ALC_CALENDAR_ALARM) {
+        if (!(*calit).StartTime.isNull()) {
             *strm << "   <starttime>" << endl;
             *strm << "    <hour>" << (*calit).StartTime.hour() << "</hour>" << endl;
             *strm << "    <minute>" << (*calit).StartTime.minute() << "</minute>" << endl;
             *strm << "    <second>" << (*calit).StartTime.second() << "</second>" << endl;
             *strm << "   </starttime>" << endl;
+        }
+        if (!(*calit).EndTime.isNull()) {
             *strm << "   <endtime>" << endl;
             *strm << "    <hour>" << (*calit).EndTime.hour() << "</hour>" << endl;
             *strm << "    <minute>" << (*calit).EndTime.minute() << "</minute>" << endl;
@@ -855,36 +857,34 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
         if ((*calit).ContactID != -1) {
             *strm << "   <contactid>" << (*calit).ContactID << "</contactid>" << endl;
         }
-        if ((*calit).EventType == ALC_CALENDAR_REPEATING) {
-            if ((*calit).DayOfWeek != -1) {
-                *strm << "   <dayofweek>" << (*calit).DayOfWeek << "</dayofweek>" << endl;
-            }
-             if ((*calit).Day != -1) {
-                *strm << "   <day>" << (*calit).Day << "</day>" << endl;
-            }
-            if ((*calit).WeekOfMonth != -1) {
-                *strm << "   <weekofmonth>" << (*calit).WeekOfMonth << "</weekofmonth>" << endl;
-            }
-            if ((*calit).Month != -1) {
-                *strm << "   <month>" << (*calit).Month << "</month>" << endl;
-            }
-            if ((*calit).Frequency != -1) {
-                *strm << "   <frequency>" << (*calit).Frequency << "</frequency>" << endl;
-            }
-            if (!((*calit).StopDate.isNull())) {
-                *strm << "   <stopdate>" << endl;
-                *strm << "    <day>" << (*calit).StopDate.day() << "</day>" << endl;
-                *strm << "    <month>" << (*calit).StopDate.month() << "</month>" << endl;
-                *strm << "    <year>" << (*calit).StopDate.year() << "</year>" << endl;
-                *strm << "   </stopdate>" << endl;
-            }
-            if (!((*calit).StopDate.isNull())) {
-                *strm << "   <startdate>" << endl;
-                *strm << "    <day>" << (*calit).StartDate.day() << "</day>" << endl;
-                *strm << "    <month>" << (*calit).StartDate.month() << "</month>" << endl;
-                *strm << "    <year>" << (*calit).StartDate.year() << "</year>" << endl;
-                *strm << "   </startdate>" << endl;
-            }
+        if ((*calit).DayOfWeek != -1) {
+            *strm << "   <dayofweek>" << (*calit).DayOfWeek << "</dayofweek>" << endl;
+        }
+         if ((*calit).Day != -1) {
+            *strm << "   <day>" << (*calit).Day << "</day>" << endl;
+        }
+        if ((*calit).WeekOfMonth != -1) {
+            *strm << "   <weekofmonth>" << (*calit).WeekOfMonth << "</weekofmonth>" << endl;
+        }
+        if ((*calit).Month != -1) {
+            *strm << "   <month>" << (*calit).Month << "</month>" << endl;
+        }
+        if ((*calit).Frequency != -1) {
+            *strm << "   <frequency>" << (*calit).Frequency << "</frequency>" << endl;
+        }
+        if (!((*calit).StopDate.isNull())) {
+            *strm << "   <stopdate>" << endl;
+            *strm << "    <day>" << (*calit).StopDate.day() << "</day>" << endl;
+            *strm << "    <month>" << (*calit).StopDate.month() << "</month>" << endl;
+            *strm << "    <year>" << (*calit).StopDate.year() << "</year>" << endl;
+            *strm << "   </stopdate>" << endl;
+        }
+        if (!((*calit).StartDate.isNull())) {
+            *strm << "   <startdate>" << endl;
+            *strm << "    <day>" << (*calit).StartDate.day() << "</day>" << endl;
+            *strm << "    <month>" << (*calit).StartDate.month() << "</month>" << endl;
+            *strm << "    <year>" << (*calit).StartDate.year() << "</year>" << endl;
+            *strm << "   </startdate>" << endl;
         }
         *strm << "  </event>" << endl;
     }
@@ -1133,7 +1133,6 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
     alcatel_close_session(type);
     alcatel_detach();
 
-    /* TODO: finish merging code here */
     if (win->mergeData == 0) {
         switch (sync) {
             case ALC_SYNC_CALENDAR: {
@@ -1141,7 +1140,7 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
                 AlcatelCalendar *item;
                 for( it = local_calendar.begin(); it != local_calendar.end(); /*++it*/ ) {
                     if ((item = getCalendarByPrevId(calendar, (*it).Id, (*it).Storage))) {
-                        if (!(*item == *it)) {
+                        if (!(item->isSame(*it))) {
                             ::message(MSG_DEBUG, "MERGE:Something different -> merging (%s)", item->getName().latin1());
                             if (win->conflictAction == 0) {
                                 calendar->append((*it));
@@ -1152,6 +1151,11 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
                             } else if (win->conflictAction == 2) {
                                 AlcatelCalendar *cont = win->solveConflict(*it, *item);
                                 if (cont == NULL) {
+                                    AlcatelCalendar old(*item);
+                                    calendar->remove(*item);
+                                    old.PrevStorage = StorageNone;
+                                    old.PrevId = -1;
+                                    calendar->append(old);
                                     calendar->append((*it));
                                     it = local_calendar.remove(it);
                                 } else {
@@ -1178,7 +1182,7 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
                 AlcatelTodo *item;
                 for( it = local_todos.begin(); it != local_todos.end(); /*++it*/ ) {
                     if ((item = getTodoByPrevId(todos, (*it).Id, (*it).Storage))) {
-                        if (!(*item == *it)) {
+                        if (!(item->isSame(*it))) {
                             ::message(MSG_DEBUG, "MERGE:Something different -> merging (%s)", item->getName().latin1());
                             if (win->conflictAction == 0) {
                                 todos->append((*it));
@@ -1189,6 +1193,11 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
                             } else if (win->conflictAction == 2) {
                                 AlcatelTodo *cont = win->solveConflict(*it, *item);
                                 if (cont == NULL) {
+                                    AlcatelTodo old(*item);
+                                    todos->remove(*item);
+                                    old.PrevStorage = StorageNone;
+                                    old.PrevId = -1;
+                                    todos->append(old);
                                     todos->append((*it));
                                     it = local_todos.remove(it);
                                 } else {
@@ -1215,7 +1224,7 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
                 AlcatelContact *item;
                 for( it = local_contacts.begin(); it != local_contacts.end(); /*++it*/ ) {
                     if ((item = getContactByPrevId(contacts, (*it).Id, (*it).Storage))) {
-                        if (!(*item == *it)) {
+                        if (!(item->isSame(*it))) {
                             ::message(MSG_DEBUG, "MERGE:Something different -> merging (%s)", item->getName().latin1());
                             if (win->conflictAction == 0) {
                                 contacts->append((*it));
@@ -1226,6 +1235,11 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
                             } else if (win->conflictAction == 2) {
                                 AlcatelContact *cont = win->solveConflict(*it, *item);
                                 if (cont == NULL) {
+                                    AlcatelContact old(*item);
+                                    contacts->remove(*item);
+                                    old.PrevStorage = StorageNone;
+                                    old.PrevId = -1;
+                                    contacts->append(old);
                                     contacts->append((*it));
                                     it = local_contacts.remove(it);
                                 } else {
@@ -1259,6 +1273,8 @@ bool KAlcatelDoc::readMobileCategories(AlcatelCategoryList *strList, alc_type sy
     int i;
     char *result;
 
+    KAlcatelApp *win=(KAlcatelApp *) parent();
+
     alcatel_attach();
 
     if (!alcatel_start_session()) return false;
@@ -1288,7 +1304,33 @@ bool KAlcatelDoc::readMobileCategories(AlcatelCategoryList *strList, alc_type sy
                 alcatel_detach();
                 return false;
             }
-            strList->append(AlcatelCategory(result, list[i], StorageMobile));
+
+            AlcatelCategory *item;
+            AlcatelCategory cat(result, list[i], StorageMobile);
+            if ((item = getCategoryByPrevId(strList, list[i], StorageAny))) {
+                if (!(item->isSame(cat))) {
+                    ::message(MSG_DEBUG, "MERGE:Something different -> merging (%s)", item->getName().latin1());
+                    if (win->conflictAction == 0) {
+                        strList->remove(*item);
+                        strList->append(cat);
+                    } else if (win->conflictAction == 1) {
+                        /* nothing to do here ... */
+                    } else if (win->conflictAction == 2) {
+                        AlcatelCategory *cont = win->solveConflict(cat, *item);
+                        strList->remove(*item);
+                        strList->append(*cont);
+                        delete cont;
+                    }
+                } else {
+                    ::message(MSG_DEBUG, "MERGE:Same records (%s)", item->getName().latin1());
+                    strList->remove(*item);
+                    strList->append(cat);
+                }
+            } else {
+                ::message(MSG_DEBUG, "MERGE:None correspondent record found (%s)", cat.getName().latin1());
+                strList->append(cat);
+            }
+
             message (MSG_DEBUG, "Read category name: %02d: %s", list[i],  result);
             free(result);
         }
@@ -1398,7 +1440,41 @@ bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1) 
             Msg.Status = msg[i].stat;
             Msg.Text = QString(msg[i].ascii);
             free(msg[i].ascii);
-            messages->append(Msg);
+
+            AlcatelMessage *item;
+            if ((item = getMessageByPrevId(messages, Msg.Id, StorageAny))) {
+                if (!(item->isSame(Msg))) {
+                    ::message(MSG_DEBUG, "MERGE:Something different -> merging (%s)", item->getName().latin1());
+                    if (win->conflictAction == 0) {
+                        messages->remove(*item);
+                        messages->append(Msg);
+                    } else if (win->conflictAction == 1) {
+                        /* nothing to do here ... */
+                    } else if (win->conflictAction == 2) {
+                        AlcatelMessage *cont = win->solveConflict(Msg, *item);
+                        if (cont == NULL) {
+                            AlcatelMessage msg_old(*item);
+                            messages->remove(*item);
+                            msg_old.PrevStorage = StorageNone;
+                            msg_old.PrevId = -1;
+                            messages->append(msg_old);
+                            messages->append(Msg);
+                        } else {
+                            messages->remove(*item);
+                            messages->append(*cont);
+                            delete cont;
+                        }
+                    }
+                } else {
+                    ::message(MSG_DEBUG, "MERGE:Same records (%s)", item->getName().latin1());
+                    messages->remove(*item);
+                    messages->append(Msg);
+                }
+            } else {
+                ::message(MSG_DEBUG, "MERGE:None correspondent record found (%s)", Msg.getName().latin1());
+                messages->append(Msg);
+            }
+
             i++;
         }
         free(msg);
@@ -1589,7 +1665,7 @@ void KAlcatelDoc::deleteContents() {
     contactsVersion++;
     messagesVersion++;
     slotUpdateAllViews(NULL);
-    /* TODO here is maybe something missing.. */
+    /* TODO: here is maybe something missing.. */
 }
 
 int KAlcatelDoc::getVersion() {

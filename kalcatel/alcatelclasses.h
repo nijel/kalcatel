@@ -41,7 +41,7 @@
 enum CallType { CallMissed, CallReceived, CallDialled };
 /** type of storage
   */
-enum AlcatelStorage {StorageNone, StoragePC, StorageSIM, StorageMobile } ;
+enum AlcatelStorage {StorageNone, StoragePC, StorageSIM, StorageMobile, StorageAny } ;
 
 /** Generic class used only as base for other storage classes
   */
@@ -87,6 +87,7 @@ public:
 	void setField(int number, AlcatelFieldStruct *data);
 	
     bool operator==(const AlcatelContact &cmp);
+    bool isSame(const AlcatelContact &cmp);
     /** returns formatted name of contact
       */
 	QString getName(void);
@@ -132,6 +133,7 @@ public:
 	void setField(int number, AlcatelFieldStruct *data);
 	
     bool operator==(const AlcatelCalendar &cmp);
+    bool isSame(const AlcatelCalendar &cmp);
     /** returns string with short information about repeating events
       */
 	QString Repeating(void);
@@ -177,6 +179,7 @@ public:
 	void setField(int number, AlcatelFieldStruct *data);
 	
     bool operator==(const AlcatelTodo &cmp);
+    bool isSame(const AlcatelTodo &cmp);
 
     QString getName(void) {return Subject;}
 
@@ -200,6 +203,7 @@ public:
 	~AlcatelMessage();
 	
     bool operator==(const AlcatelMessage &cmp);
+    bool isSame(const AlcatelMessage &cmp);
     QString getName(void) {return Text;}
 
     int Status;
@@ -221,6 +225,7 @@ public:
 	~AlcatelCall();
 	
     bool operator==(const AlcatelCall &cmp);
+    bool isSame(const AlcatelCall &cmp);
     QString getName(void) {return Name;}
 
     CallType Type;
@@ -240,6 +245,7 @@ public:
 	AlcatelCategory();
 	
     bool operator==(const AlcatelCategory &cmp);
+    bool isSame(const AlcatelCategory &cmp);
     QString getName(void) {return Name;}
 
     QString Name;

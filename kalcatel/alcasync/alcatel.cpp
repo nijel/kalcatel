@@ -48,7 +48,7 @@
 #include "charset.h"
 
 #define SLEEP_CHANGE    10000
-#define SLEEP_FAIL      500
+#define SLEEP_FAIL      200
 
 int alcatel_errno;
 
@@ -357,6 +357,7 @@ bool alcatel_done(void){
         return false;
     }
     free(data);
+    message(MSG_DETAIL,"Alcatel binary mode left");
     usleep(SLEEP_CHANGE);
     return true;
 }
@@ -530,7 +531,7 @@ alc_type *alcatel_get_field_value(alc_type type, int item, int field) {
         return NULL;
     }
 
-    len = data[4] - 10; 
+    len = data[4] - 12/;
 
     result = (alc_type *)malloc(len + 1);
     chk(result);

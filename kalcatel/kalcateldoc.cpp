@@ -2357,12 +2357,12 @@ this shouldn't be here because it should be created on the fly
 
     win->modemDisconnect();
 
-    win->slotStatusMsg(i18n("Items read"),ID_DETAIL_MSG);
-
     contactsVersion++;
     version++;
     modified=true;
     slotUpdateAllViews(NULL);
+
+    win->slotStatusMsg(i18n("Items commited"),ID_DETAIL_MSG);
 
     return true;
 }

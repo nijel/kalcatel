@@ -22,6 +22,7 @@ for 0.3-beta:
    * category names...
 
 for 0.4:
+ - fix deleting of some fields
  - write for AT commands
  - try to investigate deleting of items
  - improve contact/phone number selection dialog

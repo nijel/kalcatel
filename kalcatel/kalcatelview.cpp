@@ -65,6 +65,7 @@
 #include "alcatool/logging.h"
 
 #include "editcontactdialog.h"
+#include "edittododialog.h"
 
 KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : QWidget(parent, name) {
     int i;
@@ -1004,6 +1005,10 @@ void KAlcatelView::slotMailClick(const QString &name, const QString &address) {
 
 
 void KAlcatelView::slotTodoDoubleClicked(QListViewItem *item) {
+    if (item != NULL) {
+        EditTodoDialog edit(getDocument()->todo_cats, getDocument()->todos, getDocument()->contacts, (AlcatelTodo *)(((KAlcatelDataItem *) item)->alcatelData), (KAlcatelApp *) parent());
+        edit.exec();
+    }
 }
 
 void KAlcatelView::slotCalendarDoubleClicked(QListViewItem *item) {

@@ -4,6 +4,11 @@ KAlcatel - Changelog
 
 $Id$
 
+2002-04-08 Michal Cihar <cihar@email.cz>
+        * created todo edit dialog
+        * added time validator
+        * added clearing of contact dialog
+
 2002-03-27 Michal Cihar <cihar@email.cz>
         * deleting of items
         * fixed bug in merging which caused segfault

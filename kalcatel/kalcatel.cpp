@@ -67,6 +67,7 @@
 #include "signalled.h"
 
 #include "editcontactdialog.h"
+#include "edittododialog.h"
 
 KAlcatelApp::KAlcatelApp(QWidget* , const char* name):KMainWindow(0, name) {
     config=kapp->config();
@@ -97,8 +98,8 @@ KAlcatelApp::KAlcatelApp(QWidget* , const char* name):KMainWindow(0, name) {
   /*
     fileSave->setEnabled(false);
     fileSaveAs->setEnabled(false);
-    filePrint->setEnabled(false);
   */
+    filePrint->setEnabled(false);
     editCut->setEnabled(false);
     editCopy->setEnabled(false);
     editPaste->setEnabled(false);
@@ -1027,6 +1028,8 @@ void KAlcatelApp::slotNewMessage() {
 }
 
 void KAlcatelApp::slotNewTodo() {
+    EditTodoDialog dialog(getDocument()->todo_cats, getDocument()->todos, getDocument()->contacts, NULL, this);
+    dialog.exec();
 }
 
 void KAlcatelApp::slotNewContact() {

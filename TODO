@@ -16,6 +16,7 @@ for 0.2-alpha:
 
 for 0.3-beta:
  - editing of calendar/contacts/...
+ - contact select dialog
  - (DONE) sending/writing messages
  - write to mobile
  - (DONE) signal and battery monitoring

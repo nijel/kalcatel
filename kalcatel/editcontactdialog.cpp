@@ -245,6 +245,33 @@ EditContactDialog::~EditContactDialog(){
 }
 
 void EditContactDialog::emptyFields() {
+    editStorage->setCurrentItem(StoragePC);
+    editPosition->setValue(-1);
+    editLastName->setText("");
+    editMainNumber->setText("");
+    editFirstName->setText("");
+    editCompany->setText("");
+    editJobTitle->setText("");
+    editNote->setText("");
+    editWorkNumber->setText("");
+    editFaxNumber->setText("");
+    editOtherNumber->setText("");
+    editPagerNumber->setText("");
+    editMobileNumber->setText("");
+    editHomeNumber->setText("");
+    editEmail1->setText("");
+    editEmail2->setText("");
+    editAddress->setText("");
+    editCity->setText("");
+    editState->setText("");
+    editZip->setText("");
+    editCountry->setText("");
+    editCustom1->setText("");
+    editCustom2->setText("");
+    editCustom3->setText("");
+    editCustom4->setText("");
+    editCategory->setCurrentItem(0);
+    editPrivate->setChecked(false); /* TODO: add in config */
 }
 
 void EditContactDialog::loadContact(const AlcatelContact *cont) {
@@ -284,8 +311,6 @@ void EditContactDialog::loadContact(const AlcatelContact *cont) {
         editCustom3->setText(contact->Custom3);
         editCustom4->setText(contact->Custom4);
 
-//        editCategory->setCurrentItem(contact->Category);
-
         if (contact->Category == -1) editCategory->setCurrentItem(0);
         else if (contact->Category == 255) editCategory->setCurrentItem(1);
         else {
@@ -301,7 +326,7 @@ void EditContactDialog::loadContact(const AlcatelContact *cont) {
             }
         }
 
-        editPrivate->setChecked(contact->Private);;
+        editPrivate->setChecked(contact->Private);
     }
 }
 

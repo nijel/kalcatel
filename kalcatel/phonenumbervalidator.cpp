@@ -27,8 +27,8 @@
 #include <qstringlist.h>
 
 /* TODO: shouldn't phone number have more numbers than one? */
-QRegExp PhoneNumberValidator::phoneNumberPauseRegExp = QRegExp("^\\+?[pP0-9]+$");
-QRegExp PhoneNumberValidator::phoneNumberRegExp = QRegExp("^\\+?[0-9]+$");
+QRegExp PhoneNumberValidator::phoneNumberPauseRegExp = QRegExp("^\\+?[pP0-9*#]+$");
+QRegExp PhoneNumberValidator::phoneNumberRegExp = QRegExp("^\\+?[0-9*#]+$");
 
 PhoneNumberValidator::PhoneNumberValidator(QWidget *parent, const char *name ) : QValidator(parent,name), multiple(false), pause(true), empty(true) {
 }

@@ -680,8 +680,8 @@ void KAlcatelView::slotShowCalendar(AlcatelCalendar *what) {
     if (!what->Subject.isEmpty()) text.append(i18n("<b>Subject:</b> %1<br>").arg(what->Subject));
     if (!what->Date.isNull()) text.append(i18n("<b>Date:</b> %1<br>").arg(what->Date.toString()));
     if (what->EventType != ALC_CALENDAR_BIRTHDAY && what->EventType != ALC_CALENDAR_ALARM) {
-        text.append(i18n("<b>StartTime:</b> %1<br>").arg(what->StartTime.toString()));
-        text.append(i18n("<b>EndTime:</b> %1<br>").arg(what->EndTime.toString()));
+        text.append(i18n("<b>Start time:</b> %1<br>").arg(what->StartTime.toString()));
+        text.append(i18n("<b>End time:</b> %1<br>").arg(what->EndTime.toString()));
     }
 
     text.append(i18n("<b>Event type:</b> %1<br>").arg((what->EventType!=-1)?CalendarTypes[what->EventType]:i18n("Unknown")));
@@ -953,7 +953,7 @@ void KAlcatelView::slotCalendarDoubleClicked(QListViewItem *item) {
 
 void KAlcatelView::slotContactDoubleClicked(QListViewItem *item) {
     if (item != NULL) {
-        EditContactDialog edit(getDocument()->contacts, (AlcatelContact *)(((KAlcatelDataItem *) item)->alcatelData), this);
+        EditContactDialog edit(getDocument()->contact_cats, getDocument()->contacts, (AlcatelContact *)(((KAlcatelDataItem *) item)->alcatelData), (KAlcatelApp *) parent());
         edit.exec();
     }
 }

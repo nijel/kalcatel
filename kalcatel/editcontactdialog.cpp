@@ -41,15 +41,18 @@
 #include "editcontactdialog.h"
 #include "phonenumbervalidator.h"
 #include "alcatelclasses.h"
+#include "kalcatel.h"
+#include "kalcateldoc.h"
 
-EditContactDialog::EditContactDialog(AlcatelContactList *lst, const AlcatelContact *cont, QWidget *parent, const char *name ) : KDialog(parent,name,true) {
+EditContactDialog::EditContactDialog(AlcatelCategoryList *cat, AlcatelContactList *lst, const AlcatelContact *cont, QWidget *parent, const char *name ) : KDialog(parent,name,true) {
     contact = cont;
     list= lst;
+    categories = cat;
 
     QLabel *label;
     QFrame *line;
 
-    resize(400, 580 );
+    resize(500, 580 );
     if (cont == NULL) setCaption( i18n( "New contact" ) );
     else setCaption( i18n( "Edit contact" ) );
 
@@ -88,6 +91,13 @@ EditContactDialog::EditContactDialog(AlcatelContactList *lst, const AlcatelConta
 
     mainLayout->addWidget(new QLabel(i18n("Category"), this), 5, 0);
     mainLayout->addWidget(editCategory = new KComboBox(this), 5, 1);
+
+    editCategory->insertItem(i18n("Not set")); /* -1 */
+    editCategory->insertItem(i18n("None")); /* 255 */
+    for( AlcatelCategoryList::Iterator c_it = categories->begin(); c_it != categories->end(); ++c_it ) {
+        editCategory->insertItem((*c_it).Name);
+    }
+//    , (*c_it).Id
 
     mainLayout->addWidget(new QLabel(i18n("Private"), this), 5, 2);
     mainLayout->addWidget(editPrivate = new QCheckBox(this), 5, 3);
@@ -191,7 +201,8 @@ EditContactDialog::EditContactDialog(AlcatelContactList *lst, const AlcatelConta
     editStorage->insertItem(i18n("PC"));
     editStorage->insertItem(i18n("SIM"));
     editStorage->insertItem(i18n("Mobile"));
-    connect( editStorage, SIGNAL( activated(int)), this, SLOT( slotStorage(AlcatelStorage)));
+    connect( editStorage, SIGNAL( activated(int)), this, SLOT( slotStorage(int)));
+    editStorage->setCurrentItem(1);
     mainLayout->addWidget(editStorage, 22, 1);
 
     mainLayout->addWidget(new QLabel(i18n("Position"), this), 22, 2);
@@ -225,9 +236,73 @@ EditContactDialog::EditContactDialog(AlcatelContactList *lst, const AlcatelConta
     connect( buttonCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
 
     editPosition->setEnabled(false);
+    loadContact();
+    if (contact == NULL) editPosition->setValue(-1);
+    editStorage->setEnabled(contact == NULL);
 }
 
 EditContactDialog::~EditContactDialog(){
+}
+
+void EditContactDialog::emptyFields() {
+}
+
+void EditContactDialog::loadContact(const AlcatelContact *cont) {
+    if (cont != NULL) contact = cont;
+
+    emptyFields();
+
+    if (contact == NULL || contact->Storage == StorageAny || contact->Storage == StorageNone) return;
+
+    editStorage->setCurrentItem((int)contact->Storage);
+
+    editPosition->setValue(contact->Id);
+
+    editLastName->setText(contact->LastName);
+    editMainNumber->setText(contact->MainNumber);
+
+    if (contact->Storage == StoragePC || contact->Storage == StorageMobile) {
+        editFirstName->setText(contact->FirstName);
+        editCompany->setText(contact->Company);
+        editJobTitle->setText(contact->JobTitle);
+        editNote->setText(contact->Note);
+        editWorkNumber->setText(contact->WorkNumber);
+        editFaxNumber->setText(contact->FaxNumber);
+        editOtherNumber->setText(contact->OtherNumber);
+        editPagerNumber->setText(contact->PagerNumber);
+        editMobileNumber->setText(contact->MobileNumber);
+        editHomeNumber->setText(contact->HomeNumber);
+        editEmail1->setText(contact->Email1);
+        editEmail2->setText(contact->Email2);
+        editAddress->setText(contact->Address);
+        editCity->setText(contact->City);
+        editState->setText(contact->State);
+        editZip->setText(contact->Zip);
+        editCountry->setText(contact->Country);
+        editCustom1->setText(contact->Custom1);
+        editCustom2->setText(contact->Custom2);
+        editCustom3->setText(contact->Custom3);
+        editCustom4->setText(contact->Custom4);
+
+//        editCategory->setCurrentItem(contact->Category);
+
+        if (contact->Category == -1) editCategory->setCurrentItem(0);
+        else if (contact->Category == 255) editCategory->setCurrentItem(1);
+        else {
+            AlcatelCategory *cat = getCategoryById(categories, contact->Category, StorageAny);
+            if (cat == NULL) editCategory->setCurrentItem(0);
+            else {
+                for (int i=0; i<editCategory->count(); i++) {
+                    if (editCategory->text(i) == cat->Name) {
+                        editCategory->setCurrentItem(i);
+                        break;
+                    }
+                }
+            }
+        }
+
+        editPrivate->setChecked(contact->Private);;
+    }
 }
 
 void EditContactDialog::slotCancel() {
@@ -235,93 +310,131 @@ void EditContactDialog::slotCancel() {
 }
 
 void EditContactDialog::slotOK() {
+    AlcatelContact cont;
+    cont.Storage =  (AlcatelStorage)editStorage->currentItem();
+
+    cont.Id = editPosition->value();
+
+    cont.LastName = editLastName->text();
+    cont.MainNumber = editMainNumber->text();
+
+    if (cont.Storage == StoragePC || cont.Storage == StorageMobile) {
+        cont.FirstName = editFirstName->text();
+        cont.Company = editCompany->text();
+        cont.JobTitle = editJobTitle->text();
+        cont.Note = editNote->text();
+        cont.WorkNumber = editWorkNumber->text();
+        cont.FaxNumber = editFaxNumber->text();
+        cont.OtherNumber = editOtherNumber->text();
+        cont.PagerNumber = editPagerNumber->text();
+        cont.MobileNumber = editMobileNumber->text();
+        cont.HomeNumber = editHomeNumber->text();
+        cont.Email1 = editEmail1->text();
+        cont.Email2 = editEmail2->text();
+        cont.Address = editAddress->text();
+        cont.City = editCity->text();
+        cont.State = editState->text();
+        cont.Zip = editZip->text();
+        cont.Country = editCountry->text();
+        cont.Custom1 = editCustom1->text();
+        cont.Custom2 = editCustom2->text();
+        cont.Custom3 = editCustom3->text();
+        cont.Custom4 = editCustom4->text();
+
+        if (editCategory->currentText() == i18n("Not set")) cont.Category = -1;
+        else if (editCategory->currentText() == i18n("None")) cont.Category = 255;
+        else {
+            AlcatelCategory *cat = getCategoryByName ( categories, editCategory->currentText(), StorageAny);
+            if (cat != NULL) cont.Category = cat->Id;
+            else cont.Category = -1;
+        }
+        cont.Private = editPrivate->isChecked();
+    }
+
+    KAlcatelDoc *theDoc=((KAlcatelApp *) parentWidget())->getDocument();
+    if (contact == NULL) {
+        // insert new item
+        cont.Modified = true;
+        cont.Created = true;
+        if (cont.Storage == StoragePC) cont.Id = theDoc->getPCStorageId();
+        list->append(cont);
+        theDoc->udpateDocument(alcatel_contacts);
+    } else {
+        cont.Created = contact->Created;
+        cont.Deleted = contact->Deleted;
+        cont.PrevId = contact->PrevId;
+        cont.PrevStorage = contact->PrevStorage;
+        if (*contact != cont) {
+            // item was changed
+            list->remove(*contact);
+            cont.Modified = true;
+            list->append(cont);
+            theDoc->udpateDocument(alcatel_contacts);
+        }
+    }
+
     accept();
 }
 
-void EditContactDialog::slotStorage(AlcatelStorage st) {
-    switch (st) {
+void EditContactDialog::slotStorage(int st) {
+    switch ((AlcatelStorage)st) {
+        case StorageSIM:
+            editLastName->setEnabled(true);
+            editFirstName->setEnabled(false);
+            editCompany->setEnabled(false);
+            editJobTitle->setEnabled(false);
+            editNote->setEnabled(false);
+            editCategory->setEnabled(false);
+            editPrivate->setEnabled(false);
+            editWorkNumber->setEnabled(false);
+            editMainNumber->setEnabled(true);
+            editFaxNumber->setEnabled(false);
+            editOtherNumber->setEnabled(false);
+            editPagerNumber->setEnabled(false);
+            editMobileNumber->setEnabled(false);
+            editHomeNumber->setEnabled(false);
+            editEmail1->setEnabled(false);
+            editEmail2->setEnabled(false);
+            editAddress->setEnabled(false);
+            editCity->setEnabled(false);
+            editState->setEnabled(false);
+            editZip->setEnabled(false);
+            editCountry->setEnabled(false);
+            editCustom1->setEnabled(false);
+            editCustom2->setEnabled(false);
+            editCustom3->setEnabled(false);
+            editCustom4->setEnabled(false);
+            break;
         case StorageAny:
         case StorageNone:
-            editLastName->setEnabled();
-            editFirstName->setEnabled();
-            editCompany->setEnabled();
-            editJobTitle->setEnabled();
-            editNote->setEnabled();
-            editCategory->setEnabled();
-            editPrivate->setEnabled();
-            editWorkNumber->setEnabled();
-            editMainNumber->setEnabled();
-            editFaxNumber->setEnabled();
-            editOtherNumber->setEnabled();
-            editPagerNumber->setEnabled();
-            editMobileNumber->setEnabled();
-            editHomeNumber->setEnabled();
-            editEmail1->setEnabled();
-            editEmail2->setEnabled();
-            editAddress->setEnabled();
-            editCity->setEnabled();
-            editState->setEnabled();
-            editZip->setEnabled();
-            editCountry->setEnabled();
-            editCustom1->setEnabled();
-            editCustom2->setEnabled();
-            editCustom3->setEnabled();
-            editCustom4->setEnabled();
-            break;
-        case StorageSIM:
-            editLastName->setEnabled();
-            editFirstName->setEnabled();
-            editCompany->setEnabled();
-            editJobTitle->setEnabled();
-            editNote->setEnabled();
-            editCategory->setEnabled();
-            editPrivate->setEnabled();
-            editWorkNumber->setEnabled();
-            editMainNumber->setEnabled();
-            editFaxNumber->setEnabled();
-            editOtherNumber->setEnabled();
-            editPagerNumber->setEnabled();
-            editMobileNumber->setEnabled();
-            editHomeNumber->setEnabled();
-            editEmail1->setEnabled();
-            editEmail2->setEnabled();
-            editAddress->setEnabled();
-            editCity->setEnabled();
-            editState->setEnabled();
-            editZip->setEnabled();
-            editCountry->setEnabled();
-            editCustom1->setEnabled();
-            editCustom2->setEnabled();
-            editCustom3->setEnabled();
-            editCustom4->setEnabled();
-            break;
+            editStorage->setCurrentItem((int)StoragePC);
         case StoragePC:
         case StorageMobile:
-            editLastName->setEnabled();
-            editFirstName->setEnabled();
-            editCompany->setEnabled();
-            editJobTitle->setEnabled();
-            editNote->setEnabled();
-            editCategory->setEnabled();
-            editPrivate->setEnabled();
-            editWorkNumber->setEnabled();
-            editMainNumber->setEnabled();
-            editFaxNumber->setEnabled();
-            editOtherNumber->setEnabled();
-            editPagerNumber->setEnabled();
-            editMobileNumber->setEnabled();
-            editHomeNumber->setEnabled();
-            editEmail1->setEnabled();
-            editEmail2->setEnabled();
-            editAddress->setEnabled();
-            editCity->setEnabled();
-            editState->setEnabled();
-            editZip->setEnabled();
-            editCountry->setEnabled();
-            editCustom1->setEnabled();
-            editCustom2->setEnabled();
-            editCustom3->setEnabled();
-            editCustom4->setEnabled();
+            editLastName->setEnabled(true);
+            editFirstName->setEnabled(true);
+            editCompany->setEnabled(true);
+            editJobTitle->setEnabled(true);
+            editNote->setEnabled(true);
+            editCategory->setEnabled(true);
+            editPrivate->setEnabled(true);
+            editWorkNumber->setEnabled(true);
+            editMainNumber->setEnabled(true);
+            editFaxNumber->setEnabled(true);
+            editOtherNumber->setEnabled(true);
+            editPagerNumber->setEnabled(true);
+            editMobileNumber->setEnabled(true);
+            editHomeNumber->setEnabled(true);
+            editEmail1->setEnabled(true);
+            editEmail2->setEnabled(true);
+            editAddress->setEnabled(true);
+            editCity->setEnabled(true);
+            editState->setEnabled(true);
+            editZip->setEnabled(true);
+            editCountry->setEnabled(true);
+            editCustom1->setEnabled(true);
+            editCustom2->setEnabled(true);
+            editCustom3->setEnabled(true);
+            editCustom4->setEnabled(true);
             break;
     }
 }

@@ -4,6 +4,14 @@ KAlcatel - Changelog
 
 $Id$
 
+2002-03-25 Michal Cihar <cihar@email.cz>
+        * added contact editing
+        * added indication of modified/edited/deleted items in listing
+        * added saving of modified/edited/deleted status
+        * added menu and toolbar items for creating new contact/todo/event
+        * added unified phone number validation
+        * some code cleanups (alcatel classes and list view items)
+
 2002-03-19 Michal Cihar <cihar@email.cz>
         * removed useless twice connecting on start when modem doesn't react
 
@@ -12,7 +20,7 @@ $Id$
         * added signal strength and battery status display + monitoring
         * modem status shown in statusbar
         * support for writing/sending messages
-        * some fixes in decoding PDU messages
+        * some fixes in decoding of PDU messages
 
 2002-03-15 Michal Cihar <cihar@email.cz>
         * changed modem connecting to allow persistent connection and connecting on start

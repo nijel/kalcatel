@@ -38,7 +38,7 @@
 
 /** type of call
   */
-enum CallType { CallMissed = 0, CallReceived = 1, CallDialled = 1};
+enum CallType { CallMissed = 0, CallReceived = 1, CallDialled = 2};
 /** type of storage
   */
 enum AlcatelStorage {StorageNone = 0, StoragePC = 1, StorageSIM = 2, StorageMobile = 3, StorageAny = 0xff } ;
@@ -65,6 +65,7 @@ public:
       * Takes affect only fo StorageMobile and StorageSIM.
       */
     bool Modified;
+    bool Created;
     bool Deleted;
     virtual const char *getClassName() = 0;
     virtual QString getName(void) = 0;
@@ -88,6 +89,7 @@ public:
     void setField(int number, AlcatelFieldStruct *data);
 
     bool operator==(const AlcatelContact &cmp) const;
+    bool operator!=(const AlcatelContact &cmp) const;
     bool isSame(const AlcatelContact &cmp) const;
     /** returns formatted name of contact
       */
@@ -134,6 +136,7 @@ public:
     void setField(int number, AlcatelFieldStruct *data);
 
     bool operator==(const AlcatelCalendar &cmp) const;
+    bool operator!=(const AlcatelCalendar &cmp) const;
     bool isSame(const AlcatelCalendar &cmp) const;
     /** returns string with short information about repeating events
       */
@@ -180,6 +183,7 @@ public:
     void setField(int number, AlcatelFieldStruct *data);
 
     bool operator==(const AlcatelTodo &cmp) const;
+    bool operator!=(const AlcatelTodo &cmp) const;
     bool isSame(const AlcatelTodo &cmp) const;
 
     QString getName(void);
@@ -204,6 +208,7 @@ public:
     ~AlcatelMessage();
 
     bool operator==(const AlcatelMessage &cmp) const;
+    bool operator!=(const AlcatelMessage &cmp) const;
     bool isSame(const AlcatelMessage &cmp) const;
     QString getName(void);
 
@@ -226,6 +231,7 @@ public:
     ~AlcatelCall();
 
     bool operator==(const AlcatelCall &cmp) const;
+    bool operator!=(const AlcatelCall &cmp) const;
     bool isSame(const AlcatelCall &cmp) const;
     QString getName(void);
 
@@ -246,6 +252,7 @@ public:
     AlcatelCategory();
 
     bool operator==(const AlcatelCategory &cmp) const;
+    bool operator!=(const AlcatelCategory &cmp) const;
     bool isSame(const AlcatelCategory &cmp) const;
     QString getName(void);
 
@@ -336,4 +343,8 @@ AlcatelCalendar *getCalendarByPrevId(AlcatelCalendarList *list, int id, AlcatelS
 /** find call by previous id
   */
 AlcatelCall *getCallByPrevId(AlcatelCallList *list, int id, AlcatelStorage stype, CallType type);
+
+/** returns category by name
+  */
+AlcatelCategory *getCategoryByName(AlcatelCategoryList *list, const QString &name, AlcatelStorage type);
 #endif

@@ -50,6 +50,7 @@ enum AlcDataType {
     alcatel_messages,
     alcatel_calendar,
     alcatel_calls,
+    alcatel_contacts,
     alcatel_contacts_sim,
     alcatel_contacts_mobile
     };
@@ -116,33 +117,39 @@ class KAlcatelDoc : public QObject
     const KURL& URL() const;
     /** sets the URL of the document
      */
-	void setURL(const KURL& url);
+    void setURL(const KURL& url);
 
     /** returns document version
      */
-	int getVersion();
+    int getVersion();
     /** returns messages version
      */
-	int getMessagesVersion();
+    int getMessagesVersion();
     /** returns calls version
      */
-	int getCallsVersion();
+    int getCallsVersion();
     /** returns calendar version
      */
-	int getCalendarVersion();
+    int getCalendarVersion();
     /** returns todos version
      */
-	int getTodosVersion();
+    int getTodosVersion();
     /** returns contacts version
      */
-	int getContactsVersion();
-	
+    int getContactsVersion();
+    /** returns next pc storage id and increases internal counter
+     */
+    int getPCStorageId();
+    /** updates some part (or whole) document
+     */
+    void udpateDocument(AlcDataType which);
+
   public slots:
     /** calls repaint() on all views connected to the document object and is called by the view by which the document has been changed.
      * As this view normally repaints itself, it is excluded from the paintEvent.
      */
     void slotUpdateAllViews(KAlcatelView *sender);
- 	
+
   public:	
     /** the list of the views currently connected to the document
      */

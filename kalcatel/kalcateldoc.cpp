@@ -266,6 +266,10 @@ void KAlcatelDoc::readDomMessage(QDomElement el) {
     if (mod == "yes") {
         Msg.Modified = true;
     }
+    QString cre = el.attribute("created");
+    if (cre == "yes") {
+        Msg.Created = true;
+    }
 
     while( !n.isNull() ) {
         QDomElement l = n.toElement();
@@ -310,6 +314,10 @@ void KAlcatelDoc::readDomContact(QDomElement el) {
     QString mod = el.attribute("modified");
     if (mod == "yes") {
         Cont.Modified = true;
+    }
+    QString cre = el.attribute("created");
+    if (cre == "yes") {
+        Cont.Created = true;
     }
 
     while( !n.isNull() ) {
@@ -398,6 +406,10 @@ void KAlcatelDoc::readDomEvent(QDomElement el) {
     if (mod == "yes") {
         Cal.Modified = true;
     }
+    QString cre = el.attribute("created");
+    if (cre == "yes") {
+        Cal.Created = true;
+    }
 
     while( !n.isNull() ) {
         QDomElement l = n.toElement();
@@ -462,6 +474,10 @@ void KAlcatelDoc::readDomTodo(QDomElement el) {
     if (mod == "yes") {
         Cal.Modified = true;
     }
+    QString cre = el.attribute("created");
+    if (cre == "yes") {
+        Cal.Created = true;
+    }
 
     while( !n.isNull() ) {
         QDomElement l = n.toElement();
@@ -510,6 +526,10 @@ void KAlcatelDoc::readDomCall(QDomElement el) {
     if (mod == "yes") {
         Call.Modified = true;
     }
+    QString cre = el.attribute("created");
+    if (cre == "yes") {
+        Call.Created = true;
+    }
 
     while( !n.isNull() ) {
         QDomElement l = n.toElement();
@@ -546,6 +566,10 @@ void KAlcatelDoc::readDomCategory(QDomElement el, AlcatelCategoryList *list) {
     QString mod = el.attribute("modified");
     if (mod == "yes") {
         Cat.Modified = true;
+    }
+    QString cre = el.attribute("created");
+    if (cre == "yes") {
+        Cat.Created = true;
     }
 
     while( !n.isNull() ) {
@@ -786,6 +810,8 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
                 *strm << " modified=\"yes\"";
             if ((*messagesit).Deleted)
                 *strm << " deleted=\"yes\"";
+            if ((*messagesit).Created)
+                *strm << " created=\"yes\"";
             *strm << ">" << endl;
             if ((*messagesit).Storage != StoragePC) {
                 *strm << "   <id>" << (*messagesit).Id << "</id>" << endl;
@@ -830,6 +856,8 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
                 *strm << " modified=\"yes\"";
             if ((*cit).Deleted)
                 *strm << " deleted=\"yes\"";
+            if ((*cit).Created)
+                *strm << " created=\"yes\"";
             *strm << ">" << endl;
             if ((*cit).Storage != StoragePC) {
                 *strm << "   <id>" << (*cit).Id << "</id>" << endl;
@@ -930,6 +958,8 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
                 *strm << " modified=\"yes\"";
             if ((*calit).Deleted)
                 *strm << " deleted=\"yes\"";
+            if ((*calit).Created)
+                *strm << " created=\"yes\"";
             *strm << ">" << endl;
             if ((*calit).Storage != StoragePC) {
                 *strm << "   <id>" << (*calit).Id << "</id>" << endl;
@@ -1046,6 +1076,8 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
                 *strm << " modified=\"yes\"";
             if ((*tit).Deleted)
                 *strm << " deleted=\"yes\"";
+            if ((*tit).Created)
+                *strm << " created=\"yes\"";
             *strm << ">" << endl;
             if ((*tit).Storage != StoragePC) {
                 *strm << "   <id>" << (*tit).Id << "</id>" << endl;
@@ -1113,6 +1145,8 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
                 *strm << " modified=\"yes\"";
             if ((*callit).Deleted)
                 *strm << " deleted=\"yes\"";
+            if ((*callit).Created)
+                *strm << " created=\"yes\"";
             *strm << ">" << endl;
             if ((*callit).Storage != StoragePC) {
                 (*callit).PrevId = (*callit).Id;
@@ -1144,6 +1178,8 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
                 *strm << " modified=\"yes\"";
             if ((*catit).Deleted)
                 *strm << " deleted=\"yes\"";
+            if ((*catit).Created)
+                *strm << " created=\"yes\"";
             *strm << ">" << endl;
             if ((*catit).Storage != StoragePC) {
                 *strm << "   <id>" << (*catit).Id << "</id>" << endl;
@@ -1167,6 +1203,8 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
                 *strm << " modified=\"yes\"";
             if ((*catit).Deleted)
                 *strm << " deleted=\"yes\"";
+            if ((*catit).Created)
+                *strm << " created=\"yes\"";
             *strm << ">" << endl;
             if ((*catit).Storage != StoragePC) {
                 *strm << "   <id>" << (*catit).Id << "</id>" << endl;
@@ -1796,7 +1834,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
         callsVersion++;
     }
 
-    if (what == alcatel_contacts_sim || what == alcatel_all) {
+    if (what == alcatel_contacts || what == alcatel_contacts_sim || what == alcatel_all) {
         ContactData *cont;
         win->slotStatusMsg(i18n("Reading SIM contacts"),ID_DETAIL_MSG);
         clearContacts(contacts, StorageSIM);
@@ -1856,11 +1894,11 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
         contactsVersion++;
     }
 
-    if (what == alcatel_todos || what == alcatel_calendar || what == alcatel_contacts_mobile || what == alcatel_all) {
+    if (what == alcatel_contacts || what == alcatel_todos || what == alcatel_calendar || what == alcatel_contacts_mobile || what == alcatel_all) {
         win->slotStatusMsg(i18n("Opening binary mode"),ID_DETAIL_MSG);
         alcatel_init();
 
-        if (what == alcatel_contacts_mobile || what == alcatel_all) {
+        if (what == alcatel_contacts || what == alcatel_contacts_mobile || what == alcatel_all) {
             /* at first read categories */
             win->slotStatusMsg(i18n("Reading contact categories"),ID_DETAIL_MSG);
             if (!readMobileCategories(contact_cats, ALC_SYNC_CONTACTS, ALC_SYNC_TYPE_CONTACTS, ALC_LIST_CONTACTS_CAT)) {
@@ -1981,4 +2019,43 @@ int KAlcatelDoc::getCalendarVersion() {
 
 int KAlcatelDoc::getTodosVersion() {
     return todosVersion;
+}
+
+int KAlcatelDoc::getPCStorageId() {
+    return pcStorageCounter++;
+}
+
+void KAlcatelDoc::udpateDocument(AlcDataType which) {
+    modified=true;
+
+    version++;
+
+    switch (which) {
+        case alcatel_all:
+            todosVersion++;
+            callsVersion++;
+            calendarVersion++;
+            contactsVersion++;
+            messagesVersion++;
+            break;
+        case alcatel_todos:
+            todosVersion++;
+            break;
+        case alcatel_messages:
+            messagesVersion++;
+            break;
+        case alcatel_calendar:
+            calendarVersion++;
+            break;
+        case alcatel_calls:
+            callsVersion++;
+            break;
+        case alcatel_contacts:
+        case alcatel_contacts_sim:
+        case alcatel_contacts_mobile:
+            contactsVersion++;
+            break;
+    }
+
+    slotUpdateAllViews(NULL);
 }

@@ -48,6 +48,8 @@ KAlcatelMessageViewItem::KAlcatelMessageViewItem ( QListView * parent, AlcatelMe
 void KAlcatelMessageViewItem::update() {
     if (alcatelData->Deleted) {
         setPixmap(0, SmallIcon("kalcatel-deleted.png"));
+    } else if (alcatelData->Created) {
+        setPixmap(0, SmallIcon("kalcatel-created.png"));
     } else if (alcatelData->Modified) {
         setPixmap(0, SmallIcon("kalcatel-modified.png"));
     } else if (alcatelData->Storage == StoragePC){
@@ -98,6 +100,8 @@ KAlcatelMessageCatViewItem::KAlcatelMessageCatViewItem ( QListView * parent, Alc
 void KAlcatelMessageCatViewItem::update() {
     if (alcatelData->Deleted) {
         setPixmap(0, SmallIcon("kalcatel-deleted.png"));
+    } else if (alcatelData->Created) {
+        setPixmap(0, SmallIcon("kalcatel-created.png"));
     } else if (alcatelData->Modified) {
         setPixmap(0, SmallIcon("kalcatel-modified.png"));
     } else if (alcatelData->Storage == StoragePC){
@@ -147,6 +151,8 @@ KAlcatelCallViewItem::KAlcatelCallViewItem ( QListView * parent, AlcatelCall *da
 void KAlcatelCallViewItem::update() {
     if (alcatelData->Deleted) {
         setPixmap(0, SmallIcon("kalcatel-deleted.png"));
+    } else if (alcatelData->Created) {
+        setPixmap(0, SmallIcon("kalcatel-created.png"));
     } else if (alcatelData->Modified) {
         setPixmap(0, SmallIcon("kalcatel-modified.png"));
     } else if (alcatelData->Storage == StoragePC){
@@ -190,6 +196,8 @@ KAlcatelCallCatViewItem::KAlcatelCallCatViewItem ( QListView * parent, AlcatelCa
 void KAlcatelCallCatViewItem::update() {
     if (alcatelData->Deleted) {
         setPixmap(0, SmallIcon("kalcatel-deleted.png"));
+    } else if (alcatelData->Created) {
+        setPixmap(0, SmallIcon("kalcatel-created.png"));
     } else if (alcatelData->Modified) {
         setPixmap(0, SmallIcon("kalcatel-modified.png"));
     } else if (alcatelData->Storage == StoragePC){
@@ -228,6 +236,8 @@ KAlcatelTodoViewItem::KAlcatelTodoViewItem ( QListView *parent, AlcatelTodo *dat
 void KAlcatelTodoViewItem::update() {
     if (alcatelData->Deleted) {
         setPixmap(0, SmallIcon("kalcatel-deleted.png"));
+    } else if (alcatelData->Created) {
+        setPixmap(0, SmallIcon("kalcatel-created.png"));
     } else if (alcatelData->Modified) {
         setPixmap(0, SmallIcon("kalcatel-modified.png"));
     } else if (alcatelData->Storage == StoragePC){
@@ -276,6 +286,8 @@ KAlcatelTodoCatViewItem::KAlcatelTodoCatViewItem ( QListView *parent, AlcatelTod
 void KAlcatelTodoCatViewItem::update() {
     if (alcatelData->Deleted) {
         setPixmap(0, SmallIcon("kalcatel-deleted.png"));
+    } else if (alcatelData->Created) {
+        setPixmap(0, SmallIcon("kalcatel-created.png"));
     } else if (alcatelData->Modified) {
         setPixmap(0, SmallIcon("kalcatel-modified.png"));
     } else if (alcatelData->Storage == StoragePC){
@@ -322,6 +334,8 @@ KAlcatelContactViewItem::KAlcatelContactViewItem ( QListView * parent, AlcatelCo
 void KAlcatelContactViewItem::update() {
     if (alcatelData->Deleted) {
         setPixmap(0, SmallIcon("kalcatel-deleted.png"));
+    } else if (alcatelData->Created) {
+        setPixmap(0, SmallIcon("kalcatel-created.png"));
     } else if (alcatelData->Modified) {
         setPixmap(0, SmallIcon("kalcatel-modified.png"));
     } else if (alcatelData->Storage == StoragePC){
@@ -365,6 +379,8 @@ KAlcatelContactMobileViewItem::KAlcatelContactMobileViewItem ( QListView * paren
 void KAlcatelContactMobileViewItem::update() {
     if (alcatelData->Deleted) {
         setPixmap(0, SmallIcon("kalcatel-deleted.png"));
+    } else if (alcatelData->Created) {
+        setPixmap(0, SmallIcon("kalcatel-created.png"));
     } else if (alcatelData->Modified) {
         setPixmap(0, SmallIcon("kalcatel-modified.png"));
     } else if (alcatelData->Storage == StoragePC){
@@ -405,6 +421,8 @@ KAlcatelContactMobileCatViewItem::KAlcatelContactMobileCatViewItem ( QListView *
 void KAlcatelContactMobileCatViewItem::update() {
     if (alcatelData->Deleted) {
         setPixmap(0, SmallIcon("kalcatel-deleted.png"));
+    } else if (alcatelData->Created) {
+        setPixmap(0, SmallIcon("kalcatel-created.png"));
     } else if (alcatelData->Modified) {
         setPixmap(0, SmallIcon("kalcatel-modified.png"));
     } else if (alcatelData->Storage == StoragePC){
@@ -444,6 +462,8 @@ KAlcatelContactSIMViewItem::KAlcatelContactSIMViewItem ( QListView * parent, Alc
 void KAlcatelContactSIMViewItem::update() {
     if (alcatelData->Deleted) {
         setPixmap(0, SmallIcon("kalcatel-deleted.png"));
+    } else if (alcatelData->Created) {
+        setPixmap(0, SmallIcon("kalcatel-created.png"));
     } else if (alcatelData->Modified) {
         setPixmap(0, SmallIcon("kalcatel-modified.png"));
     } else if (alcatelData->Storage == StoragePC){
@@ -480,6 +500,8 @@ KAlcatelCalendarViewItem::KAlcatelCalendarViewItem ( QListView * parent, Alcatel
 void KAlcatelCalendarViewItem::update() {
     if (alcatelData->Deleted) {
         setPixmap(0, SmallIcon("kalcatel-deleted.png"));
+    } else if (alcatelData->Created) {
+        setPixmap(0, SmallIcon("kalcatel-created.png"));
     } else if (alcatelData->Modified) {
         setPixmap(0, SmallIcon("kalcatel-modified.png"));
     } else if (alcatelData->Storage == StoragePC){

@@ -1024,7 +1024,7 @@ void KAlcatelApp::slotNewTodo() {
 }
 
 void KAlcatelApp::slotNewContact() {
-    EditContactDialog dialog(getDocument()->contacts, NULL, this);
+    EditContactDialog dialog(getDocument()->contact_cats, getDocument()->contacts, NULL, this);
     dialog.exec();
 }
 

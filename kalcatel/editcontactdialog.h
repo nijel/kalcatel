@@ -42,15 +42,18 @@ enum AlcatelStorage;
 class EditContactDialog : public KDialog  {
     Q_OBJECT
 public: 
-    EditContactDialog(AlcatelContactList *lst, const AlcatelContact *cont, QWidget *parent=0, const char *name=0);
+    EditContactDialog(AlcatelCategoryList *cat, AlcatelContactList *lst, const AlcatelContact *cont, QWidget *parent=0, const char *name=0);
     ~EditContactDialog();
+    void emptyFields();
+    void loadContact(const AlcatelContact *cont = NULL);
 public slots:
     void slotOK();
     void slotCancel();
-    void slotStorage(AlcatelStorage st);
+    void slotStorage(int st);
 private:
     const AlcatelContact *contact;
     AlcatelContactList *list;
+    AlcatelCategoryList *categories;
 
     KComboBox *editStorage;
     KIntNumInput *editPosition;

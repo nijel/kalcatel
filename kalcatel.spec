@@ -3,14 +3,14 @@
 # the error to ian geiser <geiseri@msoe.edu>
 Summary:   KDE application to manage Alcatel 50x and 70x phone
 Name:      kalcatel
-Version:   0.3
+Version:   0.3.1
 Release:   1
 Copyright: GPL
 Vendor:    Michal Cihar <cihar@email.cz>
 Url:       http://cihar.liten.cz
 Packager:  Michal Cihar <cihar@email.cz>
 Group:     Applications
-Source:    kalcatel-0.3.tar.gz
+Source:    %{name}-%{version}.tar.gz
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-root
 
 %description

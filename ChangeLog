@@ -4,6 +4,9 @@ KAlcatel - Changelog
 
 $Id$
 
+2002-10-21 Michal Cihar <cihar@email.cz>
+        * === released 0.3.1 ===
+
 2002-10-13 Michal Cihar <cihar@email.cz>
         * fixed deleting of some fields
         * implemented deleting of items

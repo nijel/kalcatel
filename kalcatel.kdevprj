@@ -483,5 +483,12 @@ install_location=
 type=SOURCE
 
 [po/Makefile.am]
+files=po/cs.po
 sub_dirs=
 type=po
+
+[po/cs.po]
+dist=false
+install=false
+install_location=
+type=PO

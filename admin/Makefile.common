@@ -1,4 +1,3 @@
-
 SHELL=/bin/sh
 
 cvs:
@@ -256,6 +255,7 @@ package-messages:
 	   else echo " " > _translatorinfo.cpp ;\
 	   fi; \
 	   perl -e '$$mes=0; while (<STDIN>) { if (/^messages:/) { $$mes=1; print $$_; next; } if ($$mes) { if (/$$\\(XGETTEXT\)/ && / -o/) { s/ -o \$$\(podir\)/ _translatorinfo.cpp -o \$$\(podir\)/ } print $$_; } else { print $$_; } }' < Makefile.am > _transMakefile ;\
+	   includedir=/usr/include/kde; \
 	   $(MAKE) -s -f _transMakefile podir=$$podir EXTRACTRC="$$EXTRACTRC" PREPARETIPS="$$PREPARETIPS" \
 	   XGETTEXT="$${XGETTEXT:-xgettext} -C -ki18n \
 	   -kI18N_NOOP -ktranslate -kaliasLocale \

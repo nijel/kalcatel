@@ -101,6 +101,11 @@ class KAlcatelDoc : public QObject
 	void setURL(const KURL& url);
 
 	int getVersion();
+	int getSMSVersion();
+	int getCallVersion();
+	int getCalendarVersion();
+	int getTodoVersion();
+	int getContactVersion();
 	
   public slots:
     /** calls repaint() on all views connected to the document object and is called by the view by which the document has been changed.
@@ -119,14 +124,18 @@ class KAlcatelDoc : public QObject
     AlcatelCalendarList *caledar;
     AlcatelTodoList *todo;
     AlcatelSMSList *sms;
+//    AlcatelCallList calls; /*TODO: not implemented!*/
   private:
     /** the modified flag of the current document */
     bool modified;
     KURL doc_url;
 
     int version;
-
-//    AlcatelCallList calls;
+    int smsVersion;
+    int callVersion;
+    int contactVersion;
+    int calendarVersion;
+    int todoVersion;
 };
 
 #endif // KALCATELDOC_H

@@ -26,6 +26,7 @@
 //#include <qprinter.h>
 //#include <qpainter.h>
 #include <qpixmap.h>
+#include <qsplitter.h>
 
 // include files for KDE
 #include <kjanuswidget.h>
@@ -38,6 +39,7 @@
 #include "kalcateldoc.h"
 #include "kalcatel.h"
 #include "alcatelclasses.h"
+#include "alcatool/sms.h"
 
 KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : KJanusWidget(parent, name, TreeList/*IconList or Tabbed*/)
 {
@@ -90,38 +92,69 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : KJanusWidget(par
   list.clear();
 
   messages = addVBoxPage (i18n("Messages"), i18n("All messages"), SmallIcon("kalcatel-message.png"));
-  messages_list = createListView(messages, alc_messages);
+  QSplitter *vsplitter = new QSplitter( Qt::Vertical, messages );
+  messages_list = createListView(vsplitter, alc_messages);
+  connect( messages_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotMessageChanged() ) );
+  message = new QLabel( vsplitter );
+  message->setAlignment( Qt::AlignTop );
+  message->setBackgroundMode( PaletteBase );
+  vsplitter->setResizeMode(message, QSplitter::FollowSizeHint);
+
 
   list.append(i18n("Messages"));
   list.append(i18n("Unread"));
   msg_unread = addVBoxPage (list, i18n("Unread messages"), SmallIcon("kalcatel-message-unread.png"));
-  msg_unread_list = createListView(msg_unread, alc_messages_in);
+  vsplitter = new QSplitter( Qt::Vertical, msg_unread );
+  msg_unread_list = createListView(vsplitter, alc_messages_in);
   list.clear();
+  connect( msg_unread_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotUnreadMessageChanged() ) );
+  message_unread = new QLabel( vsplitter );
+  message_unread->setAlignment( Qt::AlignTop );
+  message_unread->setBackgroundMode( PaletteBase );
+  vsplitter->setResizeMode(message_unread, QSplitter::FollowSizeHint);
 
   list.append(i18n("Messages"));
   list.append(i18n("Read"));
   msg_read = addVBoxPage (list, i18n("Read messages"), SmallIcon("kalcatel-message-read.png"));
-  msg_read_list = createListView(msg_read, alc_messages_in);
+  vsplitter = new QSplitter( Qt::Vertical, msg_read );
+  msg_read_list = createListView(vsplitter, alc_messages_in);
   list.clear();
+  connect( msg_read_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotReadMessageChanged() ) );
+  message_read = new QLabel( vsplitter );
+  message_read->setAlignment( Qt::AlignTop );
+  message_read->setBackgroundMode( PaletteBase );
+  vsplitter->setResizeMode(message_read, QSplitter::FollowSizeHint);
 
   list.append(i18n("Messages"));
   list.append(i18n("Sent"));
   msg_sent = addVBoxPage (list, i18n("Sent messages"), SmallIcon("kalcatel-message-sent.png"));
-  msg_sent_list = createListView(msg_sent, alc_messages_out);
+  vsplitter = new QSplitter( Qt::Vertical, msg_sent );
+  msg_sent_list = createListView(vsplitter, alc_messages_out);
   list.clear();
+  connect( msg_sent_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotSentMessageChanged() ) );
+  message_sent = new QLabel( vsplitter );
+  message_sent->setAlignment( Qt::AlignTop );
+  message_sent->setBackgroundMode( PaletteBase );
+  vsplitter->setResizeMode(message_sent, QSplitter::FollowSizeHint);
 
   list.append(i18n("Messages"));
   list.append(i18n("Unsent"));
   msg_unsent = addVBoxPage (list, i18n("Unsent messages"), SmallIcon("kalcatel-message-unsent.png"));
-  msg_unsent_list = createListView(msg_unsent, alc_messages_out);
+  vsplitter = new QSplitter( Qt::Vertical, msg_unsent );
+  msg_unsent_list = createListView(vsplitter, alc_messages_out);
   list.clear();
+  connect( msg_unsent_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotUnsentMessageChanged() ) );
+  message_unsent = new QLabel( vsplitter );
+  message_unsent->setAlignment( Qt::AlignTop );
+  message_unsent->setBackgroundMode( PaletteBase );
+  vsplitter->setResizeMode(message_unsent, QSplitter::FollowSizeHint);
 }
 
 KAlcatelView::~KAlcatelView()
 {
 }
 
-KListView *KAlcatelView::createListView(QVBox *parent, AlcListType type)
+KListView *KAlcatelView::createListView(QWidget *parent, AlcListType type)
 {
     KListView *list;
     list = new KListView(parent);
@@ -251,6 +284,7 @@ KListView *KAlcatelView::createListView(QVBox *parent, AlcListType type)
             list->addColumn(i18n("Name"));
             list->addColumn(i18n("Status"));
             list->addColumn(i18n("Date"));
+            list->addColumn(i18n("Time"));
             list->addColumn(i18n("Text"));
             list->addColumn(i18n("Position"));
             break;
@@ -258,6 +292,7 @@ KListView *KAlcatelView::createListView(QVBox *parent, AlcListType type)
             list->addColumn(i18n("From"));
             list->addColumn(i18n("From (name)"));
             list->addColumn(i18n("Date"));
+            list->addColumn(i18n("Time"));
             list->addColumn(i18n("Text"));
             list->addColumn(i18n("Position"));
             break;
@@ -265,6 +300,7 @@ KListView *KAlcatelView::createListView(QVBox *parent, AlcListType type)
             list->addColumn(i18n("To"));
             list->addColumn(i18n("To (name)"));
             list->addColumn(i18n("Date"));
+            list->addColumn(i18n("Time"));
             list->addColumn(i18n("Text"));
             list->addColumn(i18n("Position"));
             break;
@@ -280,33 +316,153 @@ KAlcatelDoc *KAlcatelView::getDocument() const
   return theApp->getDocument();
 }
 
-
 void KAlcatelView::repaint() {
     KAlcatelDoc *doc = getDocument();
+    int unread_sms = 0;
     if (doc->getVersion() != docVersion) {
         docVersion = doc->getVersion();
 
-        AlcatelSMSList::Iterator it;
-        for( it = doc->sms->begin(); it != doc->sms->end(); ++it ) {
-            QListViewItem *newItem = new QListViewItem (messages_list,
-                    QString((* it).Sender),
-                    QString("name")/*(* it).Name*/,
-                    QString("stat"/*(* it).Status*/),
-                    QString((* it).Date.toString()),
-                    QString((* it).Text),
-                    QString("pos"/*(* it).Position*/));
-            messages_list->insertItem(newItem);
-        }
-/*
-            list->addColumn(i18n("Number"));
-            list->addColumn(i18n("Name"));
-            list->addColumn(i18n("Status"));
-            list->addColumn(i18n("Date"));
-            list->addColumn(i18n("Text"));
-            list->addColumn(i18n("Position"));
-  */
-    }
+        if (doc->getSMSVersion() != smsVersion) {
+            smsVersion = doc->getSMSVersion();
+            AlcatelSMSList::Iterator it;
+            KListView *list;
+            QString type;
+            for( it = doc->sms->begin(); it != doc->sms->end(); ++it ) {
+                switch ((* it).Status) {
+                    case SMS_UNREAD:
+                        type = i18n("Unread");
+                        list = msg_unread_list;
+                        unread_sms++;
+                        break;
+                    case SMS_READ:
+                        type = i18n("Read");
+                        list = msg_read_list;
+                        break;
+                    case SMS_UNSENT:
+                        type = i18n("Unsent");
+                        list = msg_unsent_list;
+                        break;
+                    case SMS_SENT:
+                        type = i18n("Sent");
+                        list = msg_sent_list;
+                        break;
+                }
+                QListViewItem *newItem = new QListViewItem (messages_list,
+                        QString((* it).Sender),
+                        QString("")/*TODO: get ii from contacts... (* it).Sender*/,
+                        type,
+                        QString((* it).Date.date().toString()),
+                        QString((* it).Date.time().toString()),
+                        QString((* it).Text),
+                        QString().sprintf("%d", (* it).Position));
+                messages_list->insertItem(newItem);
+
+                newItem = new QListViewItem (list,
+                        QString((* it).Sender),
+                        QString("")/*TODO: get ii from contacts... (* it).Sender*/,
+                        QString((* it).Date.date().toString()),
+                        QString((* it).Date.time().toString()),
+                        QString((* it).Text),
+                        QString().sprintf("%d", (* it).Position));
+                list->insertItem(newItem);
+            } /* for cycle over sms */
+            if (unread_sms)
+                showPage(10);
+            else
+                showPage(9);
+        } /* change in sms */
+    } /* any change */
     KJanusWidget::repaint();
+}
+
+void KAlcatelView::slotMessageChanged() {
+    QListViewItem *i = messages_list->currentItem();
+    QString text;
+    if ( !i )
+        return;
+    text = i18n( "<b>From:</b> %1 (%2)<br>"
+                    "<b>Date:</b> %3<br>"
+                    "<b>Time:</b> %4<br><br>"
+                    "%5" ).
+                arg(i->text(1)).
+                arg(i->text(0)).
+                arg(i->text(3)).
+                arg(i->text(4)).
+                arg(i->text(5));
+
+    message->setText( text );
+}
+
+void KAlcatelView::slotReadMessageChanged() {
+    QListViewItem *i = msg_read_list->currentItem();
+    QString text;
+    if ( !i )
+        return;
+    text = i18n( "<b>From:</b> %1 (%2)<br>"
+                    "<b>Date:</b> %3<br>"
+                    "<b>Time:</b> %4<br><br>"
+                    "%5" ).
+                arg(i->text(1)).
+                arg(i->text(0)).
+                arg(i->text(2)).
+                arg(i->text(3)).
+                arg(i->text(4));
+
+    message_read->setText( text );
+}
+
+void KAlcatelView::slotUnreadMessageChanged() {
+    QListViewItem *i = msg_unread_list->currentItem();
+    QString text;
+    if ( !i )
+        return;
+    text = i18n( "<b>From:</b> %1 (%2)<br>"
+                    "<b>Date:</b> %3<br>"
+                    "<b>Time:</b> %4<br><br>"
+                    "%5" ).
+                arg(i->text(1)).
+                arg(i->text(0)).
+                arg(i->text(2)).
+                arg(i->text(3)).
+                arg(i->text(4));
+
+    message_unread->setText( text );
+}
+
+void KAlcatelView::slotSentMessageChanged() {
+    QListViewItem *i = msg_sent_list->currentItem();
+    QString text;
+    if ( !i )
+        return;
+    text = i18n( "<b>From:</b> %1 (%2)<br>"
+                    "<b>Date:</b> %3<br>"
+                    "<b>Time:</b> %4<br><br>"
+                    "%5" ).
+                arg(i->text(1)).
+                arg(i->text(0)).
+                arg(i->text(2)).
+                arg(i->text(3)).
+                arg(i->text(4));
+
+    message_sent->setText( text );
+}
+
+void KAlcatelView::slotUnsentMessageChanged() {
+    QListViewItem *i = msg_unsent_list->currentItem();
+    QString text;
+    if ( !i )
+        return;
+    text = i18n( "<b>From:</b> %1 (%2)<br>"
+                    "<b>Date:</b> %3<br>"
+                    "<b>Time:</b> %4<br><br>"
+                    "%5" ).
+                arg(i->text(1)).
+                arg(i->text(0)).
+                arg(i->text(2)).
+                arg(i->text(3)).
+                arg(i->text(4));
+
+    message_unsent->setText( text );
 }
 
 /*

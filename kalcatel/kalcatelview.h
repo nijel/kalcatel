@@ -79,6 +79,11 @@ class KAlcatelView : public KJanusWidget
 //    void print(QPrinter *pPrinter);
   public slots:
     void repaint();
+    void slotMessageChanged();
+    void slotReadMessageChanged();
+    void slotUnreadMessageChanged();
+    void slotSentMessageChanged();
+    void slotUnsentMessageChanged();
 	
   private:
     QVBox *todo, *calendar,
@@ -90,9 +95,16 @@ class KAlcatelView : public KJanusWidget
         *calls_list, *calls_ld_list, *calls_mc_list, *calls_rc_list,
         *messages_list, *msg_read_list, *msg_unread_list, *msg_sent_list, *msg_unsent_list;
 
-    KListView *createListView(QVBox *parent, AlcListType type);
+    QLabel *message, *message_read, *message_unread, *message_sent, *message_unsent;
+
+    KListView *createListView(QWidget *parent, AlcListType type);
 
     int docVersion;
+    int smsVersion;
+    int callVersion;
+    int contactVersion;
+    int calendarVersion;
+    int todoVersion;
 
 /*
     QGrid *todo;

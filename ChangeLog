@@ -4,5 +4,8 @@ KAlcatel - Changelog
 
 $Id$
 
+2002-02-13 Michal Cihar <cihar@email.cz>
+        * support for reading and listing messages
+
 2002-02-11 Michal Cihar <cihar@email.cz>
         * initial gui functionality

@@ -278,7 +278,8 @@ int i;
     i = 0;
     while (msg[i].pos != -1) {
         AlcatelSMS Msg;
-        Msg.Date = QDateTime(msg[i].date);
+        Msg.Date = QDateTime();
+        Msg.Date.setTime_t(msg[i].date);
         Msg.Length = msg[i].len;
         Msg.Position = msg[i].pos;
         Msg.Raw = strdup(msg[i].raw);
@@ -292,6 +293,7 @@ int i;
     free(msg);
 
     win->slotStatusMsg(i18n("SMS messages read"),ID_DETAIL_MSG);
+    smsVersion++;
   }
   else
   {
@@ -325,4 +327,24 @@ void KAlcatelDoc::deleteContents()
 
 int KAlcatelDoc::getVersion() {
     return version;
+}
+
+int KAlcatelDoc::getSMSVersion() {
+    return smsVersion;
+}
+
+int KAlcatelDoc::getCallVersion() {
+    return callVersion;
+}
+
+int KAlcatelDoc::getContactVersion() {
+    return contactVersion;
+}
+
+int KAlcatelDoc::getCalendarVersion() {
+    return calendarVersion;
+}
+
+int KAlcatelDoc::getTodoVersion() {
+    return todoVersion;
 }

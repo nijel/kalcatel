@@ -26,8 +26,6 @@
 #ifndef ALCATELCLASSES_H
 #define ALCATELCLASSES_H
 
-#include <time.h>
-
 #include <qstring.h>
 #include <qvaluelist.h>
 #include <qdatetime.h>
@@ -135,7 +133,7 @@ public:
     int Length;
     char *Raw;
     QString Sender;
-    time_t Date;
+    QDateTime Date;
     QString Text;
     QString SMSC;
 };

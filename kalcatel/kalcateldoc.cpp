@@ -29,6 +29,7 @@
 #include <qdir.h>
 #include <qwidget.h>
 #include <qstringlist.h>
+#include <qdatetime.h>
 
 // include files for KDE
 #include <klocale.h>
@@ -277,7 +278,7 @@ int i;
     i = 0;
     while (msg[i].pos != -1) {
         AlcatelSMS Msg;
-        Msg.Date = msg[i].date;
+        Msg.Date = QDateTime(msg[i].date);
         Msg.Length = msg[i].len;
         Msg.Position = msg[i].pos;
         Msg.Raw = strdup(msg[i].raw);

@@ -292,7 +292,7 @@ void KAlcatelView::repaint() {
                     QString((* it).Sender),
                     QString("name")/*(* it).Name*/,
                     QString("stat"/*(* it).Status*/),
-                    QString("date"),
+                    QString((* it).Date.toString()),
                     QString((* it).Text),
                     QString("pos"/*(* it).Position*/));
             messages_list->insertItem(newItem);

@@ -8,7 +8,7 @@ $Id$
     * === released 0.3.2 ===
 
 2003-02-23 Michal Cihar <cihar@email.cz>
-    * finally compiles with (and ONLY with) KDE 3/Qt 3
+    * finally compiles and works with (and ONLY with) KDE 3/Qt 3
     * updated admin directory
 
 2002-10-21 Michal Cihar <cihar@email.cz>

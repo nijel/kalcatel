@@ -588,7 +588,7 @@ type=normal
 [kalcatel/images/signal/signal-0.png]
 dist=true
 install=true
-install_location=$$(kde_datadir)/kalcatel/status/signal-.0png
+install_location=$$(kde_datadir)/kalcatel/status/signal-0.png
 type=DATA
 
 [kalcatel/images/signal/signal-1.png]

@@ -2,3 +2,9 @@ Makefile
 Makefile.in
 *.moc.cpp
 *.moc
+aclocal.m4
+acinclude.m4
+configure.in
+subdirs
+configure.files
+stamp-h.in

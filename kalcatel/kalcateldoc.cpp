@@ -816,6 +816,7 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
     KTempFile tmp;
     QRegExp rlt("<");
     QRegExp rgt(">");
+    QRegExp amp("&");
 
     QTextStream *strm = tmp.textStream();
     strm->setEncoding(QTextStream::UnicodeUTF8);
@@ -852,7 +853,7 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
             *strm << "   <status>" << (*messagesit).Status << "</status>" << endl;
             *strm << "   <length>" << (*messagesit).Length << "</length>" << endl;
             *strm << "   <raw>" << (*messagesit).Raw << "</raw>" << endl;
-            *strm << "   <sender>" << (*messagesit).Sender.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</sender>" << endl;
+            *strm << "   <sender>" << (*messagesit).Sender.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</sender>" << endl;
             *strm << "   <date>" << endl;
             *strm << "    <date>" << endl;
             *strm << "     <day>" << (*messagesit).Date.date().day() << "</day>" << endl;
@@ -865,8 +866,8 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
             *strm << "     <second>" << (*messagesit).Date.time().second() << "</second>" << endl;
             *strm << "    </time>" << endl;
             *strm << "   </date>" << endl;
-            *strm << "   <text>" << (*messagesit).Text.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</text>" << endl;
-            *strm << "   <smsc>" << (*messagesit).SMSC.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</smsc>" << endl;
+            *strm << "   <text>" << (*messagesit).Text.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</text>" << endl;
+            *strm << "   <smsc>" << (*messagesit).SMSC.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</smsc>" << endl;
             *strm << "  </message>" << endl;
         }
         *strm << " </messages>" << endl;
@@ -903,19 +904,19 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
                 *strm << "   <storage>" << (*cit).PrevStorage << "</storage>" << endl;
             }
             if (!(*cit).LastName.isEmpty()) {
-                *strm << "   <lastname>" << (*cit).LastName.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</lastname>" << endl;
+                *strm << "   <lastname>" << (*cit).LastName.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</lastname>" << endl;
             }
             if (!(*cit).FirstName.isEmpty()) {
-                *strm << "   <firstname>" << (*cit).FirstName.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</firstname>" << endl;
+                *strm << "   <firstname>" << (*cit).FirstName.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</firstname>" << endl;
             }
             if (!(*cit).Company.isEmpty()) {
-                *strm << "   <company>" << (*cit).Company.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</company>" << endl;
+                *strm << "   <company>" << (*cit).Company.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</company>" << endl;
             }
             if (!(*cit).JobTitle.isEmpty()) {
-                *strm << "   <jobtitle>" << (*cit).JobTitle.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</jobtitle>" << endl;
+                *strm << "   <jobtitle>" << (*cit).JobTitle.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</jobtitle>" << endl;
             }
             if (!(*cit).Note.isEmpty()) {
-                *strm << "   <note>" << (*cit).Note.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</note>" << endl;
+                *strm << "   <note>" << (*cit).Note.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</note>" << endl;
             }
             if ((*cit).Category != -1) {
                 *strm << "   <category>" << (*cit).Category << "</category>" << endl;
@@ -924,58 +925,58 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
                 *strm << "   <private>" << (*cit).Private << "</private>" << endl;
             }
             if (!(*cit).WorkNumber.isEmpty()) {
-                *strm << "   <worknumber>" << (*cit).WorkNumber.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</worknumber>" << endl;
+                *strm << "   <worknumber>" << (*cit).WorkNumber.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</worknumber>" << endl;
             }
             if (!(*cit).MainNumber.isEmpty()) {
-                *strm << "   <mainnumber>" << (*cit).MainNumber.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</mainnumber>" << endl;
+                *strm << "   <mainnumber>" << (*cit).MainNumber.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</mainnumber>" << endl;
             }
             if (!(*cit).FaxNumber.isEmpty()) {
-                *strm << "   <faxnumber>" << (*cit).FaxNumber.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</faxnumber>" << endl;
+                *strm << "   <faxnumber>" << (*cit).FaxNumber.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</faxnumber>" << endl;
             }
             if (!(*cit).OtherNumber.isEmpty()) {
-                *strm << "   <othernumber>" << (*cit).OtherNumber.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</othernumber>" << endl;
+                *strm << "   <othernumber>" << (*cit).OtherNumber.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</othernumber>" << endl;
             }
             if (!(*cit).PagerNumber.isEmpty()) {
-                *strm << "   <pagernumber>" << (*cit).PagerNumber.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</pagernumber>" << endl;
+                *strm << "   <pagernumber>" << (*cit).PagerNumber.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</pagernumber>" << endl;
             }
             if (!(*cit).MobileNumber.isEmpty()) {
-                *strm << "   <mobilenumber>" << (*cit).MobileNumber.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</mobilenumber>" << endl;
+                *strm << "   <mobilenumber>" << (*cit).MobileNumber.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</mobilenumber>" << endl;
             }
             if (!(*cit).HomeNumber.isEmpty()) {
-                *strm << "   <homenumber>" << (*cit).HomeNumber.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</homenumber>" << endl;
+                *strm << "   <homenumber>" << (*cit).HomeNumber.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</homenumber>" << endl;
             }
             if (!(*cit).Email1.isEmpty()) {
-                *strm << "   <email1>" << (*cit).Email1.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</email1>" << endl;
+                *strm << "   <email1>" << (*cit).Email1.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</email1>" << endl;
             }
             if (!(*cit).Email2.isEmpty()) {
-                *strm << "   <email2>" << (*cit).Email2.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</email2>" << endl;
+                *strm << "   <email2>" << (*cit).Email2.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</email2>" << endl;
             }
             if (!(*cit).Address.isEmpty()) {
-                *strm << "   <address>" << (*cit).Address.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</address>" << endl;
+                *strm << "   <address>" << (*cit).Address.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</address>" << endl;
             }
             if (!(*cit).City.isEmpty()) {
-                *strm << "   <city>" << (*cit).City.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</city>" << endl;
+                *strm << "   <city>" << (*cit).City.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</city>" << endl;
             }
             if (!(*cit).State.isEmpty()) {
-                *strm << "   <state>" << (*cit).State.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</state>" << endl;
+                *strm << "   <state>" << (*cit).State.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</state>" << endl;
             }
             if (!(*cit).Zip.isEmpty()) {
-                *strm << "   <zip>" << (*cit).Zip.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</zip>" << endl;
+                *strm << "   <zip>" << (*cit).Zip.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</zip>" << endl;
             }
             if (!(*cit).Country.isEmpty()) {
-                *strm << "   <country>" << (*cit).Country.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</country>" << endl;
+                *strm << "   <country>" << (*cit).Country.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</country>" << endl;
             }
             if (!(*cit).Custom1.isEmpty()) {
-                *strm << "   <custom1>" << (*cit).Custom1.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</custom1>" << endl;
+                *strm << "   <custom1>" << (*cit).Custom1.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</custom1>" << endl;
             }
             if (!(*cit).Custom2.isEmpty()) {
-                *strm << "   <custom2>" << (*cit).Custom2.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</custom2>" << endl;
+                *strm << "   <custom2>" << (*cit).Custom2.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</custom2>" << endl;
             }
             if (!(*cit).Custom3.isEmpty()) {
-                *strm << "   <custom3>" << (*cit).Custom3.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</custom3>" << endl;
+                *strm << "   <custom3>" << (*cit).Custom3.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</custom3>" << endl;
             }
             if (!(*cit).Custom4.isEmpty()) {
-                *strm << "   <custom4>" << (*cit).Custom4.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</custom4>" << endl;
+                *strm << "   <custom4>" << (*cit).Custom4.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</custom4>" << endl;
             }
             *strm << "  </contact>" << endl;
         }
@@ -1061,7 +1062,7 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
                 *strm << "   </alarm2>" << endl;
             }
             if (!(*calit).Subject.isEmpty()) {
-                *strm << "   <subject>" << (*calit).Subject.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</subject>" << endl;
+                *strm << "   <subject>" << (*calit).Subject.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</subject>" << endl;
             }
             if ((*calit).Private != -1) {
                 *strm << "   <private>" << (*calit).Private << "</private>" << endl;
@@ -1137,7 +1138,7 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
             }
 
             if (!(*tit).Subject.isEmpty()) {
-                *strm << "   <subject>" << (*tit).Subject.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</subject>" << endl;
+                *strm << "   <subject>" << (*tit).Subject.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</subject>" << endl;
             }
             if ((*tit).Completed != -1) {
                 *strm << "   <completed>" << (*tit).Completed << "</completed>" << endl;
@@ -1205,9 +1206,9 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
                 *strm << "   <storage>" << (*callit).PrevStorage << "</storage>" << endl;
             }
             if (!(*callit).Name.isEmpty()) {
-                *strm << "   <name>" << (*callit).Name.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</name>" << endl;
+                *strm << "   <name>" << (*callit).Name.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</name>" << endl;
             }
-            *strm << "   <number>" << (*callit).Number.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</number>" << endl;
+            *strm << "   <number>" << (*callit).Number.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</number>" << endl;
             *strm << "   <type>" << (*callit).Type << "</type>" << endl;
             *strm << "  </call>" << endl;
         }
@@ -1233,7 +1234,7 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
                 *strm << "   <id>" << (*catit).PrevId << "</id>" << endl;
                 *strm << "   <storage>" << (*catit).PrevStorage << "</storage>" << endl;
             }
-            *strm << "   <name>" << (*catit).Name.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</name>" << endl;
+            *strm << "   <name>" << (*catit).Name.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</name>" << endl;
             *strm << "  </category>" << endl;
         }
         *strm << " </todocategories>" << endl;
@@ -1258,7 +1259,7 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
                 *strm << "   <id>" << (*catit).PrevId << "</id>" << endl;
                 *strm << "   <storage>" << (*catit).PrevStorage << "</storage>" << endl;
             }
-            *strm << "   <name>" << (*catit).Name.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</name>" << endl;
+            *strm << "   <name>" << (*catit).Name.replace(amp, "&amp;").replace(rlt, "&lt;").replace(rgt, "&gt;") << "</name>" << endl;
             *strm << "  </category>" << endl;
         }
         *strm << " </contactcategories>" << endl;

@@ -4,6 +4,11 @@ KAlcatel - Changelog
 
 $Id$
 
+2002-02-18 Michal Cihar <cihar@email.cz>
+        * added reading of calls and contacts from SIM
+        * corrected header in todo listing
+        * in information added own number and IMSI
+
 2002-02-17 Michal Cihar <cihar@email.cz>
         * released 0.1
 

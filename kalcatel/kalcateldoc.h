@@ -124,7 +124,7 @@ class KAlcatelDoc : public QObject
     AlcatelCalendarList *calendar;
     AlcatelTodoList *todo;
     AlcatelSMSList *sms;
-//    AlcatelCallList calls; /*TODO: not implemented!*/
+    AlcatelCallList *calls;
   private:
     int readMobileCategories(AlcatelCategoryList *strList, alc_type sync, alc_type type, alc_type cat);
     int readMobileItems(alc_type sync, alc_type type);

@@ -1,7 +1,7 @@
 known bugs:
  - sometimes this doesn't connect correctly to mobile at first attempt, trying
    again or connecing before using another program (minicom) fixes it, if you
-   know any solution send it pleasee to me
+   know any solution send it please to me
  - currently only characters <127 work correctly
 
 for 0.1-prerelease:
@@ -9,7 +9,7 @@ for 0.1-prerelease:
  - (DONE) configuration (at least of modem)
 
 for 0.2-alpha:
- - reading of everything - add calls and contacts from SIM
+ - (DONE) reading of everything - add calls and contacts from SIM
  - saving of document
  - export to csv (and maybe others)
 

@@ -74,6 +74,8 @@ KAlcatelDoc::KAlcatelDoc(QWidget *parent, const char *name) : QObject(parent, na
   calendar = new AlcatelCalendarList();
   todo = new AlcatelTodoList();
   sms = new AlcatelSMSList();
+
+  calls = new AlcatelCallList();
 }
 
 KAlcatelDoc::~KAlcatelDoc()
@@ -449,16 +451,61 @@ bool KAlcatelDoc::readMobile(AlcReadType what = alcatel_read_all, int category =
     }
 
     if (what == alcatel_read_calls || what == alcatel_read_all) {
-        KMessageBox::sorry(win, i18n("Reading calls is not implemented yet..."), i18n("Sorry"));
+        CONTACT *cont;
+        win->slotStatusMsg(i18n("Reading calls"),ID_DETAIL_MSG);
+        calls->clear();
+
+        select_phonebook(PB_LAST_DIAL);
+        cont = get_contacts(1, 10);
+        i = 0;
+        while (cont[i].pos != -1) {
+            AlcatelCall *Call = new AlcatelCall();
+            Call->Type = CallDialled;
+            Call->Id = cont[i].pos;
+            Call->Name = *(cont[i].name);
+            Call->Number = strdup(cont[i].number);
+            calls->append(*Call);
+            i++;
+        }
+        free(cont);
+
+        select_phonebook(PB_RECEIVED);
+        cont = get_contacts(1, 10);
+        i = 0;
+        while (cont[i].pos != -1) {
+            AlcatelCall *Call = new AlcatelCall();
+            Call->Type = CallReceived;
+            Call->Id = cont[i].pos;
+            Call->Name = *(cont[i].name);
+            Call->Number = strdup(cont[i].number);
+            calls->append(*Call);
+            i++;
+        }
+        free(cont);
+
+        select_phonebook(PB_MISSED);
+        cont = get_contacts(1, 10);
+        i = 0;
+        while (cont[i].pos != -1) {
+            AlcatelCall *Call = new AlcatelCall();
+            Call->Type = CallMissed;
+            Call->Id = cont[i].pos;
+            Call->Name = *(cont[i].name);
+            Call->Number = strdup(cont[i].number);
+            calls->append(*Call);
+            i++;
+        }
+        free(cont);
+
+        win->slotStatusMsg(i18n("Calls read"),ID_DETAIL_MSG);
+        callVersion++;
     }
 
     if (what == alcatel_read_contacts_sim || what == alcatel_read_all) {
-        ;
-//        KMessageBox::sorry(win, i18n("Reading contacts from SIM is not implemented yet..."), i18n("Sorry"));
         CONTACT *cont;
         win->slotStatusMsg(i18n("Reading SIM contacts"),ID_DETAIL_MSG);
         clearContacts(contacts, StorageSIM);
-        sms->clear();
+        select_phonebook(PB_SIM);
         cont = get_contacts(1, 200);
 
         i = 0;

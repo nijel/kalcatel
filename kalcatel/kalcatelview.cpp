@@ -27,7 +27,6 @@
 //#include <qpainter.h>
 #include <qpixmap.h>
 #include <qsplitter.h>
-#include <qtextview.h>
 
 // include files for KDE
 #include <kjanuswidget.h>
@@ -35,6 +34,8 @@
 #include <klistview.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
+
+#include <ktextbrowser.h>
 
 // application specific includes
 #include "kalcatelview.h"
@@ -63,7 +64,7 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : KJanusWidget(par
     vsplitter = new QSplitter( Qt::Vertical, todo );
     todo_list = createListView(vsplitter, alc_todos);
     connect( todo_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotTodoChanged(QListViewItem *) ) );
-    todo_view = new QTextView( vsplitter );
+    todo_view = new KTextBrowser( vsplitter );
     todo_view->setBackgroundMode( PaletteBase );
     vsplitter->setResizeMode(todo_view, QSplitter::FollowSizeHint);
 
@@ -71,7 +72,7 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : KJanusWidget(par
     vsplitter = new QSplitter( Qt::Vertical, calendar );
     calendar_list = createListView(vsplitter, alc_calendar);
     connect( calendar_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotCalendarChanged(QListViewItem *) ) );
-    calendar_view = new QTextView( vsplitter );
+    calendar_view = new KTextBrowser( vsplitter );
     calendar_view->setBackgroundMode( PaletteBase );
     vsplitter->setResizeMode(calendar_view, QSplitter::FollowSizeHint);
 
@@ -79,7 +80,7 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : KJanusWidget(par
     vsplitter = new QSplitter( Qt::Vertical, contacts );
     contacts_list = createListView(vsplitter, alc_contacts);
     connect( contacts_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
-    contact_view = new QTextView( vsplitter );
+    contact_view = new KTextBrowser( vsplitter );
     contact_view->setBackgroundMode( PaletteBase );
     vsplitter->setResizeMode(contact_view, QSplitter::FollowSizeHint);
 
@@ -90,7 +91,7 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : KJanusWidget(par
     contacts_sim_list = createListView(vsplitter, alc_contacts_sim);
     list.clear();
     connect( contacts_sim_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactSimChanged(QListViewItem *) ) );
-    contact_sim_view = new QTextView( vsplitter );
+    contact_sim_view = new KTextBrowser( vsplitter );
     contact_sim_view->setBackgroundMode( PaletteBase );
     vsplitter->setResizeMode(contact_sim_view, QSplitter::FollowSizeHint);
 
@@ -101,7 +102,7 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : KJanusWidget(par
     contacts_mobile_list = createListView(vsplitter, alc_contacts_mobile);
     list.clear();
     connect( contacts_mobile_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactMobileChanged(QListViewItem *) ) );
-    contact_mobile_view = new QTextView( vsplitter );
+    contact_mobile_view = new KTextBrowser( vsplitter );
     contact_mobile_view->setBackgroundMode( PaletteBase );
     vsplitter->setResizeMode(contact_mobile_view, QSplitter::FollowSizeHint);
 
@@ -130,7 +131,7 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : KJanusWidget(par
     vsplitter = new QSplitter( Qt::Vertical, messages );
     messages_list = createListView(vsplitter, alc_messages);
     connect( messages_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotMessageChanged(QListViewItem *) ) );
-    message = new QTextView( vsplitter );
+    message = new KTextBrowser( vsplitter );
     message->setBackgroundMode( PaletteBase );
     vsplitter->setResizeMode(message, QSplitter::FollowSizeHint);
 
@@ -142,7 +143,7 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : KJanusWidget(par
     msg_unread_list = createListView(vsplitter, alc_messages_in);
     list.clear();
     connect( msg_unread_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotUnreadMessageChanged(QListViewItem *) ) );
-    message_unread = new QTextView( vsplitter );
+    message_unread = new KTextBrowser( vsplitter );
     message_unread->setBackgroundMode( PaletteBase );
     vsplitter->setResizeMode(message_unread, QSplitter::FollowSizeHint);
 
@@ -153,7 +154,7 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : KJanusWidget(par
     msg_read_list = createListView(vsplitter, alc_messages_in);
     list.clear();
     connect( msg_read_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotReadMessageChanged(QListViewItem *) ) );
-    message_read = new QTextView( vsplitter );
+    message_read = new KTextBrowser( vsplitter );
     message_read->setBackgroundMode( PaletteBase );
     vsplitter->setResizeMode(message_read, QSplitter::FollowSizeHint);
 
@@ -164,7 +165,7 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : KJanusWidget(par
     msg_sent_list = createListView(vsplitter, alc_messages_out);
     list.clear();
     connect( msg_sent_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotSentMessageChanged(QListViewItem *) ) );
-    message_sent = new QTextView( vsplitter );
+    message_sent = new KTextBrowser( vsplitter );
     message_sent->setBackgroundMode( PaletteBase );
     vsplitter->setResizeMode(message_sent, QSplitter::FollowSizeHint);
 
@@ -175,7 +176,7 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : KJanusWidget(par
     msg_unsent_list = createListView(vsplitter, alc_messages_out);
     list.clear();
     connect( msg_unsent_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotUnsentMessageChanged(QListViewItem *) ) );
-    message_unsent = new QTextView( vsplitter );
+    message_unsent = new KTextBrowser( vsplitter );
     message_unsent->setBackgroundMode( PaletteBase );
     vsplitter->setResizeMode(message_unsent, QSplitter::FollowSizeHint);
 }
@@ -243,11 +244,13 @@ KListView *KAlcatelView::createListView(QWidget *parent, AlcListType type) {
             break;
         case alc_calls_type:
             list->addColumn(i18n("Number"));
+            list->addColumn(i18n("Name (from mobile)"));
             list->addColumn(i18n("Name"));
             list->addColumn(i18n("Position"));
             break;
         case alc_calls:
             list->addColumn(i18n("Number"));
+            list->addColumn(i18n("Name (from mobile)"));
             list->addColumn(i18n("Name"));
             list->addColumn(i18n("Type"));
             list->addColumn(i18n("Position"));
@@ -373,7 +376,7 @@ void KAlcatelView::repaint() {
                 todo_cat_list[(*c_it).Id] = createListView(vsplitter, alc_todos_cat);
 
                 connect( todo_cat_list[(*c_it).Id], SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotTodoCatChanged(QListViewItem *) ) );
-                todo_cat_view[(*c_it).Id] = new QTextView( vsplitter );
+                todo_cat_view[(*c_it).Id] = new KTextBrowser( vsplitter );
                 todo_cat_view[(*c_it).Id]->setBackgroundMode( PaletteBase );
                 vsplitter->setResizeMode(todo_cat_view[(*c_it).Id], QSplitter::FollowSizeHint);
 
@@ -405,7 +408,7 @@ void KAlcatelView::repaint() {
             showPage(0);
         } /* change in todos */
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if (doc->getCalendarVersion() != calendarVersion|| doc->getContactVersion() != contactVersion) {
+        if (doc->getCalendarVersion() != calendarVersion || doc->getContactVersion() != contactVersion) {
             /* we should update this also when contacts change, because there are names of contact */
             calendarVersion = doc->getCalendarVersion();
 
@@ -426,6 +429,55 @@ void KAlcatelView::repaint() {
 
             showPage(1);
         } /* change in calendar */
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        if (doc->getCallVersion() != callVersion || doc->getContactVersion() != contactVersion) {
+            /* we should update this also when contacts change, because there are names of contact */
+             int missed = 0;
+            callVersion = doc->getCallVersion();
+
+            calls_list->clear();
+            calls_ld_list->clear();
+            calls_mc_list->clear();
+            calls_rc_list->clear();
+
+            AlcatelCallList::Iterator it;
+            for( it = doc->calls->begin(); it != doc->calls->end(); ++it ) {
+                AlcatelContact *cont = getContactByPhone(doc->contacts, &((* it).Number), &(((KAlcatelApp *)parent())->phone_prefix));
+                new QListViewItem (calls_list,
+                        (* it).Number,
+                        (* it).Name,
+                        cont == NULL? QString("") : cont->Name(),
+                        CallTypes[(* it).Type],
+                        QString("%1").arg((* it).Id));
+                switch ((* it).Type) {
+                    case CallDialled:
+                        new QListViewItem (calls_ld_list,
+                                (* it).Number,
+                                (* it).Name,
+                                cont == NULL? QString("") : cont->Name(),
+                                QString("%1").arg((* it).Id));
+                        break;
+                    case CallMissed:
+                        missed++;
+                        new QListViewItem (calls_mc_list,
+                                (* it).Number,
+                                (* it).Name,
+                                cont == NULL? QString("") : cont->Name(),
+                                QString("%1").arg((* it).Id));
+                        break;
+                    case CallReceived:
+                        new QListViewItem (calls_rc_list,
+                                (* it).Number,
+                                (* it).Name,
+                                cont == NULL? QString("") : cont->Name(),
+                                QString("%1").arg((* it).Id));
+                        break;
+                }
+            } /* for cycle over calls */
+
+            if (missed>0) showPage(7);
+            else showPage(6);
+        } /* change in calls */
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (doc->getContactVersion() != contactVersion) {
             contactVersion = doc->getContactVersion();
@@ -455,7 +507,7 @@ void KAlcatelView::repaint() {
                 contacts_cat_list[(*c_it).Id] = createListView(vsplitter, alc_contacts_mobile_cat);
 
                 connect( contacts_cat_list[(*c_it).Id], SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactMobileCatChanged(QListViewItem *) ) );
-                contacts_cat_view[(*c_it).Id] = new QTextView( vsplitter );
+                contacts_cat_view[(*c_it).Id] = new KTextBrowser( vsplitter );
                 contacts_cat_view[(*c_it).Id]->setBackgroundMode( PaletteBase );
                 vsplitter->setResizeMode(contacts_cat_view[(*c_it).Id], QSplitter::FollowSizeHint);
 
@@ -538,7 +590,7 @@ void KAlcatelView::slotUnsentMessageChanged(QListViewItem *item) {
     slotShowMessage(message_sent, getSMSById(getDocument()->sms, item->text(5).toInt()));
 }
 
-void KAlcatelView::slotShowMessage(QTextView *where, AlcatelSMS *what) {
+void KAlcatelView::slotShowMessage(KTextBrowser *where, AlcatelSMS *what) {
     if (what == NULL) {
         where->setText( i18n("Failed reading message!"));
         return;
@@ -572,7 +624,7 @@ void KAlcatelView::slotTodoCatChanged(QListViewItem *item) {
     if (cont->Category >= 0) slotShowTodo(todo_cat_view[cont->Category], cont);
 }
 
-void KAlcatelView::slotShowTodo(QTextView *where, AlcatelTodo *what) {
+void KAlcatelView::slotShowTodo(KTextBrowser *where, AlcatelTodo *what) {
     QString text;
     if (what == NULL) {
         where->setText( i18n("Failed reading todo!"));
@@ -597,23 +649,12 @@ void KAlcatelView::slotCalendarChanged(QListViewItem *item) {
     slotShowCalendar(calendar_view, getCalendarById(getDocument()->calendar, item->text(7).toInt()));
 }
 
-void KAlcatelView::slotShowCalendar(QTextView *where, AlcatelCalendar *what) {
+void KAlcatelView::slotShowCalendar(KTextBrowser *where, AlcatelCalendar *what) {
     QString text;
     if (what == NULL) {
         where->setText( i18n("Failed reading calendar item!"));
         return;
     }
-/*	QString Repeating(void);
-	
-*/    /* repeating events: */
-/*    int DayOfWeek;
-    int Day;
-    int WeekOfMonth;
-    int Month;
-    int Frequency;
-    QDate StartDate;
-    QDate StopDate;*/
-
 
     AlcatelContact *cont=getContactById(getDocument()->contacts, what->ContactID, StorageMobile);
 
@@ -660,7 +701,7 @@ void KAlcatelView::slotContactMobileCatChanged(QListViewItem *item) {
     if (cont->Category >= 0) slotShowContact(contacts_cat_view[cont->Category], cont);
 }
 
-void KAlcatelView::slotShowContact(QTextView *where, AlcatelContact *what) {
+void KAlcatelView::slotShowContact(KTextBrowser *where, AlcatelContact *what) {
     QString text;
     if (what == NULL) {
         where->setText( i18n("Failed reading contact!"));
@@ -683,8 +724,8 @@ void KAlcatelView::slotShowContact(QTextView *where, AlcatelContact *what) {
         if (!what->PagerNumber.isEmpty()) text.append(i18n("<b>PagerNumber:</b> %1<br>").arg(what->PagerNumber));
         if (!what->MobileNumber.isEmpty()) text.append(i18n("<b>MobileNumber:</b> %1<br>").arg(what->MobileNumber));
         if (!what->HomeNumber.isEmpty()) text.append(i18n("<b>HomeNumber:</b> %1<br>").arg(what->HomeNumber));
-        if (!what->Email1.isEmpty()) text.append(i18n("<b>Email1:</b> %1<br>").arg(what->Email1));
-        if (!what->Email2.isEmpty()) text.append(i18n("<b>Email2:</b> %1<br>").arg(what->Email2));
+        if (!what->Email1.isEmpty()) text.append(i18n("<b>Email1:</b> <a href=\"%1\">%2</a><br>").arg(what->Email1).arg(what->Email1));
+        if (!what->Email2.isEmpty()) text.append(i18n("<b>Email2:</b> <a href=\"%1\">%2</a><br>").arg(what->Email2).arg(what->Email2));
         if (!what->Address.isEmpty()) text.append(i18n("<b>Address:</b> %1<br>").arg(what->Address));
         if (!what->City.isEmpty()) text.append(i18n("<b>City:</b> %1<br>").arg(what->City));
         if (!what->State.isEmpty()) text.append(i18n("<b>State:</b> %1<br>").arg(what->State));

@@ -53,7 +53,7 @@ typedef enum {
     } AlcListType;
 
 class KAlcatelDoc;
-class QTextView;
+class KTextBrowser;
 class AlcatelSMS;
 class AlcatelContact;
 class AlcatelCalendar;
@@ -99,10 +99,10 @@ class KAlcatelView : public KJanusWidget
     void slotContactSimChanged(QListViewItem *item);
     void slotContactMobileChanged(QListViewItem *item);
     void slotContactMobileCatChanged(QListViewItem *item);
-    void slotShowMessage(QTextView *where, AlcatelSMS *what);
-    void slotShowContact(QTextView *where, AlcatelContact *what);
-    void slotShowTodo(QTextView *where, AlcatelTodo *what);
-    void slotShowCalendar(QTextView *where, AlcatelCalendar *what);
+    void slotShowMessage(KTextBrowser *where, AlcatelSMS *what);
+    void slotShowContact(KTextBrowser *where, AlcatelContact *what);
+    void slotShowTodo(KTextBrowser *where, AlcatelTodo *what);
+    void slotShowCalendar(KTextBrowser *where, AlcatelCalendar *what);
 	
   private:
     QVBox *todo, *calendar,
@@ -115,7 +115,7 @@ class KAlcatelView : public KJanusWidget
         *calls_list, *calls_ld_list, *calls_mc_list, *calls_rc_list,
         *messages_list, *msg_read_list, *msg_unread_list, *msg_sent_list, *msg_unsent_list;
 
-    QTextView *message, *message_read, *message_unread, *message_sent, *message_unsent,
+    KTextBrowser *message, *message_read, *message_unread, *message_sent, *message_unsent,
         *todo_view, *calendar_view, *todo_cat_view[ALC_MAX_CATEGORIES],
         *contact_view, *contact_sim_view, *contact_mobile_view, *contacts_cat_view[ALC_MAX_CATEGORIES];
 

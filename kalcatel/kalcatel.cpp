@@ -22,6 +22,7 @@
  */
 /* $Id$ */
 
+#include <stdlib.h>
 #include <unistd.h>
 
 // include files for QT
@@ -49,6 +50,7 @@
 #include "alcatool/modem.h"
 #include "alcatool/mobile_info.h"
 #include "alcatool/sms.h"
+#include "alcatool/contacts.h"
 #include "alcatool/logging.h"
 
 KAlcatelApp::KAlcatelApp(QWidget* , const char* name):KMainWindow(0, name)
@@ -367,6 +369,7 @@ void KAlcatelApp::slotFileReadMobileSms()
 void KAlcatelApp::slotMobileInfo() {
     char manuf[128], model[128], rev[128], sn[128], imsi[128], *s;
     int bat_percent, bat_state, sign_strength, sign_err;
+    CONTACT *cont;
     slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
 
     char *devname;
@@ -449,6 +452,9 @@ void KAlcatelApp::slotMobileInfo() {
 
     s = get_smsc();
 
+    select_phonebook(PB_OWN);
+    cont = get_contacts(1, 1);
+
     modem_close();
 
     KMessageBox::information(this,
@@ -503,20 +509,36 @@ void KAlcatelApp::slotMobileInfo() {
           "</b></td><td>"
           "%9"
           "</td></tr>"
-          "</table>"
           ).
           arg(manuf).
           arg(model).
           arg(rev).
           arg(sn).
           arg(imsi).
-          arg(bat_state).
+          arg(
+            i18n("%1 (%2)").
+                arg(bat_state == 0 ? i18n("Supplied from battery") :
+                    bat_state == 1 ? i18n("Battery connected but not used") :
+                    bat_state == 2 ? i18n("Battery not connected") :
+                    bat_state == 3 ? i18n("Error") :
+                    i18n("Unknown")
+                ).
+                arg(bat_state)
+          ).
           arg(bat_percent).
           arg(sign_strength == 99 ? i18n("Unknown") : QString(mobil_signal_info[sign_strength])).
           arg(sign_err == 99 ? i18n("Unknown") : QString("%1").arg(sign_err)).
-          arg(s)
+          arg(s).
+          append(cont[0].pos == -1 ? QString() : i18n("<tr><td><b>"
+              "Own number:"
+              "</b></td><td>"
+              "%1"
+              "</td></tr>").
+              arg(cont[0].number)).
+          append(i18n("</table>"))
           ,
           i18n("Mobile information"));
+    free(cont);
 
     slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }

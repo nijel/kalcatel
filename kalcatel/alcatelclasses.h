@@ -36,7 +36,9 @@
   *@author Michal Cihar
   */
 
-enum AlcatelStorage {StoragePC, StorageSIM, StorageMobile} ;
+
+enum CallType { CallMissed, CallReceived, CallDialled };
+enum AlcatelStorage {StoragePC, StorageSIM, StorageMobile } ;
 
 class AlcatelClass {
 public:
@@ -46,6 +48,7 @@ public:
 
 extern QString StorageTypes[];
 extern QString SMSTypes[];
+extern QString CallTypes[];
 extern QString Priorities[];
 extern QString CalendarTypes[];
 
@@ -148,6 +151,16 @@ public:
     QString SMSC;
 };
 
+class AlcatelCall : public AlcatelClass {
+public:
+	AlcatelCall();
+	~AlcatelCall();
+	
+    QString Number;
+    QString Name;
+    CallType Type;
+};
+
 class AlcatelCategory : public AlcatelClass {
 public:
 	AlcatelCategory(char* name, int id);
@@ -161,6 +174,7 @@ typedef QValueList<AlcatelCalendar> AlcatelCalendarList;
 typedef QValueList<AlcatelTodo> AlcatelTodoList;
 typedef QValueList<AlcatelSMS> AlcatelSMSList;
 typedef QValueList<AlcatelCategory> AlcatelCategoryList;
+typedef QValueList<AlcatelCall> AlcatelCallList;
 
 AlcatelSMS *getSMSById(AlcatelSMSList *list, int id);
 QString *getCategoryName(AlcatelCategoryList *list, int id);
@@ -169,6 +183,8 @@ AlcatelContact *getContactByPhone(AlcatelContactList *list, QString *number, QSt
 AlcatelContact *getContactById(AlcatelContactList *list, int id, AlcatelStorage type);
 AlcatelTodo *getTodoById(AlcatelTodoList *list, int id);
 AlcatelCalendar *getCalendarById(AlcatelCalendarList *list, int id);
+
+AlcatelCall *getCallById(AlcatelCallList *list, int id, CallType type);
 
 void clearContacts(AlcatelContactList *list, AlcatelStorage type);
 

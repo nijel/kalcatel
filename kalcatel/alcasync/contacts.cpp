@@ -61,7 +61,7 @@ ushort text2int(char *text) {
 }
 
 CONTACT *get_contacts(int from=1, int to=200) {
-    char answer[20000], raw[200], number[100], *data, *s;
+    char answer[20000], raw[200], number[100], *data;
     ushort *binary;
     int count=0, i, len;
     modem_cmd("AT+CSCS=\"UCS2\"\r\n", answer, sizeof(answer), 50, NULL);
@@ -105,13 +105,20 @@ CONTACT *get_contacts(int from=1, int to=200) {
         }
         cont[count].name = new QString();
         cont[count].name->setUnicodeCodes(binary, len);
-
-        s = strdup(cont[count].name->latin1());
-        message(MSG_DEBUG2, "Contact %d: %s \"%s\"", cont[count].pos, cont[count].number, cont[count].name->latin1());
         count++;
     }
 
     modem_cmd("AT+CSCS=\"GSM\"\r\n", answer, sizeof(answer), 50, NULL);
 
     return cont;
+}
+
+int select_phonebook(char *pbtype) {
+    char answer[100], cmd[100];
+
+    sprintf(cmd, "AT+CPBS=\"%s\"\r\n", pbtype);
+    modem_cmd(cmd, answer, sizeof(answer), 50, NULL);
+	
+	if (strstr(answer, "ERROR") != NULL) return 0;
+	return 1;
 }

@@ -26,6 +26,13 @@
 
 class QString;
 
+#define PB_SIM "SM"
+#define PB_OWN "ON"
+
+#define PB_LAST_DIAL "LD"
+#define PB_RECEIVED "RC"
+#define PB_MISSED "MC"
+
 typedef struct {
     int pos;
     char *number;
@@ -33,4 +40,5 @@ typedef struct {
 } CONTACT;
 
 CONTACT *get_contacts(int from=1, int to=200);
+int select_phonebook(char *pbtype);
 #endif

@@ -39,6 +39,7 @@
 
 QString SMSTypes[] = { i18n("Unread"), i18n("Read"), i18n("Unsent"), i18n("Sent") };
 QString StorageTypes[]= { i18n("PC"), i18n("SIM"), i18n("Mobile") };
+QString CallTypes[] = { i18n("Missed"), i18n("Received"), i18n("Dialled") };
 QString Priorities[] = { i18n("High"), i18n("Normal"), i18n("Low") };
 QString CalendarTypes[] = {
     i18n("Appointment"),
@@ -296,6 +297,12 @@ AlcatelSMS::~AlcatelSMS() {
     }
 }
 
+AlcatelCall::AlcatelCall() {
+}
+
+AlcatelCall::~AlcatelCall() {
+}
+
 AlcatelCategory::AlcatelCategory(char* name, int id) {
     Name = QString().setLatin1(name);
     Id = id;
@@ -334,7 +341,15 @@ int phoneCmp(QString *number1, QString *number2, QString *prefix) {
         n1.prepend(*prefix);
     if (n2[0] != '+')
         n2.prepend(*prefix);
-    return n1 == n2;
+    if (!(n1 == n2)) {
+        n1 = *number1;
+        n2 = *number2;
+        n1.prepend("+");
+        n2.prepend("+");
+        return n1 == n2;
+    } else {
+        return true;
+    }
 }
 
 AlcatelContact *getContactByPhone(AlcatelContactList *list, QString *number, QString *prefix) {
@@ -375,6 +390,15 @@ AlcatelCalendar *getCalendarById(AlcatelCalendarList *list, int id) {
     AlcatelCalendarList::Iterator it;
     for( it = list->begin(); it != list->end(); ++it ) {
         if ((* it).Id == id)
+            return &(*it);
+    }
+    return NULL;
+}
+
+AlcatelCall *getCallById(AlcatelCallList *list, int id, CallType type) {
+    AlcatelCallList::Iterator it;
+    for( it = list->begin(); it != list->end(); ++it ) {
+        if ((* it).Id == id && (* it).Type == type)
             return &(*it);
     }
     return NULL;

@@ -57,7 +57,7 @@ void message(int severity,const char* format, ...)
             fprintf(stderr,"%s: %s\n", msg_level_info[severity], text);
         } else {
             fprintf(stderr,"%s\n", text);
-        } 
+        }
     }
 }
 

@@ -37,7 +37,8 @@
 #define chk_type(which) if ((*data).type != which) message( MSG_ERROR, "Type check failed for item %d!", number); else
 
 
-QString SMSTypes[] = { i18n("Unread"), i18n("Read"), i18n("Unsent"), i18n("Sent")};
+QString SMSTypes[] = { i18n("Unread"), i18n("Read"), i18n("Unsent"), i18n("Sent") };
+QString StorageTypes[]= { i18n("PC"), i18n("SIM"), i18n("Mobile") };
 QString Priorities[] = { i18n("High"), i18n("Normal"), i18n("Low") };
 QString CalendarTypes[] = {
     i18n("Appointment"),

@@ -44,6 +44,7 @@ public:
 	enum AlcatelStorage Storage;
 };
 
+extern QString StorageTypes[];
 extern QString SMSTypes[];
 extern QString Priorities[];
 extern QString CalendarTypes[];

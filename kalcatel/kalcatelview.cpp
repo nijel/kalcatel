@@ -475,9 +475,7 @@ void KAlcatelView::repaint() {
                                                         (* it).PagerNumber
                             ),
                         QString("%1 %2").
-                            arg(((* it).Storage == StorageMobile)?
-                                i18n("Mobile") :
-                                i18n("SIM")).arg((* it).Id,4)
+                            arg(StorageTypes[(* it).Storage]).arg((* it).Id,4)
                         );
 
                 if ((* it).Storage == StorageMobile) {
@@ -640,8 +638,13 @@ void KAlcatelView::slotShowCalendar(QTextView *where, AlcatelCalendar *what) {
 }
 
 void KAlcatelView::slotContactChanged(QListViewItem *item) {
-    slotShowContact(contact_view, getContactById(getDocument()->contacts, item->text(2).right(4).stripWhiteSpace().toInt(), StorageMobile));
-    /* TODO: detect type of contacts ... */
+    if (item->text(2).contains(StorageTypes[StorageMobile])) {
+        slotShowContact(contact_view, getContactById(getDocument()->contacts, item->text(2).right(4).stripWhiteSpace().toInt(), StorageMobile));
+    } else if (item->text(2).contains(StorageTypes[StorageSIM])) {
+        slotShowContact(contact_view, getContactById(getDocument()->contacts, item->text(2).right(4).stripWhiteSpace().toInt(), StorageSIM));
+    } else if (item->text(2).contains(StorageTypes[StoragePC])) {
+        slotShowContact(contact_view, getContactById(getDocument()->contacts, item->text(2).right(4).stripWhiteSpace().toInt(), StoragePC));
+    }
 }
 
 void KAlcatelView::slotContactSimChanged(QListViewItem *item) {

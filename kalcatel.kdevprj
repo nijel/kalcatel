@@ -47,7 +47,7 @@ project_type=normal_kde2
 sgml_file=/work/alcatel/kalcatel/doc/en/index.docbook
 short_info=This application allows you to manage calls\\, messages\\, contacts\\, todos,and calendar in your Alcatel One Touch 50x and 70x mobile.,,Protocol used by this phone is binary and not documented\\, so this,program could not guarantee any functionality in your case\\, but it works well for me.
 sub_dir=kalcatel/
-version=0.3.1
+version=0.3.2
 version_control=CVS
 workspace=1
 
@@ -64,7 +64,7 @@ kpp_icon=0
 kpp_license=5
 kpp_summary=
 kpp_url=http://cihar.liten.cz
-kpp_version=0.3.1
+kpp_version=0.3.2
 
 [LFV Groups]
 GNU=AUTHORS,COPYING,ChangeLog,INSTALL,README,TODO,NEWS

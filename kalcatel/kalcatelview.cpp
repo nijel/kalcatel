@@ -711,7 +711,7 @@ void KAlcatelView::slotShowTodo(AlcatelTodo *what) {
     if (what->Priority != -1) text.append(i18n("<b>Priority:</b> %1<br>").arg(Priorities[what->Priority]));
     if (what->ContactID != -1 && what->ContactID != 0) text.append(i18n("<b>Contact:</b> %1<br>").arg(cont==NULL?QString("id=%1").arg(what->ContactID):cont->Name()));
     if (what->Category != -1) {
-        AlcatelCategory *cat = getCategoryById(getDocument()->contact_cats, what->Category, StorageMobile);
+        AlcatelCategory *cat = getCategoryById(getDocument()->todo_cats, what->Category, StorageMobile);
         if (cat == NULL) {
             text.append(i18n("<b>Category:</b> %1<br>").arg(i18n("Unknown (id=%1))").arg(what->Category)));
         } else {
@@ -849,13 +849,14 @@ void KAlcatelView::slotShowContact(AlcatelContact *what) {
 }
 
 void KAlcatelView::print(QPrinter *pPrinter) {
+    KMessageBox::sorry((KAlcatelApp *) parent(), i18n("Printing not implemented yet..."), i18n("Sorry"));
+/*
     QPainter printpainter;
     printpainter.begin(pPrinter);
   	
     // TODO: add your printing code here
-    KMessageBox::sorry((KAlcatelApp *) parent(), i18n("Printing not implemented yet..."), i18n("Sorry"));
 
-    printpainter.end();
+    printpainter.end();*/
 }
 
 void KAlcatelView::slotTreeChanged(QListViewItem *item) {

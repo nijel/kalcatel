@@ -781,7 +781,12 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
         *strm << " <messages>" << endl;
         AlcatelMessageList::Iterator messagesit;
         for( messagesit = messages->begin(); messagesit != messages->end(); ++messagesit ) {
-            *strm << "  <message>" << endl;
+            *strm << "  <message";
+            if ((*messagesit).Modified)
+                *strm << " modified=\"yes\"";
+            if ((*messagesit).Deleted)
+                *strm << " deleted=\"yes\"";
+            *strm << ">" << endl;
             if ((*messagesit).Storage != StoragePC) {
                 *strm << "   <id>" << (*messagesit).Id << "</id>" << endl;
                 *strm << "   <storage>" << (*messagesit).Storage << "</storage>" << endl;
@@ -820,7 +825,12 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
         *strm << " <contacts>" << endl;
         AlcatelContactList::Iterator cit;
         for( cit = contacts->begin(); cit != contacts->end(); ++cit ) {
-            *strm << "  <contact>" << endl;
+            *strm << "  <contact";
+            if ((*cit).Modified)
+                *strm << " modified=\"yes\"";
+            if ((*cit).Deleted)
+                *strm << " deleted=\"yes\"";
+            *strm << ">" << endl;
             if ((*cit).Storage != StoragePC) {
                 *strm << "   <id>" << (*cit).Id << "</id>" << endl;
                 *strm << "   <storage>" << (*cit).Storage << "</storage>" << endl;
@@ -915,7 +925,12 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
         *strm << " <calendar>" << endl;
         AlcatelCalendarList::Iterator calit;
         for( calit = calendar->begin(); calit != calendar->end(); ++calit ) {
-            *strm << "  <event>" << endl;
+            *strm << "  <event";
+            if ((*calit).Modified)
+                *strm << " modified=\"yes\"";
+            if ((*calit).Deleted)
+                *strm << " deleted=\"yes\"";
+            *strm << ">" << endl;
             if ((*calit).Storage != StoragePC) {
                 *strm << "   <id>" << (*calit).Id << "</id>" << endl;
                 *strm << "   <storage>" << (*calit).Storage << "</storage>" << endl;
@@ -1026,7 +1041,12 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
         *strm << " <todos>" << endl;
         AlcatelTodoList::Iterator tit;
         for( tit = todos->begin(); tit != todos->end(); ++tit ) {
-            *strm << "  <todo>" << endl;
+            *strm << "  <todo";
+            if ((*tit).Modified)
+                *strm << " modified=\"yes\"";
+            if ((*tit).Deleted)
+                *strm << " deleted=\"yes\"";
+            *strm << ">" << endl;
             if ((*tit).Storage != StoragePC) {
                 *strm << "   <id>" << (*tit).Id << "</id>" << endl;
                 *strm << "   <storage>" << (*tit).Storage << "</storage>" << endl;
@@ -1088,7 +1108,12 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
         AlcatelCallList::Iterator callit;
         *strm << " <calls>" << endl;
         for( callit = calls->begin(); callit != calls->end(); ++callit ) {
-            *strm << "  <call>" << endl;
+            *strm << "  <call";
+            if ((*callit).Modified)
+                *strm << " modified=\"yes\"";
+            if ((*callit).Deleted)
+                *strm << " deleted=\"yes\"";
+            *strm << ">" << endl;
             if ((*callit).Storage != StoragePC) {
                 (*callit).PrevId = (*callit).Id;
                 (*callit).Id = pcStorageCounter++;
@@ -1112,7 +1137,12 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
         AlcatelCategoryList::Iterator catit;
         *strm << " <todocategories>" << endl;
         for( catit = todo_cats->begin(); catit != todo_cats->end(); ++catit ) {
-            *strm << "  <category>" << endl;
+            *strm << "  <category";
+            if ((*catit).Modified)
+                *strm << " modified=\"yes\"";
+            if ((*catit).Deleted)
+                *strm << " deleted=\"yes\"";
+            *strm << ">" << endl;
             if ((*catit).Storage != StoragePC) {
                 *strm << "   <id>" << (*catit).Id << "</id>" << endl;
                 *strm << "   <storage>" << (*catit).Storage << "</storage>" << endl;
@@ -1130,7 +1160,12 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
         AlcatelCategoryList::Iterator catit;
         *strm << " <contactcategories>" << endl;
         for( catit = contact_cats->begin(); catit != contact_cats->end(); ++catit ) {
-            *strm << "  <category>" << endl;
+            *strm << "  <category";
+            if ((*catit).Modified)
+                *strm << " modified=\"yes\"";
+            if ((*catit).Deleted)
+                *strm << " deleted=\"yes\"";
+            *strm << ">" << endl;
             if ((*catit).Storage != StoragePC) {
                 *strm << "   <id>" << (*catit).Id << "</id>" << endl;
                 *strm << "   <storage>" << (*catit).Storage << "</storage>" << endl;

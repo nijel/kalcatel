@@ -113,9 +113,10 @@ KAlcatelApp::~KAlcatelApp() {
 
 void KAlcatelApp::initConfig() {
     if (auto_modem) {
-        modemConnect();
-        modemDisconnect();
-        if (monitorInterval != 0) statusUpdate();
+        if (modemConnect()) {
+            modemDisconnect();
+            if (monitorInterval != 0) statusUpdate();
+        }
     }
 
     if (!persistent_modem) {

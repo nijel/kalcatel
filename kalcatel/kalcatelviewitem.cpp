@@ -24,6 +24,9 @@
 
 #include <qdatetime.h>
 
+#include <klocale.h>
+#include <kiconloader.h>
+
 #include "kalcatelviewitem.h"
 #include "alcatelclasses.h"
 #include "alcatool/logging.h"
@@ -33,15 +36,81 @@
 #define secs_time       "%04d"
 #define position_type   "%d-%04d"
 
-KAlcatelDataItem::KAlcatelDataItem ( QListView * parent, AlcatelClass *data, QString label1, QString label2, QString label3, QString label4, QString label5, QString label6, QString label7, QString label8 ) : QListViewItem ( parent, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
+KAlcatelDataItem::KAlcatelDataItem ( QListView * parent, AlcatelClass *data ) : QListViewItem ( parent ) {
     alcatelData = data;
 }
 
-KAlcatelMessageViewItem::KAlcatelMessageViewItem ( QListView * parent, AlcatelMessage *data, QString label1, QString label2, QString label3, QString label4, QString label5, QString label6, QString label7, QString label8 ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
+KAlcatelMessageViewItem::KAlcatelMessageViewItem ( QListView * parent, AlcatelMessage *data, AlcatelContact *cont) : KAlcatelDataItem ( parent, data ) {
+    contact = cont;
+    update();
+}
+
+void KAlcatelMessageViewItem::update() {
+    if (alcatelData->Deleted) {
+        setPixmap(0, SmallIcon("kalcatel-deleted.png"));
+    } else if (alcatelData->Modified) {
+        setPixmap(0, SmallIcon("kalcatel-modified.png"));
+    }
+
+    setText( 1, QString(((AlcatelMessage *)alcatelData)->Sender));
+    setText( 2, contact == NULL? i18n("Unknown") : contact->getName());
+    setText( 3, MessageTypes[((AlcatelMessage *)alcatelData)->Status]);
+    setText( 4, ((AlcatelMessage *)alcatelData)->Date.date().toString());
+    setText( 5, ((AlcatelMessage *)alcatelData)->Date.time().toString());
+    setText( 6, ((AlcatelMessage *)alcatelData)->Text);
+    setText( 7, QString("%1 %2").arg(StorageTypes[alcatelData->Storage]).arg(alcatelData->Id));
 }
 
 QString KAlcatelMessageViewItem::key ( int column, bool ascending ) const {
-    if (column == 3) {
+    if (column == 0) {
+        if (alcatelData->Deleted) return "1";
+        if (alcatelData->Modified) return "2";
+        return "0";
+    } else if (column == 4) {
+        QString tmpString;
+        QDateTime epoch( QDate(1970,1,1), QTime(0,0) );
+        tmpString.sprintf( epoch_time, epoch.secsTo(((AlcatelMessage *)alcatelData)->Date) );
+        return tmpString;
+    } else if (column == 5) {
+        QString tmpString;
+        QTime epoch( 0, 0 );
+        tmpString.sprintf( secs_time, epoch.secsTo(((AlcatelMessage *)alcatelData)->Date.time()) );
+        return tmpString;
+    } else if (column == 7) {
+        QString tmpString;
+        tmpString.sprintf( position_type, alcatelData->Storage, alcatelData->Id );
+        return tmpString;
+    } else {
+        return text(column);
+    }
+}
+
+KAlcatelMessageCatViewItem::KAlcatelMessageCatViewItem ( QListView * parent, AlcatelMessage *data, AlcatelContact *cont) : KAlcatelDataItem ( parent, data ) {
+    contact = cont;
+    update();
+}
+
+void KAlcatelMessageCatViewItem::update() {
+    if (alcatelData->Deleted) {
+        setPixmap(0, SmallIcon("kalcatel-deleted.png"));
+    } else if (alcatelData->Modified) {
+        setPixmap(0, SmallIcon("kalcatel-modified.png"));
+    }
+
+    setText( 1, QString(((AlcatelMessage *)alcatelData)->Sender));
+    setText( 2, contact == NULL? i18n("Unknown") : contact->getName());
+    setText( 3, ((AlcatelMessage *)alcatelData)->Date.date().toString());
+    setText( 4, ((AlcatelMessage *)alcatelData)->Date.time().toString());
+    setText( 5, ((AlcatelMessage *)alcatelData)->Text);
+    setText( 6, QString("%1 %2").arg(StorageTypes[alcatelData->Storage]).arg(alcatelData->Id));
+}
+
+QString KAlcatelMessageCatViewItem::key ( int column, bool ascending ) const {
+    if (column == 0) {
+        if (alcatelData->Deleted) return "1";
+        if (alcatelData->Modified) return "2";
+        return "0";
+    } else if (column == 3) {
         QString tmpString;
         QDateTime epoch( QDate(1970,1,1), QTime(0,0) );
         tmpString.sprintf( epoch_time, epoch.secsTo(((AlcatelMessage *)alcatelData)->Date) );
@@ -60,38 +129,67 @@ QString KAlcatelMessageViewItem::key ( int column, bool ascending ) const {
     }
 }
 
-KAlcatelMessageCatViewItem::KAlcatelMessageCatViewItem ( QListView * parent, AlcatelMessage *data, QString label1, QString label2, QString label3, QString label4, QString label5, QString label6, QString label7, QString label8 ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
+KAlcatelCallViewItem::KAlcatelCallViewItem ( QListView * parent, AlcatelCall *data, AlcatelContact *cont) : KAlcatelDataItem ( parent, data ) {
+    contact = cont;
+    update();
 }
 
-QString KAlcatelMessageCatViewItem::key ( int column, bool ascending ) const {
-    if (column == 2) {
-        QString tmpString;
-        QDateTime epoch( QDate(1970,1,1), QTime(0,0) );
-        tmpString.sprintf( epoch_time, epoch.secsTo(((AlcatelMessage *)alcatelData)->Date) );
-        return tmpString;
-    } else if (column == 3) {
-        QString tmpString;
-        QTime epoch( 0, 0 );
-        tmpString.sprintf( secs_time, epoch.secsTo(((AlcatelMessage *)alcatelData)->Date.time()) );
-        return tmpString;
-    } else if (column == 5) {
-        QString tmpString;
-        tmpString.sprintf( position_type, alcatelData->Storage, alcatelData->Id );
-        return tmpString;
-    } else {
-        return text(column);
+void KAlcatelCallViewItem::update() {
+    if (alcatelData->Deleted) {
+        setPixmap(0, SmallIcon("kalcatel-deleted.png"));
+    } else if (alcatelData->Modified) {
+        setPixmap(0, SmallIcon("kalcatel-modified.png"));
     }
-}
 
-KAlcatelCallViewItem::KAlcatelCallViewItem ( QListView * parent, AlcatelCall *data, QString label1, QString label2, QString label3, QString label4, QString label5, QString label6, QString label7, QString label8 ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
+    setText( 1, ((AlcatelCall *)alcatelData)->Number);
+    setText( 2, ((AlcatelCall *)alcatelData)->Name);
+    setText( 3, contact == NULL? i18n("Unknown") : contact->getName());
+    setText( 4, CallTypes[((AlcatelCall *)alcatelData)->Type]);
+    setText( 5, QString("%1 %2").arg(StorageTypes[alcatelData->Storage]).arg(alcatelData->Id));
 }
 
 QString KAlcatelCallViewItem::key ( int column, bool ascending ) const {
-    if (column == 3) {
+    if (column == 0) {
+        if (alcatelData->Deleted) return "1";
+        if (alcatelData->Modified) return "2";
+        return "0";
+    } else if (column == 4) {
         QString tmpString;
         tmpString.sprintf( position_type, alcatelData->Storage, alcatelData->Id );
         tmpString.prepend(text(column));
         return tmpString;
+    } else if (column == 5) {
+        QString tmpString;
+        tmpString.sprintf( position_type, alcatelData->Storage, alcatelData->Id );
+        return tmpString;
+    } else {
+        return text(column);
+    }
+}
+
+KAlcatelCallCatViewItem::KAlcatelCallCatViewItem ( QListView * parent, AlcatelCall *data, AlcatelContact *cont) : KAlcatelDataItem ( parent, data ) {
+    contact = cont;
+    update();
+}
+
+void KAlcatelCallCatViewItem::update() {
+    if (alcatelData->Deleted) {
+        setPixmap(0, SmallIcon("kalcatel-deleted.png"));
+    } else if (alcatelData->Modified) {
+        setPixmap(0, SmallIcon("kalcatel-modified.png"));
+    }
+
+    setText( 1, ((AlcatelCall *)alcatelData)->Number);
+    setText( 2, ((AlcatelCall *)alcatelData)->Name);
+    setText( 3, contact == NULL? i18n("Unknown") : contact->getName());
+    setText( 4, QString("%1 %2").arg(StorageTypes[alcatelData->Storage]).arg(alcatelData->Id));
+}
+
+QString KAlcatelCallCatViewItem::key ( int column, bool ascending ) const {
+    if (column == 0) {
+        if (alcatelData->Deleted) return "1";
+        if (alcatelData->Modified) return "2";
+        return "0";
     } else if (column == 4) {
         QString tmpString;
         tmpString.sprintf( position_type, alcatelData->Storage, alcatelData->Id );
@@ -101,11 +199,42 @@ QString KAlcatelCallViewItem::key ( int column, bool ascending ) const {
     }
 }
 
-KAlcatelCallCatViewItem::KAlcatelCallCatViewItem ( QListView * parent, AlcatelCall *data, QString label1, QString label2, QString label3, QString label4, QString label5, QString label6, QString label7, QString label8 ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
+KAlcatelTodoViewItem::KAlcatelTodoViewItem ( QListView *parent, AlcatelTodo *data, AlcatelContact *cont, QString catname) : KAlcatelDataItem ( parent, data ) {
+    contact = cont;
+    categoryname = catname;
+    update();
 }
 
-QString KAlcatelCallCatViewItem::key ( int column, bool ascending ) const {
-    if (column == 3) {
+void KAlcatelTodoViewItem::update() {
+    if (alcatelData->Deleted) {
+        setPixmap(0, SmallIcon("kalcatel-deleted.png"));
+    } else if (alcatelData->Modified) {
+        setPixmap(0, SmallIcon("kalcatel-modified.png"));
+    }
+
+    setText( 1, ((AlcatelTodo *)alcatelData)->Completed == -1 ? QString(""): ((AlcatelTodo *)alcatelData)->Completed ? i18n("Yes") : i18n("No"));
+    setText( 2, ((AlcatelTodo *)alcatelData)->Priority == -1 ? QString("") : Priorities[((AlcatelTodo *)alcatelData)->Priority]);
+    setText( 3, ((AlcatelTodo *)alcatelData)->DueDate.isNull()?i18n("None"):((AlcatelTodo *)alcatelData)->DueDate.toString());
+    setText( 4, (((AlcatelTodo *)alcatelData)->Subject.isNull() && ((AlcatelTodo *)alcatelData)->ContactID != -1 && contact != NULL) ? i18n("Call to %1").arg(contact->getName()) : ((AlcatelTodo *)alcatelData)->Subject);
+    setText( 5, categoryname);
+    setText( 6, QString("%1 %2").arg(StorageTypes[alcatelData->Storage]).arg(alcatelData->Id));
+}
+
+QString KAlcatelTodoViewItem::key ( int column, bool ascending ) const {
+    if (column == 0) {
+        if (alcatelData->Deleted) return "1";
+        if (alcatelData->Modified) return "2";
+        return "0";
+    } else if (column == 2) {
+        QString tmpString;
+        tmpString.sprintf( "%d", 3 - ((AlcatelTodo *)alcatelData)->Priority );
+        return tmpString;
+    } else if (column == 3) {
+        QString tmpString;
+        QDateTime epoch( QDate(1970,1,1), QTime(0,0) );
+        tmpString.sprintf( epoch_time, epoch.secsTo(((AlcatelTodo *)alcatelData)->DueDate) );
+        return tmpString;
+    } else if (column == 6) {
         QString tmpString;
         tmpString.sprintf( position_type, alcatelData->Storage, alcatelData->Id );
         return tmpString;
@@ -114,15 +243,35 @@ QString KAlcatelCallCatViewItem::key ( int column, bool ascending ) const {
     }
 }
 
-KAlcatelTodoViewItem::KAlcatelTodoViewItem ( QListView * parent, AlcatelTodo *data, QString label1, QString label2, QString label3, QString label4, QString label5, QString label6, QString label7, QString label8 ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
+KAlcatelTodoCatViewItem::KAlcatelTodoCatViewItem ( QListView *parent, AlcatelTodo *data, AlcatelContact *cont) : KAlcatelDataItem ( parent, data ) {
+    contact = cont;
+    update();
 }
 
-QString KAlcatelTodoViewItem::key ( int column, bool ascending ) const {
-    if (column == 1) {
+void KAlcatelTodoCatViewItem::update() {
+    if (alcatelData->Deleted) {
+        setPixmap(0, SmallIcon("kalcatel-deleted.png"));
+    } else if (alcatelData->Modified) {
+        setPixmap(0, SmallIcon("kalcatel-modified.png"));
+    }
+
+    setText( 1, ((AlcatelTodo *)alcatelData)->Completed == -1 ? QString(""): ((AlcatelTodo *)alcatelData)->Completed ? i18n("Yes") : i18n("No"));
+    setText( 2, ((AlcatelTodo *)alcatelData)->Priority == -1 ? QString("") : Priorities[((AlcatelTodo *)alcatelData)->Priority]);
+    setText( 3, ((AlcatelTodo *)alcatelData)->DueDate.isNull()?i18n("None"):((AlcatelTodo *)alcatelData)->DueDate.toString());
+    setText( 4, (((AlcatelTodo *)alcatelData)->Subject.isNull() && ((AlcatelTodo *)alcatelData)->ContactID != -1 && contact != NULL) ? i18n("Call to %1").arg(contact->getName()) : ((AlcatelTodo *)alcatelData)->Subject);
+    setText( 5, QString("%1 %2").arg(StorageTypes[alcatelData->Storage]).arg(alcatelData->Id));
+}
+
+QString KAlcatelTodoCatViewItem::key ( int column, bool ascending ) const {
+    if (column == 0) {
+        if (alcatelData->Deleted) return "1";
+        if (alcatelData->Modified) return "2";
+        return "0";
+    } else if (column == 2) {
         QString tmpString;
         tmpString.sprintf( "%d", 3 - ((AlcatelTodo *)alcatelData)->Priority );
         return tmpString;
-    } else if (column == 2) {
+    } else if (column == 3) {
         QString tmpString;
         QDateTime epoch( QDate(1970,1,1), QTime(0,0) );
         tmpString.sprintf( epoch_time, epoch.secsTo(((AlcatelTodo *)alcatelData)->DueDate) );
@@ -136,33 +285,35 @@ QString KAlcatelTodoViewItem::key ( int column, bool ascending ) const {
     }
 }
 
-KAlcatelTodoCatViewItem::KAlcatelTodoCatViewItem ( QListView * parent, AlcatelTodo *data, QString label1, QString label2, QString label3, QString label4, QString label5, QString label6, QString label7, QString label8 ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
+KAlcatelContactViewItem::KAlcatelContactViewItem ( QListView * parent, AlcatelContact *data) : KAlcatelDataItem ( parent, data ) {
+    update();
 }
 
-QString KAlcatelTodoCatViewItem::key ( int column, bool ascending ) const {
-    if (column == 1) {
-        QString tmpString;
-        tmpString.sprintf( "%d", 3 - ((AlcatelTodo *)alcatelData)->Priority );
-        return tmpString;
-    } else if (column == 2) {
-        QString tmpString;
-        QDateTime epoch( QDate(1970,1,1), QTime(0,0) );
-        tmpString.sprintf( epoch_time, epoch.secsTo(((AlcatelTodo *)alcatelData)->DueDate) );
-        return tmpString;
-    } else if (column == 4) {
-        QString tmpString;
-        tmpString.sprintf( position_type, alcatelData->Storage, alcatelData->Id );
-        return tmpString;
-    } else {
-        return text(column);
+void KAlcatelContactViewItem::update() {
+    if (alcatelData->Deleted) {
+        setPixmap(0, SmallIcon("kalcatel-deleted.png"));
+    } else if (alcatelData->Modified) {
+        setPixmap(0, SmallIcon("kalcatel-modified.png"));
     }
-}
 
-KAlcatelContactViewItem::KAlcatelContactViewItem ( QListView * parent, AlcatelContact *data, QString label1, QString label2, QString label3, QString label4, QString label5, QString label6, QString label7, QString label8 ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
+    setText( 1, ((AlcatelContact *)alcatelData)->getName());
+    /* try to find non-empty phone */
+    setText( 2, QString(!((AlcatelContact *)alcatelData)->MainNumber.isEmpty()?((AlcatelContact *)alcatelData)->MainNumber:
+                            !((AlcatelContact *)alcatelData)->MobileNumber.isEmpty()?((AlcatelContact *)alcatelData)->MobileNumber:
+                                !((AlcatelContact *)alcatelData)->WorkNumber.isEmpty()?((AlcatelContact *)alcatelData)->WorkNumber:
+                                    !((AlcatelContact *)alcatelData)->HomeNumber.isEmpty()?((AlcatelContact *)alcatelData)->HomeNumber:
+                                        !((AlcatelContact *)alcatelData)->OtherNumber.isEmpty()?((AlcatelContact *)alcatelData)->OtherNumber:
+                                            !((AlcatelContact *)alcatelData)->FaxNumber.isEmpty()?((AlcatelContact *)alcatelData)->FaxNumber:
+                                                ((AlcatelContact *)alcatelData)->PagerNumber));
+    setText( 3, QString("%1 %2").arg(StorageTypes[alcatelData->Storage]).arg(alcatelData->Id));
 }
 
 QString KAlcatelContactViewItem::key ( int column, bool ascending ) const {
-    if (column == 2) {
+    if (column == 0) {
+        if (alcatelData->Deleted) return "1";
+        if (alcatelData->Modified) return "2";
+        return "0";
+    } else if (column == 3) {
         QString tmpString;
         tmpString.sprintf( position_type, alcatelData->Storage, alcatelData->Id );
         return tmpString;
@@ -171,11 +322,34 @@ QString KAlcatelContactViewItem::key ( int column, bool ascending ) const {
     }
 }
 
-KAlcatelContactMobileViewItem::KAlcatelContactMobileViewItem ( QListView * parent, AlcatelContact *data, QString label1, QString label2, QString label3, QString label4, QString label5, QString label6, QString label7, QString label8 ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
+KAlcatelContactMobileViewItem::KAlcatelContactMobileViewItem ( QListView * parent, AlcatelContact *data, QString catname) : KAlcatelDataItem ( parent, data ) {
+    categoryname = catname;
+    update();
+}
+
+void KAlcatelContactMobileViewItem::update() {
+    if (alcatelData->Deleted) {
+        setPixmap(0, SmallIcon("kalcatel-deleted.png"));
+    } else if (alcatelData->Modified) {
+        setPixmap(0, SmallIcon("kalcatel-modified.png"));
+    }
+
+    setText( 1, ((AlcatelContact *)alcatelData)->LastName);
+    setText( 2, ((AlcatelContact *)alcatelData)->FirstName);
+    setText( 3, categoryname);
+    setText( 4, ((AlcatelContact *)alcatelData)->MobileNumber);
+    setText( 5, ((AlcatelContact *)alcatelData)->WorkNumber);
+    setText( 6, ((AlcatelContact *)alcatelData)->MainNumber);
+    setText( 7, ((AlcatelContact *)alcatelData)->Email1);
+    setText( 8, QString("%1 %2").arg(StorageTypes[alcatelData->Storage]).arg(alcatelData->Id));
 }
 
 QString KAlcatelContactMobileViewItem::key ( int column, bool ascending ) const {
-    if (column == 7) {
+    if (column == 0) {
+        if (alcatelData->Deleted) return "1";
+        if (alcatelData->Modified) return "2";
+        return "0";
+    } else if (column == 8) {
         QString tmpString;
         tmpString.sprintf( position_type, alcatelData->Storage, alcatelData->Id );
         return tmpString;
@@ -184,11 +358,32 @@ QString KAlcatelContactMobileViewItem::key ( int column, bool ascending ) const 
     }
 }
 
-KAlcatelContactMobileCatViewItem::KAlcatelContactMobileCatViewItem ( QListView * parent, AlcatelContact *data, QString label1, QString label2, QString label3, QString label4, QString label5, QString label6, QString label7, QString label8 ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
+KAlcatelContactMobileCatViewItem::KAlcatelContactMobileCatViewItem ( QListView * parent, AlcatelContact *data) : KAlcatelDataItem ( parent, data ) {
+    update();
+}
+
+void KAlcatelContactMobileCatViewItem::update() {
+    if (alcatelData->Deleted) {
+        setPixmap(0, SmallIcon("kalcatel-deleted.png"));
+    } else if (alcatelData->Modified) {
+        setPixmap(0, SmallIcon("kalcatel-modified.png"));
+    }
+
+    setText( 1, ((AlcatelContact *)alcatelData)->LastName);
+    setText( 2, ((AlcatelContact *)alcatelData)->FirstName);
+    setText( 3, ((AlcatelContact *)alcatelData)->MobileNumber);
+    setText( 4, ((AlcatelContact *)alcatelData)->WorkNumber);
+    setText( 5, ((AlcatelContact *)alcatelData)->MainNumber);
+    setText( 6, ((AlcatelContact *)alcatelData)->Email1);
+    setText( 7, QString("%1 %2").arg(StorageTypes[alcatelData->Storage]).arg(alcatelData->Id));
 }
 
 QString KAlcatelContactMobileCatViewItem::key ( int column, bool ascending ) const {
-    if (column == 6) {
+    if (column == 0) {
+        if (alcatelData->Deleted) return "1";
+        if (alcatelData->Modified) return "2";
+        return "0";
+    } else if (column == 7) {
         QString tmpString;
         tmpString.sprintf( position_type, alcatelData->Storage, alcatelData->Id );
         return tmpString;
@@ -197,11 +392,28 @@ QString KAlcatelContactMobileCatViewItem::key ( int column, bool ascending ) con
     }
 }
 
-KAlcatelContactSIMViewItem::KAlcatelContactSIMViewItem ( QListView * parent, AlcatelContact *data, QString label1, QString label2, QString label3, QString label4, QString label5, QString label6, QString label7, QString label8 ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
+KAlcatelContactSIMViewItem::KAlcatelContactSIMViewItem ( QListView * parent, AlcatelContact *data) : KAlcatelDataItem ( parent, data ) {
+    update();
+}
+
+void KAlcatelContactSIMViewItem::update() {
+    if (alcatelData->Deleted) {
+        setPixmap(0, SmallIcon("kalcatel-deleted.png"));
+    } else if (alcatelData->Modified) {
+        setPixmap(0, SmallIcon("kalcatel-modified.png"));
+    }
+
+    setText( 1, ((AlcatelContact *)alcatelData)->LastName);
+    setText( 2, ((AlcatelContact *)alcatelData)->MainNumber);
+    setText( 3, QString("%1 %2").arg(StorageTypes[alcatelData->Storage]).arg(alcatelData->Id));
 }
 
 QString KAlcatelContactSIMViewItem::key ( int column, bool ascending ) const {
-    if (column == 2) {
+    if (column == 0) {
+        if (alcatelData->Deleted) return "1";
+        if (alcatelData->Modified) return "2";
+        return "0";
+    } else if (column == 3) {
         QString tmpString;
         tmpString.sprintf( position_type, alcatelData->Storage, alcatelData->Id );
         return tmpString;
@@ -210,30 +422,53 @@ QString KAlcatelContactSIMViewItem::key ( int column, bool ascending ) const {
     }
 }
 
-KAlcatelCalendarViewItem::KAlcatelCalendarViewItem ( QListView * parent, AlcatelCalendar *data, QString label1, QString label2, QString label3, QString label4, QString label5, QString label6, QString label7, QString label8 ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
+KAlcatelCalendarViewItem::KAlcatelCalendarViewItem ( QListView * parent, AlcatelCalendar *data, AlcatelContact *cont) : KAlcatelDataItem ( parent, data ) {
+    contact = cont;
+    update();
+}
+
+void KAlcatelCalendarViewItem::update() {
+    if (alcatelData->Deleted) {
+        setPixmap(0, SmallIcon("kalcatel-deleted.png"));
+    } else if (alcatelData->Modified) {
+        setPixmap(0, SmallIcon("kalcatel-modified.png"));
+    }
+
+    setText( 1, ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_ALARM ? i18n("N/A") : ((AlcatelCalendar *)alcatelData)->Date.isNull()?i18n("None"):((AlcatelCalendar *)alcatelData)->Date.toString());
+    setText( 2, ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_BIRTHDAY || ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_ALARM ? i18n("N/A") : ((AlcatelCalendar *)alcatelData)->StartTime.toString());
+    setText( 3, ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_BIRTHDAY || ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_ALARM ? i18n("N/A") : ((AlcatelCalendar *)alcatelData)->EndTime.toString());
+    setText( 4, ((AlcatelCalendar *)alcatelData)->EventType!=-1?CalendarTypes[((AlcatelCalendar *)alcatelData)->EventType]:i18n("Unknown"));
+    setText( 5, (((AlcatelCalendar *)alcatelData)->Subject.isNull() && ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_CALL && contact != NULL) ? i18n("Call to %1").arg(contact->getName()) : ((AlcatelCalendar *)alcatelData)->Subject);
+    setText( 6, ((AlcatelCalendar *)alcatelData)->Alarm.isNull()?i18n("None"):((AlcatelCalendar *)alcatelData)->Alarm.toString());
+    setText( 7, ((AlcatelCalendar *)alcatelData)->Repeating());
+    setText( 8, QString("%1 %2").arg(StorageTypes[alcatelData->Storage]).arg(alcatelData->Id));
 }
 
 QString KAlcatelCalendarViewItem::key ( int column, bool ascending ) const {
     if (column == 0) {
+        if (alcatelData->Deleted) return "1";
+        if (alcatelData->Modified) return "2";
+        return "0";
+    } else if (column == 1) {
         QString tmpString;
         if (((AlcatelCalendar *)alcatelData)->Date.isNull())
             tmpString.sprintf( epoch_empty );
         else
             tmpString.sprintf( epoch_time, QDate(1970,1,1).daysTo(((AlcatelCalendar *)alcatelData)->Date) );
         return tmpString;
-    } else if (column == 1) {
+    } else if (column == 2) {
         QString tmpString;
         tmpString.sprintf( epoch_time, QDateTime(QDate(1970,1,1),QTime(0,0)).secsTo(QDateTime(((AlcatelCalendar *)alcatelData)->Date,((AlcatelCalendar *)alcatelData)->StartTime)));
         return tmpString;
-    } else if (column == 2) {
+    } else if (column == 3) {
         QString tmpString;
         tmpString.sprintf( epoch_time, QDateTime(QDate(1970,1,1),QTime(0,0)).secsTo(QDateTime(((AlcatelCalendar *)alcatelData)->Date,((AlcatelCalendar *)alcatelData)->EndTime)));
         return tmpString;
-    } else if (column == 5) {
+    } else if (column == 6) {
         QString tmpString;
         tmpString.sprintf( epoch_time, QDateTime(QDate(1970,1,1),QTime(0,0)).secsTo(((AlcatelCalendar *)alcatelData)->Alarm));
         return tmpString;
-    } else if (column == 7) {
+    } else if (column == 8) {
         QString tmpString;
         tmpString.sprintf( position_type, alcatelData->Storage, alcatelData->Id );
         return tmpString;

@@ -4,6 +4,13 @@ KAlcatel - Changelog
 
 $Id$
 
+2002-03-15 Michal Cihar <cihar@email.cz>
+        * changed modem connecting to allow persistent connection and connecting on start
+        * added detection of broken names when reading calls
+
+2002-03-13 Michal Cihar <cihar@email.cz>
+        * fixed some typos
+
 2002-03-07 Michal Cihar <cihar@email.cz>
         * corrected error message when program can not write to device
         * added configuration of RTSCTS or XON/XOFF flow control

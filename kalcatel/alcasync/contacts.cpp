@@ -94,17 +94,24 @@ ContactData *get_contacts(int from, int to) {
         sscanf(data, "+CPBR: %d, %s ,%d, %s ", &(cont[count].pos), number, &i, raw);
         data++;
 
-        len = strlen(raw);
-        len >>= 2;
-
         chk(cont[count].number = strdup(number));
-        chk(binary = (ushort *)malloc(len * sizeof(ushort)));
 
-        for(i=0; i<len; i++) {
-            binary[i] = text2int (raw + (4*i));
+        len = strlen(raw);
+        if (strncmp("E1004FE0EF000301", raw, 16) == 0) {
+            raw[0] = 0;
+            cont[count].name = new QString();
+        } else {
+            len >>= 2;
+
+            chk(binary = (ushort *)malloc(len * sizeof(ushort)));
+
+            for(i=0; i<len; i++) {
+                binary[i] = text2int (raw + (4*i));
+            }
+
+            cont[count].name = new QString();
+            cont[count].name->setUnicodeCodes(binary, len);
         }
-        cont[count].name = new QString();
-        cont[count].name->setUnicodeCodes(binary, len);
         count++;
     }
 

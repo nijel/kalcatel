@@ -123,22 +123,21 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
 
     QWhatsThis::add(editRTSCTS ,i18n("<b>Use hardware flow control</b><br>This disables/enables hardware (RTSCTS) flow control or software flow control (XON/XOFF). If your cable supports RTSCTS, it should work better."));
 
-    label = new QLabel(i18n("Stderr messages:"), mobilePage);
+    label = new QLabel(i18n("Persistent connection:"), mobilePage);
     mobileLayout->addWidget(label, 5, 0);
 
-    debugEdit = new QComboBox(mobilePage);
-    debugEdit->insertItem(i18n("Debug 2"));
-    debugEdit->insertItem(i18n("Debug"));
-    debugEdit->insertItem(i18n("Detail"));
-    debugEdit->insertItem(i18n("Information"));
-    debugEdit->insertItem(i18n("Warning"));
-    debugEdit->insertItem(i18n("Error"));
-    debugEdit->insertItem(i18n("None"));
+    editPersistent = new QCheckBox(mobilePage);
+    mobileLayout->addWidget(editPersistent, 5, 1);
 
-    QWhatsThis::add(debugEdit ,i18n("<b>Stderr messages</b><br>How many messages will be written to standard error output. Messages with lower priority than selected won't be shown. Use debug if there are probles using this program."));
-    QToolTip::add(debugEdit ,i18n("Do not display messages with lower priority than"));
+    QWhatsThis::add(editPersistent ,i18n("<b>Persistent connection</b><br>When checked, program will keep opened connection to modem since first connecting to program exit or manual disconnect."));
 
-    mobileLayout->addWidget(debugEdit, 5, 1);
+    label = new QLabel(i18n("Connect on start:"), mobilePage);
+    mobileLayout->addWidget(label, 6, 0);
+
+    editConnect = new QCheckBox(mobilePage);
+    mobileLayout->addWidget(editConnect, 6, 1);
+
+    QWhatsThis::add(editConnect ,i18n("<b>Connect on start</b><br>Conect to modem automatically after program starts."));
 
     mergePage = janus->addPage (i18n("Merging"), i18n("Merging configuration"), DesktopIcon("kalcatel-configure.png"));
     QGridLayout *mergeLayout = new QGridLayout(mergePage);
@@ -186,7 +185,7 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
     contactUrlEdit->insertItem(i18n("Custom3"));
     contactUrlEdit->insertItem(i18n("Custom4"));
 
-    QWhatsThis::add(contactUrlEdit ,i18n("<b>Show custom field as URL</b><br>If you use one of Custom fields for storing URLs you should select here which. Selected field will be show as link."));
+    QWhatsThis::add(contactUrlEdit ,i18n("<b>Show custom field as URL</b><br>If you use one of Custom fields for storing URLs you should select here which. Selected field will be show as link. Autodetect means that program will try to detect what looks like URL."));
 
     otherLayout->addWidget(contactUrlEdit, 1, 1);
 
@@ -198,6 +197,31 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
     QWhatsThis::add(editAutoOpen ,i18n("<b>Open last document on start</b><br>If checked, application will try to open last working file on start."));
 
     otherLayout->addWidget(editAutoOpen, 2, 1);
+
+    label = new QLabel(i18n("Reread messages after sending:"), otherPage);
+    otherLayout->addWidget(label, 3, 0);
+
+    editReread = new QCheckBox(otherPage);
+    otherLayout->addWidget(editReread, 3, 1);
+
+    QWhatsThis::add(editReread ,i18n("<b>Reread messages after sending</b><br>When checked, messages are reread after you send message(s)."));
+
+    label = new QLabel(i18n("Stderr messages:"), otherPage);
+    otherLayout->addWidget(label, 5, 0);
+
+    debugEdit = new QComboBox(otherPage);
+    debugEdit->insertItem(i18n("Debug 2"));
+    debugEdit->insertItem(i18n("Debug"));
+    debugEdit->insertItem(i18n("Detail"));
+    debugEdit->insertItem(i18n("Information"));
+    debugEdit->insertItem(i18n("Warning"));
+    debugEdit->insertItem(i18n("Error"));
+    debugEdit->insertItem(i18n("None"));
+
+    QWhatsThis::add(debugEdit ,i18n("<b>Stderr messages</b><br>How many messages will be written to standard error output. Messages with lower priority than selected won't be shown. Use debug if there are probles using this program. Debug 2 increases verbosity mostly in binary mode and for most cases is useless."));
+    QToolTip::add(debugEdit ,i18n("Do not display messages with lower priority than"));
+
+    otherLayout->addWidget(debugEdit, 5, 1);
 
     mainLayout->addWidget( janus, 0, 0);
 
@@ -242,6 +266,10 @@ void KAlcatelConfigDialog::slotOK() {
     theApp->phone_prefix = editPrefix->text();
     theApp->auto_open_last = editAutoOpen->isChecked();
 
+    theApp->auto_modem = editConnect->isChecked();
+    theApp->persistent_modem = editPersistent->isChecked();
+    theApp->reread_messages = editReread->isChecked();
+
     theApp->mergeData = mergeBox->id(mergeBox->selected());
     theApp->conflictAction = conflictBox->id(conflictBox->selected());
 
@@ -269,6 +297,10 @@ int KAlcatelConfigDialog::exec () {
     editRTSCTS->setChecked(theApp->mobile_rtscts);
     editPrefix->setText(theApp->phone_prefix);
     editAutoOpen->setChecked(theApp->auto_open_last);
+
+    editConnect->setChecked(theApp->auto_modem);
+    editPersistent->setChecked(theApp->persistent_modem);
+    editReread->setChecked(theApp->reread_messages);
 
     mergeBox->setButton(theApp->mergeData);
     conflictBox->setButton(theApp->conflictAction);

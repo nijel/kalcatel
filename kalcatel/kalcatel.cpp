@@ -72,7 +72,13 @@ KAlcatelApp::KAlcatelApp(QWidget* , const char* name):KMainWindow(0, name) {
     initDocument();
     initView();
 
+    modemConnected = false;
+    modemLocked = false;
   //  menuBar();
+    if (auto_modem) {
+        modemConnect();
+        modemDisconnect();
+    }
   	
 
     preferencesDialog = new KAlcatelConfigDialog(this);
@@ -90,6 +96,11 @@ KAlcatelApp::KAlcatelApp(QWidget* , const char* name):KMainWindow(0, name) {
 }
 
 KAlcatelApp::~KAlcatelApp() {
+    if (modemConnected) {
+        modemLocked = false;
+        modemConnected = false;
+        modem_close();
+    }
     delete preferencesDialog;
 }
 
@@ -106,6 +117,9 @@ void KAlcatelApp::initActions()
   newMessage = new KAction(i18n("&Message"), QIconSet(SmallIcon("kalcatel-message.png"), BarIcon("kalcatel-message.png")), 0, this, SLOT(slotNewMessage()), actionCollection(),"new_message");
 
   mobileInfo = new KAction(i18n("&Information"), QIconSet(SmallIcon("kalcatel-mobile.png"), BarIcon("kalcatel-mobile.png")), 0, this, SLOT(slotMobileInfo()), actionCollection(),"mobile_info");
+
+  mobileManualConnect = new KAction(i18n("&Connect"), QIconSet(SmallIcon("connect_established.png"), BarIcon("connect_established.png")), 0, this, SLOT(modemConnect()), actionCollection(),"mobile_connect");
+  mobileManualDisconnect = new KAction(i18n("&Disconnect"), QIconSet(SmallIcon("connect_no.png"), BarIcon("connect_no.png")), 0, this, SLOT(slotModemDisconnect()), actionCollection(),"mobile_disconnect");
 
   fileNew = KStdAction::openNew(this, SLOT(slotFileNew()), actionCollection());
   fileOpen = KStdAction::open(this, SLOT(slotFileOpen()), actionCollection());
@@ -211,6 +225,7 @@ void KAlcatelApp::saveOptions() {
         config->writeEntry("Last File", last_file.url());
     else
         config->writeEntry("Last File", "");
+    config->writeEntry("Debug", mobile_debug);
 
     config->setGroup("Data");
     config->writeEntry("Merge during read", mergeData);
@@ -229,7 +244,8 @@ void KAlcatelApp::saveOptions() {
     config->writeEntry("Init", mobile_init);
     config->writeEntry("Baud Rate", mobile_rate);
     config->writeEntry("Use RTSCTS", mobile_rtscts);
-    config->writeEntry("Debug", mobile_debug);
+    config->writeEntry("Persistent connection", persistent_modem);
+    config->writeEntry("Auto connection", auto_modem);
 }
 
 
@@ -261,6 +277,7 @@ void KAlcatelApp::readOptions(){
     }
     auto_open_last = config->readBoolEntry("Open Last File", false);
     last_file = config->readEntry("Last File", "");
+    mobile_debug = config->readNumEntry("Debug", MSG_DETAIL);
 
     config->setGroup("Data");
     mergeData = config->readNumEntry("Merge during read", 0);
@@ -279,8 +296,9 @@ void KAlcatelApp::readOptions(){
     mobile_lock = config->readPathEntry("Lock", "/var/lock/LCK..%s");
     mobile_init = config->readEntry("Init", "AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0");
     mobile_rate = config->readNumEntry("Baud Rate", 19200);
-    mobile_debug = config->readNumEntry("Debug", MSG_DETAIL);
     mobile_rtscts = config->readBoolEntry("Use RTSCTS", true);
+    persistent_modem = config->readBoolEntry("Persistent connection", true);
+    auto_modem = config->readBoolEntry("Auto connection", false);
     msg_level = mobile_debug;
 }
 
@@ -351,6 +369,112 @@ bool KAlcatelApp::queryExit()
 /////////////////////////////////////////////////////////////////////
 
 
+bool KAlcatelApp::modemConnect() {
+    if (modemConnected) {
+        if (modemLocked) {
+            return false;
+        } else {
+            modemLocked = true;
+            return true;
+        }
+    }
+    char *devname;
+
+    msg_level = mobile_debug;
+
+    strcpy(initstring, mobile_init);
+    strcpy(device, mobile_device);
+    devname = strrchr(device, '/');
+    devname++;
+    sprintf(lockname, mobile_lock, devname);
+    rate = mobile_rate;
+    modem_rtscts = mobile_rtscts;
+
+    switch (rate) {
+        case 2400:   baudrate=B2400; break;
+        case 4800:   baudrate=B4800; break;
+        case 9600:   baudrate=B9600; break;
+        case 19200:  baudrate=B19200; break;
+        case 38400:  baudrate=B38400; break;
+        default:
+            message(MSG_ERROR,"Ivalid baud rate (%d), setting to default (19200)!", rate);
+            baudrate=B19200;
+    }
+
+
+    this->slotStatusMsg(i18n("Opening modem"),ID_DETAIL_MSG);
+    if (!modem_open()) {
+        switch (modem_errno) {
+            case ERR_MDM_OPEN:
+                KMessageBox::error(this, i18n("Failed opening modem for read/write."), i18n("Error"));
+                modem_close();
+                return false;
+            case ERR_MDM_LOCK:
+                KMessageBox::error(this, i18n("Modem locked."), i18n("Error"));
+                modem_close();
+                return false;
+            default:
+                KMessageBox::error(this, i18n("Failed opening modem.\nUnknown error (%1).").arg(modem_errno), i18n("Error"));
+                modem_close();
+                return false;
+        }
+        return false;
+    }
+    this->slotStatusMsg(i18n("Setting serial port"),ID_DETAIL_MSG);
+    modem_setup();
+    this->slotStatusMsg(i18n("Initializing modem"),ID_DETAIL_MSG);
+    if (!modem_init()) {
+        switch (modem_errno) {
+            case ERR_MDM_AT:
+                KMessageBox::error(this, i18n("Modem doesn't react on AT command."), i18n("Error"));
+                modem_close();
+                return false;
+            case ERR_MDM_PDU:
+                KMessageBox::error(this, i18n("Failed selecting PDU mode."), i18n("Error"));
+                modem_close();
+                return false;
+            case ERR_MDM_WRITE:
+                KMessageBox::error(this, i18n("Can not write to selected device."), i18n("Error"));
+                modem_close();
+                return false;
+            default:
+                KMessageBox::error(this, i18n("Failed initializing modem.\nUnknown error (%1).").arg(modem_errno), i18n("Error"));
+                modem_close();
+                return false;
+        }
+        return false;
+    }
+    modemLocked = true;
+    modemConnected = true;
+    mobileManualDisconnect->setEnabled(true);
+    mobileManualConnect->setEnabled(false);
+    return true;
+}
+
+void KAlcatelApp::slotModemDisconnect() {
+    if (modemConnected) {
+        modemLocked = false;
+        modemConnected = false;
+        modem_close();
+        mobileManualDisconnect->setEnabled(false);
+        mobileManualConnect->setEnabled(true);
+    }
+}
+
+void KAlcatelApp::modemDisconnect() {
+    if (!persistent_modem) {
+        if (modemConnected) {
+            modemLocked = false;
+            modemConnected = false;
+            modem_close();
+            mobileManualDisconnect->setEnabled(false);
+            mobileManualConnect->setEnabled(true);
+        }
+    } else {
+        modemLocked = false;
+    }
+}
+
 void KAlcatelApp::slotFileReadMobileAll()
 {
   slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
@@ -411,72 +535,7 @@ void KAlcatelApp::slotMobileInfo() {
     ContactData *cont;
     slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
 
-    char *devname;
-
-    msg_level = mobile_debug;
-
-    strcpy(initstring, mobile_init);
-    strcpy(device, mobile_device);
-    devname = strrchr(device, '/');
-    devname++;
-    sprintf(lockname, mobile_lock, devname);
-    rate = mobile_rate;
-    modem_rtscts = mobile_rtscts;
-
-    switch (rate) {
-        case 2400:   baudrate=B2400; break;
-        case 4800:   baudrate=B4800; break;
-        case 9600:   baudrate=B9600; break;
-        case 19200:  baudrate=B19200; break;
-        case 38400:  baudrate=B38400; break;
-        default:
-            message(MSG_ERROR,"Ivalid baud rate (%d), setting to default (19200)!", rate);
-            baudrate=B19200;
-    }
-
-
-    this->slotStatusMsg(i18n("Opening modem"),ID_DETAIL_MSG);
-    if (!modem_open()) {
-        switch (modem_errno) {
-            case ERR_MDM_OPEN:
-                KMessageBox::error(this, i18n("Failed opening modem for read/write."), i18n("Error"));
-                modem_close();
-                return;
-            case ERR_MDM_LOCK:
-                KMessageBox::error(this, i18n("Modem locked."), i18n("Error"));
-                modem_close();
-                return;
-            default:
-                KMessageBox::error(this, i18n("Failed opening modem.\nUnknown error (%1).").arg(modem_errno), i18n("Error"));
-                modem_close();
-                return;
-        }
-        return;
-    }
-    this->slotStatusMsg(i18n("Setting serial port"),ID_DETAIL_MSG);
-    modem_setup();
-    this->slotStatusMsg(i18n("Initializing modem"),ID_DETAIL_MSG);
-    if (!modem_init()) {
-        switch (modem_errno) {
-            case ERR_MDM_AT:
-                KMessageBox::error(this, i18n("Modem doesn't react on AT command."), i18n("Error"));
-                modem_close();
-                return;
-            case ERR_MDM_PDU:
-                KMessageBox::error(this, i18n("Failed selecting PDU mode."), i18n("Error"));
-                modem_close();
-                return;
-            case ERR_MDM_WRITE:
-                KMessageBox::error(this, i18n("Can not write to selected device."), i18n("Error"));
-                modem_close();
-                return;
-            default:
-                KMessageBox::error(this, i18n("Failed initializing modem.\nUnknown error (%1).").arg(modem_errno), i18n("Error"));
-                modem_close();
-                return;
-        }
-        return;
-    }
+    if (!modemConnect()) return;
 
     this->slotStatusMsg(i18n("Reading information"),ID_DETAIL_MSG);
 
@@ -499,7 +558,7 @@ void KAlcatelApp::slotMobileInfo() {
     select_phonebook(PB_OWN);
     cont = get_contacts(1, 1);
 
-    modem_close();
+    modemDisconnect();
 
     KMessageBox::information(this,
           i18n("<table border=\"0\">"

@@ -1372,79 +1372,11 @@ bool KAlcatelDoc::readMobileCategories(AlcatelCategoryList *strList, alc_type sy
 }
 
 bool KAlcatelDoc::readMobile(AlcDataType what) {
-    char *devname;
     int i;
 
     KAlcatelApp *win=(KAlcatelApp *) parent();
 
-    msg_level = win->mobile_debug;
-
-    strcpy(initstring, win->mobile_init);
-    strcpy(device, win->mobile_device);
-    devname = strrchr(device, '/');
-    modem_rtscts = win->mobile_rtscts;
-    devname++;
-    sprintf(lockname, win->mobile_lock, devname);
-    rate = win->mobile_rate;
-
-    switch (rate) {
-        case 2400:   baudrate=B2400; break;
-        case 4800:   baudrate=B4800; break;
-        case 9600:   baudrate=B9600; break;
-        case 19200:  baudrate=B19200; break;
-        case 38400:  baudrate=B38400; break;
-        default:
-            message(MSG_ERROR,"Ivalid baud rate (%d), setting to default (19200)!", rate);
-            baudrate=B19200;
-    }
-
-
-     win->slotStatusMsg(i18n("Opening modem"),ID_DETAIL_MSG);
-     if (!modem_open()) {
-         switch (modem_errno) {
-             case ERR_MDM_OPEN:
-                 KMessageBox::error(win, i18n("Failed opening modem for read/write."), i18n("Error"));
-                 modem_close();
-                 return false;
-             case ERR_MDM_LOCK:
-                 KMessageBox::error(win, i18n("Modem locked."), i18n("Error"));
-                 modem_close();
-                 return false;
-             case ERR_MDM_LOCK_OPEN:
-                 KMessageBox::error(win, i18n("Can not open modem lock."), i18n("Error"));
-                 modem_close();
-                 return false;
-             default:
-                 KMessageBox::error(win, i18n("Failed opening modem.\nUnknown error (%1).").arg(modem_errno), i18n("Error"));
-                 modem_close();
-                 return false;
-         }
-         return false;
-     }
-     win->slotStatusMsg(i18n("Setting serial port"),ID_DETAIL_MSG);
-     modem_setup();
-     win->slotStatusMsg(i18n("Initializing modem"),ID_DETAIL_MSG);
-     if (!modem_init()) {
-         switch (modem_errno) {
-             case ERR_MDM_AT:
-                 KMessageBox::error(win, i18n("Modem doesn't react on AT command."), i18n("Error"));
-                 modem_close();
-                 return false;
-             case ERR_MDM_PDU:
-                 KMessageBox::error(win, i18n("Failed selecting PDU mode."), i18n("Error"));
-                 modem_close();
-                 return false;
-             case ERR_MDM_WRITE:
-                 KMessageBox::error(win, i18n("Can not write to selected device."), i18n("Error"));
-                 modem_close();
-                 return false;
-             default:
-                 KMessageBox::error(win, i18n("Failed initializing modem.\nUnknown error (%1).").arg(modem_errno), i18n("Error"));
-                 modem_close();
-                 return false;
-         }
-         return false;
-     }
+    if (!win->modemConnect()) return false;
 
     if (what == alcatel_messages || what == alcatel_all) {
         MessageData *msg;
@@ -1703,7 +1635,9 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
         win->slotStatusMsg(i18n("Closing binary mode"),ID_DETAIL_MSG);
         alcatel_done();
     }
-    modem_close();
+
+    win->modemDisconnect();
+
     win->slotStatusMsg(i18n("Items read"),ID_DETAIL_MSG);
 
     version++;

@@ -100,6 +100,10 @@ private:
       */
     QButtonGroup *mergeBox;
     QButtonGroup *conflictBox;
+
+    QCheckBox *editConnect;
+    QCheckBox *editPersistent;
+    QCheckBox *editReread;
 };
 
 #endif

@@ -102,7 +102,9 @@ class KAlcatelApp : public KMainWindow
 
     int contact_url;
 
-    bool reread_messages; /* TODO: add in config dialog */
+    bool reread_messages;
+    bool persistent_modem;
+    bool auto_modem;
 
     AlcatelContact *solveConflict(AlcatelContact &c1, AlcatelContact &c2);
     AlcatelMessage *solveConflict(AlcatelMessage &c1, AlcatelMessage &c2);
@@ -238,9 +240,22 @@ class KAlcatelApp : public KMainWindow
     /** opens key configuration dialog
      */
     void slotConfigureKeys();
+    /** opens toolbar configuration dialog
+     */
     void slotPreferencesToolbars();
-
+    /** opens key configuration dialog
+     */
     void slotNewMessage();
+    /** connects to modem
+     */
+    bool modemConnect();
+    /** disconnects from modem
+     */
+    void modemDisconnect();
+    /** manually disconnects from modem = doesn't check whether we want persistent connection
+     */
+    void slotModemDisconnect();
+
   private:
     /** the configuration object of the application */
     KConfig *config;
@@ -271,6 +286,8 @@ class KAlcatelApp : public KMainWindow
     KAction *fileReadMobileContactsMobile;
     KAction *newMessage;
     KAction *mobileInfo;
+    KAction *mobileManualDisconnect;
+    KAction *mobileManualConnect;
 
     KAction *fileNew;
     KAction *fileOpen;
@@ -292,6 +309,9 @@ class KAlcatelApp : public KMainWindow
     KAction *preferencesToolbars;
 
     KAlcatelConfigDialog *preferencesDialog;
+
+    bool modemConnected;
+    bool modemLocked;
 };
  
 #endif // KALCATEL_H

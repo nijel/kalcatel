@@ -16,19 +16,22 @@
   </Menu>
   <Menu name="mobile"><text>&amp;Mobile</text>
     <Action name="mobile_info"/>
+    <Separator/>
+    <Action name="mobile_connect"/>
+    <Action name="mobile_disconnect"/>
   </Menu>
 </MenuBar>
-<ToolBar fullWidth="false" name="readToolBar" newline="true"><text>Read from mobile</text>
+<ToolBar fullWidth="false" name="readToolBar" newline="false"><text>Read from mobile</text>
     <Action name="file_read_mobile"/>
     <Separator/>
     <Action name="file_read_mobile_contacts_sim"/>
     <Action name="file_read_mobile_contacts_mobile"/>
     <Action name="file_read_mobile_calendar"/>
     <Action name="file_read_mobile_calls"/>
-    <Action name="file_read_mobile_sms"/>
+    <Action name="file_read_mobile_messages"/>
     <Action name="file_read_mobile_todo"/>
 </ToolBar>
-<ToolBar fullWidth="false" name="newToolBar" newline="true"><text>Create new</text>
+<ToolBar fullWidth="false" name="newToolBar" newline="false"><text>Create new</text>
     <Action name="new_message"/>
 </ToolBar>
 </kpartgui>

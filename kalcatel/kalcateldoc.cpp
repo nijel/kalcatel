@@ -510,7 +510,7 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
     // TODO: Add your document saving code here
     /////////////////////////////////////////////////
 
-    KMessageBox::sorry(win, i18n("Saving not implemented yet..."), i18n("Sorry"));
+    KMessageBox::sorry((KAlcatelApp *) parent(), i18n("Saving not implemented yet..."), i18n("Sorry"));
 
     modified=false;
     return true;

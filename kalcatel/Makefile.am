@@ -1,11 +1,11 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = kalcatel
-kalcatel_SOURCES = kalcatelviewitem.cpp kalcateltreeviewitem.cpp kalcatelconfigdialog.cpp alcatelclasses.cpp kalcatelview.cpp kalcateldoc.cpp kalcatel.cpp main.cpp 
+kalcatel_SOURCES = kalcatelmergedialog.cpp kalcatelviewitem.cpp kalcateltreeviewitem.cpp kalcatelconfigdialog.cpp alcatelclasses.cpp kalcatelview.cpp kalcateldoc.cpp kalcatel.cpp main.cpp 
 kalcatel_LDADD   = ./alcatool/libalcatool.a  $(LIB_KFILE) $(LIB_KHTML) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBSOCKET)
 
 SUBDIRS = alcatool images info 
 
-EXTRA_DIST = main.cpp kalcatel.cpp kalcatel.h kalcateldoc.cpp kalcateldoc.h kalcatelview.cpp kalcatelview.h kalcatelui.rc kalcatel.desktop alcatelclasses.cpp alcatelclasses.h kalcatelconfigdialog.cpp kalcatelconfigdialog.h kalcateltreeviewitem.cpp kalcateltreeviewitem.h kalcatelviewitem.cpp kalcatelviewitem.h 
+EXTRA_DIST = main.cpp kalcatel.cpp kalcatel.h kalcateldoc.cpp kalcateldoc.h kalcatelview.cpp kalcatelview.h kalcatelui.rc kalcatel.desktop alcatelclasses.cpp alcatelclasses.h kalcatelconfigdialog.cpp kalcatelconfigdialog.h kalcateltreeviewitem.cpp kalcateltreeviewitem.h kalcatelviewitem.cpp kalcatelviewitem.h kalcatelmergedialog.cpp kalcatelmergedialog.h 
 
 install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Applications/

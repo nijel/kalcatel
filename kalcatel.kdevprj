@@ -24,7 +24,7 @@ ldadd=\s$(LIB_KFILE) $(LIB_KHTML) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
 ldflags=
 
 [General]
-AMChanged=false
+AMChanged=true
 author=Michal Cihar
 configure_args=--prefix=/usr
 email=cihar@email.cz
@@ -183,7 +183,7 @@ install_location=
 type=DATA
 
 [kalcatel/Makefile.am]
-files=kalcatel/main.cpp,kalcatel/kalcatel.cpp,kalcatel/kalcatel.h,kalcatel/kalcateldoc.cpp,kalcatel/kalcateldoc.h,kalcatel/kalcatelview.cpp,kalcatel/kalcatelview.h,kalcatel/kalcatelui.rc,kalcatel/kalcatel.desktop,kalcatel/alcatelclasses.cpp,kalcatel/alcatelclasses.h,kalcatel/kalcatelconfigdialog.cpp,kalcatel/kalcatelconfigdialog.h,kalcatel/kalcateltreeviewitem.cpp,kalcatel/kalcateltreeviewitem.h,kalcatel/kalcatelviewitem.cpp,kalcatel/kalcatelviewitem.h
+files=kalcatel/main.cpp,kalcatel/kalcatel.cpp,kalcatel/kalcatel.h,kalcatel/kalcateldoc.cpp,kalcatel/kalcateldoc.h,kalcatel/kalcatelview.cpp,kalcatel/kalcatelview.h,kalcatel/kalcatelui.rc,kalcatel/kalcatel.desktop,kalcatel/alcatelclasses.cpp,kalcatel/alcatelclasses.h,kalcatel/kalcatelconfigdialog.cpp,kalcatel/kalcatelconfigdialog.h,kalcatel/kalcateltreeviewitem.cpp,kalcatel/kalcateltreeviewitem.h,kalcatel/kalcatelviewitem.cpp,kalcatel/kalcatelviewitem.h,kalcatel/kalcatelmergedialog.cpp,kalcatel/kalcatelmergedialog.h
 sub_dirs=alcatool,images,info
 type=prog_main
 
@@ -616,6 +616,18 @@ install_location=
 type=SOURCE
 
 [kalcatel/kalcateldoc.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[kalcatel/kalcatelmergedialog.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[kalcatel/kalcatelmergedialog.h]
 dist=true
 install=false
 install_location=

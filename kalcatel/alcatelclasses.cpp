@@ -25,6 +25,8 @@
 
 #include <stdlib.h>
 
+#include <klocale.h>
+
 #include "alcatelclasses.h"
 #include "alcatool/logging.h"
 
@@ -70,7 +72,7 @@ AlcatelTodo::~AlcatelTodo(){
 }
 
 AlcatelSMS::AlcatelSMS(){
-    Position = -1;
+    Id = -1;
     Status = -1;
     Length = -1;
     Raw = NULL;
@@ -83,3 +85,13 @@ AlcatelSMS::~AlcatelSMS(){
     }
 }
 
+QString SMSTypes[] = { i18n("Unread"), i18n("Read"), i18n("Unsent"), i18n("Sent")};
+
+AlcatelSMS *findAlcatelSMSById(AlcatelSMSList *list, int id) {
+    AlcatelSMSList::Iterator it;
+    for( it = list->begin(); it != list->end(); ++it ) {
+        if ((* it).Id == id)
+            return &(*it);
+    }
+    return NULL;
+}

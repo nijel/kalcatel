@@ -279,7 +279,7 @@ int i;
         Msg->Date = QDateTime();
         Msg->Date.setTime_t(msg[i].date);
         Msg->Length = msg[i].len;
-        Msg->Position = msg[i].pos;
+        Msg->Id = msg[i].pos;
         Msg->Raw = strdup(msg[i].raw);
         free(msg[i].raw);
         Msg->SMSC = QString(msg[i].smsc);
@@ -304,6 +304,7 @@ int i;
   modem_close();
 
   version++;
+  modified=true;
   slotUpdateAllViews(NULL);
 
   return true;

@@ -50,6 +50,8 @@ typedef enum {
     } AlcListType;
 
 class KAlcatelDoc;
+class QTextView;
+class AlcatelSMS;
 
 /** The KAlcatelView class provides the view widget for the KAlcatelApp instance.	
  * The View instance inherits QWidget as a base class and represents the view object of a KTMainWindow. As KAlcatelView is part of the
@@ -84,6 +86,7 @@ class KAlcatelView : public KJanusWidget
     void slotUnreadMessageChanged();
     void slotSentMessageChanged();
     void slotUnsentMessageChanged();
+    void slotShowMessage(QTextView *where, AlcatelSMS *what);
 	
   private:
     QVBox *todo, *calendar,
@@ -95,7 +98,7 @@ class KAlcatelView : public KJanusWidget
         *calls_list, *calls_ld_list, *calls_mc_list, *calls_rc_list,
         *messages_list, *msg_read_list, *msg_unread_list, *msg_sent_list, *msg_unsent_list;
 
-    QLabel *message, *message_read, *message_unread, *message_sent, *message_unsent;
+    QTextView *message, *message_read, *message_unread, *message_sent, *message_unsent;
 
     KListView *createListView(QWidget *parent, AlcListType type);
 

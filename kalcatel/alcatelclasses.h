@@ -36,17 +36,16 @@
   *@author Michal Cihar
   */
 
-/*
-class AlcatelClasses {
-public: 
-	AlcatelClasses();
-	~AlcatelClasses();
+class AlcatelClass {
+public:
+    int Id;
 };
-*/
+
+extern QString SMSTypes[];
 
 typedef enum {SIM, Phone} ContactStorage;
 
-class AlcatelContact {
+class AlcatelContact : public AlcatelClass {
 public:
 	AlcatelContact();
 	~AlcatelContact();
@@ -80,7 +79,7 @@ public:
     QString Custom4;
 };
 
-class AlcatelCalendar {
+class AlcatelCalendar : public AlcatelClass {
 public:
 	AlcatelCalendar();
 	~AlcatelCalendar();
@@ -108,7 +107,7 @@ public:
     QTime UnknownTime;        /* this contains time, probably same as AlarmTime */
 };
 
-class AlcatelTodo {
+class AlcatelTodo : public AlcatelClass {
 public:
 	AlcatelTodo();
 	~AlcatelTodo();
@@ -123,12 +122,11 @@ public:
     int ContactID;
 };
 
-class AlcatelSMS{
+class AlcatelSMS : public AlcatelClass {
 public:
 	AlcatelSMS();
 	~AlcatelSMS();
 	
-    int Position;
     int Status;
     int Length;
     char *Raw;
@@ -142,4 +140,7 @@ typedef QValueList<AlcatelContact> AlcatelContactList;
 typedef QValueList<AlcatelCalendar> AlcatelCalendarList;
 typedef QValueList<AlcatelTodo> AlcatelTodoList;
 typedef QValueList<AlcatelSMS> AlcatelSMSList;
+
+AlcatelSMS *findAlcatelSMSById(AlcatelSMSList *list, int id);
+
 #endif

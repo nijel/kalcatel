@@ -1,18 +1,17 @@
 # This spec file was generated using Kpp
 # If you find any problems with this spec file please report
 # the error to ian geiser <geiseri@msoe.edu>
-Summary:   
+Summary:   KDE application to manage Alcatel 50x and 70x phone
 Name:      kalcatel
 Version:   0.3
-Release:   0.1
+Release:   1
 Copyright: GPL
 Vendor:    Michal Cihar <cihar@email.cz>
 Url:       http://cihar.liten.cz
-Icon:      icon32x32.png
 Packager:  Michal Cihar <cihar@email.cz>
 Group:     Applications
 Source:    kalcatel-0.3.tar.gz
-BuildRoot: 
+BuildRoot: /var/tmp/%{name}-%{version}-%{release}-root
 
 %description
 This application allows you to manage calls, messages, contacts,

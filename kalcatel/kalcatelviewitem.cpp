@@ -50,6 +50,10 @@ void KAlcatelMessageViewItem::update() {
         setPixmap(0, SmallIcon("kalcatel-deleted.png"));
     } else if (alcatelData->Modified) {
         setPixmap(0, SmallIcon("kalcatel-modified.png"));
+    } else if (alcatelData->Storage == StoragePC){
+        setPixmap(0, SmallIcon("kalcatel-computer.png"));
+    } else {
+        setPixmap(0, SmallIcon("kalcatel-mobile.png"));
     }
 
     setText( 1, QString(((AlcatelMessage *)alcatelData)->Sender));
@@ -95,6 +99,10 @@ void KAlcatelMessageCatViewItem::update() {
         setPixmap(0, SmallIcon("kalcatel-deleted.png"));
     } else if (alcatelData->Modified) {
         setPixmap(0, SmallIcon("kalcatel-modified.png"));
+    } else if (alcatelData->Storage == StoragePC){
+        setPixmap(0, SmallIcon("kalcatel-computer.png"));
+    } else {
+        setPixmap(0, SmallIcon("kalcatel-mobile.png"));
     }
 
     setText( 1, QString(((AlcatelMessage *)alcatelData)->Sender));
@@ -139,6 +147,10 @@ void KAlcatelCallViewItem::update() {
         setPixmap(0, SmallIcon("kalcatel-deleted.png"));
     } else if (alcatelData->Modified) {
         setPixmap(0, SmallIcon("kalcatel-modified.png"));
+    } else if (alcatelData->Storage == StoragePC){
+        setPixmap(0, SmallIcon("kalcatel-computer.png"));
+    } else {
+        setPixmap(0, SmallIcon("kalcatel-mobile.png"));
     }
 
     setText( 1, ((AlcatelCall *)alcatelData)->Number);
@@ -177,6 +189,10 @@ void KAlcatelCallCatViewItem::update() {
         setPixmap(0, SmallIcon("kalcatel-deleted.png"));
     } else if (alcatelData->Modified) {
         setPixmap(0, SmallIcon("kalcatel-modified.png"));
+    } else if (alcatelData->Storage == StoragePC){
+        setPixmap(0, SmallIcon("kalcatel-computer.png"));
+    } else {
+        setPixmap(0, SmallIcon("kalcatel-mobile.png"));
     }
 
     setText( 1, ((AlcatelCall *)alcatelData)->Number);
@@ -210,6 +226,10 @@ void KAlcatelTodoViewItem::update() {
         setPixmap(0, SmallIcon("kalcatel-deleted.png"));
     } else if (alcatelData->Modified) {
         setPixmap(0, SmallIcon("kalcatel-modified.png"));
+    } else if (alcatelData->Storage == StoragePC){
+        setPixmap(0, SmallIcon("kalcatel-computer.png"));
+    } else {
+        setPixmap(0, SmallIcon("kalcatel-mobile.png"));
     }
 
     setText( 1, ((AlcatelTodo *)alcatelData)->Completed == -1 ? QString(""): ((AlcatelTodo *)alcatelData)->Completed ? i18n("Yes") : i18n("No"));
@@ -253,6 +273,10 @@ void KAlcatelTodoCatViewItem::update() {
         setPixmap(0, SmallIcon("kalcatel-deleted.png"));
     } else if (alcatelData->Modified) {
         setPixmap(0, SmallIcon("kalcatel-modified.png"));
+    } else if (alcatelData->Storage == StoragePC){
+        setPixmap(0, SmallIcon("kalcatel-computer.png"));
+    } else {
+        setPixmap(0, SmallIcon("kalcatel-mobile.png"));
     }
 
     setText( 1, ((AlcatelTodo *)alcatelData)->Completed == -1 ? QString(""): ((AlcatelTodo *)alcatelData)->Completed ? i18n("Yes") : i18n("No"));
@@ -294,6 +318,10 @@ void KAlcatelContactViewItem::update() {
         setPixmap(0, SmallIcon("kalcatel-deleted.png"));
     } else if (alcatelData->Modified) {
         setPixmap(0, SmallIcon("kalcatel-modified.png"));
+    } else if (alcatelData->Storage == StoragePC){
+        setPixmap(0, SmallIcon("kalcatel-computer.png"));
+    } else {
+        setPixmap(0, SmallIcon("kalcatel-mobile.png"));
     }
 
     setText( 1, ((AlcatelContact *)alcatelData)->getName());
@@ -332,6 +360,10 @@ void KAlcatelContactMobileViewItem::update() {
         setPixmap(0, SmallIcon("kalcatel-deleted.png"));
     } else if (alcatelData->Modified) {
         setPixmap(0, SmallIcon("kalcatel-modified.png"));
+    } else if (alcatelData->Storage == StoragePC){
+        setPixmap(0, SmallIcon("kalcatel-computer.png"));
+    } else {
+        setPixmap(0, SmallIcon("kalcatel-mobile.png"));
     }
 
     setText( 1, ((AlcatelContact *)alcatelData)->LastName);
@@ -367,6 +399,10 @@ void KAlcatelContactMobileCatViewItem::update() {
         setPixmap(0, SmallIcon("kalcatel-deleted.png"));
     } else if (alcatelData->Modified) {
         setPixmap(0, SmallIcon("kalcatel-modified.png"));
+    } else if (alcatelData->Storage == StoragePC){
+        setPixmap(0, SmallIcon("kalcatel-computer.png"));
+    } else {
+        setPixmap(0, SmallIcon("kalcatel-mobile.png"));
     }
 
     setText( 1, ((AlcatelContact *)alcatelData)->LastName);
@@ -401,6 +437,10 @@ void KAlcatelContactSIMViewItem::update() {
         setPixmap(0, SmallIcon("kalcatel-deleted.png"));
     } else if (alcatelData->Modified) {
         setPixmap(0, SmallIcon("kalcatel-modified.png"));
+    } else if (alcatelData->Storage == StoragePC){
+        setPixmap(0, SmallIcon("kalcatel-computer.png"));
+    } else {
+        setPixmap(0, SmallIcon("kalcatel-mobile.png"));
     }
 
     setText( 1, ((AlcatelContact *)alcatelData)->LastName);
@@ -432,6 +472,10 @@ void KAlcatelCalendarViewItem::update() {
         setPixmap(0, SmallIcon("kalcatel-deleted.png"));
     } else if (alcatelData->Modified) {
         setPixmap(0, SmallIcon("kalcatel-modified.png"));
+    } else if (alcatelData->Storage == StoragePC){
+        setPixmap(0, SmallIcon("kalcatel-computer.png"));
+    } else {
+        setPixmap(0, SmallIcon("kalcatel-mobile.png"));
     }
 
     setText( 1, ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_ALARM ? i18n("N/A") : ((AlcatelCalendar *)alcatelData)->Date.isNull()?i18n("None"):((AlcatelCalendar *)alcatelData)->Date.toString());

@@ -282,6 +282,8 @@ int modem_open(void) {
         return 0;
     }
 
+    ioctl(fd, TIOCEXCL, (char *) 0); /* additional open() calls shall fail */
+
     tcgetattr(modem,&oldtio);
 	oldtio.c_cflag=(oldtio.c_cflag&~(CBAUD|CBAUDEX))|B0|HUPCL;
 	return 1;

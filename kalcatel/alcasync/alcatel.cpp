@@ -101,7 +101,8 @@ char alc_calendar_field_names[ALC_CALENDAR_FIELDS][20] = {
     "Frequency",
     "StartDate",
     "StopDate",
-    /* Following two used when EventType is alarm */
+    /* Following two used when EventType is alarm (and Intellisync sometimes
+       creates them, but when it reads them it fails) */
     "AlarmDate2",
     "AlarmTime2"
 };

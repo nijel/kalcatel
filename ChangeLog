@@ -4,6 +4,9 @@ KAlcatel - Changelog
 
 $Id$
 
+2002-03-18 Michal Cihar <cihar@email.cz>
+        * modem now should be opened exclusively
+
 2002-03-15 Michal Cihar <cihar@email.cz>
         * changed modem connecting to allow persistent connection and connecting on start
         * added detection of broken names when reading calls

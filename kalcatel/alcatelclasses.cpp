@@ -315,25 +315,22 @@ AlcatelCategory::AlcatelCategory() {
     Id = -1;
 }
 
-AlcatelMessage *getMessageById(AlcatelMessageList *list, int id) {
+AlcatelMessage *getMessageById(AlcatelMessageList *list, int id, AlcatelStorage type) {
     AlcatelMessageList::Iterator it;
     for( it = list->begin(); it != list->end(); ++it ) {
-        if ((* it).Id == id)
+        if ((* it).Id == id && (* it).Storage == type)
             return &(*it);
     }
     return NULL;
 }
 
-QString *getCategoryName(AlcatelCategoryList *list, int id) {
-    static QString unk = i18n("Unknown");
-    static QString non = i18n("None");
-    if (id == -1) return &non;
+AlcatelCategory *getCategoryById(AlcatelCategoryList *list, int id, AlcatelStorage type) {
     AlcatelCategoryList::Iterator it;
     for( it = list->begin(); it != list->end(); ++it ) {
-        if ((* it).Id == id)
-            return &((*it).Name);
+        if ((* it).Id == id && (* it).Storage == type)
+            return &(*it);
     }
-    return &unk;
+    return NULL;
 }
 
 int phoneCmp(QString *number1, QString *number2, QString *prefix) {
@@ -381,19 +378,19 @@ AlcatelContact *getContactById(AlcatelContactList *list, int id, AlcatelStorage 
     return NULL;
 }
 
-AlcatelTodo *getTodoById(AlcatelTodoList *list, int id) {
+AlcatelTodo *getTodoById(AlcatelTodoList *list, int id, AlcatelStorage type) {
     AlcatelTodoList::Iterator it;
     for( it = list->begin(); it != list->end(); ++it ) {
-        if ((* it).Id == id)
+        if ((* it).Id == id && (* it).Storage == type)
             return &(*it);
     }
     return NULL;
 }
 	
-AlcatelCalendar *getCalendarById(AlcatelCalendarList *list, int id) {
+AlcatelCalendar *getCalendarById(AlcatelCalendarList *list, int id, AlcatelStorage type) {
     AlcatelCalendarList::Iterator it;
     for( it = list->begin(); it != list->end(); ++it ) {
-        if ((* it).Id == id)
+        if ((* it).Id == id && (* it).Storage == type)
             return &(*it);
     }
     return NULL;

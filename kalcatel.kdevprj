@@ -464,13 +464,13 @@ type=DATA
 [kalcatel/images/items-22x22/contact-mobile.png]
 dist=true
 install=true
-install_location=$$(kde_icondir)/hicolor/22x22/actions/kalcatel-mobile.png
+install_location=$$(kde_icondir)/hicolor/22x22/actions/kalcatel-contact-mobile.png
 type=DATA
 
 [kalcatel/images/items-22x22/contact-sim.png]
 dist=true
 install=true
-install_location=$$(kde_icondir)/hicolor/22x22/actions/kalcatel-sim.png
+install_location=$$(kde_icondir)/hicolor/22x22/actions/kalcatel-contact-sim.png
 type=DATA
 
 [kalcatel/images/items-22x22/contact.png]

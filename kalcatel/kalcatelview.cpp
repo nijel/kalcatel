@@ -384,24 +384,37 @@ void KAlcatelView::repaint() {
             }
             AlcatelTodoList::Iterator it;
             for( it = doc->todo->begin(); it != doc->todo->end(); ++it ) {
+                QString catname;
+                if ((* it).Category >= 0) {
+                    if ((todo_cat_list[(* it).Category] != NULL) && ((* it).Category < ALC_MAX_CATEGORIES)) {
+                        new QListViewItem (todo_cat_list[(* it).Category],
+                                (* it).Completed == -1 ? QString(""): (* it).Completed ? i18n("Yes") : i18n("No"),
+                                (* it).Priority == -1 ? QString("") : Priorities[(* it).Priority],
+                                (* it).DueDate.isNull()?i18n("None"):(* it).DueDate.toString(),
+                                (* it).Subject,
+                                QString("%1").arg((* it).Id));
+                    } else {
+                        ::message(MSG_WARNING, "Can not insert to category list (%d)", (* it).Category);
+                    }
+
+                    AlcatelCategory *cat = getCategoryById(doc->todo_cats, (*it).Category, StorageMobile);
+                    if (cat == NULL) {
+                        catname = i18n("Unknown (id=%1)").arg((* it).Category);
+                    } else {
+                        catname = cat->Name;
+                    }
+                } else {
+                    catname = i18n("None");
+                }
+
                 new QListViewItem (todo_list,
                         (* it).Completed == -1 ? QString(""): (* it).Completed ? i18n("Yes") : i18n("No"),
                         (* it).Priority == -1 ? QString("") : Priorities[(* it).Priority],
                         (* it).DueDate.isNull()?i18n("None"):(* it).DueDate.toString(),
                         (* it).Subject,
-                        *(getCategoryName(doc->todo_cats, (*it).Category)),
+                        catname,
                         QString("%1").arg((* it).Id));
 
-                if (((* it).Category >= 0) && (todo_cat_list[(* it).Category] != NULL) && ((* it).Category < ALC_MAX_CATEGORIES)) {
-                    new QListViewItem (todo_cat_list[(* it).Category],
-                            (* it).Completed == -1 ? QString(""): (* it).Completed ? i18n("Yes") : i18n("No"),
-                            (* it).Priority == -1 ? QString("") : Priorities[(* it).Priority],
-                            (* it).DueDate.isNull()?i18n("None"):(* it).DueDate.toString(),
-                            (* it).Subject,
-                            QString("%1").arg((* it).Id));
-                } else {
-                    ::message(MSG_WARNING, "Can not insert to category list (%d)", (* it).Category);
-                }
             } /* for cycle over todos */
 
             showPage(0);
@@ -530,22 +543,33 @@ void KAlcatelView::repaint() {
                         );
 
                 if ((* it).Storage == StorageMobile) {
-                    if (((* it).Category >= 0) && (contacts_cat_list[(* it).Category] != NULL) && ((* it).Category < ALC_MAX_CATEGORIES)) {
-                        new QListViewItem (contacts_cat_list[(* it).Category],
-                                QString((* it).LastName),
-                                QString((* it).FirstName),
-                                QString((* it).MobileNumber),
-                                QString((* it).WorkNumber),
-                                QString((* it).MainNumber),
-                                QString((* it).Email1),
-                                QString("%1").arg((* it).Id));
+                    QString catname;
+                    if ((* it).Category >= 0) {
+                        if ((contacts_cat_list[(* it).Category] != NULL) && ((* it).Category < ALC_MAX_CATEGORIES)) {
+                            new QListViewItem (contacts_cat_list[(* it).Category],
+                                    QString((* it).LastName),
+                                    QString((* it).FirstName),
+                                    QString((* it).MobileNumber),
+                                    QString((* it).WorkNumber),
+                                    QString((* it).MainNumber),
+                                    QString((* it).Email1),
+                                    QString("%1").arg((* it).Id));
+                        } else {
+                            ::message(MSG_WARNING, "Can not insert to category list (%d)", (* it).Category);
+                        }
+                        AlcatelCategory *cat = getCategoryById(doc->contact_cats, (* it).Category, StorageMobile);
+                        if (cat == NULL) {
+                            catname = i18n("Unknown (id=%1)").arg((* it).Category);
+                        } else {
+                            catname = cat->Name;;
+                        }
                     } else {
-                        ::message(MSG_WARNING, "Can not insert to category list (%d)", (* it).Category);
+                        catname = i18n("None");
                     }
                     new QListViewItem (contacts_mobile_list,
                             QString((* it).LastName),
                             QString((* it).FirstName),
-                            *(getCategoryName(doc->contact_cats, (* it).Category)),
+                            catname,
                             QString((* it).MobileNumber),
                             QString((* it).WorkNumber),
                             QString((* it).MainNumber),
@@ -570,23 +594,23 @@ void KAlcatelView::repaint() {
 }
 
 void KAlcatelView::slotMessageChanged(QListViewItem *item) {
-    slotShowMessage(message, getMessageById(getDocument()->sms, item->text(6).toInt()));
+    slotShowMessage(message, getMessageById(getDocument()->sms, item->text(6).toInt(), StorageSIM)); /*TODO: detect storage*/
 }
 
 void KAlcatelView::slotReadMessageChanged(QListViewItem *item) {
-    slotShowMessage(message_read, getMessageById(getDocument()->sms, item->text(5).toInt()));
+    slotShowMessage(message_read, getMessageById(getDocument()->sms, item->text(5).toInt(), StorageSIM)); /*TODO: detect storage*/
 }
 
 void KAlcatelView::slotUnreadMessageChanged(QListViewItem *item) {
-    slotShowMessage(message_unread, getMessageById(getDocument()->sms, item->text(5).toInt()));
+    slotShowMessage(message_unread, getMessageById(getDocument()->sms, item->text(5).toInt(), StorageSIM)); /*TODO: detect storage*/
 }
 
 void KAlcatelView::slotSentMessageChanged(QListViewItem *item) {
-    slotShowMessage(message_sent, getMessageById(getDocument()->sms, item->text(5).toInt()));
+    slotShowMessage(message_sent, getMessageById(getDocument()->sms, item->text(5).toInt(), StorageSIM)); /*TODO: detect storage*/
 }
 
 void KAlcatelView::slotUnsentMessageChanged(QListViewItem *item) {
-    slotShowMessage(message_sent, getMessageById(getDocument()->sms, item->text(5).toInt()));
+    slotShowMessage(message_sent, getMessageById(getDocument()->sms, item->text(5).toInt(), StorageSIM)); /*TODO: detect storage*/
 }
 
 void KAlcatelView::slotShowMessage(KTextBrowser *where, AlcatelMessage *what) {
@@ -615,11 +639,11 @@ void KAlcatelView::slotShowMessage(KTextBrowser *where, AlcatelMessage *what) {
 }
 
 void KAlcatelView::slotTodoChanged(QListViewItem *item) {
-    slotShowTodo(todo_view, getTodoById(getDocument()->todo, item->text(5).toInt()));
+    slotShowTodo(todo_view, getTodoById(getDocument()->todo, item->text(5).toInt(), StorageMobile)); /*TODO: detect storage*/
 }
 
 void KAlcatelView::slotTodoCatChanged(QListViewItem *item) {
-    AlcatelTodo *cont = getTodoById(getDocument()->todo, item->text(4).toInt());
+    AlcatelTodo *cont = getTodoById(getDocument()->todo, item->text(4).toInt(), StorageMobile); /*TODO: detect storage*/
     if (cont->Category >= 0) slotShowTodo(todo_cat_view[cont->Category], cont);
 }
 
@@ -638,14 +662,21 @@ void KAlcatelView::slotShowTodo(KTextBrowser *where, AlcatelTodo *what) {
     if (what->Completed != -1) text.append(i18n("<b>Completed:</b> %1<br>").arg(what->Completed == 1?i18n("Yes"):i18n("No")));
     if (what->Priority != -1) text.append(i18n("<b>Priority:</b> %1<br>").arg(Priorities[what->Priority]));
     if (what->ContactID != -1 && what->ContactID != 0) text.append(i18n("<b>Contact:</b> %1<br>").arg(cont==NULL?QString("id=%1").arg(what->ContactID):cont->Name()));
-    text.append(i18n("<b>Category:</b> %1<br>").arg(*(getCategoryName(getDocument()->contact_cats, what->Category))));
+    if (what->Category != -1) {
+        AlcatelCategory *cat = getCategoryById(getDocument()->contact_cats, what->Category, StorageMobile);
+        if (cat == NULL) {
+            text.append(i18n("<b>Category:</b> %1<br>").arg(i18n("Unknown (id=%1))").arg(what->Category)));
+        } else {
+            text.append(i18n("<b>Category:</b> %1<br>").arg(cat->Name));
+        }
+    }
     text.append(i18n("<b>Position:</b> %1").arg(what->Id));
     where->setText(text);
     where->setMinimumHeight(where->contentsHeight()); /* resize to show all contents*/
 }
 
 void KAlcatelView::slotCalendarChanged(QListViewItem *item) {
-    slotShowCalendar(calendar_view, getCalendarById(getDocument()->calendar, item->text(7).toInt()));
+    slotShowCalendar(calendar_view, getCalendarById(getDocument()->calendar, item->text(7).toInt(), StorageMobile)); /*TODO: detect storage*/
 }
 
 void KAlcatelView::slotShowCalendar(KTextBrowser *where, AlcatelCalendar *what) {
@@ -713,7 +744,16 @@ void KAlcatelView::slotShowContact(KTextBrowser *where, AlcatelContact *what) {
     } else {
         if (!what->FirstName.isEmpty()) text.append(i18n("<b>FirstName:</b> %1<br>").arg(what->FirstName));
         if (!what->LastName.isEmpty()) text.append(i18n("<b>LastName:</b> %1<br>").arg(what->LastName));
-        text.append(i18n("<b>Category:</b> %1<br>").arg(*(getCategoryName(getDocument()->contact_cats, what->Category))));
+
+        if (what->Category != -1) {
+            AlcatelCategory *cat = getCategoryById(getDocument()->contact_cats, what->Category, StorageMobile);
+            if (cat == NULL) {
+                text.append(i18n("<b>Category:</b> %1<br>").arg(i18n("Unknown (id=%1))").arg(what->Category)));
+            } else {
+                text.append(i18n("<b>Category:</b> %1<br>").arg(cat->Name));
+            }
+        }
+
         if (!what->Company.isEmpty()) text.append(i18n("<b>Company:</b> %1<br>").arg(what->Company));
         if (!what->JobTitle.isEmpty()) text.append(i18n("<b>JobTitle:</b> %1<br>").arg(what->JobTitle));
         if (!what->WorkNumber.isEmpty()) text.append(i18n("<b>WorkNumber:</b> %1<br>").arg(what->WorkNumber));

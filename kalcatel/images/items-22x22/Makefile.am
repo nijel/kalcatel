@@ -17,9 +17,9 @@ install-data-local:
 	$(mkinstalldirs) $(kde_icondir)/hicolor/22x22/actions/
 	$(INSTALL_DATA) $(srcdir)/todo.png $(kde_icondir)/hicolor/22x22/actions/kalcatel-todo.png
 	$(mkinstalldirs) $(kde_icondir)/hicolor/22x22/actions/
-	$(INSTALL_DATA) $(srcdir)/contact-mobile.png $(kde_icondir)/hicolor/22x22/actions/kalcatel-mobile.png
+	$(INSTALL_DATA) $(srcdir)/contact-mobile.png $(kde_icondir)/hicolor/22x22/actions/kalcatel-contact-mobile.png
 	$(mkinstalldirs) $(kde_icondir)/hicolor/22x22/actions/
-	$(INSTALL_DATA) $(srcdir)/contact-sim.png $(kde_icondir)/hicolor/22x22/actions/kalcatel-sim.png
+	$(INSTALL_DATA) $(srcdir)/contact-sim.png $(kde_icondir)/hicolor/22x22/actions/kalcatel-contact-sim.png
 
 uninstall-local:
 	-rm -f $(kde_icondir)/hicolor/22x22/actions/kalcatel-calendar.png
@@ -28,7 +28,7 @@ uninstall-local:
 	-rm -f $(kde_icondir)/hicolor/22x22/actions/kalcatel-message.png
 	-rm -f $(kde_icondir)/hicolor/22x22/actions/kalcatel-mobile.png
 	-rm -f $(kde_icondir)/hicolor/22x22/actions/kalcatel-todo.png
-	-rm -f $(kde_icondir)/hicolor/22x22/actions/kalcatel-mobile.png
-	-rm -f $(kde_icondir)/hicolor/22x22/actions/kalcatel-sim.png
+	-rm -f $(kde_icondir)/hicolor/22x22/actions/kalcatel-contact-mobile.png
+	-rm -f $(kde_icondir)/hicolor/22x22/actions/kalcatel-contact-sim.png
 
 ####### kdevelop will overwrite this part!!! (end)############

@@ -238,10 +238,10 @@ typedef QValueList<AlcatelCategory> AlcatelCategoryList;
 
 /** find message by id
   */
-AlcatelMessage *getMessageById(AlcatelMessageList *list, int id);
+AlcatelMessage *getMessageById(AlcatelMessageList *list, int id, AlcatelStorage type);
 /** returns category name
   */
-QString *getCategoryName(AlcatelCategoryList *list, int id);
+AlcatelCategory *getCategoryById(AlcatelCategoryList *list, int id, AlcatelStorage type);
 /** compares two phone numbers, prefix should be international prefix
   */
 int phoneCmp(QString *number1, QString *number2, QString *prefix);
@@ -253,10 +253,10 @@ AlcatelContact *getContactByPhone(AlcatelContactList *list, QString *number, QSt
 AlcatelContact *getContactById(AlcatelContactList *list, int id, AlcatelStorage type);
 /** find todo by id
   */
-AlcatelTodo *getTodoById(AlcatelTodoList *list, int id);
+AlcatelTodo *getTodoById(AlcatelTodoList *list, int id, AlcatelStorage type);
 /** find calendar item by id
   */
-AlcatelCalendar *getCalendarById(AlcatelCalendarList *list, int id);
+AlcatelCalendar *getCalendarById(AlcatelCalendarList *list, int id, AlcatelStorage type);
 
 /** find call by id
   */

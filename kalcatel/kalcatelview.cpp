@@ -349,7 +349,7 @@ void KAlcatelView::repaint() {
                         QString((* it).Text),
                         QString("%1").arg((* it).Id));
 
-                new QListViewItem (list,
+                new KAlcatelMessageCatViewItem (list, &(* it),
                         QString((* it).Sender),
                         cont == NULL? QString("") : cont->Name(),
                         (* it).Date.date().toString(),

@@ -4,6 +4,10 @@ KAlcatel - Changelog
 
 $Id$
 
+2002-02-14 Michal Cihar <cihar@email.cz>
+        * now supported text addresses (phone numbers) in pdu decoding
+        * corrected behavior when reading messages more than once
+
 2002-02-13 Michal Cihar <cihar@email.cz>
         * reading and listing messages
         * information dialog

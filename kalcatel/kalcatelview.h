@@ -126,6 +126,9 @@ class KAlcatelView : public QWidget {
   public slots:
     void repaint();
 
+    void slotUrlClick(const QString &url);
+    void slotMailClick(const QString &name, const QString &address);
+
     void slotTreeChanged(QListViewItem *item);
     void slotSetTitle( int num );
 

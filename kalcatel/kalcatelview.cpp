@@ -97,7 +97,9 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : QWidget(parent, 
     connect(widgetstack, SIGNAL(aboutToShow ( int )), this, SLOT( slotSetTitle( int )));
     listwidget->setStretchFactor( widgetstack, 100);
 
-    textview = new KTextBrowser( vsplitter );
+    textview = new KTextBrowser( vsplitter, 0, true);
+    connect(textview, SIGNAL(mailClick( const QString &, const QString &)), this, SLOT( slotMailClick( const QString &, const QString &)));
+    connect(textview, SIGNAL(urlClick( const QString &)), this, SLOT( slotUrlClick( const QString &)));
     vsplitter->setResizeMode( textview, QSplitter::FollowSizeHint );
     textview->setBackgroundMode( PaletteBase );
 
@@ -715,17 +717,16 @@ void KAlcatelView::slotShowMessage(AlcatelMessage *what) {
         "<b>Date:</b> %3<br>"
         "<b>Time:</b> %4<br>"
         "<b>SMSC:</b> %5<br>"
-        "<b>Position:</b> %6<br>"
-        "<b>Status:</b> %7<br><br>"
-        "%8").
-        arg(cont == NULL? QString("") : cont->Name()).
+        "<b>Status:</b> %7<br>").
+        arg(cont == NULL? QString("") : //cont->Name()
+            QString("<a href=\"contact:%1/%2\">%3</a>").arg(cont->Storage==StoragePC ? 'P' : cont->Storage==StorageMobile ? 'M' : 'S').
+            arg(cont->Id).arg(cont->Name())).
+
         arg(what->Sender).
         arg(what->Date.date().toString()).
         arg(what->Date.time().toString()).
         arg(what->SMSC).
-        arg(what->Id).
-        arg(MessageTypes[what->Status]).
-        arg(what->Text);
+        arg(MessageTypes[what->Status]);
 
     text.append(i18n("<b>Storage:</b> %1<br>").arg(StorageTypes[what->Storage]));
     text.append(i18n("<b>Position:</b> %1").arg(what->Id));
@@ -733,6 +734,9 @@ void KAlcatelView::slotShowMessage(AlcatelMessage *what) {
         text.append(i18n("<br><b>Previous storage:</b> %1<br>").arg(StorageTypes[what->PrevStorage]));
         text.append(i18n("<b>Previous position:</b> %1").arg(what->PrevId));
     }
+
+    text.append("<br><br>");
+    text.append(what->Text);
 
     textview->setText(text);
 
@@ -758,7 +762,10 @@ void KAlcatelView::slotShowTodo(AlcatelTodo *what) {
     if (what->Private != -1) text.append(i18n("<b>Private:</b> %1<br>").arg(what->Private == 1?i18n("Yes"):i18n("No")));
     if (what->Completed != -1) text.append(i18n("<b>Completed:</b> %1<br>").arg(what->Completed == 1?i18n("Yes"):i18n("No")));
     if (what->Priority != -1) text.append(i18n("<b>Priority:</b> %1<br>").arg(Priorities[what->Priority]));
-    if (what->ContactID != -1 && what->ContactID != 0) text.append(i18n("<b>Contact:</b> %1<br>").arg(cont==NULL?QString("id=%1").arg(what->ContactID):cont->Name()));
+    if (what->ContactID != -1 && what->ContactID != 0) text.append(i18n("<b>Contact:</b> %1<br>").arg(cont==NULL?QString("id=%1").arg(what->ContactID):
+        QString("<a href=\"contact:%1/%2\">%3</a>").arg(what->Storage==StoragePC ? 'P' : what->Storage==StorageMobile ? 'M' : 'S').
+        arg(what->ContactID).arg(cont->Name())
+            ));
     if (what->Category != -1) {
         AlcatelCategory *cat = getCategoryById(getDocument()->todo_cats, what->Category, what->Storage);
         if (cat == NULL) {
@@ -806,7 +813,10 @@ void KAlcatelView::slotShowCalendar(AlcatelCalendar *what) {
     if (!what->Alarm.isNull()) text.append(i18n("<b>Alarm:</b> %1<br>").arg(what->Alarm.toString()));
     if (!what->Alarm2.isNull()) text.append(i18n("<b>Alarm2:</b> %1<br>").arg(what->Alarm2.toString()));
     if (what->Private != -1) text.append(i18n("<b>Private:</b> %1<br>").arg(what->Private == 1?i18n("Yes"):i18n("No")));
-    if (what->ContactID != -1 && what->ContactID != 0) text.append(i18n("<b>Contact:</b> %1<br>").arg(cont==NULL?QString("id=%1").arg(what->ContactID):cont->Name()));
+    if (what->ContactID != -1 && what->ContactID != 0) text.append(i18n("<b>Contact:</b> %1<br>").arg(cont==NULL?QString("id=%1").arg(what->ContactID):
+        QString("<a href=\"contact:%1/%2\">%3</a>").arg(what->Storage==StoragePC ? 'P' : what->Storage==StorageMobile ? 'M' : 'S').
+        arg(what->ContactID).arg(cont->Name())
+            ));
 
     text.append(i18n("<b>Storage:</b> %1<br>").arg(StorageTypes[what->Storage]));
     text.append(i18n("<b>Position:</b> %1").arg(what->Id));
@@ -1010,9 +1020,48 @@ void KAlcatelView::slotShowCall(AlcatelCall *what) {
     AlcatelContact *cont = getContactByPhone(getDocument()->contacts, &(what->Number), &(((KAlcatelApp *)parent())->phone_prefix));
     QString text;
     text.append(i18n("<b>From:</b> %1 (%2)<br>").arg(what->Name).arg(what->Number));
-    if (cont != NULL) text.append(i18n("<b>Contact:</b> %3<br>").arg(cont->Name()));
+    if (cont != NULL)  text.append(i18n("<b>Contact:</b> %1<br>").arg(
+        QString("<a href=\"contact:%1/%2\">%3</a>").arg(cont->Storage==StoragePC ? 'P' : cont->Storage==StorageMobile ? 'M' : 'S').
+        arg(cont->Id).arg(cont->Name())
+            ));
     text.append(i18n( "<b>Type:</b> %4<br><b>Position:</b> %6").arg(CallTypes[what->Type]).arg(what->Id));
     textview->setText(text);
     textview->setMinimumHeight(textview->contentsHeight()); /* resize to show all contents*/
     vsplitter->setResizeMode( textview, QSplitter::FollowSizeHint );
 }
+
+void KAlcatelView::slotUrlClick(const QString &url) {
+    if (url.contains(QRegExp("^contact:"))) {
+        QString str = url.right(url.length() - 8);
+        bool found = false;
+        AlcatelStorage storage = StorageNone;
+        QString num = str.right(str.length() - 2);
+        int pos = num.toInt();
+        if (str[0] == 'P') storage = StoragePC;
+        else if (str[0] == 'M') storage = StorageMobile;
+        else if (str[0] == 'S') storage = StorageSIM;
+
+        QListViewItem * nextChild = contacts_list->firstChild();
+        QListViewItem * myChild;
+        while( (myChild=nextChild)!=NULL ) {
+            nextChild = myChild->nextSibling();
+            if (((KAlcatelDataItem *)myChild)->alcatelData->Id == pos && ((KAlcatelDataItem *)myChild)->alcatelData->Storage == storage) {
+                tree->setCurrentItem(contacts_item);
+                contacts_list->setCurrentItem(myChild);
+                contacts_list->ensureItemVisible(myChild);
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            KMessageBox::sorry((KAlcatelApp *) parent(), i18n("Item was not found (%1)").arg(str), i18n("Sorry"));
+        }
+    } else {
+        KApplication::kApplication()->invokeBrowser(url);
+    }
+}
+
+void KAlcatelView::slotMailClick(const QString &name, const QString &address) {
+    KApplication::kApplication()->invokeMailer(address);
+}
+

@@ -630,7 +630,7 @@ void KAlcatelView::slotShowTodo(AlcatelTodo *what) {
 
     AlcatelContact *cont=getContactById(getDocument()->contacts, what->ContactID, what->Storage);
     if (!what->Subject.isEmpty()) text.append(i18n("<b>Subject:</b> %1<br>").arg(what->Subject));
-    if (!what->DueDate.isNull()) text.append(i18n("<b>DueDate:</b> %1<br>").arg(what->DueDate.toString()));
+    if (!what->DueDate.isNull()) text.append(i18n("<b>Due date:</b> %1<br>").arg(what->DueDate.toString()));
     if (!what->Alarm.isNull()) text.append(i18n("<b>Alarm:</b> %1<br>").arg(what->Alarm.toString()));
     if (what->Private != -1) text.append(i18n("<b>Private:</b> %1<br>").arg(what->Private == 1?i18n("Yes"):i18n("No")));
     if (what->Completed != -1) text.append(i18n("<b>Completed:</b> %1<br>").arg(what->Completed == 1?i18n("Yes"):i18n("No")));
@@ -684,11 +684,11 @@ void KAlcatelView::slotShowCalendar(AlcatelCalendar *what) {
         text.append(i18n("<b>EndTime:</b> %1<br>").arg(what->EndTime.toString()));
     }
 
-    text.append(i18n("<b>EventType:</b> %1<br>").arg((what->EventType!=-1)?CalendarTypes[what->EventType]:i18n("Unknown")));
+    text.append(i18n("<b>Event type:</b> %1<br>").arg((what->EventType!=-1)?CalendarTypes[what->EventType]:i18n("Unknown")));
     text.append(i18n("<b>Repeating:</b> %1<br>").arg(what->RepeatingDetail()));
 
     if (!what->Alarm.isNull()) text.append(i18n("<b>Alarm:</b> %1<br>").arg(what->Alarm.toString()));
-    if (!what->Alarm2.isNull()) text.append(i18n("<b>Alarm2:</b> %1<br>").arg(what->Alarm2.toString()));
+    if (!what->Alarm2.isNull()) text.append(i18n("<b>Alarm 2:</b> %1<br>").arg(what->Alarm2.toString()));
     if (what->Private != -1) text.append(i18n("<b>Private:</b> %1<br>").arg(what->Private == 1?i18n("Yes"):i18n("No")));
     if (what->ContactID != -1 && what->ContactID != 0) text.append(i18n("<b>Contact:</b> %1<br>").arg(cont==NULL?QString("id=%1").arg(what->ContactID):
         QString("<a href=\"contact:%1/%2\">%3</a>").arg(what->Storage==StoragePC ? 'P' : what->Storage==StorageMobile ? 'M' : 'S').
@@ -727,8 +727,8 @@ void KAlcatelView::slotShowContact(AlcatelContact *what) {
         if (!what->LastName.isEmpty()) text.append(i18n("<b>Name:</b> %1<br>").arg(what->LastName));
         if (!what->MainNumber.isEmpty()) text.append(i18n("<b>Phone:</b> %1<br>").arg(what->MainNumber));
     } else {
-        if (!what->FirstName.isEmpty()) text.append(i18n("<b>FirstName:</b> %1<br>").arg(what->FirstName));
-        if (!what->LastName.isEmpty()) text.append(i18n("<b>LastName:</b> %1<br>").arg(what->LastName));
+        if (!what->FirstName.isEmpty()) text.append(i18n("<b>First name:</b> %1<br>").arg(what->FirstName));
+        if (!what->LastName.isEmpty()) text.append(i18n("<b>Last name:</b> %1<br>").arg(what->LastName));
 
         if (what->Category != -1) {
             if (what->Category == 255) {
@@ -744,16 +744,16 @@ void KAlcatelView::slotShowContact(AlcatelContact *what) {
         }
 
         if (!what->Company.isEmpty()) text.append(i18n("<b>Company:</b> %1<br>").arg(what->Company));
-        if (!what->JobTitle.isEmpty()) text.append(i18n("<b>JobTitle:</b> %1<br>").arg(what->JobTitle));
-        if (!what->WorkNumber.isEmpty()) text.append(i18n("<b>WorkNumber:</b> %1<br>").arg(what->WorkNumber));
-        if (!what->MainNumber.isEmpty()) text.append(i18n("<b>MainNumber:</b> %1<br>").arg(what->MainNumber));
-        if (!what->FaxNumber.isEmpty()) text.append(i18n("<b>FaxNumber:</b> %1<br>").arg(what->FaxNumber));
-        if (!what->OtherNumber.isEmpty()) text.append(i18n("<b>OtherNumber:</b> %1<br>").arg(what->OtherNumber));
-        if (!what->PagerNumber.isEmpty()) text.append(i18n("<b>PagerNumber:</b> %1<br>").arg(what->PagerNumber));
-        if (!what->MobileNumber.isEmpty()) text.append(i18n("<b>MobileNumber:</b> %1<br>").arg(what->MobileNumber));
-        if (!what->HomeNumber.isEmpty()) text.append(i18n("<b>HomeNumber:</b> %1<br>").arg(what->HomeNumber));
-        if (!what->Email1.isEmpty()) text.append(i18n("<b>Email1:</b> <a href=\"%1\">%2</a><br>").arg(what->Email1).arg(what->Email1));
-        if (!what->Email2.isEmpty()) text.append(i18n("<b>Email2:</b> <a href=\"%1\">%2</a><br>").arg(what->Email2).arg(what->Email2));
+        if (!what->JobTitle.isEmpty()) text.append(i18n("<b>Job title:</b> %1<br>").arg(what->JobTitle));
+        if (!what->WorkNumber.isEmpty()) text.append(i18n("<b>Work number:</b> %1<br>").arg(what->WorkNumber));
+        if (!what->MainNumber.isEmpty()) text.append(i18n("<b>Main number:</b> %1<br>").arg(what->MainNumber));
+        if (!what->FaxNumber.isEmpty()) text.append(i18n("<b>Fax number:</b> %1<br>").arg(what->FaxNumber));
+        if (!what->OtherNumber.isEmpty()) text.append(i18n("<b>Other number:</b> %1<br>").arg(what->OtherNumber));
+        if (!what->PagerNumber.isEmpty()) text.append(i18n("<b>Pager number:</b> %1<br>").arg(what->PagerNumber));
+        if (!what->MobileNumber.isEmpty()) text.append(i18n("<b>Mobile number:</b> %1<br>").arg(what->MobileNumber));
+        if (!what->HomeNumber.isEmpty()) text.append(i18n("<b>Home number:</b> %1<br>").arg(what->HomeNumber));
+        if (!what->Email1.isEmpty()) text.append(i18n("<b>Email 1:</b> <a href=\"%1\">%2</a><br>").arg(what->Email1).arg(what->Email1));
+        if (!what->Email2.isEmpty()) text.append(i18n("<b>Email 2:</b> <a href=\"%1\">%2</a><br>").arg(what->Email2).arg(what->Email2));
         if (!what->Address.isEmpty()) text.append(i18n("<b>Address:</b> %1<br>").arg(what->Address));
         if (!what->City.isEmpty()) text.append(i18n("<b>City:</b> %1<br>").arg(what->City));
         if (!what->State.isEmpty()) text.append(i18n("<b>State:</b> %1<br>").arg(what->State));
@@ -768,7 +768,7 @@ void KAlcatelView::slotShowContact(AlcatelContact *what) {
                 what->Custom1.contains(QRegExp("\\.[a-zA-Z1-9][a-zA-Z1-9]+$" , false))))
                     custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom1)).arg(what->Custom1);
         else custom = what->Custom1;
-        if (!what->Custom1.isEmpty()) text.append(i18n("<b>Custom1:</b> %1<br>").arg(custom));
+        if (!what->Custom1.isEmpty()) text.append(i18n("<b>Custom 1:</b> %1<br>").arg(custom));
         if (theApp->contact_url == 2) custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom2)).arg(what->Custom2);
         else if (theApp->contact_url == -1 &&
             (what->Custom2.contains("http://") ||
@@ -776,7 +776,7 @@ void KAlcatelView::slotShowContact(AlcatelContact *what) {
                 what->Custom2.contains(QRegExp("\\.[a-zA-Z1-9][a-zA-Z1-9]+$" , false))))
                     custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom2)).arg(what->Custom2);
         else custom = what->Custom2;
-        if (!what->Custom2.isEmpty()) text.append(i18n("<b>Custom2:</b> %1<br>").arg(custom));
+        if (!what->Custom2.isEmpty()) text.append(i18n("<b>Custom 2:</b> %1<br>").arg(custom));
         if (theApp->contact_url == 3) custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom3)).arg(what->Custom3);
         else if (theApp->contact_url == -1 &&
             (what->Custom3.contains("http://") ||
@@ -784,7 +784,7 @@ void KAlcatelView::slotShowContact(AlcatelContact *what) {
                 what->Custom3.contains(QRegExp("\\.[a-zA-Z1-9][a-zA-Z1-9]+$" , false))))
                     custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom3)).arg(what->Custom3);
         else custom = what->Custom3;
-        if (!what->Custom3.isEmpty()) text.append(i18n("<b>Custom3:</b> %1<br>").arg(custom));
+        if (!what->Custom3.isEmpty()) text.append(i18n("<b>Custom 3:</b> %1<br>").arg(custom));
         if (theApp->contact_url == 4) custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom4)).arg(what->Custom4);
         else if (theApp->contact_url == -1 &&
             (what->Custom4.contains("http://") ||
@@ -792,7 +792,7 @@ void KAlcatelView::slotShowContact(AlcatelContact *what) {
                 what->Custom4.contains(QRegExp("\\.[a-zA-Z1-9][a-zA-Z1-9]+$" , false))))
                     custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom4)).arg(what->Custom4);
         else custom = what->Custom4;
-        if (!what->Custom4.isEmpty()) text.append(i18n("<b>Custom4:</b> %1<br>").arg(custom));
+        if (!what->Custom4.isEmpty()) text.append(i18n("<b>Custom 4:</b> %1<br>").arg(custom));
         if (!what->Note.isEmpty()) text.append(i18n("<b>Note:</b> %1<br>").arg(what->Note));
         if (what->Private != -1) text.append(i18n("<b>Private:</b> %1<br>").arg(what->Private == 1?i18n("Yes"):i18n("No")));
     }

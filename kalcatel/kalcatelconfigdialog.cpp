@@ -42,7 +42,6 @@
 #include <kiconloader.h>
 #include <kurlrequester.h>
 #include <kcombobox.h>
-
 #include <knuminput.h>
 
 #include "kalcatelconfigdialog.h"

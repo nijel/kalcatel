@@ -29,6 +29,12 @@
 #include <kdialog.h>
 #include "alcatelclasses.h"
 
+class QCheckBox;
+class KComboBox;
+class QLineEdit;
+class KIntNumInput;
+enum AlcatelStorage;
+
 /**dialog for editing contact
   *@author Michal Cihar
   */
@@ -41,9 +47,40 @@ public:
 public slots:
     void slotOK();
     void slotCancel();
+    void slotStorage(AlcatelStorage st);
 private:
     const AlcatelContact *contact;
     AlcatelContactList *list;
+
+    KComboBox *editStorage;
+    KIntNumInput *editPosition;
+
+    QLineEdit *editLastName;
+    QLineEdit *editFirstName;
+    QLineEdit *editCompany;
+    QLineEdit *editJobTitle;
+    QLineEdit *editNote;
+    KComboBox *editCategory;
+    QCheckBox *editPrivate;
+    QLineEdit *editWorkNumber;
+    QLineEdit *editMainNumber;
+    QLineEdit *editFaxNumber;
+    QLineEdit *editOtherNumber;
+    QLineEdit *editPagerNumber;
+    QLineEdit *editMobileNumber;
+    QLineEdit *editHomeNumber;
+    QLineEdit *editEmail1;
+    QLineEdit *editEmail2;
+    QLineEdit *editAddress;
+    QLineEdit *editCity;
+    QLineEdit *editState;
+    QLineEdit *editZip;
+    QLineEdit *editCountry;
+    QLineEdit *editCustom1;
+    QLineEdit *editCustom2;
+    QLineEdit *editCustom3;
+    QLineEdit *editCustom4;
+
 };
 
 #endif

@@ -38,10 +38,10 @@
 
 /** type of call
   */
-enum CallType { CallMissed, CallReceived, CallDialled };
+enum CallType { CallMissed = 0, CallReceived = 1, CallDialled = 1};
 /** type of storage
   */
-enum AlcatelStorage {StorageNone, StoragePC, StorageSIM, StorageMobile, StorageAny } ;
+enum AlcatelStorage {StorageNone = 0, StoragePC = 1, StorageSIM = 2, StorageMobile = 3, StorageAny = 0xff } ;
 
 /** Generic class used only as base for other storage classes
   */

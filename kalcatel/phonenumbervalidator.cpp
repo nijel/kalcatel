@@ -27,7 +27,7 @@
 #include <qstringlist.h>
 
 /* TODO: shouldn't phone number have more numbers than one? */
-QRegExp PhoneNumberValidator::phoneNumberPauseRegExp = QRegExp("^\\+?[0-9][pP0-9]+$");
+QRegExp PhoneNumberValidator::phoneNumberPauseRegExp = QRegExp("^\\+?[pP0-9]+$");
 QRegExp PhoneNumberValidator::phoneNumberRegExp = QRegExp("^\\+?[0-9]+$");
 
 PhoneNumberValidator::PhoneNumberValidator(QWidget *parent, const char *name ) : QValidator(parent,name), multiple(false), pause(true), empty(true) {
@@ -51,7 +51,10 @@ bool PhoneNumberValidator::allowEmpty() const { return empty; }
 void PhoneNumberValidator::setEmpty( const bool val) { empty = val; }
 
 PhoneNumberValidator::State PhoneNumberValidator::validate ( QString &what, int &pos ) const {
-    if (empty && what.isEmpty()) return Acceptable;
+    if (what.isEmpty()) {
+        if (empty) return Acceptable;
+        else return Intermediate;
+    }
     if (multiple) {
         bool wasEmpty = true;
         QStringList list = QStringList::split(QRegExp("[; ,]"), what, true);
@@ -75,16 +78,21 @@ PhoneNumberValidator::State PhoneNumberValidator::validate ( QString &what, int 
                 } else {
                     wasEmpty = false;
                 }
-                if (*it == "+") return PhoneNumberValidator::Intermediate;
+                if (*it == "+") return Intermediate;
                 if (phoneNumberRegExp.find(*it, 0) == -1) return Invalid;
             }
         }
         return Acceptable;
-    }
-    if (pause) {
-        return (phoneNumberPauseRegExp.find(what, 0) == -1) ? Invalid : Acceptable;
     } else {
-        return (phoneNumberRegExp.find(what, 0) == -1) ? Invalid : Acceptable;
+        if (pause) {
+            if (what == "+") return Intermediate;
+            if (phoneNumberPauseRegExp.find(what, 0) == -1) return Invalid;
+            return Acceptable;
+        } else {
+            if (what == "+") return Intermediate;
+            if (phoneNumberRegExp.find(what, 0) == -1) return Invalid;
+            return Acceptable;
+        }
     }
 }
 

@@ -245,34 +245,38 @@ int modem_open(void) {
 
     if (modem > 0) { return 1; }
 
-    message(MSG_INFO,"Checking lock for modem %s",lockname);
-    lock = fopen(lockname, "r");
-    if (lock != NULL) {
-        /* lock file exists */
-        if (fscanf(lock, "%d", &pid) == 1 && pid > 0) {
-            /* pid is written in lock file */
-            if (!kill(pid,0)){
-                /* process is running */
-                message(MSG_ERROR,"Modem is locked by pid %d!",pid);
-                modem_errno = ERR_MDM_LOCK;
-                return 0;
+    if (strlen(lockname) > 0) {
+        message(MSG_INFO,"Checking lock for modem %s",lockname);
+        lock = fopen(lockname, "r");
+        if (lock != NULL) {
+            /* lock file exists */
+            if (fscanf(lock, "%d", &pid) == 1 && pid > 0) {
+                /* pid is written in lock file */
+                if (!kill(pid,0)){
+                    /* process is running */
+                    message(MSG_ERROR,"Modem is locked by pid %d!",pid);
+                    modem_errno = ERR_MDM_LOCK;
+                    return 0;
+                }
             }
+            fclose(lock);
         }
+
+        i = unlink(lockname);
+
+        if (i && errno != ENOENT)
+            message(MSG_WARNING,"Failed lock unlink: %d (%s)\n", errno, strerror(errno));
+
+        if (!(lock = fopen(lockname,"w"))) {
+            message(MSG_ERROR,"Can not open lock file for writing!", lockname);
+            modem_errno = ERR_MDM_LOCK_OPEN;
+            return 0;
+        }
+        fprintf(lock,"%08d",(int)getpid());
         fclose(lock);
-    }
-
-    i = unlink(lockname);
-
-    if (i && errno != ENOENT)
-        message(MSG_WARNING,"Failder lock unlink: %d (%s)\n", errno, strerror(errno));
-
-    if (!(lock = fopen(lockname,"w"))) {
-        message(MSG_ERROR,"Can not open lock file for writing!", lockname);
-        modem_errno = ERR_MDM_LOCK_OPEN;
-        return 0;
-    }
-    fprintf(lock,"%08d",(int)getpid());
-    fclose(lock);
+    } else {
+        message(MSG_INFO,"Lockname empty, not locking");
+    }      
         
     
     message(MSG_INFO,"Opening modem %s",device);
@@ -306,8 +310,8 @@ void modem_close(void) {
 
         close(modem);
         modem = 0;
-        unlink(lockname);
+        if (strlen(lockname) > 0) unlink(lockname);
     }
-	modem_initialised = 0;
+    modem_initialised = 0;
 }
 

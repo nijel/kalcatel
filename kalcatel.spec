@@ -41,6 +41,7 @@ make -j$numprocs
 make install-strip DESTDIR=$RPM_BUILD_ROOT
 
 cd $RPM_BUILD_ROOT
+gzip -9 usr/man/man1/kalcatel.1
 find . -type d | sed '1,2d;s,^\.,\%attr(-\,root\,root) \%dir ,' > $RPM_BUILD_DIR/file.list.kalcatel
 find . -type f | sed 's,^\.,\%attr(-\,root\,root) ,' >> $RPM_BUILD_DIR/file.list.kalcatel
 find . -type l | sed 's,^\.,\%attr(-\,root\,root) ,' >> $RPM_BUILD_DIR/file.list.kalcatel

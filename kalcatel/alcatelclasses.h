@@ -54,13 +54,13 @@ public:
     int Id;
     /** Storage of record
       */
-	AlcatelStorage Storage;
+    AlcatelStorage Storage;
     /** Previous position of record (used only for StoragePC)
       */
     int PrevId;
     /** Previous storage of record (used only for StoragePC)
       */
-	AlcatelStorage PrevStorage;
+    AlcatelStorage PrevStorage;
     /** Whether record has been modified, used for saving into mobile.
       * Takes affect only fo StorageMobile and StorageSIM.
       */
@@ -80,19 +80,19 @@ extern QString CalendarTypes[];
   */
 class AlcatelContact : public AlcatelClass {
 public:
-	AlcatelContact();
-	~AlcatelContact();
-	
+    AlcatelContact();
+    ~AlcatelContact();
+
     /** sets field read from mobile in this class
       */
-	void setField(int number, AlcatelFieldStruct *data);
-	
-    bool operator==(const AlcatelContact &cmp);
-    bool isSame(const AlcatelContact &cmp);
+    void setField(int number, AlcatelFieldStruct *data);
+
+    bool operator==(const AlcatelContact &cmp) const;
+    bool isSame(const AlcatelContact &cmp) const;
     /** returns formatted name of contact
       */
-	QString getName(void);
-	
+    QString getName(void);
+
     QString LastName;
     QString FirstName;
     QString Company;
@@ -119,30 +119,30 @@ public:
     QString Custom3;
     QString Custom4;
 
-    const char *getClassName() {static char cn[]="AlcatelContact";return cn;}
+    const char *getClassName() {static const char cn[]="AlcatelContact";return cn;}
 };
 
 /** class for storing calendar
   */
 class AlcatelCalendar : public AlcatelClass {
 public:
-	AlcatelCalendar();
-	~AlcatelCalendar();
-	
+    AlcatelCalendar();
+    ~AlcatelCalendar();
+
     /** sets field read from mobile in this class
       */
-	void setField(int number, AlcatelFieldStruct *data);
-	
-    bool operator==(const AlcatelCalendar &cmp);
-    bool isSame(const AlcatelCalendar &cmp);
+    void setField(int number, AlcatelFieldStruct *data);
+
+    bool operator==(const AlcatelCalendar &cmp) const;
+    bool isSame(const AlcatelCalendar &cmp) const;
     /** returns string with short information about repeating events
       */
-	QString Repeating(void);
+    QString Repeating(void) const;
     /** returns string with detailed information about repeating events
       */
-    QString RepeatingDetail(void);
-	
-    QString getName(void) {return QString("%1 %2-%3 (%4)").arg(Date.toString()).arg(StartTime.toString()).arg(EndTime.toString()).arg(Subject);}
+    QString RepeatingDetail(void) const;
+
+    QString getName(void);
 
     QDate Date;
     QTime StartTime;
@@ -165,24 +165,24 @@ public:
     /* used when EventType is alarm */
     QDateTime Alarm2;
 
-    const char *getClassName() {static char cn[]="AlcatelCalendar";return cn;}
+    const char *getClassName() {static const char cn[]="AlcatelCalendar";return cn;}
 };
 
 /** class for storing todos
   */
 class AlcatelTodo : public AlcatelClass {
 public:
-	AlcatelTodo();
-	~AlcatelTodo();
-	
+    AlcatelTodo();
+    ~AlcatelTodo();
+
     /** sets field read from mobile in this class
       */
-	void setField(int number, AlcatelFieldStruct *data);
-	
-    bool operator==(const AlcatelTodo &cmp);
-    bool isSame(const AlcatelTodo &cmp);
+    void setField(int number, AlcatelFieldStruct *data);
 
-    QString getName(void) {return Subject;}
+    bool operator==(const AlcatelTodo &cmp) const;
+    bool isSame(const AlcatelTodo &cmp) const;
+
+    QString getName(void);
 
     QDate DueDate;
     int Completed;
@@ -193,19 +193,19 @@ public:
     int Priority;
     int ContactID;
 
-    const char *getClassName() {static char cn[]="AlcatelTodo";return cn;}
+    const char *getClassName() {static const char cn[]="AlcatelTodo";return cn;}
 };
 
 /** class for storing messages
   */
 class AlcatelMessage : public AlcatelClass {
 public:
-	AlcatelMessage();
-	~AlcatelMessage();
-	
-    bool operator==(const AlcatelMessage &cmp);
-    bool isSame(const AlcatelMessage &cmp);
-    QString getName(void) {return Text;}
+    AlcatelMessage();
+    ~AlcatelMessage();
+
+    bool operator==(const AlcatelMessage &cmp) const;
+    bool isSame(const AlcatelMessage &cmp) const;
+    QString getName(void);
 
     int Status;
     int Length;
@@ -215,25 +215,25 @@ public:
     QString Text;
     QString SMSC;
 
-    const char *getClassName() {static char cn[]="AlcatelMessage";return cn;}
+    const char *getClassName() {static const char cn[]="AlcatelMessage";return cn;}
 };
 
 /** class for storing calls
   */
 class AlcatelCall : public AlcatelClass {
 public:
-	AlcatelCall();
-	~AlcatelCall();
-	
-    bool operator==(const AlcatelCall &cmp);
-    bool isSame(const AlcatelCall &cmp);
-    QString getName(void) {return Name;}
+    AlcatelCall();
+    ~AlcatelCall();
+
+    bool operator==(const AlcatelCall &cmp) const;
+    bool isSame(const AlcatelCall &cmp) const;
+    QString getName(void);
 
     CallType Type;
     QString Number;
     QString Name;
 
-    const char *getClassName() {static char cn[]="AlcatelCall";return cn;}
+    const char *getClassName() {static const char cn[]="AlcatelCall";return cn;}
 };
 
 /** class for storing categories
@@ -242,12 +242,12 @@ class AlcatelCategory : public AlcatelClass {
 public:
     /** creates class and sets name and id
       */
-	AlcatelCategory(char* name, int id, AlcatelStorage storage);
-	AlcatelCategory();
-	
-    bool operator==(const AlcatelCategory &cmp);
-    bool isSame(const AlcatelCategory &cmp);
-    QString getName(void) {return Name;}
+    AlcatelCategory(char* name, int id, AlcatelStorage storage);
+    AlcatelCategory();
+
+    bool operator==(const AlcatelCategory &cmp) const;
+    bool isSame(const AlcatelCategory &cmp) const;
+    QString getName(void);
 
     QString Name;
 

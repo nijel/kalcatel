@@ -27,8 +27,7 @@
 
 #include <qwidget.h>
 #include <kdialog.h>
-
-class AlcatelContact;
+#include "alcatelclasses.h"
 
 /**dialog for editing contact
   *@author Michal Cihar
@@ -37,13 +36,14 @@ class AlcatelContact;
 class EditContactDialog : public KDialog  {
     Q_OBJECT
 public: 
-    EditContactDialog(const AlcatelContact *cont, QWidget *parent=0, const char *name=0);
+    EditContactDialog(AlcatelContactList *lst, const AlcatelContact *cont, QWidget *parent=0, const char *name=0);
     ~EditContactDialog();
 public slots:
     void slotOK();
     void slotCancel();
 private:
     const AlcatelContact *contact;
+    AlcatelContactList *list;
 };
 
 #endif

@@ -40,8 +40,10 @@
 #include "phonenumbervalidator.h"
 #include "alcatelclasses.h"
 
-EditContactDialog::EditContactDialog(const AlcatelContact *cont, QWidget *parent, const char *name ) : KDialog(parent,name,true) {
+EditContactDialog::EditContactDialog(AlcatelContactList *lst, const AlcatelContact *cont, QWidget *parent, const char *name ) : KDialog(parent,name,true) {
     contact = cont;
+    list= lst;
+
     QLabel *label;
     QFrame *line;
 

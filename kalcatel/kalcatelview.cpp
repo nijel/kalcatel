@@ -953,7 +953,7 @@ void KAlcatelView::slotCalendarDoubleClicked(QListViewItem *item) {
 
 void KAlcatelView::slotContactDoubleClicked(QListViewItem *item) {
     if (item != NULL) {
-        EditContactDialog edit((AlcatelContact *)(((KAlcatelDataItem *) item)->alcatelData), this);
+        EditContactDialog edit(getDocument()->contacts, (AlcatelContact *)(((KAlcatelDataItem *) item)->alcatelData), this);
         edit.exec();
     }
 }

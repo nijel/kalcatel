@@ -153,7 +153,7 @@ AlcatelCalendar::AlcatelCalendar() {
 AlcatelCalendar::~AlcatelCalendar() {
 }
 
-QString AlcatelCalendar::Repeating(void) {
+QString AlcatelCalendar::Repeating(void) const {
     static QString birthday = i18n("Each year (birthday)");
     static QString none = i18n("None");
     static QString unknown = i18n("Unknown");
@@ -179,7 +179,7 @@ QString AlcatelCalendar::Repeating(void) {
     }
 }
 
-QString AlcatelCalendar::RepeatingDetail(void) {
+QString AlcatelCalendar::RepeatingDetail(void) const {
     static QString birthday = i18n("Each year (birthday)");
     static QString none = i18n("None");
     static QString unknown = i18n("Unknown");
@@ -230,6 +230,9 @@ QString AlcatelCalendar::RepeatingDetail(void) {
             return unknown;
     }
 }
+QString AlcatelCalendar::getName(void) {
+    return QString("%1 %2-%3 (%4)").arg(Date.toString()).arg(StartTime.toString()).arg(EndTime.toString()).arg(Subject);
+}
 
 void AlcatelCalendar::setField(int number, AlcatelFieldStruct *data) {
     switch (number) {
@@ -269,6 +272,10 @@ AlcatelTodo::AlcatelTodo() {
 AlcatelTodo::~AlcatelTodo() {
 }
 
+QString AlcatelTodo::getName(void) {
+    return Subject;
+}
+
 void AlcatelTodo::setField(int number, AlcatelFieldStruct *data) {
     switch (number) {
         case 0: chk_type(_date) DueDate.setYMD(((AlcatelDateStruct *)((*data).data))->year, ((AlcatelDateStruct *)((*data).data))->month, ((AlcatelDateStruct *)((*data).data))->day); break;
@@ -291,6 +298,10 @@ AlcatelMessage::AlcatelMessage() {
     Length = -1;
 }
 
+QString AlcatelMessage::getName(void) {
+    return Text;
+}
+
 AlcatelMessage::~AlcatelMessage() {
 }
 
@@ -298,6 +309,10 @@ AlcatelCall::AlcatelCall() {
 }
 
 AlcatelCall::~AlcatelCall() {
+}
+
+QString AlcatelCall::getName(void) {
+    return Name;
 }
 
 AlcatelCategory::AlcatelCategory(char* name, int id, AlcatelStorage storage) {
@@ -309,6 +324,10 @@ AlcatelCategory::AlcatelCategory(char* name, int id, AlcatelStorage storage) {
 AlcatelCategory::AlcatelCategory() {
     Name = QString("");
     Id = -1;
+}
+
+QString AlcatelCategory::getName(void) {
+    return Name;
 }
 
 AlcatelMessage *getMessageById(AlcatelMessageList *list, int id, AlcatelStorage type) {
@@ -523,7 +542,7 @@ AlcatelCall *getCallByPrevId(AlcatelCallList *list, int id, AlcatelStorage stype
 }
 
 /* TODO: add isNull to all date/time comparsion */
-bool AlcatelCalendar::operator==(const AlcatelCalendar &cmp) {
+bool AlcatelCalendar::operator==(const AlcatelCalendar &cmp) const {
     return
         (Id == cmp.Id) &&
         (Storage == cmp.Storage) &&
@@ -547,7 +566,7 @@ bool AlcatelCalendar::operator==(const AlcatelCalendar &cmp) {
         (Alarm2 == cmp.Alarm2);
 }
 
-bool AlcatelTodo::operator==(const AlcatelTodo &cmp) {
+bool AlcatelTodo::operator==(const AlcatelTodo &cmp) const {
     return
         (Id == cmp.Id) &&
         (Storage == cmp.Storage) &&
@@ -563,7 +582,7 @@ bool AlcatelTodo::operator==(const AlcatelTodo &cmp) {
         (ContactID == cmp.ContactID);
 }
 
-bool AlcatelContact::operator==(const AlcatelContact &cmp) {
+bool AlcatelContact::operator==(const AlcatelContact &cmp) const {
     return
         (Id == cmp.Id) &&
         (Storage == cmp.Storage) &&
@@ -596,7 +615,7 @@ bool AlcatelContact::operator==(const AlcatelContact &cmp) {
         ((Custom4.isEmpty() && cmp.Custom4.isEmpty()) || (Custom4 == cmp.Custom4));
 }
 
-bool AlcatelCategory::operator==(const AlcatelCategory &cmp) {
+bool AlcatelCategory::operator==(const AlcatelCategory &cmp) const {
     return
         (Id == cmp.Id) &&
         (Storage == cmp.Storage) &&
@@ -605,7 +624,7 @@ bool AlcatelCategory::operator==(const AlcatelCategory &cmp) {
         ((Name.isEmpty() && cmp.Name.isEmpty()) || (Name == cmp.Name));
 }
 
-bool AlcatelMessage::operator==(const AlcatelMessage &cmp) {
+bool AlcatelMessage::operator==(const AlcatelMessage &cmp) const {
     return
         (Id == cmp.Id) &&
         (Storage == cmp.Storage) &&
@@ -620,7 +639,7 @@ bool AlcatelMessage::operator==(const AlcatelMessage &cmp) {
         ((SMSC.isEmpty() && cmp.SMSC.isEmpty()) || (SMSC == cmp.SMSC));
 }
 
-bool AlcatelCall::operator==(const AlcatelCall &cmp) {
+bool AlcatelCall::operator==(const AlcatelCall &cmp) const {
     return
         (Id == cmp.Id) &&
         (Storage == cmp.Storage) &&
@@ -631,7 +650,7 @@ bool AlcatelCall::operator==(const AlcatelCall &cmp) {
         ((Name.isEmpty() && cmp.Name.isEmpty()) || (Name == cmp.Name));
 }
 
-bool AlcatelCalendar::isSame(const AlcatelCalendar &cmp) {
+bool AlcatelCalendar::isSame(const AlcatelCalendar &cmp) const {
     return
         (Date == cmp.Date) &&
         (StartTime == cmp.StartTime) &&
@@ -651,7 +670,7 @@ bool AlcatelCalendar::isSame(const AlcatelCalendar &cmp) {
         (Alarm2 == cmp.Alarm2);
 }
 
-bool AlcatelTodo::isSame(const AlcatelTodo &cmp) {
+bool AlcatelTodo::isSame(const AlcatelTodo &cmp) const {
     return
         (DueDate == cmp.DueDate) &&
         (Completed == cmp.Completed) &&
@@ -663,7 +682,7 @@ bool AlcatelTodo::isSame(const AlcatelTodo &cmp) {
         (ContactID == cmp.ContactID);
 }
 
-bool AlcatelContact::isSame(const AlcatelContact &cmp) {
+bool AlcatelContact::isSame(const AlcatelContact &cmp) const {
     return
         ((LastName.isEmpty() && cmp.LastName.isEmpty()) || (LastName == cmp.LastName)) &&
         ((FirstName.isEmpty() && cmp.FirstName.isEmpty()) || (FirstName == cmp.FirstName)) &&
@@ -692,11 +711,11 @@ bool AlcatelContact::isSame(const AlcatelContact &cmp) {
         ((Custom4.isEmpty() && cmp.Custom4.isEmpty()) || (Custom4 == cmp.Custom4));
 }
 
-bool AlcatelCategory::isSame(const AlcatelCategory &cmp) {
+bool AlcatelCategory::isSame(const AlcatelCategory &cmp) const {
     return ((Name.isEmpty() && cmp.Name.isEmpty()) || (Name == cmp.Name));
 }
 
-bool AlcatelMessage::isSame(const AlcatelMessage &cmp) {
+bool AlcatelMessage::isSame(const AlcatelMessage &cmp) const {
     return
         (Status == cmp.Status) &&
         (Length == cmp.Length) &&
@@ -707,7 +726,7 @@ bool AlcatelMessage::isSame(const AlcatelMessage &cmp) {
         ((SMSC.isEmpty() && cmp.SMSC.isEmpty()) || (SMSC == cmp.SMSC));
 }
 
-bool AlcatelCall::isSame(const AlcatelCall &cmp) {
+bool AlcatelCall::isSame(const AlcatelCall &cmp) const {
     return
         (Type == cmp.Type) &&
         (Number == cmp.Number) &&

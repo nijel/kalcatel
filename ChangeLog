@@ -7,6 +7,7 @@ $Id$
 2002-03-04 Michal Cihar <cihar@email.cz>
         * merging functional for all types
         * fixed possible bug when comparing stored data
+        * during saving is changed storage
 
 2002-03-03 Michal Cihar <cihar@email.cz>
         * fixed plenty memory leaks

@@ -669,6 +669,10 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
         if ((*messagesit).Storage != StoragePC) {
             *strm << "   <id>" << (*messagesit).Id << "</id>" << endl;
             *strm << "   <storage>" << (*messagesit).Storage << "</storage>" << endl;
+            (*messagesit).PrevId = (*messagesit).Id;
+            (*messagesit).Id = pcStorageCounter++;
+            (*messagesit).PrevStorage = (*messagesit).Storage;
+            (*messagesit).Storage = StoragePC;
         } else {
             *strm << "   <id>" << (*messagesit).PrevId << "</id>" << endl;
             *strm << "   <storage>" << (*messagesit).PrevStorage << "</storage>" << endl;
@@ -702,6 +706,9 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
         if ((*cit).Storage != StoragePC) {
             *strm << "   <id>" << (*cit).Id << "</id>" << endl;
             *strm << "   <storage>" << (*cit).Storage << "</storage>" << endl;
+            (*cit).PrevId = (*cit).Id;
+            (*cit).PrevStorage = (*cit).Storage;
+            (*cit).Storage = StoragePC;
         } else {
             *strm << "   <id>" << (*cit).PrevId << "</id>" << endl;
             *strm << "   <storage>" << (*cit).PrevStorage << "</storage>" << endl;
@@ -792,6 +799,10 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
         if ((*calit).Storage != StoragePC) {
             *strm << "   <id>" << (*calit).Id << "</id>" << endl;
             *strm << "   <storage>" << (*calit).Storage << "</storage>" << endl;
+            (*calit).PrevId = (*calit).Id;
+            (*calit).Id = pcStorageCounter++;
+            (*calit).PrevStorage = (*calit).Storage;
+            (*calit).Storage = StoragePC;
         } else {
             *strm << "   <id>" << (*calit).PrevId << "</id>" << endl;
             *strm << "   <storage>" << (*calit).PrevStorage << "</storage>" << endl;
@@ -897,6 +908,10 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
         if ((*tit).Storage != StoragePC) {
             *strm << "   <id>" << (*tit).Id << "</id>" << endl;
             *strm << "   <storage>" << (*tit).Storage << "</storage>" << endl;
+            (*tit).PrevId = (*tit).Id;
+            (*tit).Id = pcStorageCounter++;
+            (*tit).PrevStorage = (*tit).Storage;
+            (*tit).Storage = StoragePC;
         } else {
             *strm << "   <id>" << (*tit).PrevId << "</id>" << endl;
             *strm << "   <storage>" << (*tit).PrevStorage << "</storage>" << endl;
@@ -985,6 +1000,12 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
 
     doc_url = url;
     modified=false;
+    version++;
+    todosVersion++;
+    calendarVersion++;
+    contactsVersion++;
+    messagesVersion++;
+    slotUpdateAllViews(NULL);
     return true;
 }
 
@@ -1442,7 +1463,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1) 
             free(msg[i].ascii);
 
             AlcatelMessage *item;
-            if ((item = getMessageByPrevId(messages, Msg.Id, StorageAny))) {
+            if ((item = getMessageByPrevId(messages, Msg.Id, StorageSIM))) {
                 if (!(item->isSame(Msg))) {
                     ::message(MSG_DEBUG, "MERGE:Something different -> merging (%s)", item->getName().latin1());
                     if (win->conflictAction == 0) {
@@ -1559,7 +1580,41 @@ bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1) 
             delete cont[i].name;
             Cont.MainNumber = cont[i].number;
             free(cont[i].number);
-            contacts->append(Cont);
+
+            AlcatelContact *item;
+            if ((item = getContactByPrevId(contacts, Cont.Id, StorageSIM))) {
+                if (!(item->isSame(Cont))) {
+                    ::message(MSG_DEBUG, "MERGE:Something different -> merging (%s)", item->getName().latin1());
+                    if (win->conflictAction == 0) {
+                        contacts->remove(*item);
+                        contacts->append(Cont);
+                    } else if (win->conflictAction == 1) {
+                        /* nothing to do here ... */
+                    } else if (win->conflictAction == 2) {
+                        AlcatelContact *cont = win->solveConflict(Cont, *item);
+                        if (cont == NULL) {
+                            AlcatelContact old(*item);
+                            contacts->remove(*item);
+                            old.PrevStorage = StorageNone;
+                            old.PrevId = -1;
+                            contacts->append(old);
+                            contacts->append(Cont);
+                        } else {
+                            contacts->remove(*item);
+                            contacts->append(*cont);
+                            delete cont;
+                        }
+                    }
+                } else {
+                    ::message(MSG_DEBUG, "MERGE:Same records (%s)", item->getName().latin1());
+                    contacts->remove(*item);
+                    contacts->append(Cont);
+                }
+            } else {
+                ::message(MSG_DEBUG, "MERGE:None correspondent record found (%s)", Cont.getName().latin1());
+                contacts->append(Cont);
+            }
+
             i++;
         }
         free(cont);

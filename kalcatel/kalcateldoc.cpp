@@ -754,7 +754,7 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
     return true;
 }
 
-int KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
+bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
     alc_type *result;
     int i, j;
     int *ids, *items;
@@ -779,15 +779,20 @@ int KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
             break;
     }
 
-    alcatel_attach();
+    if (!alcatel_attach()) return false;
 
-    sync_start_session();
-    if (sync_select_type(type) == 0) {
-        sync_begin_read(sync);
+    if (!alcatel_start_session()) return false;
 
-        ids = sync_get_ids(type);
+    if (alcatel_select_type(type)) {
+        if (!alcatel_begin_transfer(sync)) {
+            alcatel_close_session(type);
+            alcatel_detach();
+            return false;
+        }
+
+        ids = alcatel_get_ids(type);
         if (ids == NULL) {
-            sync_close_session(type);
+            alcatel_close_session(type);
             alcatel_detach();
             return false;
         }
@@ -797,9 +802,9 @@ int KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
         for (i = 1; i <= ids[0]; i++) {
             win->slotStatusMsg(i18n("Reading item %1 of %2").arg(i).arg(ids[0]),ID_DETAIL_MSG);
             message(MSG_DEBUG, "Reading id[%d] = %d", i-1, ids[i]);
-            items = sync_get_fields(type, ids[i]);
-            if (!items) {
-                sync_close_session(type);
+            items = alcatel_get_fields(type, ids[i]);
+            if (items == NULL) {
+                alcatel_close_session(type);
                 alcatel_detach();
                 return false;
             }
@@ -827,8 +832,12 @@ int KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
             }
             for (j = 1; j <= items[0]; j++) {
                 message(MSG_DEBUG, "items[%d] = %d", j-1, items[j]);
-                result = sync_get_field_value(type, ids[i], items[j]);
-                if (!result) return false;
+                result = alcatel_get_field_value(type, ids[i], items[j]);
+                if (result == NULL) {
+                    alcatel_close_session(type);
+                    alcatel_detach();
+                    return false;
+                }
                 field = decode_field_value(result);
                 if (items[j] >= count) {
                     message(MSG_WARNING, "Unknown field %02d, ignoring!",items[j]);
@@ -866,36 +875,50 @@ int KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
         free(ids);
     } else {
         message(MSG_ERROR, "Can not open sync session!");
-        sync_close_session(type);
+        alcatel_close_session(type);
         alcatel_detach();
         return false;
     }
 
-    sync_close_session(type);
+    alcatel_close_session(type);
     alcatel_detach();
     return true;
 }
 
-int KAlcatelDoc::readMobileCategories(AlcatelCategoryList *strList, alc_type sync, alc_type type, alc_type cat) {
+bool KAlcatelDoc::readMobileCategories(AlcatelCategoryList *strList, alc_type sync, alc_type type, alc_type cat) {
     int *list;
     int i;
     char *result;
 
     alcatel_attach();
 
-    sync_start_session();
+    if (!alcatel_start_session()) return false;
 
-    if (sync_select_type(type) == 0) {
-        sync_begin_read(sync);
+    if (alcatel_select_type(type)) {
+        if (!alcatel_begin_transfer(sync)) {
+            alcatel_close_session(type);
+            alcatel_detach();
+            return false;
+        }
 
-        list = sync_get_obj_list(type, cat);
+        list = alcatel_get_obj_list(type, cat);
+        if (list == NULL) {
+            alcatel_close_session(type);
+            alcatel_detach();
+            return false;
+        }
 
         message(MSG_INFO, "Received %d categories:", list[0]);
 
         clearCategories(strList, StorageMobile);
 
         for (i = 1; i <= list[0]; i++) {
-            result = sync_get_obj_list_item(type, cat, list[i]);
+            result = alcatel_get_obj_list_item(type, cat, list[i]);
+            if (result == NULL) {
+                alcatel_close_session(type);
+                alcatel_detach();
+                return false;
+            }
             strList->append(AlcatelCategory(result, list[i], StorageMobile));
             message (MSG_DEBUG, "Read category name: %02d: %s", list[i],  result);
             free(result);
@@ -908,7 +931,7 @@ int KAlcatelDoc::readMobileCategories(AlcatelCategoryList *strList, alc_type syn
         i = false;
     }
 
-    sync_close_session(type);
+    alcatel_close_session(type);
     alcatel_detach();
     return i;
 }

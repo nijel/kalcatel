@@ -169,10 +169,10 @@ class KAlcatelDoc : public QObject
   private:
     /** reads categories from mobile
       */
-    int readMobileCategories(AlcatelCategoryList *strList, alc_type sync, alc_type type, alc_type cat);
+    bool readMobileCategories(AlcatelCategoryList *strList, alc_type sync, alc_type type, alc_type cat);
     /** reads items from mobile
       */
-    int readMobileItems(alc_type sync, alc_type type);
+    bool readMobileItems(alc_type sync, alc_type type);
     /** the modified flag of the current document
       */
     bool modified;

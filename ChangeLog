@@ -4,6 +4,12 @@ KAlcatel - Changelog
 
 $Id$
 
+2002-02-21 Michal Cihar <cihar@email.cz>
+        *improved behavior when reading of data fails
+
+2002-02-20 Michal Cihar <cihar@email.cz>
+        * added saving support
+
 2002-02-19 Michal Cihar <cihar@email.cz>
         * added reading of calls and contacts from SIM
         * in information added own number

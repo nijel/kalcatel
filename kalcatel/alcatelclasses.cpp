@@ -38,7 +38,7 @@
 
 
 QString MessageTypes[] = { i18n("Unread"), i18n("Read"), i18n("Unsent"), i18n("Sent") };
-QString StorageTypes[]= { i18n("PC"), i18n("SIM"), i18n("Mobile") };
+QString StorageTypes[]= { i18n("None"), i18n("PC"), i18n("SIM"), i18n("Mobile") };
 QString CallTypes[] = { i18n("Missed"), i18n("Received"), i18n("Dialled") };
 QString Priorities[] = { i18n("High"), i18n("Normal"), i18n("Low") };
 QString CalendarTypes[] = {
@@ -337,8 +337,8 @@ QString *getCategoryName(AlcatelCategoryList *list, int id) {
 }
 
 int phoneCmp(QString *number1, QString *number2, QString *prefix) {
-    QString n1 = QString(*number1);
-    QString n2 = QString(*number2);
+    QString n1(*number1);
+    QString n2(*number2);
     if (n1[0] != '+')
         n1.prepend(*prefix);
     if (n2[0] != '+')
@@ -346,9 +346,11 @@ int phoneCmp(QString *number1, QString *number2, QString *prefix) {
     if (!(n1 == n2)) {
         n1 = *number1;
         n2 = *number2;
-        n1.prepend("+");
-        n2.prepend("+");
-        return n1 == n2;
+        if (n1[0] != '+')
+            n1.prepend("+");
+        if (n2[0] != '+')
+            n2.prepend("+");
+        return (n1 == n2);
     } else {
         return true;
     }

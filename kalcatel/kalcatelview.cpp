@@ -59,7 +59,6 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : KJanusWidget(par
         todo_cat_view[i] =  NULL;
     }
 
-
     todo = addVBoxPage (i18n("Todos"), i18n("All todos"), SmallIcon("kalcatel-todo.png"));
     vsplitter = new QSplitter( Qt::Vertical, todo );
     todo_list = createListView(vsplitter, alc_todos);
@@ -475,8 +474,8 @@ void KAlcatelView::repaint() {
                 }
             } /* for cycle over calls */
 
-            if (missed>0) showPage(7);
-            else showPage(6);
+            if (missed>0) showPage(6);
+            else showPage(5);
         } /* change in calls */
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (doc->getContactVersion() != contactVersion) {

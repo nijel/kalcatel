@@ -23,8 +23,8 @@
 /* $Id$ */
 
 // include files for Qt
-//#include <qprinter.h>
-//#include <qpainter.h>
+#include <qprinter.h>
+#include <qpainter.h>
 #include <qpixmap.h>
 #include <qsplitter.h>
 

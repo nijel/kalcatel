@@ -116,9 +116,8 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : QWidget(parent, 
     QString html = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/info/index.html");
 
     if (html.isNull()) {
-        kalcatel_html->begin();
-        kalcatel_html->write(QString("<b>%1</b>").arg(i18n("Template for document info view not found!")));
-        kalcatel_html->end();
+        html_text = new QString("<b>%ERROR%</b><br/>%1<br/>%2");
+        html_text->replace( QRegExp("%ERROR%"), i18n("Template for document info view not found, please reinstall KAlcatel!"));
     } else {
         QString html_dir = KApplication::kApplication()->dirs()->findResourceDir("data", "kalcatel/info/index.html");
         html_dir.append("kalcatel/info/");

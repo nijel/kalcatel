@@ -3,6 +3,7 @@ kalcatel (0.3-2) unstable; urgency=low
   * fixed path for kde documentation (now /usr/share/doc/kde/HTML...)
   * updated man page, we now have write support...
   * removed local variables from changelog
+  * upstream changelog installed as changelog.gz
 
  -- Michal Cihar <cihar@email.cz>  Tue,  9 Jul 2002 15:33:34 +0200
 

@@ -292,7 +292,7 @@ void EditMessageDialog::slotTextChanged() {
 }
 
 void EditMessageDialog::selectContacts() {
-    SelectContactDialog dlg(SelectContactDialog::Numbers,StorageAny, contacts, this);
+    SelectContactDialog dlg(SelectContactDialog::Numbers,StorageAny, StorageAny, contacts, this);
     if (dlg.exec()) {
         sendToCombo->setEditText(sendToCombo->currentText().append(" ").append(dlg.getNumbers()));
     }

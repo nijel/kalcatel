@@ -110,7 +110,7 @@ EditContactDialog::EditContactDialog(AlcatelCategoryList *cat, AlcatelContactLis
     line->setMargin(3);
     mainLayout->addMultiCellWidget(line,7,7,0,3);
 
-    mainLayout->addWidget(new QLabel(i18n("Work nuber"), this),8 , 0);
+    mainLayout->addWidget(new QLabel(i18n("Work number"), this),8 , 0);
     mainLayout->addWidget(editWorkNumber = new QLineEdit(this),8 , 1);
     editWorkNumber->setValidator(new PhoneNumberValidator(true, true, false, editWorkNumber));
 

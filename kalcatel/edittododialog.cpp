@@ -386,7 +386,7 @@ void EditTodoDialog::slotStorage(int st) {
 }
 
 void EditTodoDialog::selectContacts() {
-    SelectContactDialog dlg(SelectContactDialog::Contact,(AlcatelStorage)editStorage->currentItem(), contacts, this);
+    SelectContactDialog dlg(SelectContactDialog::Contact,(AlcatelStorage)editStorage->currentItem(), StorageMobile, contacts, this);
     if (dlg.exec()) {
         ContactID = dlg.getContactID();
         if (ContactID != -1 && ContactID != 0) {

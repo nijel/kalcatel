@@ -33,9 +33,10 @@
 
 #include "selectcontactdialog.h"
 
-SelectContactDialog::SelectContactDialog(SelectContactDialog::SelectType type, AlcatelStorage st, AlcatelContactList *conts, QWidget *parent, const char *name ) : KDialog(parent, name, true), type(type) {
+SelectContactDialog::SelectContactDialog(SelectContactDialog::SelectType type, AlcatelStorage st, AlcatelStorage pst, AlcatelContactList *conts, QWidget *parent, const char *name ) : KDialog(parent, name, true), type(type) {
     list = conts;
     storage = st;
+    prev_storage = pst;
 
     QLabel *label;
     QFrame *line;
@@ -62,7 +63,13 @@ SelectContactDialog::SelectContactDialog(SelectContactDialog::SelectType type, A
         listbox-> setSelectionMode (KListBox::Single);
         AlcatelContactList::Iterator it;
         for( it = list->begin(); it != list->end(); ++it ) {
-            new ContactBoxItem( "", (*it).Id, listbox, (*it).getName());
+            if (((*it).Storage == st) &&
+                 (
+                    (st == StoragePC && (*it).PrevStorage == prev_storage) ||
+                    (st == StorageMobile) ||
+                    (st == StorageSIM)
+                 ))
+                new ContactBoxItem( "", (*it).Id, listbox, (*it).getName());
         }
     } else {
         listbox-> setSelectionMode (KListBox::Extended);
@@ -78,7 +85,7 @@ SelectContactDialog::SelectContactDialog(SelectContactDialog::SelectType type, A
         }
     }
 
-    connect(listbox, SIGNAL(executed(QListBoxItem *)), this, SLOT(slotExecuted(QListBoxItem *)));
+    connect(listbox, SIGNAL(doubleClicked ( QListBoxItem *, const QPoint & )), this, SLOT(slotDoubleClicked(QListBoxItem *, const QPoint &)));
     mainLayout->addMultiCellWidget( listbox, 2,2, 0,3 );
 
 
@@ -127,7 +134,7 @@ void SelectContactDialog::slotCancel() {
     reject();
 }
 
-void SelectContactDialog::slotExecuted(QListBoxItem *item) {
+void SelectContactDialog::slotDoubleClicked(QListBoxItem *item, const QPoint &pos) {
     if (type == Contact) {
         ContactID = ((ContactBoxItem *)item)->Contact;
     } else {

@@ -29,12 +29,12 @@ cflags=
 cppflags=
 cxxflags=\s-O0 -g3 -Wall
 ldadd=\s$(LIB_KFILE) $(LIB_KHTML) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
-ldflags=\s  \s
+ldflags=\s      \s
 
 [General]
-AMChanged=false
+AMChanged=true
 author=Michal Cihar
-configure_args=--prefix=/usr --enable-debug\s
+configure_args=\s--build=i386-linux --host=i386-linux --target=i386-linux --prefix=/usr --enable-debug\s
 debug_args=
 email=cihar@email.cz
 kdevprj_version=1.3
@@ -47,7 +47,7 @@ project_type=normal_kde2
 sgml_file=/work/alcatel/kalcatel/doc/en/index.docbook
 short_info=This application allows you to manage calls\\, messages\\, contacts\\, todos,and calendar in your Alcatel One Touch 50x and 70x mobile.,,Protocol used by this phone is binary and not documented\\, so this,program could not guarantee any functionality in your case\\, but it works well for me.
 sub_dir=kalcatel/
-version=0.3
+version=0.3.1
 version_control=CVS
 workspace=1
 
@@ -941,6 +941,12 @@ install_location=
 type=HEADER
 
 [po/Makefile.am]
-files=
+files=po/cs.po
 sub_dirs=
 type=po
+
+[po/cs.po]
+dist=false
+install=false
+install_location=
+type=PO

@@ -42,7 +42,7 @@ class SelectContactDialog : public KDialog  {
    Q_OBJECT
 public:
     enum SelectType { Contact, Numbers };
-    SelectContactDialog(SelectType type, AlcatelStorage st, AlcatelContactList *conts, QWidget *parent=0, const char *name=0);
+    SelectContactDialog(SelectType type, AlcatelStorage st, AlcatelStorage pst, AlcatelContactList *conts, QWidget *parent=0, const char *name=0);
     ~SelectContactDialog();
     int getContactID() {return ContactID;}
     QString getNumbers() {return numbers;}
@@ -52,11 +52,12 @@ protected:
     SelectType type;
     int ContactID;
     AlcatelStorage storage;
+    AlcatelStorage prev_storage;
     QString numbers;
 private slots:
     void slotOK();
     void slotCancel();
-    void slotExecuted(QListBoxItem *item);
+    void slotDoubleClicked(QListBoxItem *item, const QPoint &pos);
 };
 
 /**Class for ListBoxItem with additional data

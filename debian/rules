@@ -36,9 +36,6 @@ build-stamp:
 	-chmod 755 configure
 	./configure $(configkde) $(XINERAMA)
 	make
-	for i in korganizer kandy kpilot alarmd ical2vcal; do \
-		docbook-to-man debian/$$i.sgml > debian/$$i.1; \
-	done
 	touch build-stamp
 
 clean: debian-clean

@@ -23,6 +23,9 @@
 /* $Id$ */
 
 #include <qdatetime.h>
+#include <qpalette.h>
+#include <qpainter.h>
+#include <qfont.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -38,6 +41,29 @@
 
 KAlcatelDataItem::KAlcatelDataItem ( QListView * parent, AlcatelClass *data ) : QListViewItem ( parent ) {
     alcatelData = data;
+}
+
+void KAlcatelDataItem::paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment ) {
+    QColorGroup _cg( cg );
+    QColor c = _cg.text();
+    QFont f = p->font();
+    bool it = f.italic();
+    bool bld = f.bold();
+
+    if ( alcatelData->Deleted )
+        _cg.setColor( QColorGroup::Text, Qt::red );
+    if ( alcatelData->Created || alcatelData->Modified)
+        f.setItalic(true);
+    if ( (strcmp(alcatelData->getClassName(), "AlcatelTodo") == 0) && (((AlcatelTodo *)alcatelData)->Completed == 0))
+        f.setBold(true);
+    p->setFont(f);
+
+    QListViewItem::paintCell( p, _cg, column, width, alignment );
+
+    f.setItalic(it);
+    f.setBold(bld);
+    p->setFont(f);
+    _cg.setColor( QColorGroup::Text, c );
 }
 
 KAlcatelMessageViewItem::KAlcatelMessageViewItem ( QListView * parent, AlcatelMessage *data, AlcatelContact *cont) : KAlcatelDataItem ( parent, data ) {

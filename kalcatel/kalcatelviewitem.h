@@ -43,6 +43,7 @@ public:
     KAlcatelDataItem ( QListView * parent, AlcatelClass *data );
     AlcatelClass *alcatelData;
     virtual void update() = 0;
+    virtual void paintCell( QPainter *p, const QColorGroup &cg, int column, int width, int alignment );
 };
 
 class KAlcatelMessageViewItem : public KAlcatelDataItem  {

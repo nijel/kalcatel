@@ -31,6 +31,7 @@ void get_string(char *cmd, char *data, int len);
 void get_sn(char *sn,int len);
 void get_revision(char *rev,int len);
 void get_model(char *model,int len);
+void get_imsi(char *manuf,int len);
 
 extern char mobil_signal_info[][10];
 

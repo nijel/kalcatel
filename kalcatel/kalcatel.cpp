@@ -365,7 +365,7 @@ void KAlcatelApp::slotFileReadMobileSms()
 }
 
 void KAlcatelApp::slotMobileInfo() {
-    char manuf[128], model[128], rev[128], sn[128], *s;
+    char manuf[128], model[128], rev[128], sn[128], imsi[128], *s;
     int bat_percent, bat_state, sign_strength, sign_err;
     slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
 
@@ -441,6 +441,8 @@ void KAlcatelApp::slotMobileInfo() {
 
     get_sn(sn,sizeof(sn));
 
+    get_imsi(imsi,sizeof(imsi));
+
     get_battery(&bat_state, &bat_percent);
 
     get_signal(&sign_strength, &sign_err);
@@ -454,20 +456,25 @@ void KAlcatelApp::slotMobileInfo() {
           "<tr><td><b>"
           "Manufacturer:"
           "</b></td><td>"
-          "%1"
+          "%0"
           "</td></tr>"
           "<tr><td><b>"
           "Model:"
           "</b></td><td>"
-          "%2"
+          "%1"
           "</td></tr>"
           "<tr><td><b>"
           "Revision:"
           "</b></td><td>"
-          "%3"
+          "%2"
           "</td></tr>"
           "<tr><td><b>"
           "Serial number:"
+          "</b></td><td>"
+          "%3"
+          "</td></tr>"
+          "<tr><td><b>"
+          "IMSI:"
           "</b></td><td>"
           "%4"
           "</td></tr>"
@@ -502,6 +509,7 @@ void KAlcatelApp::slotMobileInfo() {
           arg(model).
           arg(rev).
           arg(sn).
+          arg(imsi).
           arg(bat_state).
           arg(bat_percent).
           arg(sign_strength == 99 ? i18n("Unknown") : QString(mobil_signal_info[sign_strength])).

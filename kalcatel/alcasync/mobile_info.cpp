@@ -30,10 +30,6 @@
 #include "version.h"
 
 /* TODO:
- * international mobile subscriber identity
- *<at+cimi
- *><IMSI>:230012000319080
- *
  * clock:
  *<at+cclk?
  *>+CCLK: "02/01/30,13:58:33"
@@ -44,6 +40,9 @@
  * alarm:
  *  - text = max 32 chars
  *  - at once can be active only one
+ *
+ *  - this is probably broken in current version, use binary protocol instead
+ *
  *<at+cala="02/01/30,14:10:00+00",1,0,"hokus pokus"
  *>OK
  *
@@ -61,7 +60,6 @@
  *>+CALA: (1-5), (0), 241
  *
  * 
-
  */
 
 char mobil_signal_info[][10] = {
@@ -145,6 +143,13 @@ void get_model(char *model,int len){
 
 void get_manufacturer(char *manuf,int len){
     get_string("AT+CGMI\r\n",manuf,len);
+}
+
+void get_imsi(char *imsi,int len){
+    char *pos;
+    get_string("AT+CIMI\r\n", imsi, len);
+    pos = strchr(imsi, ':');
+    memmove(imsi, pos+1, strlen(pos));
 }
 
 void get_string(char *cmd, char *data, int len){

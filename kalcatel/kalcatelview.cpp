@@ -229,7 +229,6 @@ KListView *KAlcatelView::createListView(QWidget *parent, AlcListType type) {
             list->addColumn(i18n("Priority"));
             list->addColumn(i18n("Due date"));
             list->addColumn(i18n("Subject"));
-            list->addColumn(i18n("Category"));
             list->addColumn(i18n("Position"));
             break;
         case alc_calendar:

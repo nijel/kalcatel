@@ -1,9 +1,7 @@
-/*****************************************************************************
- * 
+/*
  * kalcatelview.h
  *
- * TODO: description
- *
+ * code for displaying kalcateldoc
  *
  * Copyright (c) 2002 by Michal Cihar <cihar@email.cz>
  * 
@@ -21,7 +19,7 @@
  * if and only if programmer/distributor of that code recieves written
  * permission from author of this code.
  *
- *****************************************************************************/
+ */
 /* $Id$ */
 
 #ifndef KALCATELVIEW_H

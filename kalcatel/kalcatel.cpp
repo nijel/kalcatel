@@ -1,9 +1,7 @@
-/*****************************************************************************
- * 
+/*
  * kalcatel.cpp
  *
- * TODO: description
- *
+ * main window code
  *
  * Copyright (c) 2002 by Michal Cihar <cihar@email.cz>
  * 
@@ -21,7 +19,7 @@
  * if and only if programmer/distributor of that code recieves written
  * permission from author of this code.
  *
- *****************************************************************************/
+ */
 /* $Id$ */
 
 #include <unistd.h>

@@ -1,9 +1,7 @@
-/*****************************************************************************
- * 
+/*
  * |FILENAME|
  *
  * TODO: description
- *
  *
  * Copyright (c) |YEAR| by |AUTHOR| <|EMAIL|>
  * 
@@ -21,5 +19,5 @@
  * if and only if programmer/distributor of that code recieves written
  * permission from author of this code.
  *
- *****************************************************************************/
+ */
 /* $Id$ */

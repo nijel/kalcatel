@@ -5,6 +5,9 @@ KAlcatel - Changelog
 $Id$
 
 2003-05-09 Michal Cihar <cihar at email dot cz>
+    * === released 0.3.3 ===
+
+2003-05-09 Michal Cihar <cihar at email dot cz>
     * hopefully really fixed reply string parsing
     * support for empty lockname to disable locking
     * better report locking problems

@@ -14,7 +14,7 @@ Source:    kalcatel-0.2.1.tar.gz
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-root
 
 %description
-This application allows you to manage messages, calls, contacs, todos and
+This application allows you to manage messages, calls, contacts, todos and
 calendar in your Alcatel One Touch 50x and 70x mobile. In fact currently is in
 this gui supported just reading, but full functionality will be coded in near
 future.

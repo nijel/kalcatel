@@ -105,6 +105,7 @@ EditMessageDialog::EditMessageDialog(QWidget *parent, const char *name ) : KDial
     mainLayout->addMultiCellWidget(messageEdit,4,4,0,4);
 
     connect( messageEdit, SIGNAL( textChanged() ), this, SLOT( slotTextChanged() ) );
+    connect( messageEdit, SIGNAL( returnPressed() ), this, SLOT( slotOK() ) );
 
     QWhatsThis::add( messageEdit,i18n("<b>Message text</b><br>Write here message text, note that characters with accents will be very probably interpreted another way that you wanted, just few pass correctly."));
 

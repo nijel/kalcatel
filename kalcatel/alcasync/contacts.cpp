@@ -60,12 +60,12 @@ ushort text2int(char *text) {
     return result;
 }
 
-struct ContactData *get_contacts(int from=1, int to=200) {
+ContactData *get_contacts(int from=1, int to=200) {
     char answer[20000], raw[200], number[100], *data;
     ushort *binary;
     int count=0, i, len;
     modem_cmd("AT+CSCS=\"UCS2\"\r\n", answer, sizeof(answer), 50, NULL);
-    struct ContactData *cont;
+    ContactData *cont;
 
     sprintf(raw, "AT+CPBR=%d,%d\r\n", from, to);
     modem_cmd(raw, answer, sizeof(answer), 500, NULL);
@@ -83,7 +83,7 @@ struct ContactData *get_contacts(int from=1, int to=200) {
     message(MSG_INFO,"Read %d contacts", count);
 
     /* allocate array for storing messages */
-    cont = (struct ContactData *)malloc((count + 1) * sizeof(struct ContactData));
+    cont = (ContactData *)malloc((count + 1) * sizeof(ContactData));
     chk(cont);
     cont[count].pos = -1; /* end symbol */
 

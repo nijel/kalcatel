@@ -758,7 +758,7 @@ int KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
     alc_type *result;
     int i, j;
     int *ids, *items;
-    struct AlcatelFieldStruct *field;
+    AlcatelFieldStruct *field;
 
     int count;
 
@@ -1017,7 +1017,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1)
     }
 
     if (what == alcatel_calls || what == alcatel_all) {
-        struct ContactData *cont;
+        ContactData *cont;
         win->slotStatusMsg(i18n("Reading calls"),ID_DETAIL_MSG);
         clearCalls(calls, StorageMobile);
 
@@ -1071,7 +1071,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1)
     }
 
     if (what == alcatel_contacts_sim || what == alcatel_all) {
-        struct ContactData *cont;
+        ContactData *cont;
         win->slotStatusMsg(i18n("Reading SIM contacts"),ID_DETAIL_MSG);
         clearContacts(contacts, StorageSIM);
         select_phonebook(PB_SIM);

@@ -84,7 +84,7 @@ public:
 	
     /** sets field read from mobile in this class
       */
-	void setField(int number, struct AlcatelFieldStruct *data);
+	void setField(int number, AlcatelFieldStruct *data);
 	
     /** returns formatted name of contact
       */
@@ -126,7 +126,7 @@ public:
 	
     /** sets field read from mobile in this class
       */
-	void setField(int number, struct AlcatelFieldStruct *data);
+	void setField(int number, AlcatelFieldStruct *data);
 	
     /** returns string with short information about repeating events
       */
@@ -166,7 +166,7 @@ public:
 	
     /** sets field read from mobile in this class
       */
-	void setField(int number, struct AlcatelFieldStruct *data);
+	void setField(int number, AlcatelFieldStruct *data);
 	
     QDate DueDate;
     int Completed;

@@ -53,7 +53,7 @@ struct ContactData {
 
 /** Reads contacts from current phonebook.
  */
-struct ContactData *get_contacts(int from=1, int to=200);
+ContactData *get_contacts(int from=1, int to=200);
 
 /** Selects currect phonebook.
  */

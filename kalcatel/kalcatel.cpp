@@ -383,7 +383,7 @@ void KAlcatelApp::slotFileReadMobileSms()
 void KAlcatelApp::slotMobileInfo() {
     char manuf[128], model[128], rev[128], sn[128], imsi[128], *s;
     int bat_percent, bat_state, sign_strength, sign_err;
-    struct ContactData *cont;
+    ContactData *cont;
     slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
 
     char *devname;
@@ -674,8 +674,8 @@ void KAlcatelApp::slotFileClose()
   slotStatusMsg(i18n("Closing file..."), ID_STATUS_MSG);
 	
   close();
-
-  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
+// this causes crash:
+//  slotStatusMsg(i18n("Ready."), ID_STATUS_MSG);
 }
 
 void KAlcatelApp::slotFilePrint()
@@ -791,8 +791,9 @@ void KAlcatelApp::slotStatusMsg(const QString &text, int which, int clearDetail 
   }
 //  statusBar()->changeItem(text, which);
   statusBar()->message(*msg);
-  setUpdatesEnabled(true);
   setEnabled(true);
+  setUpdatesEnabled(true);
+  update();
 }
 
 void KAlcatelApp::slotDefaultDetailMsg()

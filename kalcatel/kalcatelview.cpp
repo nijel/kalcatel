@@ -41,6 +41,7 @@
 #include "kalcatel.h"
 #include "alcatelclasses.h"
 #include "alcatool/sms.h"
+#include "alcatool/logging.h"
 
 KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : KJanusWidget(parent, name, TreeList) {
     int i;
@@ -375,7 +376,7 @@ void KAlcatelView::repaint() {
         } /* change in sms */
         if (doc->getContactVersion() != contactVersion) {
             contactVersion = doc->getContactVersion();
-            AlcatelCategoryList::Iterator it;
+            AlcatelCategoryList::Iterator c_it;
             int i;
 
             for (i=0; i<ALCATEL_MAX_CATEGORIES; i++)
@@ -384,50 +385,73 @@ void KAlcatelView::repaint() {
                     contacts_cat_list[i] = NULL;
                 }
 
-            for( it = doc->contact_cats->begin(); it != doc->contact_cats->end(); ++it ) {
+            for( c_it = doc->contact_cats->begin(); c_it != doc->contact_cats->end(); ++c_it ) {
                 QStringList list = QStringList();
                 QVBox *box;
 
                 list.append(i18n("Contacts"));
                 list.append(i18n("Mobile"));
-                list.append((*it).Name);
-                box = addVBoxPage (list, i18n("Contacts stored in mobile in category %1").arg((*it).Name), SmallIcon("kalcatel-contact-mobile.png"));
-                contacts_cat_list[(*it).Id] = createListView(box, alc_contacts_mobile);
+                list.append((*c_it).Name);
+                box = addVBoxPage (list, i18n("Contacts stored in mobile in category %1").arg((*c_it).Name), SmallIcon("kalcatel-contact-mobile.png"));
+                contacts_cat_list[(*c_it).Id] = createListView(box, alc_contacts_mobile_cat);
+                ::message(MSG_DEBUG, "Created category %d", (*c_it).Id);
                 list.clear();
             }
-            {
             AlcatelContactList::Iterator it;
             for( it = doc->contacts->begin(); it != doc->contacts->end(); ++it ) {
-/*                type =  SMSTypes[(* it).Status];
-                switch ((* it).Status) {
-                    case SMS_UNREAD:
-                        list = msg_unread_list;
-                        unread_sms++;
-                        break;
-                    case SMS_READ:
-                        list = msg_read_list;
-                        break;
-                    case SMS_UNSENT:
-                        list = msg_unsent_list;
-                        break;
-                    case SMS_SENT:
-                        list = msg_sent_list;
-                        break;
-                }*/
                 QListViewItem *newItem = new QListViewItem (contacts_list,
-                        QString((* it).FirstName),
-                        QString((* it).MainNumber));
+                        ((* it).FirstName.isEmpty())?
+                            (((* it).LastName.isEmpty())?
+                                QString("?"):
+                                QString((* it).LastName)):
+                            (((* it).LastName.isEmpty())?
+                                QString((* it).FirstName):
+                                QString("%1, %2").arg((* it).LastName).arg((* it).FirstName))
+                        ,
+                        QString(!(* it).MainNumber.isEmpty()?(* it).MainNumber: /* try to find non-empty phone */
+                                    !(* it).MobileNumber.isEmpty()?(* it).MobileNumber:
+                                        !(* it).WorkNumber.isEmpty()?(* it).WorkNumber:
+                                            !(* it).HomeNumber.isEmpty()?(* it).HomeNumber:
+                                                !(* it).OtherNumber.isEmpty()?(* it).OtherNumber:
+                                                    !(* it).FaxNumber.isEmpty()?(* it).FaxNumber:
+                                                        (* it).PagerNumber
+                            ),
+                        QString("%1 %2").
+                            arg(((* it).Storage == AlcatelContact::Mobile)?
+                                i18n("Mobile") :
+                                i18n("SIM")).arg((* it).Id,3)
+                        );
 
-/*                if ((* it).Storage == AlcatelContact:Mobile)
-                newItem = new QListViewItem (list,
-                        QString((* it).Sender),
-                        QString((* it).Date.date().toString()),
-                        QString((* it).Date.time().toString()),
-                        QString((* it).Text),
-                        QString().sprintf("%d", (* it).Id));*/
+                if ((* it).Storage == AlcatelContact::Mobile) {
+                    if (((* it).Category >= 0) && (contacts_cat_list[(* it).Category] != NULL) && ((* it).Category < ALCATEL_MAX_CATEGORIES)) {
+                        newItem = new QListViewItem (contacts_cat_list[(* it).Category],
+                                QString((* it).LastName),
+                                QString((* it).FirstName),
+                                QString((* it).MobileNumber),
+                                QString((* it).WorkNumber),
+                                QString((* it).MainNumber),
+                                QString((* it).Email1),
+                                QString("%1").arg((* it).Id));
+                    } else {
+                        ::message(MSG_WARNING, "Can not insert to category list (%d)", (* it).Category);
+                    }
+                    newItem = new QListViewItem (contacts_mobile_list,
+                            QString((* it).LastName),
+                            QString((* it).FirstName),
+                            QString("%1").arg((* it).Category),
+                            QString((* it).MobileNumber),
+                            QString((* it).WorkNumber),
+                            QString((* it).MainNumber),
+                            QString((* it).Email1),
+                            QString("%1").arg((* it).Id));
+                } /* storage=mobile */
+                else {
+                    newItem = new QListViewItem (contacts_sim_list,
+                            QString((* it).LastName),
+                            QString((* it).MainNumber),
+                            QString("%1").arg((* it).Id));
+                } /* storage=sim */
             } /* for cycle over contacts */
-            }
-
 
             showPage(2);
         } /* change in contacts */

@@ -57,7 +57,7 @@ void AlcatelContact::setField(int number, FIELD *data) {
         case 2: chk_type(_string) Company = (char *)((*data).data); break;
         case 3: chk_type(_string) JobTitle = (char *)((*data).data); break;
         case 4: chk_type(_string) Note = (char *)((*data).data); break;
-        case 5: chk_type(_enum) Category = *((int *)((*data).data)); break;
+        case 5: chk_type(_byte) Category = *((int *)((*data).data)); break;
         case 6: chk_type(_bool) Private = *((int *)((*data).data)); break;
         case 7: chk_type(_phone) WorkNumber = (char *)((*data).data); break;
         case 8: chk_type(_phone) MainNumber = (char *)((*data).data); break;

@@ -110,14 +110,6 @@ class KAlcatelView : public KJanusWidget
     int contactVersion;
     int calendarVersion;
     int todoVersion;
-
-/*
-    QGrid *todo;
-    QGrid *calendar;
-    QGrid *contacts;
-    QGrid *calls;
-    QGrid *messages;
-	*/
 };
 
 #endif // KALCATELVIEW_H

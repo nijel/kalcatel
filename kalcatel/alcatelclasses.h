@@ -46,13 +46,14 @@ extern QString SMSTypes[];
 
 class AlcatelContact : public AlcatelClass {
 public:
-    typedef enum {SIM, Phone} ContactStorage;
 	AlcatelContact();
 	~AlcatelContact();
 	
 	void setField(int number, FIELD *data);
 	
-	ContactStorage Storage;
+    enum ContactStorage {SIM, Mobile} ;
+
+	enum ContactStorage Storage;
 	
     QString LastName;
     QString FirstName;

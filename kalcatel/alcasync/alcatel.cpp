@@ -395,6 +395,7 @@ int *sync_get_ids(alc_type type) {
     free(alcatel_recv_ack(ALC_ACK));
     free(alcatel_recv_packet(1));
     data = alcatel_recv_packet(1);
+    if (!data) return NULL;
 
     count = data[10];
 

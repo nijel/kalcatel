@@ -217,6 +217,11 @@ void KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
         sync_begin_read(sync);
 
         ids = sync_get_ids(type);
+        if (ids == NULL) {
+            sync_close_session(type);
+            alcatel_detach();
+            return;
+        }
 
         message(MSG_INFO, "Received %d ids", ids[0]);
 
@@ -231,13 +236,16 @@ void KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
             switch (sync) {
                 case ALC_SYNC_CALENDAR:
                     Calendar = new AlcatelCalendar();
+                    Calendar->Id = ids[i];
                     break;
                 case ALC_SYNC_TODO:
                     Todo = new AlcatelTodo();
+                    Todo->Id = ids[i];
                     break;
                 case ALC_SYNC_CONTACTS:
                     Contact = new AlcatelContact();
-                    Contact->Storage = AlcatelContact::Phone;
+                    Contact->Storage = AlcatelContact::Mobile;
+                    Contact->Id = ids[i];
                     break;
             }
             for (j = 1; j <= items[0]; j++) {
@@ -444,23 +452,28 @@ bool KAlcatelDoc::readMobile(AlcReadType what = alcatel_read_all, int category =
 
         if (what == alcatel_read_contacts_mobile || what == alcatel_read_all) {
             /* at first read categories */
+            win->slotStatusMsg(i18n("Reading contact categories"),ID_DETAIL_MSG);
             if (!readMobileCategories(contact_cats, ALC_SYNC_CONTACTS, ALC_SYNC_TYPE_CONTACTS, ALC_LIST_CONTACTS_CAT))
                 KMessageBox::error(win, i18n("Reading contacts categories failed!"), i18n("Error"));
 
+            win->slotStatusMsg(i18n("Reading contact items"),ID_DETAIL_MSG);
             readMobileItems(ALC_SYNC_CONTACTS, ALC_SYNC_TYPE_CONTACTS);
 
             contactVersion++;
         }
 
         if (what == alcatel_read_calendar || what == alcatel_read_all) {
+            win->slotStatusMsg(i18n("Reading calendar items"),ID_DETAIL_MSG);
             readMobileItems(ALC_SYNC_CALENDAR, ALC_SYNC_TYPE_CALENDAR);
         }
 
         if (what == alcatel_read_todo || what == alcatel_read_all) {
             /* at first read categories */
+            win->slotStatusMsg(i18n("Reading todo categories"),ID_DETAIL_MSG);
             if (!readMobileCategories(todo_cats, ALC_SYNC_TODO, ALC_SYNC_TYPE_TODO, ALC_LIST_TODO_CAT))
                 KMessageBox::error(win, i18n("Reading todo categories failed!"), i18n("Error"));
 
+            win->slotStatusMsg(i18n("Reading todo items"),ID_DETAIL_MSG);
             readMobileItems(ALC_SYNC_TODO, ALC_SYNC_TYPE_TODO);
 
             todoVersion++;

@@ -5,6 +5,7 @@ KAlcatel - Changelog
 $Id$
 
 2002-02-21 Michal Cihar <cihar@email.cz>
+        * changed way of creating view, not used KJanusWidget anymore
         * improved behavior when reading of data fails
         * added support for URL in custom fields
 

@@ -25,159 +25,133 @@
 // include files for Qt
 #include <qprinter.h>
 #include <qpainter.h>
-#include <qpixmap.h>
 #include <qsplitter.h>
+#include <qwidgetstack.h>
+#include <qvbox.h>
+#include <qlayout.h>
+#include <qheader.h>
+#include <qlistview.h>
+#include <qfont.h>
 
 // include files for KDE
-#include <kjanuswidget.h>
-#include <klocale.h>
 #include <klistview.h>
+#include <klocale.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
-
 #include <ktextbrowser.h>
 
 // application specific includes
 #include "kalcatelview.h"
 #include "kalcateldoc.h"
 #include "kalcatel.h"
+#include "kalcateltreeviewitem.h"
 #include "alcatelclasses.h"
 #include "alcatool/sms.h"
 #include "alcatool/logging.h"
 
-KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : KJanusWidget(parent, name, TreeList) {
+KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : QWidget(parent, name) {
     int i;
-    QSplitter *vsplitter;
-    QStringList list = QStringList();
-    setShowIconsInTreeList (true);
-    setTreeListAutoResize (true);
+
+    QGridLayout *layout = new QGridLayout( this );
+
+    hsplitter = new QSplitter( Qt::Horizontal, this );
+    layout->addWidget( hsplitter, 0, 0);
+    tree = new KListView( hsplitter );
+    tree->setSorting(-1);
+    tree->addColumn(QString());
+    tree->header()->hide();
+    tree->setAllColumnsShowFocus(true);
+    tree->setRootIsDecorated(true);
+
+    connect( tree, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotTreeChanged(QListViewItem *) ) );
+
+    vsplitter = new QSplitter( Qt::Vertical, hsplitter );
+
+    listwidget = new QVBox( vsplitter);
+
+    titlelabel = new QLabel( QString(), listwidget );
+    QFont font = titlelabel->font();
+    font.setBold(true);
+    titlelabel->setFont(font);
+    titlelabel->setMargin(3);
+    listwidget->setStretchFactor( titlelabel, -1);
+
+    QFrame *line = new QFrame( listwidget );
+    line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+    line->setMargin(3);
+    listwidget->setStretchFactor( line, -1);
+
+    widgetstack = new QWidgetStack( listwidget );
+    widgetstack->setMargin(3);
+    connect(widgetstack, SIGNAL(aboutToShow ( int )), this, SLOT( slotSetTitle( int )));
+    listwidget->setStretchFactor( widgetstack, 100);
+
+    textview = new KTextBrowser( vsplitter );
+    vsplitter->setResizeMode( textview, QSplitter::FollowSizeHint );
+    textview->setBackgroundMode( PaletteBase );
 
     for (i=0; i<ALC_MAX_CATEGORIES; i++) {
         contacts_cat_list[i] =  NULL;
-        contacts_cat_view[i] =  NULL;
         todo_cat_list[i] =  NULL;
-        todo_cat_view[i] =  NULL;
     }
 
-    todo = addVBoxPage (i18n("Todos"), i18n("All todos"), SmallIcon("kalcatel-todo.png"));
-    vsplitter = new QSplitter( Qt::Vertical, todo );
-    todo_list = createListView(vsplitter, alc_todos);
-    connect( todo_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotTodoChanged(QListViewItem *) ) );
-    todo_view = new KTextBrowser( vsplitter );
-    todo_view->setBackgroundMode( PaletteBase );
-    vsplitter->setResizeMode(todo_view, QSplitter::FollowSizeHint);
-
-    calendar = addVBoxPage (i18n("Calendar"), i18n("Whole calendar"), SmallIcon("kalcatel-calendar.png"));
-    vsplitter = new QSplitter( Qt::Vertical, calendar );
-    calendar_list = createListView(vsplitter, alc_calendar);
-    connect( calendar_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotCalendarChanged(QListViewItem *) ) );
-    calendar_view = new KTextBrowser( vsplitter );
-    calendar_view->setBackgroundMode( PaletteBase );
-    vsplitter->setResizeMode(calendar_view, QSplitter::FollowSizeHint);
-
-    contacts = addVBoxPage (i18n("Contacts"), i18n("All contacts"), SmallIcon("kalcatel-contact.png"));
-    vsplitter = new QSplitter( Qt::Vertical, contacts );
-    contacts_list = createListView(vsplitter, alc_contacts);
-    connect( contacts_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
-    contact_view = new KTextBrowser( vsplitter );
-    contact_view->setBackgroundMode( PaletteBase );
-    vsplitter->setResizeMode(contact_view, QSplitter::FollowSizeHint);
-
-    list.append(i18n("Contacts"));
-    list.append(i18n("SIM"));
-    contacts_sim = addVBoxPage (list, i18n("Contacts on SIM card"), SmallIcon("kalcatel-contact-sim.png"));
-    vsplitter = new QSplitter( Qt::Vertical, contacts_sim );
-    contacts_sim_list = createListView(vsplitter, alc_contacts_sim);
-    list.clear();
-    connect( contacts_sim_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactSimChanged(QListViewItem *) ) );
-    contact_sim_view = new KTextBrowser( vsplitter );
-    contact_sim_view->setBackgroundMode( PaletteBase );
-    vsplitter->setResizeMode(contact_sim_view, QSplitter::FollowSizeHint);
-
-    list.append(i18n("Contacts"));
-    list.append(i18n("Mobile"));
-    contacts_mobile = addVBoxPage (list, i18n("Contacts stored in mobile"), SmallIcon("kalcatel-contact-mobile.png"));
-    vsplitter = new QSplitter( Qt::Vertical, contacts_mobile );
-    contacts_mobile_list = createListView(vsplitter, alc_contacts_mobile);
-    list.clear();
-    connect( contacts_mobile_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactMobileChanged(QListViewItem *) ) );
-    contact_mobile_view = new KTextBrowser( vsplitter );
-    contact_mobile_view->setBackgroundMode( PaletteBase );
-    vsplitter->setResizeMode(contact_mobile_view, QSplitter::FollowSizeHint);
-
-    calls = addVBoxPage (i18n("Calls"), i18n("All calls"), SmallIcon("kalcatel-call.png"));
-    calls_list = createListView(calls, alc_calls);
-
-    list.append(i18n("Calls"));
-    list.append(i18n("Missed"));
-    calls_mc = addVBoxPage (list, i18n("Missed calls"), SmallIcon("kalcatel-call-missed.png"));
-    calls_mc_list = createListView(calls_mc, alc_calls_type);
-    list.clear();
-
-    list.append(i18n("Calls"));
-    list.append(i18n("Received"));
-    calls_rc = addVBoxPage (list, i18n("Received calls"), SmallIcon("kalcatel-call-received.png"));
-    calls_rc_list = createListView(calls_rc, alc_calls_type);
-    list.clear();
-
-    list.append(i18n("Calls"));
-    list.append(i18n("Outgoing"));
-    calls_ld = addVBoxPage (list, i18n("Outgoing calls"), SmallIcon("kalcatel-call-outgoing.png"));
-    calls_ld_list = createListView(calls_ld, alc_calls_type);
-    list.clear();
-
-    messages = addVBoxPage (i18n("Messages"), i18n("All messages"), SmallIcon("kalcatel-message.png"));
-    vsplitter = new QSplitter( Qt::Vertical, messages );
-    messages_list = createListView(vsplitter, alc_messages);
+    widgetstack->addWidget( messages_list = createListView( widgetstack, alc_messages ), ID_MESSAGES );
     connect( messages_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotMessageChanged(QListViewItem *) ) );
-    message = new KTextBrowser( vsplitter );
-    message->setBackgroundMode( PaletteBase );
-    vsplitter->setResizeMode(message, QSplitter::FollowSizeHint);
+    messages_item = new KAlcatelTreeViewItem(tree, i18n("Messages"), SmallIcon("kalcatel-message.png"), ID_MESSAGES );
 
+    widgetstack->addWidget( messages_unsent_list = createListView( widgetstack, alc_messages_out ), ID_MESSAGES_UNSENT );
+    connect( messages_unsent_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotUnsentMessageChanged(QListViewItem *) ) );
+    messages_unsent_item = new KAlcatelTreeViewItem(messages_item, i18n("Unsent"), SmallIcon("kalcatel-message-unsent.png"), ID_MESSAGES_UNSENT );
 
-    list.append(i18n("Messages"));
-    list.append(i18n("Unread"));
-    msg_unread = addVBoxPage (list, i18n("Unread messages"), SmallIcon("kalcatel-message-unread.png"));
-    vsplitter = new QSplitter( Qt::Vertical, msg_unread );
-    msg_unread_list = createListView(vsplitter, alc_messages_in);
-    list.clear();
-    connect( msg_unread_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotUnreadMessageChanged(QListViewItem *) ) );
-    message_unread = new KTextBrowser( vsplitter );
-    message_unread->setBackgroundMode( PaletteBase );
-    vsplitter->setResizeMode(message_unread, QSplitter::FollowSizeHint);
+    widgetstack->addWidget( messages_sent_list = createListView( widgetstack, alc_messages_out ), ID_MESSAGES_SENT );
+    connect( messages_sent_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotSentMessageChanged(QListViewItem *) ) );
+    messages_sent_item = new KAlcatelTreeViewItem(messages_item, i18n("Sent"), SmallIcon("kalcatel-message-sent.png"), ID_MESSAGES_SENT );
 
-    list.append(i18n("Messages"));
-    list.append(i18n("Read"));
-    msg_read = addVBoxPage (list, i18n("Read messages"), SmallIcon("kalcatel-message-read.png"));
-    vsplitter = new QSplitter( Qt::Vertical, msg_read );
-    msg_read_list = createListView(vsplitter, alc_messages_in);
-    list.clear();
-    connect( msg_read_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotReadMessageChanged(QListViewItem *) ) );
-    message_read = new KTextBrowser( vsplitter );
-    message_read->setBackgroundMode( PaletteBase );
-    vsplitter->setResizeMode(message_read, QSplitter::FollowSizeHint);
+    widgetstack->addWidget( messages_read_list = createListView( widgetstack, alc_messages_in ), ID_MESSAGES_READ );
+    connect( messages_read_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotReadMessageChanged(QListViewItem *) ) );
+    messages_read_item = new KAlcatelTreeViewItem(messages_item, i18n("Read"), SmallIcon("kalcatel-message-read.png"), ID_MESSAGES_READ );
 
-    list.append(i18n("Messages"));
-    list.append(i18n("Sent"));
-    msg_sent = addVBoxPage (list, i18n("Sent messages"), SmallIcon("kalcatel-message-sent.png"));
-    vsplitter = new QSplitter( Qt::Vertical, msg_sent );
-    msg_sent_list = createListView(vsplitter, alc_messages_out);
-    list.clear();
-    connect( msg_sent_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotSentMessageChanged(QListViewItem *) ) );
-    message_sent = new KTextBrowser( vsplitter );
-    message_sent->setBackgroundMode( PaletteBase );
-    vsplitter->setResizeMode(message_sent, QSplitter::FollowSizeHint);
+    widgetstack->addWidget( messages_unread_list = createListView( widgetstack, alc_messages_in ), ID_MESSAGES_UNREAD );
+    connect( messages_unread_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotUnreadMessageChanged(QListViewItem *) ) );
+    messages_unread_item = new KAlcatelTreeViewItem(messages_item, i18n("Unread"), SmallIcon("kalcatel-message-unread.png"), ID_MESSAGES_UNREAD );
 
-    list.append(i18n("Messages"));
-    list.append(i18n("Unsent"));
-    msg_unsent = addVBoxPage (list, i18n("Unsent messages"), SmallIcon("kalcatel-message-unsent.png"));
-    vsplitter = new QSplitter( Qt::Vertical, msg_unsent );
-    msg_unsent_list = createListView(vsplitter, alc_messages_out);
-    list.clear();
-    connect( msg_unsent_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotUnsentMessageChanged(QListViewItem *) ) );
-    message_unsent = new KTextBrowser( vsplitter );
-    message_unsent->setBackgroundMode( PaletteBase );
-    vsplitter->setResizeMode(message_unsent, QSplitter::FollowSizeHint);
+    widgetstack->addWidget( calls_list = createListView( widgetstack, alc_calls ), ID_CALLS );
+    calls_item = new KAlcatelTreeViewItem(tree, i18n("Calls"), SmallIcon("kalcatel-call.png"), ID_CALLS );
+
+    widgetstack->addWidget( calls_outgoing_list = createListView( widgetstack, alc_calls_type ), ID_CALLS_OUTGOING );
+    calls_outgoing_item = new KAlcatelTreeViewItem(calls_item, i18n("Outgoing"), SmallIcon("kalcatel-call-outgoing.png"), ID_CALLS_OUTGOING );
+
+    widgetstack->addWidget( calls_received_list = createListView( widgetstack, alc_calls_type ), ID_CALLS_RECEIVED );
+    calls_received_item = new KAlcatelTreeViewItem(calls_item, i18n("Received"), SmallIcon("kalcatel-call-received.png"), ID_CALLS_RECEIVED );
+
+    widgetstack->addWidget( calls_missed_list = createListView( widgetstack, alc_calls_type ), ID_CALLS_MISSED );
+    calls_missed_item = new KAlcatelTreeViewItem(calls_item, i18n("Missed"), SmallIcon("kalcatel-call-missed.png"), ID_CALLS_MISSED );
+
+    widgetstack->addWidget( contacts_list = createListView( widgetstack, alc_contacts ), ID_CONTACTS );
+    connect( contacts_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
+    contacts_item = new KAlcatelTreeViewItem(tree, i18n("Contacts"), SmallIcon("kalcatel-contact.png"), ID_CONTACTS );
+
+    widgetstack->addWidget( contacts_mobile_list = createListView( widgetstack, alc_contacts_mobile ), ID_CONTACTS_MOBILE );
+    connect( contacts_mobile_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactMobileChanged(QListViewItem *) ) );
+    contacts_mobile_item = new KAlcatelTreeViewItem(contacts_item, i18n("Mobile"), SmallIcon("kalcatel-contact-mobile.png"), ID_CONTACTS_MOBILE );
+
+    widgetstack->addWidget( contacts_sim_list = createListView( widgetstack, alc_contacts_sim ), ID_CONTACTS_SIM );
+    connect( contacts_sim_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactSimChanged(QListViewItem *) ) );
+    contacts_sim_item = new KAlcatelTreeViewItem(contacts_item, i18n("SIM"), SmallIcon("kalcatel-contact-sim.png"), ID_CONTACTS_SIM );
+
+    widgetstack->addWidget( calendar_list = createListView( widgetstack, alc_calendar ), ID_CALENDAR );
+    connect( calendar_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotCalendarChanged(QListViewItem *) ) );
+    calendar_item = new KAlcatelTreeViewItem(tree, i18n("Calendar"), SmallIcon("kalcatel-calendar.png"), ID_CALENDAR );
+
+    widgetstack->addWidget( todo_list = createListView( widgetstack, alc_todos ), ID_TODOS );
+    connect( todo_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotTodoChanged(QListViewItem *) ) );
+    todo_item = new KAlcatelTreeViewItem(tree, i18n("Todos"), SmallIcon("kalcatel-todo.png"), ID_TODOS );
+
+    tree->setCurrentItem(todo_item);
+    slotTreeChanged(todo_item);
+    slotSetTitle(ID_TODOS);
+
+    hsplitter->setResizeMode( tree, QSplitter::FollowSizeHint );
 }
 
 KAlcatelView::~KAlcatelView() {
@@ -303,26 +277,26 @@ void KAlcatelView::repaint() {
             QString type;
 
             messages_list->clear();
-            msg_unread_list->clear();
-            msg_read_list->clear();
-            msg_unsent_list->clear();
-            msg_sent_list->clear();
+            messages_unread_list->clear();
+            messages_read_list->clear();
+            messages_unsent_list->clear();
+            messages_sent_list->clear();
 
             for( it = doc->sms->begin(); it != doc->sms->end(); ++it ) {
                 type =  MessageTypes[(* it).Status];
                 switch ((* it).Status) {
                     case MESSAGE_UNREAD:
-                        list = msg_unread_list;
+                        list = messages_unread_list;
                         unread_sms++;
                         break;
                     case MESSAGE_READ:
-                        list = msg_read_list;
+                        list = messages_read_list;
                         break;
                     case MESSAGE_UNSENT:
-                        list = msg_unsent_list;
+                        list = messages_unsent_list;
                         break;
                     case MESSAGE_SENT:
-                        list = msg_sent_list;
+                        list = messages_sent_list;
                         break;
                 }
                 AlcatelContact *cont = getContactByPhone(doc->contacts, &((* it).Sender), &(((KAlcatelApp *)parent())->phone_prefix));
@@ -344,9 +318,9 @@ void KAlcatelView::repaint() {
                         QString().sprintf("%d", (* it).Id));
             } /* for cycle over sms */
             if (unread_sms)
-                showPage(10);
+                tree->setCurrentItem(messages_unread_item);
             else
-                showPage(9);
+                tree->setCurrentItem(messages_item);
         } /* change in sms */
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (doc->getTodoVersion() != todoVersion|| doc->getContactVersion() != contactVersion) {
@@ -359,29 +333,24 @@ void KAlcatelView::repaint() {
 
             for (i=0; i<ALC_MAX_CATEGORIES; i++)
                 if (todo_cat_list[i] !=  NULL) {
-                    ((QVBox *)(todo_cat_list[i]->parent()->parent()))->~QVBox();
+                    widgetstack->removeWidget(todo_cat_list[i]);
                     todo_cat_list[i] = NULL;
                 }
 
-            for( c_it = doc->todo_cats->begin(); c_it != doc->todo_cats->end(); ++c_it ) {
-                QStringList list = QStringList();
-                QVBox *box;
-
-                list.append(i18n("Todos"));
-                list.append((*c_it).Name);
-                box = addVBoxPage (list, i18n("Todos in category %1").arg((*c_it).Name), SmallIcon("kalcatel-todo.png"));
-                QSplitter *vsplitter = new QSplitter( Qt::Vertical, box );
-
-                todo_cat_list[(*c_it).Id] = createListView(vsplitter, alc_todos_cat);
-
-                connect( todo_cat_list[(*c_it).Id], SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotTodoCatChanged(QListViewItem *) ) );
-                todo_cat_view[(*c_it).Id] = new KTextBrowser( vsplitter );
-                todo_cat_view[(*c_it).Id]->setBackgroundMode( PaletteBase );
-                vsplitter->setResizeMode(todo_cat_view[(*c_it).Id], QSplitter::FollowSizeHint);
-
-                ::message(MSG_DEBUG, "Created category listview %d", (*c_it).Id);
-                list.clear();
+            QListViewItem * nextChild = todo_item->firstChild();
+            QListViewItem * myChild;
+            while( (myChild=nextChild)!=NULL ) {
+                nextChild = myChild->nextSibling();
+                ((KAlcatelTreeViewItem *)myChild)->~KAlcatelTreeViewItem();
             }
+
+            for( c_it = doc->todo_cats->begin(); c_it != doc->todo_cats->end(); ++c_it ) {
+                widgetstack->addWidget(todo_cat_list[(*c_it).Id] = createListView(widgetstack, alc_todos_cat), ID_TODOS_CAT + (*c_it).Id );
+                new KAlcatelTreeViewItem(todo_item, (*c_it).Name, SmallIcon("kalcatel-todo.png"), ID_TODOS_CAT + (*c_it).Id );
+                connect( todo_cat_list[(*c_it).Id], SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotTodoCatChanged(QListViewItem *) ) );
+                ::message(MSG_DEBUG, "Created category listview %d", (*c_it).Id);
+            }
+
             AlcatelTodoList::Iterator it;
             for( it = doc->todo->begin(); it != doc->todo->end(); ++it ) {
                 QString catname;
@@ -417,7 +386,7 @@ void KAlcatelView::repaint() {
 
             } /* for cycle over todos */
 
-            showPage(0);
+            tree->setCurrentItem(todo_item);
         } /* change in todos */
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (doc->getCalendarVersion() != calendarVersion || doc->getContactVersion() != contactVersion) {
@@ -439,7 +408,7 @@ void KAlcatelView::repaint() {
                         QString("%1").arg((* it).Id));
             } /* for cycle over items */
 
-            showPage(1);
+            tree->setCurrentItem(calendar_item);
         } /* change in calendar */
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (doc->getCallVersion() != callVersion || doc->getContactVersion() != contactVersion) {
@@ -448,9 +417,9 @@ void KAlcatelView::repaint() {
             callVersion = doc->getCallVersion();
 
             calls_list->clear();
-            calls_ld_list->clear();
-            calls_mc_list->clear();
-            calls_rc_list->clear();
+            calls_outgoing_list->clear();
+            calls_missed_list->clear();
+            calls_received_list->clear();
 
             AlcatelCallList::Iterator it;
             for( it = doc->calls->begin(); it != doc->calls->end(); ++it ) {
@@ -463,7 +432,7 @@ void KAlcatelView::repaint() {
                         QString("%1").arg((* it).Id));
                 switch ((* it).Type) {
                     case CallDialled:
-                        new QListViewItem (calls_ld_list,
+                        new QListViewItem (calls_outgoing_list,
                                 (* it).Number,
                                 (* it).Name,
                                 cont == NULL? QString("") : cont->Name(),
@@ -471,14 +440,14 @@ void KAlcatelView::repaint() {
                         break;
                     case CallMissed:
                         missed++;
-                        new QListViewItem (calls_mc_list,
+                        new QListViewItem (calls_missed_list,
                                 (* it).Number,
                                 (* it).Name,
                                 cont == NULL? QString("") : cont->Name(),
                                 QString("%1").arg((* it).Id));
                         break;
                     case CallReceived:
-                        new QListViewItem (calls_rc_list,
+                        new QListViewItem (calls_received_list,
                                 (* it).Number,
                                 (* it).Name,
                                 cont == NULL? QString("") : cont->Name(),
@@ -487,8 +456,10 @@ void KAlcatelView::repaint() {
                 }
             } /* for cycle over calls */
 
-            if (missed>0) showPage(6);
-            else showPage(5);
+            if (missed>0)
+                tree->setCurrentItem(calls_missed_item);
+            else
+                tree->setCurrentItem(calls_item);
         } /* change in calls */
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (doc->getContactVersion() != contactVersion) {
@@ -502,30 +473,24 @@ void KAlcatelView::repaint() {
 
             for (i=0; i<ALC_MAX_CATEGORIES; i++)
                 if (contacts_cat_list[i] !=  NULL) {
-                    ((QVBox *)(contacts_cat_list[i]->parent()->parent()))->~QVBox();
+                    widgetstack->removeWidget(todo_cat_list[i]);
                     contacts_cat_list[i] = NULL;
                 }
 
-            for( c_it = doc->contact_cats->begin(); c_it != doc->contact_cats->end(); ++c_it ) {
-                QStringList list = QStringList();
-                QVBox *box;
-
-                list.append(i18n("Contacts"));
-                list.append(i18n("Mobile"));
-                list.append((*c_it).Name);
-                box = addVBoxPage (list, i18n("Contacts stored in mobile in category %1").arg((*c_it).Name), SmallIcon("kalcatel-contact-mobile.png"));
-                QSplitter *vsplitter = new QSplitter( Qt::Vertical, box );
-
-                contacts_cat_list[(*c_it).Id] = createListView(vsplitter, alc_contacts_mobile_cat);
-
-                connect( contacts_cat_list[(*c_it).Id], SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactMobileCatChanged(QListViewItem *) ) );
-                contacts_cat_view[(*c_it).Id] = new KTextBrowser( vsplitter );
-                contacts_cat_view[(*c_it).Id]->setBackgroundMode( PaletteBase );
-                vsplitter->setResizeMode(contacts_cat_view[(*c_it).Id], QSplitter::FollowSizeHint);
-
-                ::message(MSG_DEBUG, "Created category listview %d", (*c_it).Id);
-                list.clear();
+            QListViewItem * nextChild = contacts_mobile_item->firstChild();
+            QListViewItem * myChild;
+            while( (myChild=nextChild)!=NULL ) {
+                nextChild = myChild->nextSibling();
+                ((KAlcatelTreeViewItem *)myChild)->~KAlcatelTreeViewItem();
             }
+
+            for( c_it = doc->contact_cats->begin(); c_it != doc->contact_cats->end(); ++c_it ) {
+                widgetstack->addWidget(contacts_cat_list[(*c_it).Id] = createListView(widgetstack, alc_contacts_mobile_cat), ID_CONTACTS_CAT + (*c_it).Id );
+                new KAlcatelTreeViewItem(contacts_mobile_item, (*c_it).Name, SmallIcon("kalcatel-contact-mobile.png"), ID_CONTACTS_CAT + (*c_it).Id );
+                connect( contacts_cat_list[(*c_it).Id], SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactMobileCatChanged(QListViewItem *) ) );
+                ::message(MSG_DEBUG, "Created category listview %d", (*c_it).Id);
+            }
+
             AlcatelContactList::Iterator it;
             for( it = doc->contacts->begin(); it != doc->contacts->end(); ++it ) {
                 new QListViewItem (contacts_list,
@@ -584,42 +549,42 @@ void KAlcatelView::repaint() {
                 } /* storage=sim */
             } /* for cycle over contacts */
 
-            showPage(2);
+            tree->setCurrentItem(contacts_item);
         } /* change in contacts */
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (unread_sms)
-            showPage(10); /* allways show unread messages, if any */
+            tree->setCurrentItem(messages_unread_item);
     } /* any change */
-    KJanusWidget::repaint();
+    QWidget::repaint();
 }
 
 void KAlcatelView::slotMessageChanged(QListViewItem *item) {
-    slotShowMessage(message, getMessageById(getDocument()->sms, item->text(6).toInt(), StorageSIM)); /*TODO: detect storage*/
+    slotShowMessage(getMessageById(getDocument()->sms, item->text(6).toInt(), StorageSIM)); /*TODO: detect storage*/
 }
 
 void KAlcatelView::slotReadMessageChanged(QListViewItem *item) {
-    slotShowMessage(message_read, getMessageById(getDocument()->sms, item->text(5).toInt(), StorageSIM)); /*TODO: detect storage*/
+    slotShowMessage(getMessageById(getDocument()->sms, item->text(5).toInt(), StorageSIM)); /*TODO: detect storage*/
 }
 
 void KAlcatelView::slotUnreadMessageChanged(QListViewItem *item) {
-    slotShowMessage(message_unread, getMessageById(getDocument()->sms, item->text(5).toInt(), StorageSIM)); /*TODO: detect storage*/
+    slotShowMessage(getMessageById(getDocument()->sms, item->text(5).toInt(), StorageSIM)); /*TODO: detect storage*/
 }
 
 void KAlcatelView::slotSentMessageChanged(QListViewItem *item) {
-    slotShowMessage(message_sent, getMessageById(getDocument()->sms, item->text(5).toInt(), StorageSIM)); /*TODO: detect storage*/
+    slotShowMessage(getMessageById(getDocument()->sms, item->text(5).toInt(), StorageSIM)); /*TODO: detect storage*/
 }
 
 void KAlcatelView::slotUnsentMessageChanged(QListViewItem *item) {
-    slotShowMessage(message_sent, getMessageById(getDocument()->sms, item->text(5).toInt(), StorageSIM)); /*TODO: detect storage*/
+    slotShowMessage(getMessageById(getDocument()->sms, item->text(5).toInt(), StorageSIM)); /*TODO: detect storage*/
 }
 
-void KAlcatelView::slotShowMessage(KTextBrowser *where, AlcatelMessage *what) {
+void KAlcatelView::slotShowMessage(AlcatelMessage *what) {
     if (what == NULL) {
-        where->setText( i18n("Failed reading message!"));
+        textview->setText( i18n("Failed reading message!"));
         return;
     }
     AlcatelContact *cont = getContactByPhone(getDocument()->contacts, &(what->Sender), &(((KAlcatelApp *)parent())->phone_prefix));
-    where->setText( i18n(
+    textview->setText( i18n(
         "<b>From:</b> %1 (%2)<br>"
         "<b>Date:</b> %3<br>"
         "<b>Time:</b> %4<br>"
@@ -635,22 +600,22 @@ void KAlcatelView::slotShowMessage(KTextBrowser *where, AlcatelMessage *what) {
         arg(what->Id).
         arg(MessageTypes[what->Status]).
         arg(what->Text));
-    where->setMinimumHeight(where->contentsHeight()); /* resize to show all contents*/
+    textview->setMinimumHeight(textview->contentsHeight()); /* resize to show all contents*/
 }
 
 void KAlcatelView::slotTodoChanged(QListViewItem *item) {
-    slotShowTodo(todo_view, getTodoById(getDocument()->todo, item->text(5).toInt(), StorageMobile)); /*TODO: detect storage*/
+    slotShowTodo(getTodoById(getDocument()->todo, item->text(5).toInt(), StorageMobile)); /*TODO: detect storage*/
 }
 
 void KAlcatelView::slotTodoCatChanged(QListViewItem *item) {
     AlcatelTodo *cont = getTodoById(getDocument()->todo, item->text(4).toInt(), StorageMobile); /*TODO: detect storage*/
-    if (cont->Category >= 0) slotShowTodo(todo_cat_view[cont->Category], cont);
+    if (cont->Category >= 0) slotShowTodo(cont);
 }
 
-void KAlcatelView::slotShowTodo(KTextBrowser *where, AlcatelTodo *what) {
+void KAlcatelView::slotShowTodo(AlcatelTodo *what) {
     QString text;
     if (what == NULL) {
-        where->setText( i18n("Failed reading todo!"));
+        textview->setText( i18n("Failed reading todo!"));
         return;
     }
 
@@ -671,18 +636,18 @@ void KAlcatelView::slotShowTodo(KTextBrowser *where, AlcatelTodo *what) {
         }
     }
     text.append(i18n("<b>Position:</b> %1").arg(what->Id));
-    where->setText(text);
-    where->setMinimumHeight(where->contentsHeight()); /* resize to show all contents*/
+    textview->setText(text);
+    textview->setMinimumHeight(textview->contentsHeight()); /* resize to show all contents*/
 }
 
 void KAlcatelView::slotCalendarChanged(QListViewItem *item) {
-    slotShowCalendar(calendar_view, getCalendarById(getDocument()->calendar, item->text(7).toInt(), StorageMobile)); /*TODO: detect storage*/
+    slotShowCalendar(getCalendarById(getDocument()->calendar, item->text(7).toInt(), StorageMobile)); /*TODO: detect storage*/
 }
 
-void KAlcatelView::slotShowCalendar(KTextBrowser *where, AlcatelCalendar *what) {
+void KAlcatelView::slotShowCalendar(AlcatelCalendar *what) {
     QString text;
     if (what == NULL) {
-        where->setText( i18n("Failed reading calendar item!"));
+        textview->setText( i18n("Failed reading calendar item!"));
         return;
     }
 
@@ -704,37 +669,37 @@ void KAlcatelView::slotShowCalendar(KTextBrowser *where, AlcatelCalendar *what) 
     if (what->ContactID != -1 && what->ContactID != 0) text.append(i18n("<b>Contact:</b> %1<br>").arg(cont==NULL?QString("id=%1").arg(what->ContactID):cont->Name()));
 
     text.append(i18n("<b>Position:</b> %1").arg(what->Id));
-    where->setText(text);
-    where->setMinimumHeight(where->contentsHeight()); /* resize to show all contents*/
+    textview->setText(text);
+    textview->setMinimumHeight(textview->contentsHeight()); /* resize to show all contents*/
 }
 
 void KAlcatelView::slotContactChanged(QListViewItem *item) {
     if (item->text(2).contains(StorageTypes[StorageMobile])) {
-        slotShowContact(contact_view, getContactById(getDocument()->contacts, item->text(2).right(4).stripWhiteSpace().toInt(), StorageMobile));
+        slotShowContact(getContactById(getDocument()->contacts, item->text(2).right(4).stripWhiteSpace().toInt(), StorageMobile));
     } else if (item->text(2).contains(StorageTypes[StorageSIM])) {
-        slotShowContact(contact_view, getContactById(getDocument()->contacts, item->text(2).right(4).stripWhiteSpace().toInt(), StorageSIM));
+        slotShowContact(getContactById(getDocument()->contacts, item->text(2).right(4).stripWhiteSpace().toInt(), StorageSIM));
     } else if (item->text(2).contains(StorageTypes[StoragePC])) {
-        slotShowContact(contact_view, getContactById(getDocument()->contacts, item->text(2).right(4).stripWhiteSpace().toInt(), StoragePC));
+        slotShowContact(getContactById(getDocument()->contacts, item->text(2).right(4).stripWhiteSpace().toInt(), StoragePC));
     }
 }
 
 void KAlcatelView::slotContactSimChanged(QListViewItem *item) {
-    slotShowContact(contact_sim_view, getContactById(getDocument()->contacts, item->text(2).toInt(), StorageSIM));
+    slotShowContact(getContactById(getDocument()->contacts, item->text(2).toInt(), StorageSIM));
 }
 
 void KAlcatelView::slotContactMobileChanged(QListViewItem *item) {
-    slotShowContact(contact_mobile_view, getContactById(getDocument()->contacts, item->text(7).toInt(), StorageMobile));
+    slotShowContact(getContactById(getDocument()->contacts, item->text(7).toInt(), StorageMobile));
 }
 
 void KAlcatelView::slotContactMobileCatChanged(QListViewItem *item) {
     AlcatelContact *cont = getContactById(getDocument()->contacts, item->text(6).toInt(), StorageMobile);
-    if (cont->Category >= 0) slotShowContact(contacts_cat_view[cont->Category], cont);
+    if (cont->Category >= 0) slotShowContact(cont);
 }
 
-void KAlcatelView::slotShowContact(KTextBrowser *where, AlcatelContact *what) {
+void KAlcatelView::slotShowContact(AlcatelContact *what) {
     QString text;
     if (what == NULL) {
-        where->setText( i18n("Failed reading contact!"));
+        textview->setText( i18n("Failed reading contact!"));
         return;
     }
     if (what->Storage == StorageSIM) {
@@ -789,8 +754,8 @@ void KAlcatelView::slotShowContact(KTextBrowser *where, AlcatelContact *what) {
         text.append(i18n("<b>Storage:</b> %1<br>").arg(i18n("Phone")));
     }
     text.append(i18n("<b>Position:</b> %1").arg(what->Id));
-    where->setText(text);
-    where->setMinimumHeight(where->contentsHeight()); /* resize to show all contents*/
+    textview->setText(text);
+    textview->setMinimumHeight(textview->contentsHeight()); /* resize to show all contents*/
 }
 
 void KAlcatelView::print(QPrinter *pPrinter) {
@@ -801,4 +766,42 @@ void KAlcatelView::print(QPrinter *pPrinter) {
     KMessageBox::sorry((KAlcatelApp *) parent(), i18n("Printing not implemented yet..."), i18n("Sorry"));
 
     printpainter.end();
+}
+
+void KAlcatelView::slotTreeChanged(QListViewItem *item) {
+    item->setOpen(true);
+    widgetstack->raiseWidget( ((KAlcatelTreeViewItem *)item)->showWidget );
+}
+
+void KAlcatelView::slotSetTitle( int num ) {
+    textview->setText("");
+    if (num == ID_TODOS) titlelabel->setText(i18n("All todos"));
+    else if (num == ID_CALENDAR) titlelabel->setText(i18n("Whole canedar"));
+    else if (num == ID_CONTACTS) titlelabel->setText(i18n("All contacts"));
+    else if (num == ID_CONTACTS_SIM) titlelabel->setText(i18n("Contacts stored on SIM card"));
+    else if (num == ID_CONTACTS_MOBILE ) titlelabel->setText(i18n("Contacts stored in mobile"));
+    else if (num == ID_CALLS) titlelabel->setText(i18n("All calls"));
+    else if (num == ID_CALLS_OUTGOING) titlelabel->setText(i18n("Outgoing calls"));
+    else if (num == ID_CALLS_MISSED) titlelabel->setText(i18n("Missed calls"));
+    else if (num == ID_CALLS_RECEIVED) titlelabel->setText(i18n("Received calls"));
+    else if (num == ID_MESSAGES) titlelabel->setText(i18n("All messages"));
+    else if (num == ID_MESSAGES_SENT) titlelabel->setText(i18n("Sent messages"));
+    else if (num == ID_MESSAGES_UNSENT) titlelabel->setText(i18n("Unsent messages"));
+    else if (num == ID_MESSAGES_READ) titlelabel->setText(i18n("Read messages"));
+    else if (num == ID_MESSAGES_UNREAD) titlelabel->setText(i18n("Unread messages"));
+    else if (num >= ID_CONTACTS_CAT && num < ID_CONTACTS_CAT + ALC_MAX_CATEGORIES){
+        AlcatelCategory *cat = getCategoryById(getDocument()->contact_cats, num - ID_CONTACTS_CAT, StorageMobile);
+        if (cat == NULL)
+            titlelabel->setText(i18n("Contacts in unknown category"));
+        else
+            titlelabel->setText(i18n("Contacts in category %1").arg(cat->Name));
+    }
+    else if (num >= ID_TODOS_CAT && num < ID_TODOS_CAT + ALC_MAX_CATEGORIES){
+        AlcatelCategory *cat = getCategoryById(getDocument()->todo_cats, num - ID_TODOS_CAT, StorageMobile);
+        if (cat == NULL)
+            titlelabel->setText(i18n("Todos in unknown category"));
+        else
+            titlelabel->setText(i18n("Todos in category %1").arg(cat->Name));
+    }
+    else titlelabel->setText(i18n("KAlcatel - something wrong has happen (%1)").arg(num));
 }

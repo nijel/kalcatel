@@ -77,6 +77,7 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : QWidget(parent, 
     hsplitter = new QSplitter( Qt::Horizontal, this );
     layout->addWidget( hsplitter, 0, 0);
     tree = new KListView( hsplitter );
+    hsplitter->setResizeMode(tree, QSplitter::FollowSizeHint);
     tree->setSorting(0);
     tree->addColumn(QString());
     tree->header()->hide();
@@ -105,9 +106,10 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : QWidget(parent, 
     listwidget->setStretchFactor( widgetstack, 100);
 
     textview = new KTextBrowser( vsplitter, 0, true);
+    vsplitter->setResizeMode(textview, QSplitter::FollowSizeHint);
+          
     connect(textview, SIGNAL(mailClick( const QString &, const QString &)), this, SLOT( slotMailClick( const QString &, const QString &)));
     connect(textview, SIGNAL(urlClick( const QString &)), this, SLOT( slotUrlClick( const QString &)));
-    vsplitter->setResizeMode( textview, QSplitter::FollowSizeHint );
     textview->setBackgroundMode( PaletteBase );
 
     for (i=0; i<ALC_MAX_CATEGORIES; i++) {
@@ -646,7 +648,6 @@ void KAlcatelView::repaint() {
         kalcatel_html->end();
 
     } /* any change */
-    hsplitter->setResizeMode( tree, QSplitter::FollowSizeHint );
     QWidget::repaint();
 }
 
@@ -656,6 +657,7 @@ void KAlcatelView::slotMessageChanged(QListViewItem *item) {
 
 void KAlcatelView::slotShowMessage(AlcatelMessage *what) {
     QString text;
+    
     if (what == NULL) {
         textview->setText( i18n("Failed reading message!"));
         return;
@@ -688,9 +690,8 @@ void KAlcatelView::slotShowMessage(AlcatelMessage *what) {
     text.append(what->Text);
 
     textview->setText(text);
-
+    textview->sync();
     textview->setMinimumHeight(textview->contentsHeight()); /* resize to show all contents*/
-    vsplitter->setResizeMode( textview, QSplitter::FollowSizeHint );
 }
 
 void KAlcatelView::slotTodoChanged(QListViewItem *item) {
@@ -736,8 +737,8 @@ void KAlcatelView::slotShowTodo(AlcatelTodo *what) {
     }
 
     textview->setText(text);
+    textview->sync();
     textview->setMinimumHeight(textview->contentsHeight()); /* resize to show all contents*/
-    vsplitter->setResizeMode( textview, QSplitter::FollowSizeHint );
 }
 
 void KAlcatelView::slotCalendarChanged(QListViewItem *item) {
@@ -779,8 +780,8 @@ void KAlcatelView::slotShowCalendar(AlcatelCalendar *what) {
     }
 
     textview->setText(text);
+    textview->sync();
     textview->setMinimumHeight(textview->contentsHeight()); /* resize to show all contents*/
-    vsplitter->setResizeMode( textview, QSplitter::FollowSizeHint );
 }
 
 void KAlcatelView::slotContactChanged(QListViewItem *item) {
@@ -828,8 +829,8 @@ void KAlcatelView::slotShowContact(AlcatelContact *what) {
         if (!what->PagerNumber.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Pager number")).arg(what->PagerNumber));
         if (!what->MobileNumber.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Mobile number")).arg(what->MobileNumber));
         if (!what->HomeNumber.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Home number")).arg(what->HomeNumber));
-        if (!what->Email1.isEmpty()) text.append(QString("<b>%1:</b> <a href=\"%2\">%3</a><br>").arg(i18n("Email 1")).arg(what->Email1).arg(what->Email1));
-        if (!what->Email2.isEmpty()) text.append(QString("<b>%1:</b> <a href=\"%2\">%3</a><br>").arg(i18n("Email 2")).arg(what->Email2).arg(what->Email2));
+        if (!what->Email1.isEmpty()) text.append(QString("<b>%1:</b> <a href=\"mailto:%2\">%3</a><br>").arg(i18n("Email 1")).arg(what->Email1).arg(what->Email1));
+        if (!what->Email2.isEmpty()) text.append(QString("<b>%1:</b> <a href=\"mailto:%2\">%3</a><br>").arg(i18n("Email 2")).arg(what->Email2).arg(what->Email2));
         if (!what->Address.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Address")).arg(what->Address));
         if (!what->City.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("City")).arg(what->City));
         if (!what->State.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("State")).arg(what->State));
@@ -879,8 +880,8 @@ void KAlcatelView::slotShowContact(AlcatelContact *what) {
         text.append(QString("<b>%1:</b> %2").arg(i18n("Previous position")).arg(what->PrevId));
     }
     textview->setText(text);
+    textview->sync();
     textview->setMinimumHeight(textview->contentsHeight()); /* resize to show all contents*/
-    vsplitter->setResizeMode( textview, QSplitter::FollowSizeHint );
 }
 
 void KAlcatelView::print(QPrinter *pPrinter) {
@@ -985,8 +986,8 @@ void KAlcatelView::slotShowCall(AlcatelCall *what) {
         text.append(QString("<b>%1:</b> %2").arg(i18n("Previous position")).arg(what->PrevId));
     }
     textview->setText(text);
+    textview->sync();
     textview->setMinimumHeight(textview->contentsHeight()); /* resize to show all contents*/
-    vsplitter->setResizeMode( textview, QSplitter::FollowSizeHint );
 }
 
 void KAlcatelView::slotUrlClick(const QString &url) {

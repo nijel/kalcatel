@@ -25,7 +25,7 @@
 #include "signallabel.h"
 
 void SignalLabel::mousePressEvent(QMouseEvent *ev) {
-    clicked();
+    if (ev->ButtonState() == Qt::LeftButton) clicked();
 }
 
 SignalLabel::SignalLabel(QWidget *parent, const char *name ) : QLabel(parent,name) {

@@ -29,6 +29,6 @@ SignalLed::SignalLed (const QColor& col, KLed::State st, KLed::Look look, KLed::
 }
 
 void SignalLed::mousePressEvent(QMouseEvent *ev) {
-    clicked();
+    if (ev->ButtonState() == Qt::LeftButton) clicked();
 }
 

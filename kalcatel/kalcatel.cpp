@@ -759,7 +759,7 @@ void KAlcatelApp::slotMobileInfo() {
           arg(sn).
           arg(imsi).
           arg(
-            i18n("%1 (%2)").
+            QString("%1 (%2)").
                 arg(bat_state == 0 ? i18n("Supplied from battery") :
                     bat_state == 1 ? i18n("Battery connected but not used") :
                     bat_state == 2 ? i18n("Battery not connected") :

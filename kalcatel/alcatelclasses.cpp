@@ -38,7 +38,7 @@
 
 
 QString MessageTypes[] = { i18n("Unread"), i18n("Read"), i18n("Unsent"), i18n("Sent") };
-QString StorageTypes[]= { i18n("None"), i18n("PC"), i18n("SIM"), i18n("Mobile") };
+QString StorageTypes[]= { i18n("none_storage", "None"), i18n("PC"), i18n("SIM"), i18n("Mobile") };
 QString CallTypes[] = { i18n("Missed"), i18n("Received"), i18n("Outgoing") };
 QString Priorities[] = { i18n("High"), i18n("Normal"), i18n("Low") };
 QString CalendarTypes[] = {
@@ -64,7 +64,7 @@ QString DayNames[] = {
     i18n("Sunday") };
 
 QString MonthNames[] = {
-    i18n("None"),
+    i18n("none_month", "None"),
     i18n("January"),
     i18n("February"),
     i18n("March"),
@@ -308,7 +308,7 @@ AlcatelCalendar::~AlcatelCalendar() {
 
 QString AlcatelCalendar::Repeating(void) const {
     static QString birthday = i18n("Each year (birthday)");
-    static QString none = i18n("None");
+    static QString none = i18n("none_repeating", "None");
     static QString unknown = i18n("Unknown");
     static QString forever = i18n("Forever");
     switch (EventType) {
@@ -322,7 +322,7 @@ QString AlcatelCalendar::Repeating(void) const {
             if (StartDate.isNull() && StopDate.isNull())
                 return forever;
             else if (StartDate.isNull())
-                return i18n("Till %2").arg(StopDate.toString());
+                return i18n("Till %1").arg(StopDate.toString());
             else if (StopDate.isNull())
                 return i18n("From %1").arg(StartDate.toString());
             else
@@ -334,7 +334,7 @@ QString AlcatelCalendar::Repeating(void) const {
 
 QString AlcatelCalendar::RepeatingDetail(void) const {
     static QString birthday = i18n("Each year (birthday)");
-    static QString none = i18n("None");
+    static QString none = i18n("none_repeating", "None");
     static QString unknown = i18n("Unknown");
     static QString forever = i18n("Forever");
     QString text;
@@ -349,7 +349,7 @@ QString AlcatelCalendar::RepeatingDetail(void) const {
             if (StartDate.isNull() && StopDate.isNull())
                 text.append(forever);
             else if (StartDate.isNull())
-                text.append(i18n("Till %2").arg(StopDate.toString()));
+                text.append(i18n("Till %1").arg(StopDate.toString()));
             else if (StopDate.isNull())
                 text.append(i18n("From %1").arg(StartDate.toString()));
             else

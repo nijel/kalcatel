@@ -4,6 +4,12 @@ KAlcatel - Changelog
 
 $Id$
 
+2002-05-31 Michal Cihar <cihar@email.cz>
+        * finished czech translation
+        * simplified some messages to make i18n easier
+        * fixed some typos
+        * really don't know how to allow work KDE/Qt 3 AND KDE/Qt 2.2
+
 2002-05-30 Michal Cihar <cihar@email.cz>
         * initial fix for KDE/Qt 3
         * updated czech translation
@@ -11,7 +17,7 @@ $Id$
 
 2002-05-23 Michal Cihar <cihar@email.cz>
         * fixed typo (nuber -> number)
-        * started Czech translation (still missing 369 of 480)
+        * started Czech translation (still plenty missing)
         * some improvements in contact select dialog (still not final)
 
 2002-05-15 Michal Cihar <cihar@email.cz>

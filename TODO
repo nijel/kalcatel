@@ -24,15 +24,15 @@ for 0.3-beta:
        + category names...
 
 for 0.4-beta:
- - (almost DONE) support for KDE/Qt 3
- - (started)  czech translation
+ - (started) support for KDE/Qt 3
+    * std dialogs cannot probably contain <br> etc. in KDE/Qt 3
+    * QMultiLineEdit causes much problems
+ - (DONE) czech translation
  - (started) improve contact/phone number selection dialog
- - std dialogs cannot contain <br> etc in KDE/Qt 3
  - after creating of item:
-	* focus to it
-	* update item view
+    * focus to it
+    * update item view
  - remember last screen for update...
- - Qt 3 - text editor for messages
 
 for 0.5:
  - fix deleting of some fields

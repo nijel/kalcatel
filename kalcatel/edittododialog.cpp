@@ -85,7 +85,7 @@ EditTodoDialog::EditTodoDialog(AlcatelCategoryList *cat, AlcatelTodoList *lst, A
     mainLayout->addWidget(editCategory = new KComboBox(this), 5, 1);
 
     editCategory->insertItem(i18n("Not set")); /* -1 */
-    editCategory->insertItem(i18n("None")); /* 255 */
+    editCategory->insertItem(i18n("none_category", "None")); /* 255 */
     for( AlcatelCategoryList::Iterator c_it = categories->begin(); c_it != categories->end(); ++c_it ) {
         editCategory->insertItem((*c_it).Name);
     }
@@ -123,7 +123,7 @@ EditTodoDialog::EditTodoDialog(AlcatelCategoryList *cat, AlcatelTodoList *lst, A
     mainLayout->addWidget(new QLabel(i18n("Contact"), this), 10, 0);
     mainLayout->addWidget(editContactID = new QLineEdit(this), 10, 1);
     editContactID->setDisabled(true);
-    editContactID->setText(i18n("None"));
+    editContactID->setText(i18n("none_contact", "None"));
 
     buttonContacts = new QPushButton(i18n("Contacts..."), this);
     connect ( buttonContacts, SIGNAL( clicked() ), this, SLOT(selectContacts()));
@@ -160,7 +160,7 @@ EditTodoDialog::EditTodoDialog(AlcatelCategoryList *cat, AlcatelTodoList *lst, A
     mainLayout->addWidget(new QLabel(i18n("Storage"), this), 15, 0);
 
     editStorage = new KComboBox(this);
-    editStorage->insertItem(i18n("None"));
+    editStorage->insertItem(i18n("none_category", "None"));
     editStorage->insertItem(i18n("PC"));
     editStorage->insertItem(i18n("SIM"));
     editStorage->insertItem(i18n("Mobile"));
@@ -219,7 +219,7 @@ void EditTodoDialog::emptyFields() {
     editAlarmTime->setCurrentItem ( 4 * 9 ); /* 9 hours *//* TODO: this could be in config */
     editSubject->setText("");
     editPriority->setCurrentItem(1);
-    editContactID->setText(i18n("None"));
+    editContactID->setText(i18n("none_contact", "None"));
     ContactID = -1;
     editPrivate->setChecked(false); /* TODO: add in config */
 }
@@ -280,7 +280,7 @@ void EditTodoDialog::loadTodo(const AlcatelTodo *cont) {
             editContactID->setText(cont->getName());
         }
     } else {
-        editContactID->setText(i18n("None"));
+        editContactID->setText(i18n("none_contact", "None"));
     }
     ContactID = todo->ContactID;
 
@@ -336,7 +336,7 @@ void EditTodoDialog::slotOK() {
     cont.ContactID = ContactID;
 
     if (editCategory->currentText() == i18n("Not set")) cont.Category = -1;
-    else if (editCategory->currentText() == i18n("None")) cont.Category = 255;
+    else if (editCategory->currentText() == i18n("none_category", "None")) cont.Category = 255;
     else {
         AlcatelCategory *cat = getCategoryByName ( categories, editCategory->currentText(), StorageAny);
         if (cat != NULL) cont.Category = cat->Id;
@@ -397,7 +397,7 @@ void EditTodoDialog::selectContacts() {
                 editContactID->setText(cont->getName());
             }
         } else {
-            editContactID->setText(i18n("None"));
+            editContactID->setText(i18n("none_contact", "None"));
         }
     }
 }

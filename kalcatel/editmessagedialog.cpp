@@ -198,14 +198,14 @@ void EditMessageDialog::slotOK() {
                 w_failed++;
                 failed++;
             } else {
-                msg.append(i18n("Message written, position=%2<br>").arg(i));
+                msg.append(i18n("Message written, position=%1<br>").arg(i));
                 written++;
             }
         } else {
             for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it ) {
                 if ((*it).find(PhoneNumberValidator::phoneNumberRegExp, 0) == -1) {
                     KMessageBox::error(this, i18n("%1 doesn't look like phone number!").arg(*it), i18n("Error"));
-                    msg.append(i18n("%1 desn't look like phone number!").arg(*it).append("<br>"));
+                    msg.append(i18n("%1 doesn't look like phone number!").arg(*it).append("<br>"));
                     failed++;
                 } else {
                     make_pdu((*it).latin1(), messageEdit->text().latin1(), 1, classCombo->currentItem(), pdu);

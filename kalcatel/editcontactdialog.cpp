@@ -93,7 +93,7 @@ EditContactDialog::EditContactDialog(AlcatelCategoryList *cat, AlcatelContactLis
     mainLayout->addWidget(editCategory = new KComboBox(this), 5, 1);
 
     editCategory->insertItem(i18n("Not set")); /* -1 */
-    editCategory->insertItem(i18n("None")); /* 255 */
+    editCategory->insertItem(i18n("none_category", "None")); /* 255 */
     for( AlcatelCategoryList::Iterator c_it = categories->begin(); c_it != categories->end(); ++c_it ) {
         editCategory->insertItem((*c_it).Name);
     }
@@ -197,7 +197,7 @@ EditContactDialog::EditContactDialog(AlcatelCategoryList *cat, AlcatelContactLis
     mainLayout->addWidget(new QLabel(i18n("Storage"), this), 22, 0);
 
     editStorage = new KComboBox(this);
-    editStorage->insertItem(i18n("None"));
+    editStorage->insertItem(i18n("none_storage", "None"));
     editStorage->insertItem(i18n("PC"));
     editStorage->insertItem(i18n("SIM"));
     editStorage->insertItem(i18n("Mobile"));
@@ -367,7 +367,7 @@ void EditContactDialog::slotOK() {
         cont.Custom4 = editCustom4->text();
 
         if (editCategory->currentText() == i18n("Not set")) cont.Category = -1;
-        else if (editCategory->currentText() == i18n("None")) cont.Category = 255;
+        else if (editCategory->currentText() == i18n("none_category", "None")) cont.Category = 255;
         else {
             AlcatelCategory *cat = getCategoryByName ( categories, editCategory->currentText(), StorageAny);
             if (cat != NULL) cont.Category = cat->Id;

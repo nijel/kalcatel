@@ -153,8 +153,8 @@ AlcatelContact *KAlcatelMergeDialog::exec(AlcatelContact &c1, AlcatelContact &c2
         KAlcatelDoc *theDoc = theApp->getDocument();
         AlcatelCategory *cat1 = getCategoryById(theDoc->contact_cats, c1.Category, c1.Storage);
         AlcatelCategory *cat2 = getCategoryById(theDoc->contact_cats, c2.Category, c2.Storage);
-        QString s1 = c1.Category == 255 ? i18n("None") : cat1 == NULL ? i18n("Unknown") : cat1->Name;
-        QString s2 = c2.Category == 255 ? i18n("None") : cat2 == NULL ? i18n("Unknown") : cat2->Name;
+        QString s1 = c1.Category == 255 ? i18n("none_category", "None") : cat1 == NULL ? i18n("Unknown") : cat1->Name;
+        QString s2 = c2.Category == 255 ? i18n("none_category", "None") : cat2 == NULL ? i18n("Unknown") : cat2->Name;
         itemList.append(MergeItem(conflictGrid, i18n("Category"), s1, s2));
     }
     if (c1.Private != c2.Private)  { itemList.append(MergeItem(conflictGrid, i18n("Private"), c1.Private, c2.Private)); }
@@ -228,7 +228,7 @@ AlcatelCalendar *KAlcatelMergeDialog::exec(AlcatelCalendar &c1, AlcatelCalendar 
         QString s1;
         QString s2;
         if (c1.ContactID == 0) {
-            s1 = i18n("None");
+            s1 = i18n("none_contact", "None");
         } else if (c1.ContactID == -1) {
             s1 = i18n("Not set");
         } else {
@@ -237,7 +237,7 @@ AlcatelCalendar *KAlcatelMergeDialog::exec(AlcatelCalendar &c1, AlcatelCalendar 
             s1.append(i18n(" (id=%1)").arg(c1.ContactID));
         }
         if (c2.ContactID == 0) {
-            s2 = i18n("None");
+            s2 = i18n("none_contact", "None");
         } else if (c2.ContactID == -1) {
             s2 = i18n("Not set");
         } else {
@@ -281,8 +281,8 @@ AlcatelTodo *KAlcatelMergeDialog::exec(AlcatelTodo &c1, AlcatelTodo &c2) {
         KAlcatelDoc *theDoc = theApp->getDocument();
         AlcatelCategory *cat1 = getCategoryById(theDoc->todo_cats, c1.Category, c1.Storage);
         AlcatelCategory *cat2 = getCategoryById(theDoc->todo_cats, c2.Category, c2.Storage);
-        QString s1 = c1.Category == 255 ? i18n("None") : cat1 == NULL ? i18n("Unknown") : cat1->Name;
-        QString s2 = c1.Category == 255 ? i18n("None") : cat2 == NULL ? i18n("Unknown") : cat2->Name;
+        QString s1 = c1.Category == 255 ? i18n("none_category", "None") : cat1 == NULL ? i18n("Unknown") : cat1->Name;
+        QString s2 = c1.Category == 255 ? i18n("none_category", "None") : cat2 == NULL ? i18n("Unknown") : cat2->Name;
         itemList.append(MergeItem(conflictGrid, i18n("Category"), s1, s2));
     }
     if (c1.Priority != c2.Priority)  { itemList.append(MergeItem(conflictGrid, i18n("Priority"), Priorities[c1.Priority], Priorities[c2.Priority])); }
@@ -292,7 +292,7 @@ AlcatelTodo *KAlcatelMergeDialog::exec(AlcatelTodo &c1, AlcatelTodo &c2) {
         QString s1;
         QString s2;
         if (c1.ContactID == 0) {
-            s1 = i18n("None");
+            s1 = i18n("none_contact", "None");
         } else if (c1.ContactID == -1) {
             s1 = i18n("Not set");
         } else {
@@ -301,7 +301,7 @@ AlcatelTodo *KAlcatelMergeDialog::exec(AlcatelTodo &c1, AlcatelTodo &c2) {
             s1.append(i18n(" (id=%1)").arg(c1.ContactID));
         }
         if (c2.ContactID == 0) {
-            s2 = i18n("None");
+            s2 = i18n("none_contact", "None");
         } else if (c2.ContactID == -1) {
             s2 = i18n("Not set");
         } else {

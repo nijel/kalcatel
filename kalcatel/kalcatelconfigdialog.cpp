@@ -220,11 +220,11 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
 
     contactUrlEdit = new QComboBox(otherPage);
     contactUrlEdit->insertItem(i18n("Autodetect"));
-    contactUrlEdit->insertItem(i18n("None"));
-    contactUrlEdit->insertItem(i18n("Custom1"));
-    contactUrlEdit->insertItem(i18n("Custom2"));
-    contactUrlEdit->insertItem(i18n("Custom3"));
-    contactUrlEdit->insertItem(i18n("Custom4"));
+    contactUrlEdit->insertItem(i18n("none_field", "None"));
+    contactUrlEdit->insertItem(i18n("Custom 1"));
+    contactUrlEdit->insertItem(i18n("Custom 2"));
+    contactUrlEdit->insertItem(i18n("Custom 3"));
+    contactUrlEdit->insertItem(i18n("Custom 4"));
 
     QWhatsThis::add(contactUrlEdit ,i18n("<b>Show custom field as URL</b><br>If you use one of Custom fields for storing URLs you should select here which. Selected field will be show as link. Autodetect means that program will try to detect what looks like URL."));
 
@@ -256,7 +256,7 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
     editMonitor->setSuffix(i18n("s"));
     otherLayout->addWidget(editMonitor,4,1);
 
-    QWhatsThis::add(editMonitor ,i18n("<b>Battery and signal monitor refresh</b><br>How often will be updated information about signal strength and battery status. You can always refresh these values just by clicking to indicator in bottom left corner."));
+    QWhatsThis::add(editMonitor ,i18n("<b>Battery and signal monitor refresh</b><br>How often will be updated information about signal strength and battery status. You can always refresh these values just by clicking to indicator in bottom right corner."));
 
     label = new QLabel(i18n("Stderr messages:"), otherPage);
     otherLayout->addWidget(label, 6, 0);
@@ -268,7 +268,7 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
     debugEdit->insertItem(i18n("Information"));
     debugEdit->insertItem(i18n("Warning"));
     debugEdit->insertItem(i18n("Error"));
-    debugEdit->insertItem(i18n("None"));
+    debugEdit->insertItem(i18n("none_debug", "None"));
 
     QWhatsThis::add(debugEdit ,i18n("<b>Stderr messages</b><br>How many messages will be written to standard error output. Messages with lower priority than selected won't be shown. Use Debug if there are problems using this program and possibly consult output with author."
                                     "<br>Debug 2 only adds some (probaly) unuseful information about reading/writing data to mobile."));

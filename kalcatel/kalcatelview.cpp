@@ -436,7 +436,7 @@ void KAlcatelView::repaint() {
                         catname = cat->Name;
                     }
                 } else {
-                    catname = i18n("None");
+                    catname = i18n("none_category", "None");
                 }
 
                 new KAlcatelTodoViewItem (todo_list, &(*it), cont, catname);
@@ -545,7 +545,7 @@ void KAlcatelView::repaint() {
                             catname = cat->Name;;
                         }
                     } else {
-                        catname = i18n("None");
+                        catname = i18n("none_category", "None");
                     }
                     new KAlcatelContactMobileViewItem (contacts_cat_list, &(*it), catname);
                 } /* not any storage=sim */
@@ -662,27 +662,29 @@ void KAlcatelView::slotShowMessage(AlcatelMessage *what) {
     }
     AlcatelContact *cont = getContactByPhone(getDocument()->contacts, &(what->Sender), &(((KAlcatelApp *)parent())->phone_prefix));
 
-    text = ((what->Status == MESSAGE_UNREAD || what->Status == MESSAGE_READ) ? i18n("<b>From:</b> %1 (%2)<br>") : i18n("<b>To:</b> %1 (%2)<br>")).
+    text = QString("<b>%1:</b> %2 (%3)<br>").arg(((what->Status == MESSAGE_UNREAD || what->Status == MESSAGE_READ) ? i18n("From") : i18n("To"))).
         arg(cont == NULL? QString("") : //cont->Name()
             QString("<a href=\"contact:%1/%2\">%3</a>").arg(cont->Storage==StoragePC ? 'P' : cont->Storage==StorageMobile ? 'M' : 'S').
             arg(cont->Id).arg(cont->getName())).
         arg(what->Sender);
 
-    if (!what->Date.isNull())
-        text.append(i18n("<b>Date:</b> %1<br><b>Time:</b> %2<br>").
-            arg(what->Date.date().toString()).
+    if (!what->Date.isNull()) {
+        text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Date")).
+            arg(what->Date.date().toString()));
+        text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Time")).
             arg(what->Date.time().toString()));
-
-    text.append(i18n("<b>SMSC:</b> %3<br>").arg(what->SMSC));
-    text.append(i18n("<b>Status:</b> %4<br>").arg(MessageTypes[what->Status]));
-    text.append(i18n("<b>Storage:</b> %1<br>").arg(StorageTypes[what->Storage]));
-    text.append(i18n("<b>Position:</b> %1").arg(what->Id));
-    if (what->Storage == StoragePC) {
-        text.append(i18n("<br><b>Previous storage:</b> %1<br>").arg(StorageTypes[what->PrevStorage]));
-        text.append(i18n("<b>Previous position:</b> %1").arg(what->PrevId));
     }
 
-    text.append("<br><br>");
+    text.append(QString("<b>%1:</b> %2<br>").arg(i18n("SMSC")).arg(what->SMSC));
+    text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Status")).arg(MessageTypes[what->Status]));
+    text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Storage")).arg(StorageTypes[what->Storage]));
+    text.append(QString("<b>%1:</b> %2").arg(i18n("Position")).arg(what->Id));
+    if (what->Storage == StoragePC) {
+        text.append(QString("<br><b>%1:</b> %2<br>").arg(i18n("Previous storage")).arg(StorageTypes[what->PrevStorage]));
+        text.append(QString("<b>%1:</b> %2").arg(i18n("Previous position")).arg(what->PrevId));
+    }
+
+    text.append("<br>");
     text.append(what->Text);
 
     textview->setText(text);
@@ -703,34 +705,34 @@ void KAlcatelView::slotShowTodo(AlcatelTodo *what) {
     }
 
     AlcatelContact *cont=getContactById(getDocument()->contacts, what->ContactID, what->Storage);
-    if (!what->Subject.isEmpty()) text.append(i18n("<b>Subject:</b> %1<br>").arg(what->Subject));
-    if (!what->DueDate.isNull()) text.append(i18n("<b>Due date:</b> %1<br>").arg(what->DueDate.toString()));
-    if (!what->Alarm.isNull()) text.append(i18n("<b>Alarm:</b> %1<br>").arg(what->Alarm.toString()));
-    if (what->Private != -1) text.append(i18n("<b>Private:</b> %1<br>").arg(what->Private == 1?i18n("Yes"):i18n("No")));
-    if (what->Completed != -1) text.append(i18n("<b>Completed:</b> %1<br>").arg(what->Completed == 1?i18n("Yes"):i18n("No")));
-    if (what->Priority != -1) text.append(i18n("<b>Priority:</b> %1<br>").arg(Priorities[what->Priority]));
-    if (what->ContactID != -1 && what->ContactID != 0) text.append(i18n("<b>Contact:</b> %1<br>").arg(cont==NULL?i18n("id=%1").arg(what->ContactID):
+    if (!what->Subject.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Subject")).arg(what->Subject));
+    if (!what->DueDate.isNull()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Due date")).arg(what->DueDate.toString()));
+    if (!what->Alarm.isNull()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Alarm")).arg(what->Alarm.toString()));
+    if (what->Private != -1) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Private")).arg(what->Private == 1?i18n("Yes"):i18n("No")));
+    if (what->Completed != -1) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Completed")).arg(what->Completed == 1?i18n("Yes"):i18n("No")));
+    if (what->Priority != -1) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Priority")).arg(Priorities[what->Priority]));
+    if (what->ContactID != -1 && what->ContactID != 0) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Contact")).arg(cont==NULL?i18n("id=%1").arg(what->ContactID):
         QString("<a href=\"contact:%1/%2\">%3</a>").arg(what->Storage==StoragePC ? 'P' : what->Storage==StorageMobile ? 'M' : 'S').
         arg(what->ContactID).arg(cont->getName())
             ));
     if (what->Category != -1) {
         if (what->Category == 255) {
-            text.append(i18n("<b>Category:</b> %1<br>").arg(i18n("None")));
+            text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Category")).arg(i18n("none_category", "None")));
         } else {
             AlcatelCategory *cat = getCategoryById(getDocument()->todo_cats, what->Category, StorageAny);
             if (cat == NULL) {
-                text.append(i18n("<b>Category:</b> %1<br>").arg(i18n("Unknown (id=%1)").arg(what->Category)));
+                text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Category")).arg(i18n("Unknown (id=%1)").arg(what->Category)));
             } else {
-                text.append(i18n("<b>Category:</b> %1<br>").arg(cat->Name));
+                text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Category")).arg(cat->Name));
             }
         }
     }
 
-    text.append(i18n("<b>Storage:</b> %1<br>").arg(StorageTypes[what->Storage]));
-    text.append(i18n("<b>Position:</b> %1").arg(what->Id));
+    text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Storage")).arg(StorageTypes[what->Storage]));
+    text.append(QString("<b>%1:</b> %2").arg(i18n("Position")).arg(what->Id));
     if (what->Storage == StoragePC) {
-        text.append(i18n("<br><b>Previous storage:</b> %1<br>").arg(StorageTypes[what->PrevStorage]));
-        text.append(i18n("<b>Previous position:</b> %1").arg(what->PrevId));
+        text.append(QString("<br><b>%1:</b> %2<br>").arg(i18n("Previous storage")).arg(StorageTypes[what->PrevStorage]));
+        text.append(QString("<b>%1:</b> %2").arg(i18n("Previous position")).arg(what->PrevId));
     }
 
     textview->setText(text);
@@ -751,29 +753,29 @@ void KAlcatelView::slotShowCalendar(AlcatelCalendar *what) {
 
     AlcatelContact *cont=getContactById(getDocument()->contacts, what->ContactID, what->Storage);
 
-    if (!what->Subject.isEmpty()) text.append(i18n("<b>Subject:</b> %1<br>").arg(what->Subject));
-    if (!what->Date.isNull()) text.append(i18n("<b>Date:</b> %1<br>").arg(what->Date.toString()));
+    if (!what->Subject.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Subject")).arg(what->Subject));
+    if (!what->Date.isNull()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Date")).arg(what->Date.toString()));
     if (what->EventType != ALC_CALENDAR_BIRTHDAY && what->EventType != ALC_CALENDAR_ALARM && what->EventType != ALC_CALENDAR_DAILY_ALARM) {
-        text.append(i18n("<b>Start time:</b> %1<br>").arg(what->StartTime.toString()));
-        text.append(i18n("<b>End time:</b> %1<br>").arg(what->EndTime.toString()));
+        text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Start time")).arg(what->StartTime.toString()));
+        text.append(QString("<b>%1:</b> %2<br>").arg(i18n("End time")).arg(what->EndTime.toString()));
     }
 
-    text.append(i18n("<b>Event type:</b> %1<br>").arg((what->EventType!=-1)?CalendarTypes[what->EventType]:i18n("Unknown")));
-    text.append(i18n("<b>Repeating:</b> %1<br>").arg(what->RepeatingDetail()));
+    text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Event type")).arg((what->EventType!=-1)?CalendarTypes[what->EventType]:i18n("Unknown")));
+    text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Repeating")).arg(what->RepeatingDetail()));
 
-    if (!what->Alarm.isNull()) text.append(i18n("<b>Alarm:</b> %1<br>").arg(what->Alarm.toString()));
-    if (!what->Alarm2.isNull()) text.append(i18n("<b>Alarm 2:</b> %1<br>").arg(what->Alarm2.toString()));
-    if (what->Private != -1) text.append(i18n("<b>Private:</b> %1<br>").arg(what->Private == 1?i18n("Yes"):i18n("No")));
-    if (what->ContactID != -1 && what->ContactID != 0) text.append(i18n("<b>Contact:</b> %1<br>").arg(cont==NULL?QString("id=%1").arg(what->ContactID):
+    if (!what->Alarm.isNull()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Alarm")).arg(what->Alarm.toString()));
+    if (!what->Alarm2.isNull()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Alarm 2")).arg(what->Alarm2.toString()));
+    if (what->Private != -1) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Private")).arg(what->Private == 1?i18n("Yes"):i18n("No")));
+    if (what->ContactID != -1 && what->ContactID != 0) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Contact")).arg(cont==NULL?QString("id=%1").arg(what->ContactID):
         QString("<a href=\"contact:%1/%2\">%3</a>").arg(what->Storage==StoragePC ? 'P' : what->Storage==StorageMobile ? 'M' : 'S').
         arg(what->ContactID).arg(cont->getName())
             ));
 
-    text.append(i18n("<b>Storage:</b> %1<br>").arg(StorageTypes[what->Storage]));
-    text.append(i18n("<b>Position:</b> %1").arg(what->Id));
+    text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Storage")).arg(StorageTypes[what->Storage]));
+    text.append(QString("<b>%1:</b> %2").arg(i18n("Position")).arg(what->Id));
     if (what->Storage == StoragePC) {
-        text.append(i18n("<br><b>Previous storage:</b> %1<br>").arg(StorageTypes[what->PrevStorage]));
-        text.append(i18n("<b>Previous position:</b> %1").arg(what->PrevId));
+        text.append(QString("<br><b>%1:</b> %2<br>").arg(i18n("Previous storage")).arg(StorageTypes[what->PrevStorage]));
+        text.append(QString("<b>%1:</b> %2").arg(i18n("Previous position")).arg(what->PrevId));
     }
 
     textview->setText(text);
@@ -798,41 +800,41 @@ void KAlcatelView::slotShowContact(AlcatelContact *what) {
         return;
     }
     if (what->Storage == StorageSIM) {
-        if (!what->LastName.isEmpty()) text.append(i18n("<b>Name:</b> %1<br>").arg(what->LastName));
-        if (!what->MainNumber.isEmpty()) text.append(i18n("<b>Phone:</b> %1<br>").arg(what->MainNumber));
+        if (!what->LastName.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Name")).arg(what->LastName));
+        if (!what->MainNumber.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Phone")).arg(what->MainNumber));
     } else {
-        if (!what->FirstName.isEmpty()) text.append(i18n("<b>First name:</b> %1<br>").arg(what->FirstName));
-        if (!what->LastName.isEmpty()) text.append(i18n("<b>Last name:</b> %1<br>").arg(what->LastName));
+        if (!what->FirstName.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("First name")).arg(what->FirstName));
+        if (!what->LastName.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Last name")).arg(what->LastName));
 
         if (what->Category != -1) {
             if (what->Category == 255) {
-                text.append(i18n("<b>Category:</b> %1<br>").arg(i18n("None")));
+                text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Category")).arg(i18n("none_category", "None")));
             } else {
                 AlcatelCategory *cat = getCategoryById(getDocument()->contact_cats, what->Category, StorageAny);
                 if (cat == NULL) {
-                    text.append(i18n("<b>Category:</b> %1<br>").arg(i18n("Unknown (id=%1))").arg(what->Category)));
+                    text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Category")).arg(i18n("Unknown (id=%1)").arg(what->Category)));
                 } else {
-                    text.append(i18n("<b>Category:</b> %1<br>").arg(cat->Name));
+                    text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Category")).arg(cat->Name));
                 }
             }
         }
 
-        if (!what->Company.isEmpty()) text.append(i18n("<b>Company:</b> %1<br>").arg(what->Company));
-        if (!what->JobTitle.isEmpty()) text.append(i18n("<b>Job title:</b> %1<br>").arg(what->JobTitle));
-        if (!what->WorkNumber.isEmpty()) text.append(i18n("<b>Work number:</b> %1<br>").arg(what->WorkNumber));
-        if (!what->MainNumber.isEmpty()) text.append(i18n("<b>Main number:</b> %1<br>").arg(what->MainNumber));
-        if (!what->FaxNumber.isEmpty()) text.append(i18n("<b>Fax number:</b> %1<br>").arg(what->FaxNumber));
-        if (!what->OtherNumber.isEmpty()) text.append(i18n("<b>Other number:</b> %1<br>").arg(what->OtherNumber));
-        if (!what->PagerNumber.isEmpty()) text.append(i18n("<b>Pager number:</b> %1<br>").arg(what->PagerNumber));
-        if (!what->MobileNumber.isEmpty()) text.append(i18n("<b>Mobile number:</b> %1<br>").arg(what->MobileNumber));
-        if (!what->HomeNumber.isEmpty()) text.append(i18n("<b>Home number:</b> %1<br>").arg(what->HomeNumber));
-        if (!what->Email1.isEmpty()) text.append(i18n("<b>Email 1:</b> <a href=\"%1\">%2</a><br>").arg(what->Email1).arg(what->Email1));
-        if (!what->Email2.isEmpty()) text.append(i18n("<b>Email 2:</b> <a href=\"%1\">%2</a><br>").arg(what->Email2).arg(what->Email2));
-        if (!what->Address.isEmpty()) text.append(i18n("<b>Address:</b> %1<br>").arg(what->Address));
-        if (!what->City.isEmpty()) text.append(i18n("<b>City:</b> %1<br>").arg(what->City));
-        if (!what->State.isEmpty()) text.append(i18n("<b>State:</b> %1<br>").arg(what->State));
-        if (!what->Zip.isEmpty()) text.append(i18n("<b>Zip:</b> %1<br>").arg(what->Zip));
-        if (!what->Country.isEmpty()) text.append(i18n("<b>Country:</b> %1<br>").arg(what->Country));
+        if (!what->Company.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Company")).arg(what->Company));
+        if (!what->JobTitle.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Job title")).arg(what->JobTitle));
+        if (!what->WorkNumber.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Work number")).arg(what->WorkNumber));
+        if (!what->MainNumber.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Main number")).arg(what->MainNumber));
+        if (!what->FaxNumber.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Fax number")).arg(what->FaxNumber));
+        if (!what->OtherNumber.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Other number")).arg(what->OtherNumber));
+        if (!what->PagerNumber.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Pager number")).arg(what->PagerNumber));
+        if (!what->MobileNumber.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Mobile number")).arg(what->MobileNumber));
+        if (!what->HomeNumber.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Home number")).arg(what->HomeNumber));
+        if (!what->Email1.isEmpty()) text.append(QString("<b>%1:</b> <a href=\"%2\">%3</a><br>").arg(i18n("Email 1")).arg(what->Email1).arg(what->Email1));
+        if (!what->Email2.isEmpty()) text.append(QString("<b>%1:</b> <a href=\"%2\">%3</a><br>").arg(i18n("Email 2")).arg(what->Email2).arg(what->Email2));
+        if (!what->Address.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Address")).arg(what->Address));
+        if (!what->City.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("City")).arg(what->City));
+        if (!what->State.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("State")).arg(what->State));
+        if (!what->Zip.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Zip")).arg(what->Zip));
+        if (!what->Country.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Country")).arg(what->Country));
         QString custom;
         KAlcatelApp *theApp=(KAlcatelApp *) parentWidget();
         if (theApp->contact_url == 1) custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom1)).arg(what->Custom1);
@@ -842,7 +844,7 @@ void KAlcatelView::slotShowContact(AlcatelContact *what) {
                 what->Custom1.contains(QRegExp("\\.[a-zA-Z1-9][a-zA-Z1-9]+$" , false))))
                     custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom1)).arg(what->Custom1);
         else custom = what->Custom1;
-        if (!what->Custom1.isEmpty()) text.append(i18n("<b>Custom 1:</b> %1<br>").arg(custom));
+        if (!what->Custom1.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Custom 1")).arg(custom));
         if (theApp->contact_url == 2) custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom2)).arg(what->Custom2);
         else if (theApp->contact_url == -1 &&
             (what->Custom2.contains("http://") ||
@@ -850,7 +852,7 @@ void KAlcatelView::slotShowContact(AlcatelContact *what) {
                 what->Custom2.contains(QRegExp("\\.[a-zA-Z1-9][a-zA-Z1-9]+$" , false))))
                     custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom2)).arg(what->Custom2);
         else custom = what->Custom2;
-        if (!what->Custom2.isEmpty()) text.append(i18n("<b>Custom 2:</b> %1<br>").arg(custom));
+        if (!what->Custom2.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Custom 2")).arg(custom));
         if (theApp->contact_url == 3) custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom3)).arg(what->Custom3);
         else if (theApp->contact_url == -1 &&
             (what->Custom3.contains("http://") ||
@@ -858,7 +860,7 @@ void KAlcatelView::slotShowContact(AlcatelContact *what) {
                 what->Custom3.contains(QRegExp("\\.[a-zA-Z1-9][a-zA-Z1-9]+$" , false))))
                     custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom3)).arg(what->Custom3);
         else custom = what->Custom3;
-        if (!what->Custom3.isEmpty()) text.append(i18n("<b>Custom 3:</b> %1<br>").arg(custom));
+        if (!what->Custom3.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Custom 3")).arg(custom));
         if (theApp->contact_url == 4) custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom4)).arg(what->Custom4);
         else if (theApp->contact_url == -1 &&
             (what->Custom4.contains("http://") ||
@@ -866,15 +868,15 @@ void KAlcatelView::slotShowContact(AlcatelContact *what) {
                 what->Custom4.contains(QRegExp("\\.[a-zA-Z1-9][a-zA-Z1-9]+$" , false))))
                     custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom4)).arg(what->Custom4);
         else custom = what->Custom4;
-        if (!what->Custom4.isEmpty()) text.append(i18n("<b>Custom 4:</b> %1<br>").arg(custom));
-        if (!what->Note.isEmpty()) text.append(i18n("<b>Note:</b> %1<br>").arg(what->Note));
-        if (what->Private != -1) text.append(i18n("<b>Private:</b> %1<br>").arg(what->Private == 1?i18n("Yes"):i18n("No")));
+        if (!what->Custom4.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Custom 4")).arg(custom));
+        if (!what->Note.isEmpty()) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Note")).arg(what->Note));
+        if (what->Private != -1) text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Private")).arg(what->Private == 1?i18n("Yes"):i18n("No")));
     }
-    text.append(i18n("<b>Storage:</b> %1<br>").arg(StorageTypes[what->Storage]));
-    text.append(i18n("<b>Position:</b> %1").arg(what->Id));
+    text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Storage")).arg(StorageTypes[what->Storage]));
+    text.append(QString("<b>%1:</b> %2").arg(i18n("Position")).arg(what->Id));
     if (what->Storage == StoragePC) {
-        text.append(i18n("<br><b>Previous storage:</b> %1<br>").arg(StorageTypes[what->PrevStorage]));
-        text.append(i18n("<b>Previous position:</b> %1").arg(what->PrevId));
+        text.append(QString("<br><b>%1:</b> %2<br>").arg(i18n("Previous storage")).arg(StorageTypes[what->PrevStorage]));
+        text.append(QString("<b>%1:</b> %2").arg(i18n("Previous position")).arg(what->PrevId));
     }
     textview->setText(text);
     textview->setMinimumHeight(textview->contentsHeight()); /* resize to show all contents*/
@@ -970,17 +972,17 @@ void KAlcatelView::slotShowCall(AlcatelCall *what) {
     }
     AlcatelContact *cont = getContactByPhone(getDocument()->contacts, &(what->Number), &(((KAlcatelApp *)parent())->phone_prefix));
     QString text;
-    text.append(i18n("<b>From:</b> %1 (%2)<br>").arg(what->Name).arg(what->Number));
-    if (cont != NULL)  text.append(i18n("<b>Contact:</b> %1<br>").arg(
+    text.append(QString("<b>%1:</b> %2 (%3)<br>").arg(what->Type == CallDialed ? i18n("To") : i18n("From")).arg(what->Name).arg(what->Number));
+    if (cont != NULL)  text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Contact")).arg(
         QString("<a href=\"contact:%1/%2\">%3</a>").arg(cont->Storage==StoragePC ? 'P' : cont->Storage==StorageMobile ? 'M' : 'S').
         arg(cont->Id).arg(cont->getName())
             ));
-    text.append(i18n( "<b>Type:</b> %4<br>").arg(CallTypes[what->Type]));
-    text.append(i18n("<b>Storage:</b> %1<br>").arg(StorageTypes[what->Storage]));
-    text.append(i18n("<b>Position:</b> %1").arg(what->Id));
+    text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Type")).arg(CallTypes[what->Type]));
+    text.append(QString("<b>%1:</b> %2<br>").arg(i18n("Storage")).arg(StorageTypes[what->Storage]));
+    text.append(QString("<b>%1:</b> %2>").arg(i18n("Position")).arg(what->Id));
     if (what->Storage == StoragePC) {
-        text.append(i18n("<br><b>Previous storage:</b> %1<br>").arg(StorageTypes[what->PrevStorage]));
-        text.append(i18n("<b>Previous position:</b> %1").arg(what->PrevId));
+        text.append(QString("<br><b>%1:</b> %2<br>").arg(i18n("Previous storage")).arg(StorageTypes[what->PrevStorage]));
+        text.append(QString("<b>%1:</b> %2").arg(i18n("Previous position")).arg(what->PrevId));
     }
     textview->setText(text);
     textview->setMinimumHeight(textview->contentsHeight()); /* resize to show all contents*/

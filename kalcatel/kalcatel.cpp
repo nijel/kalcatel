@@ -962,8 +962,7 @@ void KAlcatelApp::slotDefaultDetailMsg() {
 }
 
 void KAlcatelApp::slotPreferencesEdit() {
-    preferencesDialog->exec();
-    initConfig();
+    if (preferencesDialog->exec()) initConfig();
 }
 
 void KAlcatelApp::slotPreferencesSave() {

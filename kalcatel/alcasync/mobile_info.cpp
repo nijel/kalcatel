@@ -157,19 +157,21 @@ void get_string(const char *cmd, char *data, int len){
     char buffer[1000];
     char *loc1,*loc2;
     modem_cmd(cmd,buffer,sizeof(buffer)-1,100,0);
-    loc1 = strchr(buffer,'\n');
-    if (loc1 != NULL) {
-        loc1++;
-        loc1 = strchr(loc1,'\n');
-    }
-    if (loc1 != NULL) {
-        loc1++;
-        loc2 = strchr(loc1,'\r');
-        loc2[0] = '\0';
-        strncpy(data,loc1,len-1);
-    } else {
+    if (strlen(buffer) < strlen(cmd) + 1) {
         message(MSG_WARNING,"Could not parse string from output! (received: \"%s\")",reform(buffer,1));
         data[0]='\0';
+        return;
     }
+    loc1 = buffer + strlen(cmd);
+    while (*loc1 == '\n' || *loc1 == '\r') loc1++;
+    
+    loc2 = strchr(loc1,'\r');
+    if (loc2 == NULL) {
+        message(MSG_WARNING,"Could not parse string from output! (received: \"%s\")",reform(buffer,1));
+        data[0]='\0';
+        return;
+    }
+    loc2[0] = '\0';
+    strncpy(data,loc1,len-1);
     message(MSG_DEBUG,"Parsed string (len=%d): %s", len, reform(data,1));
 }

@@ -1,10 +1,30 @@
 KNOWN BUGS
- - sometimes this doesn't connect correctly to mobile at first attempt, trying
-   again or connecing before using another program (minicom) fixes it, if you
-   know any solution send it please to me
- - currently only ASCII characters <127 work correctly
+----------
 
-KNOWN INTERFACE FLAWS
- - icons for new * and fetch * are same
+PROGRAM CAN'T CONNECT
+(note: this bug is since 0.3 very rare)
+
+Sometimes this program doesn't connect correctly to mobile at first attempt,
+trying again mostly fixes it. When problem stays, try to connect to mobile
+with some "low level" program (for example minicom) and try some AT command
+(just AT should enough - OK should appear, or try ATI - modem should reply
+with it's name).
+
+If you know how to reproduce this bug, please send that procedure to me.
+
+
+SOME CHARACTERS DOESN'T WORK
+
+KAlcatel/alcatool currently supports only GSM characters in most cases. This
+contains all non accented latin chacacters, numbers, special signs and few
+accented characters (like á,í). In mobile (tested with Alcatel OT 501) you
+can enter characters, that won't be read correctly using KAlcatel/alcatool
+(all greek and some special symbols). I'm going to solve this, but not now.
+
+If you know how to convert these characters, please send it to me.
+
+This problem should less affect contacts stored on SIM card. They are being
+read in Unicode and if you use Unicode fonts, everything should be ok.
+
 
 $Id$

@@ -82,6 +82,8 @@ KAlcatelApp::KAlcatelApp(QWidget* , const char* name):KMainWindow(0, name) {
     initDocument();
     initView();
 
+    KMessageBox::information(this, i18n("This program can write data to mobile. It uses protocol which is not documented, so it may fail.<br><br><b>It may delete data in mobile.</b><br><br>However this has never happend to me, but you have been warned and don't complain, when it does something like that."), i18n("Warning"), "Initial Warning");
+
 //    menuBar();
 
     mobileManualDisconnect->setEnabled(false);

@@ -9,7 +9,8 @@ for 0.2-alpha:
  - (DONE) merging of data
 
 for 0.3-beta:
- - editing of calendar
+ - saving of deleted flags
+ - (DONE) editing of calendar
  - (DONE) editing of contacts
  - (DONE) editing of todos
  - (DONE) contact select dialog
@@ -17,16 +18,16 @@ for 0.3-beta:
  - (DONE) write to mobile (Alcatel binary mode)
  - (DONE) signal and battery monitoring
  - (DONE) change category behavior in contacts - tree should look like:
-   * SIM (include previous sim)
-   * general
-   * category names...
+       + SIM (include previous sim)
+       + general
+       + category names...
 
 for 0.4:
  - fix deleting of some fields
  - write for AT commands
  - try to investigate deleting of items
  - improve contact/phone number selection dialog
- - export/import data from csv (and maybe others)
+ - export/import data from csv (and maybe others - vcard)
 
 for 0.5:
  - rewrite reading as separate thread and allow canceling (probably using
@@ -36,6 +37,7 @@ for 1.0:
  - fix majority of reported bugs
 
 sometimes (probably till 1.0, but not planned yet):
+ - `grep -rn '/* TODO:' *`
  - verify deleted items by content (optionally)
  - czech translation
  - searching

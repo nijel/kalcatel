@@ -85,7 +85,8 @@
 #define ALC_CALENDAR_APPOINTMENT    0
 #define ALC_CALENDAR_BIRTHDAY       2
 #define ALC_CALENDAR_CALL           3
-#define ALC_CALENDAR_ALARM          4
+#define ALC_CALENDAR_ALARM          4 /* Alarm=Alarm2: when beep */
+#define ALC_CALENDAR_DAILY_ALARM    5 /* Alarm: last set???, Alarm2: when beep */
 #define ALC_CALENDAR_REPEATING      9
 
 /** types of return values

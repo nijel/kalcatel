@@ -66,6 +66,7 @@
 
 #include "editcontactdialog.h"
 #include "edittododialog.h"
+#include "editeventdialog.h"
 
 KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : QWidget(parent, name) {
     int i;
@@ -751,7 +752,7 @@ void KAlcatelView::slotShowCalendar(AlcatelCalendar *what) {
 
     if (!what->Subject.isEmpty()) text.append(i18n("<b>Subject:</b> %1<br>").arg(what->Subject));
     if (!what->Date.isNull()) text.append(i18n("<b>Date:</b> %1<br>").arg(what->Date.toString()));
-    if (what->EventType != ALC_CALENDAR_BIRTHDAY && what->EventType != ALC_CALENDAR_ALARM) {
+    if (what->EventType != ALC_CALENDAR_BIRTHDAY && what->EventType != ALC_CALENDAR_ALARM && what->EventType != ALC_CALENDAR_DAILY_ALARM) {
         text.append(i18n("<b>Start time:</b> %1<br>").arg(what->StartTime.toString()));
         text.append(i18n("<b>End time:</b> %1<br>").arg(what->EndTime.toString()));
     }
@@ -1025,7 +1026,10 @@ void KAlcatelView::slotTodoDoubleClicked(QListViewItem *item) {
 }
 
 void KAlcatelView::slotCalendarDoubleClicked(QListViewItem *item) {
-/* TODO: add editing code here */
+    if (item != NULL) {
+        EditEventDialog edit(getDocument()->calendar, getDocument()->contacts, (AlcatelCalendar *)(((KAlcatelDataItem *) item)->alcatelData), (KAlcatelApp *) parent());
+        edit.exec();
+    }
 }
 
 void KAlcatelView::slotContactDoubleClicked(QListViewItem *item) {

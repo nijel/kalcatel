@@ -4,6 +4,12 @@ KAlcatel - Changelog
 
 $Id$
 
+2002-05-06 Michal Cihar <cihar@email.cz>
+        * added editing of events
+        * fixed editing of todos
+        * fixed listing of daily alarms
+        * fixed crash when data content was deleted and window should repaint
+
 2002-04-30 Michal Cihar <cihar@email.cz>
         * rewritten commiting of changes
         * commiting now for *some* items works

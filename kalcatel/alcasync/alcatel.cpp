@@ -531,7 +531,7 @@ alc_type *alcatel_get_field_value(alc_type type, int item, int field) {
         return NULL;
     }
 
-    len = data[4] - 12/;
+    len = data[4] - 12;
 
     result = (alc_type *)malloc(len + 1);
     chk(result);

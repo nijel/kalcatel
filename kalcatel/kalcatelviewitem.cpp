@@ -536,9 +536,9 @@ void KAlcatelCalendarViewItem::update() {
         setPixmap(0, SmallIcon("kalcatel-mobile.png"));
     }
 
-    setText( 1, ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_ALARM ? i18n("N/A") : ((AlcatelCalendar *)alcatelData)->Date.isNull()?i18n("None"):((AlcatelCalendar *)alcatelData)->Date.toString());
-    setText( 2, ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_BIRTHDAY || ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_ALARM ? i18n("N/A") : ((AlcatelCalendar *)alcatelData)->StartTime.toString());
-    setText( 3, ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_BIRTHDAY || ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_ALARM ? i18n("N/A") : ((AlcatelCalendar *)alcatelData)->EndTime.toString());
+    setText( 1, ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_DAILY_ALARM || ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_ALARM ? i18n("N/A") : ((AlcatelCalendar *)alcatelData)->Date.isNull()?i18n("None"):((AlcatelCalendar *)alcatelData)->Date.toString());
+    setText( 2, ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_BIRTHDAY || ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_DAILY_ALARM || ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_ALARM ? i18n("N/A") : ((AlcatelCalendar *)alcatelData)->StartTime.toString());
+    setText( 3, ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_BIRTHDAY || ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_DAILY_ALARM || ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_ALARM ? i18n("N/A") : ((AlcatelCalendar *)alcatelData)->EndTime.toString());
     setText( 4, ((AlcatelCalendar *)alcatelData)->EventType!=-1?CalendarTypes[((AlcatelCalendar *)alcatelData)->EventType]:i18n("Unknown"));
     setText( 5, (((AlcatelCalendar *)alcatelData)->Subject.isEmpty() && ((AlcatelCalendar *)alcatelData)->EventType == ALC_CALENDAR_CALL && contact != NULL) ? i18n("Call to %1").arg(contact->getName()) : ((AlcatelCalendar *)alcatelData)->Subject);
     setText( 6, ((AlcatelCalendar *)alcatelData)->Alarm.isNull()?i18n("None"):((AlcatelCalendar *)alcatelData)->Alarm.toString());

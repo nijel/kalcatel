@@ -47,7 +47,7 @@ QString CalendarTypes[] = {
     i18n("Birthday"),
     i18n("Call"),
     i18n("Alarm"),
-    i18n("Unknown(5)"),
+    i18n("Daily alarm"),
     i18n("Unknown(6)"),
     i18n("Unknown(7)"),
     i18n("Unknown(8)"),
@@ -92,7 +92,7 @@ void *getAlcatelField(const QDate &data, AlcatelFieldType type) {
 }
 
 void *getAlcatelField(const QTime &data, AlcatelFieldType type) {
-    if (type == _date) {
+    if (type == _time) {
         AlcatelTimeStruct *time = (AlcatelTimeStruct *)malloc(sizeof(AlcatelTimeStruct));
         time->hour = data.hour();
         time->minute = data.minute();
@@ -364,7 +364,7 @@ QString AlcatelCalendar::RepeatingDetail(void) const {
     }
 }
 QString AlcatelCalendar::getName(void) {
-    return QString("%1 %2-%3 (%4)").arg(Date.toString()).arg(StartTime.toString()).arg(EndTime.toString()).arg(Subject);
+    return QString("%2 (%1)").arg((int)Storage).arg(Id);
 }
 
 void AlcatelCalendar::setField(int number, AlcatelFieldStruct *data) {

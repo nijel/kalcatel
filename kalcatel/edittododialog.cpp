@@ -125,7 +125,7 @@ EditTodoDialog::EditTodoDialog(AlcatelCategoryList *cat, AlcatelTodoList *lst, A
     editContactID->setDisabled(true);
     editContactID->setText(i18n("None"));
 
-    QPushButton *buttonContacts = new QPushButton(i18n("Contacts..."), this);
+    buttonContacts = new QPushButton(i18n("Contacts..."), this);
     connect ( buttonContacts, SIGNAL( clicked() ), this, SLOT(selectContacts()));
     mainLayout->addWidget(buttonContacts,10,2);
 
@@ -230,7 +230,7 @@ void EditTodoDialog::loadTodo(const AlcatelTodo *cont) {
     emptyFields();
 
     if (todo == NULL) return;
-    if (todo->Storage == StorageAny || todo->Storage == StorageNone) return;
+    if (todo->Storage == StorageAny || todo->Storage == StorageNone || todo->Storage == StorageSIM) return;
 
     editStorage->setCurrentItem((int)todo->Storage);
 
@@ -250,9 +250,8 @@ void EditTodoDialog::loadTodo(const AlcatelTodo *cont) {
         else editAlarmDate->setDate(QDate::currentDate());
     } else {
         editAlarmDate->setDate(todo->Alarm.date());
+        editAlarmTime->setEditText(todo->Alarm.time().toString());
     }
-
-    editAlarmTime->setEditText(todo->Alarm.time().toString());
 
     editSubject->setText(todo->Subject);
 

@@ -653,6 +653,7 @@ bool KAlcatelDoc::openDocument(const KURL& url, const char *format /*=0*/) {
                             m = m.nextSibling();
                         }
                         messagesVersion++;
+                        version++;
                     }
                 } else if (e.tagName() == "contacts") {
                     if (theApp->loadContacts){
@@ -671,6 +672,7 @@ bool KAlcatelDoc::openDocument(const KURL& url, const char *format /*=0*/) {
                             m = m.nextSibling();
                         }
                         contactsVersion++;
+                        version++;
                     }
                 } else if (e.tagName() == "calendar") {
                     if (theApp->loadEvents){
@@ -689,6 +691,7 @@ bool KAlcatelDoc::openDocument(const KURL& url, const char *format /*=0*/) {
                             m = m.nextSibling();
                         }
                         calendarVersion++;
+                        version++;
                     }
                 } else if (e.tagName() == "todos") {
                     if (theApp->loadTodos){
@@ -707,6 +710,7 @@ bool KAlcatelDoc::openDocument(const KURL& url, const char *format /*=0*/) {
                             m = m.nextSibling();
                         }
                         todosVersion++;
+                        version++;
                     }
                 } else if (e.tagName() == "calls") {
                     if (theApp->loadCalls){
@@ -725,6 +729,7 @@ bool KAlcatelDoc::openDocument(const KURL& url, const char *format /*=0*/) {
                             m = m.nextSibling();
                         }
                         callsVersion++;
+                        version++;
                     }
                 } else if (e.tagName() == "todocategories") {
                     if (theApp->loadTodos){
@@ -743,6 +748,7 @@ bool KAlcatelDoc::openDocument(const KURL& url, const char *format /*=0*/) {
                             m = m.nextSibling();
                         }
                         todosVersion++;
+                        version++;
                     }
                 } else if (e.tagName() == "contactcategories") {
                     if (theApp->loadContacts){
@@ -761,6 +767,7 @@ bool KAlcatelDoc::openDocument(const KURL& url, const char *format /*=0*/) {
                             m = m.nextSibling();
                         }
                         contactsVersion++;
+                        version++;
                     }
                 } else {
                     ::message(MSG_WARNING, "Unknown tag in document: %s", e.tagName().latin1());
@@ -1255,18 +1262,27 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
         case ALC_SYNC_CALENDAR:
             count = ALC_CALENDAR_FIELDS;
             clearCalendar(calendar, StorageMobile);
+            calendarVersion++;
+            version++;
+            slotUpdateAllViews(NULL);
             if (win->mergeData == 1)
                 clearCalendar(calendar, StoragePC);
             break;
         case ALC_SYNC_TODO:
             count = ALC_TODO_FIELDS;
             clearTodos(todos, StorageMobile);
+            todosVersion++;
+            version++;
+            slotUpdateAllViews(NULL);
             if (win->mergeData == 1)
                 clearTodos(todos, StoragePC);
             break;
         case ALC_SYNC_CONTACTS:
             count = ALC_CONTACTS_FIELDS;
             clearContacts(contacts, StorageMobile);
+            contactsVersion++;
+            version++;
+            slotUpdateAllViews(NULL);
             if (win->mergeData == 1)
                 clearContacts(contacts, StoragePC);
             break;
@@ -1426,6 +1442,7 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
                         it = local_calendar.remove(it);
                     }
                     calendarVersion++;
+                    version++;
                     slotUpdateAllViews(NULL);
                 }
                 break; }
@@ -1471,6 +1488,7 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
                         it = local_todos.remove(it);
                     }
                     todosVersion++;
+                    version++;
                     slotUpdateAllViews(NULL);
                 }
                 break; }
@@ -1517,6 +1535,7 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
                         it = local_contacts.remove(it);
                     }
                     contactsVersion++;
+                    version++;
                     slotUpdateAllViews(NULL);
                 }
                 break; }
@@ -1592,6 +1611,7 @@ bool KAlcatelDoc::readMobileCategories(AlcatelCategoryList *strList, alc_type sy
             message (MSG_DEBUG, "Read category name: %02d: %s", list[i],  result);
             contactsVersion++;
             todosVersion++;
+            version++;
             slotUpdateAllViews(NULL);
             free(result);
         }
@@ -1619,6 +1639,9 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
         MessageData *msg;
         win->slotStatusMsg(i18n("Reading messages"),ID_DETAIL_MSG);
         clearMessages(messages, StorageSIM);
+        messagesVersion++;
+        version++;
+        slotUpdateAllViews(NULL);
         msg = get_messages();
 
         i = 0;
@@ -1675,6 +1698,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
             }
 
             messagesVersion++;
+            version++;
             slotUpdateAllViews(NULL);
             i++;
         }
@@ -1687,6 +1711,9 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
         ContactData *cont;
         win->slotStatusMsg(i18n("Reading calls"),ID_DETAIL_MSG);
         clearCalls(calls, StorageMobile);
+        callsVersion++;
+        version++;
+        slotUpdateAllViews(NULL);
 
         select_phonebook(PB_LAST_DIAL);
         cont = get_contacts(1, 10);
@@ -1735,6 +1762,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
                 calls->append(Call);
             }
             callsVersion++;
+            version++;
             slotUpdateAllViews(NULL);
             i++;
         }
@@ -1787,6 +1815,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
                 calls->append(Call);
             }
             callsVersion++;
+            version++;
             slotUpdateAllViews(NULL);
             i++;
         }
@@ -1841,6 +1870,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
             }
 
             callsVersion++;
+            version++;
             slotUpdateAllViews(NULL);
             i++;
         }
@@ -1853,6 +1883,9 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
         ContactData *cont;
         win->slotStatusMsg(i18n("Reading SIM contacts"),ID_DETAIL_MSG);
         clearContacts(contacts, StorageSIM);
+        contactsVersion++;
+        version++;
+        slotUpdateAllViews(NULL);
         select_phonebook(PB_SIM);
         cont = get_contacts(1, 200);
 
@@ -1902,6 +1935,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
             }
 
             contactsVersion++;
+            version++;
             slotUpdateAllViews(NULL);
             i++;
         }
@@ -1937,6 +1971,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
             }
 
             contactsVersion++;
+            version++;
         }
 
         if (what == alcatel_calendar || what == alcatel_all) {
@@ -1950,6 +1985,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
                 return false;
             }
             calendarVersion++;
+            version++;
         }
 
         if (what == alcatel_todos || what == alcatel_all) {
@@ -1975,6 +2011,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
             }
 
             todosVersion++;
+            version++;
         }
 
         win->slotStatusMsg(i18n("Closing binary mode"),ID_DETAIL_MSG);
@@ -2136,7 +2173,7 @@ this shouldn't be here because it should be created on the fly
     }*/
 
     {
-        ::message(MSG_INFO, "Commiting todos... N/A really yet");
+        ::message(MSG_INFO, "Commiting todos...");
         AlcatelTodoList::Iterator it;
         for( it = todos->begin(); it != todos->end(); ++it ) {
             if ((*it).Storage == StorageMobile || ((*it).Storage == StoragePC && (*it).PrevStorage == StorageMobile)) {
@@ -2208,7 +2245,7 @@ this shouldn't be here because it should be created on the fly
     }
 
     {
-        ::message(MSG_INFO, "Commiting events... N/A really yet");
+        ::message(MSG_INFO, "Commiting events...");
         AlcatelCalendarList::Iterator it;
         for( it = calendar->begin(); it != calendar->end(); ++it ) {
             if ((*it).Storage == StorageMobile || ((*it).Storage == StoragePC && (*it).PrevStorage == StorageMobile)) {

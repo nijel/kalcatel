@@ -68,6 +68,7 @@
 
 #include "editcontactdialog.h"
 #include "edittododialog.h"
+#include "editeventdialog.h"
 
 KAlcatelApp::KAlcatelApp(QWidget* , const char* name):KMainWindow(0, name) {
     config=kapp->config();
@@ -1053,6 +1054,8 @@ void KAlcatelApp::slotNewContact() {
 }
 
 void KAlcatelApp::slotNewEvent() {
+    EditEventDialog dialog(getDocument()->calendar, getDocument()->contacts, NULL, this);
+    dialog.exec();
 }
 
 void KAlcatelApp::slotMobileCommit() {

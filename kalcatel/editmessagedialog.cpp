@@ -46,8 +46,8 @@
 #include "phonenumbervalidator.h"
 #include "kalcatel.h"
 
-#include "alcatool/pdu.h"
-#include "alcatool/sms.h"
+#include "alcasync/pdu.h"
+#include "alcasync/sms.h"
 
 #include "selectcontactdialog.h"
 

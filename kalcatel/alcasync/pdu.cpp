@@ -1,5 +1,5 @@
 /*
- * alcatool/pdu.cpp
+ * alcasync/pdu.cpp
  *
  * PDU decoding/encoding
  *

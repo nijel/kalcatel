@@ -61,7 +61,7 @@ nice to have features (possible):
     - add alcatel code into gnokii
     - add support for linking with gnokii in kalcatel
     - make some more generic library for accessing mobiles and add to that
-      library code from gnokii, alcatool and may be some others - this is IMHO
+      library code from gnokii, alcasync and may be some others - this is IMHO
       best, but also most operose
  - calendar view for calendar items
  - nicer icons ;-)

@@ -57,11 +57,11 @@
 #include "editmessagedialog.h"
 #include "alcatelclasses.h"
 
-#include "alcatool/modem.h"
-#include "alcatool/mobile_info.h"
-#include "alcatool/sms.h"
-#include "alcatool/contacts.h"
-#include "alcatool/logging.h"
+#include "alcasync/modem.h"
+#include "alcasync/mobile_info.h"
+#include "alcasync/sms.h"
+#include "alcasync/contacts.h"
+#include "alcasync/logging.h"
 
 #include "signallabel.h"
 #include "signalled.h"

@@ -61,8 +61,8 @@
 #include "kalcateltreeviewitem.h"
 #include "kalcatelviewitem.h"
 #include "alcatelclasses.h"
-#include "alcatool/sms.h"
-#include "alcatool/logging.h"
+#include "alcasync/sms.h"
+#include "alcasync/logging.h"
 
 #include "editcontactdialog.h"
 #include "edittododialog.h"

@@ -26,10 +26,10 @@ If you know how to reproduce this bug, please send that procedure to me.
 
 SOME CHARACTERS DOESN'T WORK
 
-KAlcatel/alcatool currently supports only GSM characters in most cases. This
+KAlcatel/alcasync currently supports only GSM characters in most cases. This
 contains all non accented latin chacacters, numbers, special signs and few
 accented characters (like á,í). In mobile (tested with Alcatel OT 501) you
-can enter characters, that won't be read correctly using KAlcatel/alcatool
+can enter characters, that won't be read correctly using KAlcatel/alcasync
 (all greek and some special symbols). I'm going to solve this, but not now.
 
 If you know how to convert these characters, please send it to me.

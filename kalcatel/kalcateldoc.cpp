@@ -47,17 +47,17 @@
 #include "kalcatel.h"
 #include "kalcatelview.h"
 
-// alcatool includes
-#include "alcatool/modem.h"
-#include "alcatool/mobile_info.h"
-#include "alcatool/logging.h"
-#include "alcatool/version.h"
-#include "alcatool/charset.h"
-#include "alcatool/sms.h"
-#include "alcatool/common.h"
-#include "alcatool/pdu.h"
-#include "alcatool/alcatel.h"
-#include "alcatool/contacts.h"
+// alcasync includes
+#include "alcasync/modem.h"
+#include "alcasync/mobile_info.h"
+#include "alcasync/logging.h"
+#include "alcasync/version.h"
+#include "alcasync/charset.h"
+#include "alcasync/sms.h"
+#include "alcasync/common.h"
+#include "alcasync/pdu.h"
+#include "alcasync/alcatel.h"
+#include "alcasync/contacts.h"
 
 QList<KAlcatelView> *KAlcatelDoc::pViewList = 0L;
 

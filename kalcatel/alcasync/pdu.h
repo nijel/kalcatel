@@ -1,5 +1,5 @@
 /*
- * alcatool/pdu.h
+ * alcasync/pdu.h
  *
  * PDU decoding/encoding
  *

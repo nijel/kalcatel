@@ -1,5 +1,5 @@
 /*
- * alcatool/mobile.h
+ * alcasync/mobile.h
  *
  * some common defines for mobile phones
  *

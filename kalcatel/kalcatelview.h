@@ -32,7 +32,7 @@
 // include files for Qt
 #include <qwidget.h>
 
-#include "alcatool/alcatel.h"
+#include "alcasync/alcatel.h"
 
 /** Listing type, used for creting headers of list views
   */

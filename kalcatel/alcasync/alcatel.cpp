@@ -1,5 +1,5 @@
 /*
- * alcatool/alcatel.cpp
+ * alcasync/alcatel.cpp
  *
  * low level functions for communication with Alcatel One Touch 501 and
  * compatible mobile phone

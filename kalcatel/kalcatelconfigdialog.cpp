@@ -47,7 +47,7 @@
 #include "kalcatelconfigdialog.h"
 #include "kalcatel.h"
 
-#include "alcatool/logging.h"
+#include "alcasync/logging.h"
 
 KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) : KDialog(parent,name,true) {
     resize(450, 200 );

@@ -1,5 +1,5 @@
 /*
- * alcatool/modem.h
+ * alcasync/modem.h
  *
  * modem initialization, commands and closing
  *

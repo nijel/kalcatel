@@ -1,5 +1,5 @@
 /*
- * alcatool/sms.cpp
+ * alcasync/sms.cpp
  *
  * sms reading/writing functions
  *

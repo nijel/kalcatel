@@ -28,8 +28,8 @@
 #include <klocale.h>
 
 #include "alcatelclasses.h"
-#include "alcatool/logging.h"
-#include "alcatool/alcatel.h"
+#include "alcasync/logging.h"
+#include "alcasync/alcatel.h"
 
 /**
  * used for type checking

@@ -9,6 +9,8 @@ $Id$
         * fixed editing of todos
         * fixed listing of daily alarms
         * fixed crash when data content was deleted and window should repaint
+        * alcatool renamed to alcasync to avoid name confusions with Matthijs
+          van Duin's tool for alcatel ADSL modems
 
 2002-04-30 Michal Cihar <cihar@email.cz>
         * rewritten commiting of changes

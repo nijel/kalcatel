@@ -1,5 +1,5 @@
 /*
- * alcatool/logging.cpp
+ * alcasync/logging.cpp
  *
  * loging functions with configurable verbosity
  *

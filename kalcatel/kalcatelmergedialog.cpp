@@ -41,7 +41,7 @@
 #include "kalcateldoc.h"
 
 #include "alcatelclasses.h"
-#include "alcatool/logging.h"
+#include "alcasync/logging.h"
 
 KAlcatelMergeDialog::KAlcatelMergeDialog(QWidget *parent, const char *name ) : KDialog(parent,name,true) {
     QLabel *label;

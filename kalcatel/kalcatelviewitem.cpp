@@ -32,7 +32,7 @@
 
 #include "kalcatelviewitem.h"
 #include "alcatelclasses.h"
-#include "alcatool/logging.h"
+#include "alcasync/logging.h"
 
 #define epoch_time      "%010d"
 #define epoch_empty     "          "

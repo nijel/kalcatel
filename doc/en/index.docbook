@@ -239,7 +239,7 @@ used for apps that use plugins or that provide their own scripting hooks
 and/or development libraries. -->
 
 <para>
-&kapp; is based on alcatool library which makes all hard work with mobile.
+&kapp; is based on alcasync library which makes all hard work with mobile.
 </para>
 
 <!-- Use refentries to describe APIs.  Refentries are fairly complicated and you

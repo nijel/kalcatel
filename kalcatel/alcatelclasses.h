@@ -30,7 +30,7 @@
 #include <qvaluelist.h>
 #include <qdatetime.h>
 
-#include "alcatool/alcatel.h"
+#include "alcasync/alcatel.h"
 
 /**
   *@author Michal Cihar

@@ -42,6 +42,7 @@ public:
 };
 
 extern QString SMSTypes[];
+extern QString Priorities[];
 
 
 class AlcatelContact : public AlcatelClass {
@@ -55,6 +56,7 @@ public:
 
 	enum ContactStorage Storage;
 	
+	QString Name(void);
     QString LastName;
     QString FirstName;
     QString Company;
@@ -161,5 +163,6 @@ QString *getCategoryName(AlcatelCategoryList *list, int id);
 int phoneCmp(QString *number1, QString *number2, QString *prefix);
 AlcatelContact *getContactByPhone(AlcatelContactList *list, QString *number, QString *prefix);
 AlcatelContact *getContactById(AlcatelContactList *list, int id);
+AlcatelTodo *getTodoById(AlcatelTodoList *list, int id);
 
 #endif

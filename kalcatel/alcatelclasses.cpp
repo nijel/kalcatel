@@ -35,6 +35,11 @@
  * used for type checking
  */
 #define chk_type(which) if ((*data).type != which) message( MSG_ERROR, "Type check failed for item %d!", number); else
+
+
+QString SMSTypes[] = { i18n("Unread"), i18n("Read"), i18n("Unsent"), i18n("Sent")};
+QString Priorities[] = { i18n("High"), i18n("Normal"), i18n("Low") };
+
 /*
 AlcatelClasses::AlcatelClasses() {
 }
@@ -49,6 +54,17 @@ AlcatelContact::AlcatelContact() {
 
 AlcatelContact::~AlcatelContact() {
 }
+
+QString AlcatelContact::Name(void) {
+    return (this->FirstName.isEmpty())?
+                            ((this->LastName.isEmpty())?
+                                QString("?"):
+                                QString(this->LastName)):
+                            ((this->LastName.isEmpty())?
+                                QString(this->FirstName):
+                                QString("%1, %2").arg(this->LastName).arg(this->FirstName));
+}
+
 
 void AlcatelContact::setField(int number, FIELD *data) {
     switch (number) {
@@ -143,7 +159,7 @@ void AlcatelTodo::setField(int number, FIELD *data) {
         case 3: chk_type(_time) Alarm.time().setHMS (((TIME *)((*data).data))->hour, ((TIME *)((*data).data))->minute, ((TIME *)((*data).data))->second); break;
         case 4: chk_type(_string) Subject = (char *)((*data).data); break;
         case 5: chk_type(_bool) Private = *((int *)((*data).data)); break;
-        case 6: chk_type(_enum) Category = *((int *)((*data).data)); break;
+        case 6: chk_type(_byte) Category = *((int *)((*data).data)); break;
         case 7: chk_type(_enum) Priority = *((int *)((*data).data)); break;
         case 8: chk_type(_int) ContactID = *((int *)((*data).data)); break;
 
@@ -175,9 +191,6 @@ AlcatelCategory::AlcatelCategory() {
     Id = -1;
 }
 
-
-QString SMSTypes[] = { i18n("Unread"), i18n("Read"), i18n("Unsent"), i18n("Sent")};
-
 AlcatelSMS *getSMSById(AlcatelSMSList *list, int id) {
     AlcatelSMSList::Iterator it;
     for( it = list->begin(); it != list->end(); ++it ) {
@@ -188,13 +201,15 @@ AlcatelSMS *getSMSById(AlcatelSMSList *list, int id) {
 }
 
 QString *getCategoryName(AlcatelCategoryList *list, int id) {
-    static QString str = i18n("Unknown");
+    static QString unk = i18n("Unknown");
+    static QString non = i18n("None");
+    if (id == -1) return &non;
     AlcatelCategoryList::Iterator it;
     for( it = list->begin(); it != list->end(); ++it ) {
         if ((* it).Id == id)
             return &((*it).Name);
     }
-    return &str;
+    return &unk;
 }
 
 int phoneCmp(QString *number1, QString *number2, QString *prefix) {
@@ -232,3 +247,11 @@ AlcatelContact *getContactById(AlcatelContactList *list, int id) {
     return NULL;
 }
 
+AlcatelTodo *getTodoById(AlcatelTodoList *list, int id) {
+    AlcatelTodoList::Iterator it;
+    for( it = list->begin(); it != list->end(); ++it ) {
+        if ((* it).Id == id)
+            return &(*it);
+    }
+    return NULL;
+}

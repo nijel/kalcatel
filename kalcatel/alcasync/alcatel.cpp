@@ -424,6 +424,7 @@ int *sync_get_fields(alc_type type, int item) {
     free(alcatel_recv_ack(ALC_ACK));
     free(alcatel_recv_packet(1));
     data = alcatel_recv_packet(1);
+    if (!data) return NULL;
 
     count = data[14];
 
@@ -449,6 +450,7 @@ alc_type *sync_get_field_value(alc_type type, int item, int field) {
     free(alcatel_recv_ack(ALC_ACK));
     free(alcatel_recv_packet(1));
     data = alcatel_recv_packet(1);
+    if (!data) return NULL;
 
     len = data[4] - 10; 
 

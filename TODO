@@ -2,7 +2,6 @@ known bugs:
  - sometimes this doesn't connect correctly to mobile at first attempt, trying
    again or connecing before using another program (minicom) fixes it, if you
    know any solution send it pleasee to me
- - this code probably contains plenty of memory leaks
 
 for 0.1-prerelease:
  - reading of contacts (mobile), calendar, todo
@@ -22,6 +21,7 @@ for 0.3-beta:
 
 for 0.4:
  - fix majority of reported bugs, this should be first "stable" release
+ - czech translation (maybe sooner)
 
 sometimes (till 1.0):
  - synchronisation with kab

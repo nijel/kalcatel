@@ -187,7 +187,8 @@ bool KAlcatelDoc::openDocument(const KURL& url, const char *format /*=0*/)
   modified=false;
   return true;
 }
-void KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
+
+int KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
     alc_type *result;
     int i, j;
     int *ids, *items;
@@ -222,7 +223,7 @@ void KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
         if (ids == NULL) {
             sync_close_session(type);
             alcatel_detach();
-            return;
+            return false;
         }
 
         message(MSG_INFO, "Received %d ids", ids[0]);
@@ -231,6 +232,7 @@ void KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
             win->slotStatusMsg(i18n("Reading item %1 of %2").arg(i).arg(ids[0]),ID_DETAIL_MSG);
             message(MSG_DEBUG, "Reading id[%d] = %d", i-1, ids[i]);
             items = sync_get_fields(type, ids[i]);
+            if (!items) return false;
             message(MSG_INFO, "Receiving data for item %d (%d fields)", ids[i], items[0]);
             printf ("Item %d (fields: %d):\n", ids[i], items[0]);
             AlcatelContact *Contact;
@@ -254,6 +256,7 @@ void KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
             for (j = 1; j <= items[0]; j++) {
                 message(MSG_DEBUG, "items[%d] = %d", j-1, items[j]);
                 result = sync_get_field_value(type, ids[i], items[j]);
+                if (!result) return false;
                 field = decode_field_value(result);
                 if (items[j] >= count) {
                     message(MSG_WARNING, "Unknown field %02d, ignoring!",items[j]);
@@ -291,10 +294,14 @@ void KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
         free(ids);
     } else {
         message(MSG_ERROR, "Can not open sync session!");
+        sync_close_session(type);
+        alcatel_detach();
+        return false;
     }
 
     sync_close_session(type);
     alcatel_detach();
+    return true;
 }
 
 int KAlcatelDoc::readMobileCategories(AlcatelCategoryList *strList, alc_type sync, alc_type type, alc_type cat) {
@@ -460,14 +467,16 @@ bool KAlcatelDoc::readMobile(AlcReadType what = alcatel_read_all, int category =
                 KMessageBox::error(win, i18n("Reading contacts categories failed!"), i18n("Error"));
 
             win->slotStatusMsg(i18n("Reading contact items"),ID_DETAIL_MSG);
-            readMobileItems(ALC_SYNC_CONTACTS, ALC_SYNC_TYPE_CONTACTS);
+            if (!readMobileItems(ALC_SYNC_CONTACTS, ALC_SYNC_TYPE_CONTACTS))
+                KMessageBox::error(win, i18n("Reading contacts failed!"), i18n("Error"));
 
             contactVersion++;
         }
 
         if (what == alcatel_read_calendar || what == alcatel_read_all) {
             win->slotStatusMsg(i18n("Reading calendar items"),ID_DETAIL_MSG);
-            readMobileItems(ALC_SYNC_CALENDAR, ALC_SYNC_TYPE_CALENDAR);
+            if (!readMobileItems(ALC_SYNC_CALENDAR, ALC_SYNC_TYPE_CALENDAR))
+                KMessageBox::error(win, i18n("Reading calendar items failed!"), i18n("Error"));
         }
 
         if (what == alcatel_read_todo || what == alcatel_read_all) {
@@ -477,7 +486,8 @@ bool KAlcatelDoc::readMobile(AlcReadType what = alcatel_read_all, int category =
                 KMessageBox::error(win, i18n("Reading todo categories failed!"), i18n("Error"));
 
             win->slotStatusMsg(i18n("Reading todo items"),ID_DETAIL_MSG);
-            readMobileItems(ALC_SYNC_TODO, ALC_SYNC_TYPE_TODO);
+            if (!readMobileItems(ALC_SYNC_TODO, ALC_SYNC_TYPE_TODO))
+                KMessageBox::error(win, i18n("Reading todos failed!"), i18n("Error"));
 
             todoVersion++;
         }
@@ -485,32 +495,45 @@ bool KAlcatelDoc::readMobile(AlcReadType what = alcatel_read_all, int category =
         win->slotStatusMsg(i18n("Closing binary mode"),ID_DETAIL_MSG);
         alcatel_done();
     }
-  modem_close();
-  win->slotStatusMsg(i18n("Items read"),ID_DETAIL_MSG);
+    modem_close();
+    win->slotStatusMsg(i18n("Items read"),ID_DETAIL_MSG);
 
-  version++;
-  modified=true;
-  slotUpdateAllViews(NULL);
+    version++;
+    modified=true;
+    slotUpdateAllViews(NULL);
 
-  return true;
+    return true;
 }
 
-bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/)
-{
-  /////////////////////////////////////////////////
-  // TODO: Add your document saving code here
-  /////////////////////////////////////////////////
+bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
+    /////////////////////////////////////////////////
+    // TODO: Add your document saving code here
+    /////////////////////////////////////////////////
 
-  modified=false;
-  return true;
+    KMessageBox::sorry(win, i18n("Saving not implemented yet..."), i18n("Sorry"));
+
+    modified=false;
+    return true;
 }
 
-void KAlcatelDoc::deleteContents()
-{
-  /////////////////////////////////////////////////
-  // TODO: Add implementation to delete the document contents
-  /////////////////////////////////////////////////
+void KAlcatelDoc::deleteContents() {
+    todo_cats->clear();
+    contact_cats->clear();
 
+    contacts->clear();
+    calendar->clear();
+    todo->clear();
+    sms->clear();
+
+    modified=true;
+    version++;
+    todoVersion++;
+    callVersion++;
+    calendarVersion++;
+    contactVersion++;
+    smsVersion++;
+    slotUpdateAllViews(NULL);
+    /* TODO here is maybe something missing.. */
 }
 
 int KAlcatelDoc::getVersion() {

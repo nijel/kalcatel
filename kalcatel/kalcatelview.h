@@ -43,6 +43,7 @@ typedef enum {
     alc_contacts_mobile,
     alc_contacts_mobile_cat,
     alc_todos,
+    alc_todos_cat,
     alc_calendar,
     alc_calls,
     alc_calls_type,
@@ -92,6 +93,7 @@ class KAlcatelView : public KJanusWidget
     void slotSentMessageChanged(QListViewItem *item);
     void slotUnsentMessageChanged(QListViewItem *item);
     void slotTodoChanged(QListViewItem *item);
+    void slotTodoCatChanged(QListViewItem *item);
     void slotCalendarChanged(QListViewItem *item);
     void slotContactChanged(QListViewItem *item);
     void slotContactSimChanged(QListViewItem *item);
@@ -99,6 +101,7 @@ class KAlcatelView : public KJanusWidget
     void slotContactMobileCatChanged(QListViewItem *item);
     void slotShowMessage(QTextView *where, AlcatelSMS *what);
     void slotShowContact(QTextView *where, AlcatelContact *what);
+    void slotShowTodo(QTextView *where, AlcatelTodo *what);
 	
   private:
     QVBox *todo, *calendar,

@@ -127,7 +127,7 @@ class KAlcatelDoc : public QObject
 //    AlcatelCallList calls; /*TODO: not implemented!*/
   private:
     int readMobileCategories(AlcatelCategoryList *strList, alc_type sync, alc_type type, alc_type cat);
-    void readMobileItems(alc_type sync, alc_type type);
+    int readMobileItems(alc_type sync, alc_type type);
     /** the modified flag of the current document */
     bool modified;
     KURL doc_url;

@@ -4,6 +4,13 @@ KAlcatel - Changelog
 
 $Id$
 
+2002-02-16 Michal Cihar <cihar@email.cz>
+        * contact viewing works
+
+2002-02-15 Michal Cihar <cihar@email.cz>
+        * added of reading all binary data (shown are only contacts)
+        * added phone number lookup (in messages)
+
 2002-02-14 Michal Cihar <cihar@email.cz>
         * now supported text addresses (phone numbers) in pdu decoding
         * corrected behavior when reading messages more than once

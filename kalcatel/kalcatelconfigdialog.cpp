@@ -46,6 +46,8 @@
 #include "kalcatelconfigdialog.h"
 #include "kalcatel.h"
 
+#include "alcatool/logging.h"
+
 KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) : KDialog(parent,name,true) {
     resize(450, 200 );
     setCaption( i18n( "KAlcatel configuration" ) );
@@ -251,6 +253,7 @@ void KAlcatelConfigDialog::slotOK() {
     }
 
     theApp->mobile_debug = debugEdit->currentItem();
+    msg_level = theApp->mobile_debug;
     theApp->contact_url = contactUrlEdit->currentItem() - 1;
 
     accept();

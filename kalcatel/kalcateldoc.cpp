@@ -1165,8 +1165,7 @@ bool KAlcatelDoc::readMobileCategories(AlcatelCategoryList *strList, alc_type sy
     return i;
 }
 
-bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1)
-{
+bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1) {
     char *devname;
     int i;
 

@@ -1549,7 +1549,7 @@ sub tag_DIST () {
         next if ($entry eq "CVS" || $entry =~ /^\./  || $entry eq "Makefile" || $entry =~ /~$/ || $entry =~ /^\#.*\#$/);
         next if (! -f $entry);
         next if ($entry =~ /\.moc/ || $entry =~ /\.moc.$cppExt$/ || $entry =~ /\.lo$/ || $entry =~ /\.la$/ || $entry =~ /\.o/);
-        next if ($entry eq "kalcatel" || $entry eq "tags" || $entry eq "TAGS" || $entry =~ /\.a$/ || $entry eq "build-stamp" || $entry =~ /\.debhelper$/ || $entry eq "kalcatel.substvars");
+        next if ($entry eq "kalcatel" || $entry eq "tags" || $entry eq "TAGS" || $entry =~ /\.a$/ || $entry eq "build-stamp" || $entry =~ /\.debhelper$/ || $entry eq "kalcatel.substvars" || $entry =~ /\.(tar.(gz|bz2)|rpm|deb)$/ );
         next if ($entry =~ /\.all_$cppExt\.$cppExt$/);
         $foundfiles{$entry} = 1;
     }

@@ -114,7 +114,7 @@ void SelectContactDialog::slotOK() {
         ContactID = ((ContactBoxItem *)listbox->item(listbox->currentItem()))->Contact;
     } else {
         numbers = "";
-        for (int i = 0; i < listbox->count(); i++) {
+        for (unsigned int i = 0; i < listbox->count(); i++) {
             if (listbox->isSelected(i)){
                 numbers.append(((ContactBoxItem *)listbox->item(i))->Number).append(' ');;
             }

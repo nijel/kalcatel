@@ -68,6 +68,8 @@ public:
     bool Created;
     bool Deleted;
     virtual const char *getClassName() = 0;
+    /** returns formatted printable name of class
+      */
     virtual QString getName(void) = 0;
 };
 
@@ -90,8 +92,11 @@ public:
 
     bool operator==(const AlcatelContact &cmp) const;
     bool operator!=(const AlcatelContact &cmp) const;
+    /** returns of contacts are same, same contacts can differ in storage,
+      * position (both also previous) and modified/created/deleted flag
+      */
     bool isSame(const AlcatelContact &cmp) const;
-    /** returns formatted name of contact
+    /** returns formatted printable name of contact
       */
     QString getName(void);
 
@@ -137,6 +142,9 @@ public:
 
     bool operator==(const AlcatelCalendar &cmp) const;
     bool operator!=(const AlcatelCalendar &cmp) const;
+    /** returns of events are same, same events can differ in storage,
+      * position (both also previous) and modified/created/deleted flag
+      */
     bool isSame(const AlcatelCalendar &cmp) const;
     /** returns string with short information about repeating events
       */
@@ -145,6 +153,8 @@ public:
       */
     QString RepeatingDetail(void) const;
 
+    /** returns formatted printable name of event
+      */
     QString getName(void);
 
     QDate Date;
@@ -184,8 +194,13 @@ public:
 
     bool operator==(const AlcatelTodo &cmp) const;
     bool operator!=(const AlcatelTodo &cmp) const;
+    /** returns of todos are same, same todos can differ in storage,
+      * position (both also previous) and modified/created/deleted flag
+      */
     bool isSame(const AlcatelTodo &cmp) const;
 
+    /** returns formatted printable name of todo
+      */
     QString getName(void);
 
     QDate DueDate;
@@ -209,7 +224,12 @@ public:
 
     bool operator==(const AlcatelMessage &cmp) const;
     bool operator!=(const AlcatelMessage &cmp) const;
+    /** returns of messages are same, same messages can differ in storage,
+      * position (both also previous) and modified/created/deleted flag
+      */
     bool isSame(const AlcatelMessage &cmp) const;
+    /** returns formatted printable name of message
+      */
     QString getName(void);
 
     int Status;
@@ -232,7 +252,12 @@ public:
 
     bool operator==(const AlcatelCall &cmp) const;
     bool operator!=(const AlcatelCall &cmp) const;
+    /** returns of calls are same, same calls can differ in storage,
+      * position (both also previous) and modified/created/deleted flag
+      */
     bool isSame(const AlcatelCall &cmp) const;
+    /** returns formatted printable name of call
+      */
     QString getName(void);
 
     CallType Type;
@@ -253,7 +278,12 @@ public:
 
     bool operator==(const AlcatelCategory &cmp) const;
     bool operator!=(const AlcatelCategory &cmp) const;
+    /** returns of categories are same, same categories can differ in storage,
+      * position (both also previous) and modified/created/deleted flag
+      */
     bool isSame(const AlcatelCategory &cmp) const;
+    /** returns formatted printable name of category
+      */
     QString getName(void);
 
     QString Name;

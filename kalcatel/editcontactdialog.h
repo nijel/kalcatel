@@ -44,7 +44,12 @@ class EditContactDialog : public KDialog  {
 public: 
     EditContactDialog(AlcatelCategoryList *cat, AlcatelContactList *lst, const AlcatelContact *cont, QWidget *parent=0, const char *name=0);
     ~EditContactDialog();
+    /** empties all editable fields
+      */
     void emptyFields();
+    /** loads contact into editable fields, if NULL contact defined in
+      * constructor will be used
+      */
     void loadContact(const AlcatelContact *cont = NULL);
 public slots:
     void slotOK();

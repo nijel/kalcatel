@@ -12,7 +12,7 @@ for 0.3-beta:
  - editing of calendar
  - (DONE) editing of contacts
  - (DONE) editing of todos
- - contact select dialog
+ - (DONE) contact select dialog
  - (DONE) sending/writing messages
  - write to mobile
  - (DONE) signal and battery monitoring
@@ -24,7 +24,7 @@ for 0.3-beta:
 for 0.4:
  - fix majority of reported bugs, this should be first "stable" release
 
-sometimes (till 1.0):
+sometimes (probably till 1.0, but not planned yet):
  - czech translation
  - searching
  - filters
@@ -36,14 +36,11 @@ sometimes (till 1.0):
    headers, toolbars, ...)
  - read clock, set clock as they are in computer, set to + months to remove
    messages ;-)
- - contacts sim <-> mobile transfer
+ - contacts ( sim <-> mobile ) transfer
 
 nice to have features (probable):
  - print support
  - copy & paste whole items over clipboard
- - try to do something with alarms (this will be probably part of calendar
-   editation, because alarms are in fact calendar events of specific type and
-   with zero date and at commands support for setting this seems to be broken)
 
 nice to have features (possible):
  - simplier interface for non Alcatel phones (without anything what is Alcatel
@@ -53,13 +50,14 @@ nice to have features (possible):
     - add alcatel code into gnokii
     - add support for linking with gnokii in kalcatel
     - make some more generic library for accessing mobiles and add to that
-      library code from gnokii, alcatool and may be some others
- - calendar look for calendar items
+      library code from gnokii, alcatool and may be some others - this is IMHO
+      best, but also most operose
+ - calendar view for calendar items
  - nicer icons ;-)
 
-nice to have features (unprobable - all this probably needs reading of flash
-some decoding ot it and write it back, but I'm not able to make such thing.
-Can you help with this?):
+nice to have features (very unprobable - all this probably needs reading of
+flash memory, some decoding of it and write it back, but I'm not able to make
+such thing. Can you help with this?):
  - support for messages in phone
  - logo changing
 

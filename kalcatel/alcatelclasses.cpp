@@ -406,8 +406,11 @@ AlcatelCall *getCallById(AlcatelCallList *list, int id, CallType type) {
 
 void clearContacts(AlcatelContactList *list, AlcatelStorage type){
     AlcatelContactList::Iterator it;
-    for( it = list->begin(); it != list->end(); ++it ) {
-        if ((* it).Storage == type)
-            list->remove(it);
+    it = list->begin();
+    while (it != list->end()) {
+        if ((* it).Storage == type )
+            it = list->remove(it);
+        else
+            it++;
     }
 }

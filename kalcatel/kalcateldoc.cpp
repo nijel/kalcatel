@@ -54,6 +54,7 @@
 #include "alcatool/common.h"
 #include "alcatool/pdu.h"
 #include "alcatool/alcatel.h"
+#include "alcatool/contacts.h"
 
 QList<KAlcatelView> *KAlcatelDoc::pViewList = 0L;
 
@@ -209,7 +210,7 @@ int KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
             break;
         case ALC_SYNC_CONTACTS:
             count = ALC_CONTACTS_FIELDS;
-            contacts->clear();
+            clearContacts(contacts, StorageMobile);
             break;
     }
 
@@ -253,7 +254,7 @@ int KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
                     break;
                 case ALC_SYNC_CONTACTS:
                     Contact = new AlcatelContact();
-                    Contact->Storage = AlcatelContact::Mobile;
+                    Contact->Storage = StorageMobile;
                     Contact->Id = ids[i];
                     break;
             }
@@ -452,10 +453,31 @@ bool KAlcatelDoc::readMobile(AlcReadType what = alcatel_read_all, int category =
     }
 
     if (what == alcatel_read_contacts_sim || what == alcatel_read_all) {
-        KMessageBox::sorry(win, i18n("Reading contacts from SIM is not implemented yet..."), i18n("Sorry"));
+        ;
+//        KMessageBox::sorry(win, i18n("Reading contacts from SIM is not implemented yet..."), i18n("Sorry"));
+        CONTACT *cont;
+        win->slotStatusMsg(i18n("Reading SIM contacts"),ID_DETAIL_MSG);
+        clearContacts(contacts, StorageSIM);
+        sms->clear();
+        cont = get_contacts(1, 200);
+
+        i = 0;
+        while (cont[i].pos != -1) {
+            AlcatelContact *Cont = new AlcatelContact();
+            Cont->Storage = StorageSIM;
+            Cont->Id = cont[i].pos;
+            Cont->LastName = *(cont[i].name);
+            Cont->MainNumber = strdup(cont[i].number);
+            contacts->append(*Cont);
+            i++;
+        }
+        free(cont);
+
+        win->slotStatusMsg(i18n("SIM contacts read"),ID_DETAIL_MSG);
+        contactVersion++;
     }
 
-    if (what != alcatel_read_sms || what == alcatel_read_all) {
+    if (what == alcatel_read_todo || what == alcatel_read_calendar || what == alcatel_read_contacts_mobile || what == alcatel_read_all) {
         win->slotStatusMsg(i18n("Opening binary mode"),ID_DETAIL_MSG);
         alcatel_init();
 

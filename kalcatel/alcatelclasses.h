@@ -36,15 +36,17 @@
   *@author Michal Cihar
   */
 
+enum AlcatelStorage {StoragePC, StorageSIM, StorageMobile} ;
+
 class AlcatelClass {
 public:
     int Id;
+	enum AlcatelStorage Storage;
 };
 
 extern QString SMSTypes[];
 extern QString Priorities[];
 extern QString CalendarTypes[];
-
 
 class AlcatelContact : public AlcatelClass {
 public:
@@ -52,10 +54,6 @@ public:
 	~AlcatelContact();
 	
 	void setField(int number, FIELD *data);
-	
-    enum ContactStorage {SIM, Mobile} ;
-
-	enum ContactStorage Storage;
 	
 	QString Name(void);
 	
@@ -167,8 +165,10 @@ AlcatelSMS *getSMSById(AlcatelSMSList *list, int id);
 QString *getCategoryName(AlcatelCategoryList *list, int id);
 int phoneCmp(QString *number1, QString *number2, QString *prefix);
 AlcatelContact *getContactByPhone(AlcatelContactList *list, QString *number, QString *prefix);
-AlcatelContact *getContactById(AlcatelContactList *list, int id);
+AlcatelContact *getContactById(AlcatelContactList *list, int id, AlcatelStorage type);
 AlcatelTodo *getTodoById(AlcatelTodoList *list, int id);
 AlcatelCalendar *getCalendarById(AlcatelCalendarList *list, int id);
+
+void clearContacts(AlcatelContactList *list, AlcatelStorage type);
 
 #endif

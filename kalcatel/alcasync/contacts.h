@@ -1,10 +1,10 @@
 /*
- * alcatool/sms.h
+ * contacts.h
  *
- * sms reading/writing functions
+ * reading of contacts and calls using AT commands
  *
  * Copyright (c) 2002 by Michal Cihar <cihar@email.cz>
- *
+ * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
  * Free Software Foundation; either version 2 of the License, or (at your
@@ -21,37 +21,16 @@
  *
  */
 /* $Id$ */
-#ifndef SMS_H
-#define SMS_H
-#include <time.h>
+#ifndef CONTACTS_H
+#define CONTACTS_H
 
-#define SMS_UNREAD  0
-#define SMS_READ    1
-#define SMS_UNSENT  2
-#define SMS_SENT    3
-#define SMS_ALL     4
+class QString;
 
 typedef struct {
     int pos;
-    int stat;
-    int len;
-    char *raw;
-    char *sendr;
-    time_t date;
-    char *ascii;
-    char *smsc;
-} SMS;
+    char *number;
+    QString *name;
+} CONTACT;
 
-
-int delete_sms(int which);
-
-SMS *get_sms(int which);
-SMS *get_smss(int state = SMS_ALL);
-
-int send_sms(char *pdu);
-int put_sms(char *pdu, int state);
-
-char *get_smsc(void);
-void set_smsc(char *smsc);
-
+CONTACT *get_contacts(int from=1, int to=200);
 #endif

@@ -194,7 +194,7 @@ install_location=
 type=HEADER
 
 [kalcatel/alcatool/Makefile.am]
-files=kalcatel/alcatool/alcatel.cpp,kalcatel/alcatool/alcatel.h,kalcatel/alcatool/charset.cpp,kalcatel/alcatool/charset.h,kalcatel/alcatool/common.cpp,kalcatel/alcatool/common.h,kalcatel/alcatool/logging.cpp,kalcatel/alcatool/logging.h,kalcatel/alcatool/mobile.h,kalcatel/alcatool/mobile_info.cpp,kalcatel/alcatool/mobile_info.h,kalcatel/alcatool/modem.cpp,kalcatel/alcatool/modem.h,kalcatel/alcatool/pdu.cpp,kalcatel/alcatool/pdu.h,kalcatel/alcatool/sms.cpp,kalcatel/alcatool/sms.h,kalcatel/alcatool/version.h
+files=kalcatel/alcatool/alcatel.cpp,kalcatel/alcatool/alcatel.h,kalcatel/alcatool/charset.cpp,kalcatel/alcatool/charset.h,kalcatel/alcatool/common.cpp,kalcatel/alcatool/common.h,kalcatel/alcatool/logging.cpp,kalcatel/alcatool/logging.h,kalcatel/alcatool/mobile.h,kalcatel/alcatool/mobile_info.cpp,kalcatel/alcatool/mobile_info.h,kalcatel/alcatool/modem.cpp,kalcatel/alcatool/modem.h,kalcatel/alcatool/pdu.cpp,kalcatel/alcatool/pdu.h,kalcatel/alcatool/sms.cpp,kalcatel/alcatool/sms.h,kalcatel/alcatool/version.h,kalcatel/alcatool/contacts.h,kalcatel/alcatool/contacts.cpp
 sharedlib_LDFLAGS=
 sharedlib_rootname=libalcatool
 sub_dirs=
@@ -231,6 +231,18 @@ install_location=
 type=SOURCE
 
 [kalcatel/alcatool/common.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[kalcatel/alcatool/contacts.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[kalcatel/alcatool/contacts.h]
 dist=true
 install=false
 install_location=

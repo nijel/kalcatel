@@ -352,10 +352,10 @@ AlcatelContact *getContactByPhone(AlcatelContactList *list, QString *number, QSt
     return NULL;
 }
 
-AlcatelContact *getContactById(AlcatelContactList *list, int id) {
+AlcatelContact *getContactById(AlcatelContactList *list, int id, AlcatelStorage type) {
     AlcatelContactList::Iterator it;
     for( it = list->begin(); it != list->end(); ++it ) {
-        if ((* it).Id == id)
+        if ((* it).Id == id && (* it).Storage == type)
             return &(*it);
     }
     return NULL;
@@ -377,4 +377,12 @@ AlcatelCalendar *getCalendarById(AlcatelCalendarList *list, int id) {
             return &(*it);
     }
     return NULL;
+}
+
+void clearContacts(AlcatelContactList *list, AlcatelStorage type){
+    AlcatelContactList::Iterator it;
+    for( it = list->begin(); it != list->end(); ++it ) {
+        if ((* it).Storage == type)
+            list->remove(it);
+    }
 }

@@ -225,7 +225,7 @@ int modem_init(void) {
 
 // alcatel also supports USC2 but it is used only for contacts on sim card and
 // return values of some commands (at+csca)
-    modem_cmd("at+CSCS=\"GSM\"\r\n", answer, sizeof(answer), 50, NULL);
+    modem_cmd("AT+CSCS=\"GSM\"\r\n", answer, sizeof(answer), 50, NULL);
 
 // why use this??    
 //    message(MSG_DETAIL,"Setting rate");

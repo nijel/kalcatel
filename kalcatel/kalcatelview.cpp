@@ -475,12 +475,12 @@ void KAlcatelView::repaint() {
                                                         (* it).PagerNumber
                             ),
                         QString("%1 %2").
-                            arg(((* it).Storage == AlcatelContact::Mobile)?
+                            arg(((* it).Storage == StorageMobile)?
                                 i18n("Mobile") :
                                 i18n("SIM")).arg((* it).Id,4)
                         );
 
-                if ((* it).Storage == AlcatelContact::Mobile) {
+                if ((* it).Storage == StorageMobile) {
                     if (((* it).Category >= 0) && (contacts_cat_list[(* it).Category] != NULL) && ((* it).Category < ALC_MAX_CATEGORIES)) {
                         new QListViewItem (contacts_cat_list[(* it).Category],
                                 QString((* it).LastName),
@@ -581,7 +581,7 @@ void KAlcatelView::slotShowTodo(QTextView *where, AlcatelTodo *what) {
         return;
     }
 
-    AlcatelContact *cont=getContactById(getDocument()->contacts, what->ContactID);
+    AlcatelContact *cont=getContactById(getDocument()->contacts, what->ContactID, StorageMobile);
     if (!what->Subject.isEmpty()) text.append(i18n("<b>Subject:</b> %1<br>").arg(what->Subject));
     if (!what->DueDate.isNull()) text.append(i18n("<b>DueDate:</b> %1<br>").arg(what->DueDate.toString()));
     if (!what->Alarm.isNull()) text.append(i18n("<b>Alarm:</b> %1<br>").arg(what->Alarm.toString()));
@@ -617,7 +617,7 @@ void KAlcatelView::slotShowCalendar(QTextView *where, AlcatelCalendar *what) {
     QDate StopDate;*/
 
 
-    AlcatelContact *cont=getContactById(getDocument()->contacts, what->ContactID);
+    AlcatelContact *cont=getContactById(getDocument()->contacts, what->ContactID, StorageMobile);
 
     if (!what->Subject.isEmpty()) text.append(i18n("<b>Subject:</b> %1<br>").arg(what->Subject));
     if (!what->Date.isNull()) text.append(i18n("<b>Date:</b> %1<br>").arg(what->Date.toString()));
@@ -640,19 +640,20 @@ void KAlcatelView::slotShowCalendar(QTextView *where, AlcatelCalendar *what) {
 }
 
 void KAlcatelView::slotContactChanged(QListViewItem *item) {
-    slotShowContact(contact_view, getContactById(getDocument()->contacts, item->text(2).right(4).stripWhiteSpace().toInt()));
+    slotShowContact(contact_view, getContactById(getDocument()->contacts, item->text(2).right(4).stripWhiteSpace().toInt(), StorageMobile));
+    /* TODO: detect type of contacts ... */
 }
 
 void KAlcatelView::slotContactSimChanged(QListViewItem *item) {
-    slotShowContact(contact_sim_view, getContactById(getDocument()->contacts, item->text(3).toInt()));
+    slotShowContact(contact_sim_view, getContactById(getDocument()->contacts, item->text(2).toInt(), StorageSIM));
 }
 
 void KAlcatelView::slotContactMobileChanged(QListViewItem *item) {
-    slotShowContact(contact_mobile_view, getContactById(getDocument()->contacts, item->text(7).toInt()));
+    slotShowContact(contact_mobile_view, getContactById(getDocument()->contacts, item->text(7).toInt(), StorageSIM));
 }
 
 void KAlcatelView::slotContactMobileCatChanged(QListViewItem *item) {
-    AlcatelContact *cont = getContactById(getDocument()->contacts, item->text(6).toInt());
+    AlcatelContact *cont = getContactById(getDocument()->contacts, item->text(6).toInt(), StorageMobile);
     if (cont->Category >= 0) slotShowContact(contacts_cat_view[cont->Category], cont);
 }
 
@@ -662,8 +663,8 @@ void KAlcatelView::slotShowContact(QTextView *where, AlcatelContact *what) {
         where->setText( i18n("Failed reading contact!"));
         return;
     }
-    if (what->Storage == AlcatelContact::SIM) {
-        if (!what->FirstName.isEmpty()) text.append(i18n("<b>Name:</b> %1<br>").arg(what->FirstName));
+    if (what->Storage == StorageSIM) {
+        if (!what->LastName.isEmpty()) text.append(i18n("<b>Name:</b> %1<br>").arg(what->LastName));
         if (!what->MainNumber.isEmpty()) text.append(i18n("<b>Phone:</b> %1<br>").arg(what->MainNumber));
         text.append(i18n("<b>Storage:</b> %1<br>").arg(i18n("SIM card")));
     } else {

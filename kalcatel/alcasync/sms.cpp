@@ -88,7 +88,7 @@ SMS *get_smss(int state = SMS_ALL) {
         chk(mesg[count].raw = strdup(raw));
         chk(mesg[count].sendr = strdup(sendr));
         chk(mesg[count].ascii = strdup(ascii));
-        message(MSG_DEBUG2, "Message %d (raw): %s \"%s\"", mesg[count].pos, mesg[count].sendr, mesg[count].ascii);
+        message(MSG_DEBUG2, "Message %d: %s \"%s\"", mesg[count].pos, mesg[count].sendr, mesg[count].ascii);
         chk(mesg[count].smsc = strdup(smsc));
         count++;
     }

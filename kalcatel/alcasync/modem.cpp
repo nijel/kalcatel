@@ -281,6 +281,7 @@ int modem_open(void) {
     if (modem <0) {
         perror(device);
         modem_errno = ERR_MDM_OPEN;
+        unlink(lockname); // remove lock which we created before
         return 0;
     }
 

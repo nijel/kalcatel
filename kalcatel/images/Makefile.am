@@ -1,6 +1,6 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 
-SUBDIRS = items-16x16 items-22x22 
+SUBDIRS = items-16x16 items-22x22 items-32x32 
 
 EXTRA_DIST = icon-16x16.png icon-22x22.png icon-32x32.png icon-48x48.png 
 

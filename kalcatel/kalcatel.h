@@ -48,6 +48,7 @@
 // forward declaration of the KAlcatel classes
 class KAlcatelDoc;
 class KAlcatelView;
+class KAlcatelConfigDialog;
 
 /**
   * The base class for KAlcatel application windows. It sets up the main
@@ -191,6 +192,12 @@ class KAlcatelApp : public KMainWindow
     /** sets default details status message
      */
     void slotDefaultDetailMsg();
+    /** opens configuration dialog
+     */
+    void slotPreferencesEdit();
+    /** saves preferences
+     */
+    void slotPreferencesSave();
 
   private:
     /** the configuration object of the application */
@@ -235,6 +242,11 @@ class KAlcatelApp : public KMainWindow
     KAction* editPaste;
     KToggleAction* viewToolBar;
     KToggleAction* viewStatusBar;
+
+    KAction* preferencesSave;
+    KAction* preferencesEdit;
+
+    KAlcatelConfigDialog *preferencesDialog;
 };
  
 #endif // KALCATEL_H

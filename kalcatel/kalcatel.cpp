@@ -44,6 +44,7 @@
 #include "kalcatel.h"
 #include "kalcatelview.h"
 #include "kalcateldoc.h"
+#include "kalcatelconfigdialog.h"
 
 #include "alcatool/modem.h"
 #include "alcatool/mobile_info.h"
@@ -64,6 +65,8 @@ KAlcatelApp::KAlcatelApp(QWidget* , const char* name):KMainWindow(0, name)
 //  menuBar();
 	
   readOptions();
+
+  preferencesDialog = new KAlcatelConfigDialog(this);
 
   ///////////////////////////////////////////////////////////////////
   // disable actions at startup
@@ -92,15 +95,6 @@ void KAlcatelApp::initActions()
   fileReadMobileContactsSim = new KAction(i18n("Contacts from &SIM"), QIconSet(SmallIcon("kalcatel-contact-sim.png"), BarIcon("kalcatel-contact-sim.png")), 0, this, SLOT(slotFileReadMobileContactsSim()), actionCollection(),"file_read_mobile_contacts_sim");
   fileReadMobileContactsMobile = new KAction(i18n("Contacts from &mobile"), QIconSet(SmallIcon("kalcatel-contact-mobile.png"), BarIcon("kalcatel-contact-mobile.png")), 0, this, SLOT(slotFileReadMobileContactsMobile()), actionCollection(),"file_read_mobile_contacts_mobile");
 
-/*
-  fileReadMobileAll = new KAction(i18n("&Read everything from mobile"), QIconSet(UserIcon("mobile.png")), 0, this, SLOT(slotFileReadMobileAll()), actionCollection(),"file_read_mobile");
-  fileReadMobileTodo = new KAction(i18n("Read &todos from mobile"), QIconSet(UserIcon("todo.png")), 0, this, SLOT(slotFileReadMobileTodo()), actionCollection(),"file_read_mobile_todo");
-  fileReadMobileSms = new KAction(i18n("Read &SMSs from mobile"), QIconSet(UserIcon("message.png")), 0, this, SLOT(slotFileReadMobileSms()), actionCollection(),"file_read_mobile_sms");
-  fileReadMobileCalendar = new KAction(i18n("Read &calendar from mobile"), QIconSet(UserIcon("calendar.png")), 0, this, SLOT(slotFileReadMobileCalendar()), actionCollection(),"file_read_mobile_calendar");
-  fileReadMobileCalls = new KAction(i18n("Read c&alls from mobile"), QIconSet(UserIcon("call.png")), 0, this, SLOT(slotFileReadMobileCalls()), actionCollection(),"file_read_mobile_calls");
-  fileReadMobileContactsSim = new KAction(i18n("Read contacts (S&IM) from mobile"), QIconSet(UserIcon("contact-sim.png")), 0, this, SLOT(slotFileReadMobileContactsSim()), actionCollection(),"file_read_mobile_contacts_sim");
-  fileReadMobileContactsMobile = new KAction(i18n("Read contacts (m&obile) from mobile"), QIconSet(UserIcon("contact-mobile.png")), 0, this, SLOT(slotFileReadMobileContactsMobile()), actionCollection(),"file_read_mobile_contacts_mobile");
-*/
   mobileInfo = new KAction(i18n("&Information"), QIconSet(SmallIcon("kalcatel-mobile.png"), BarIcon("kalcatel-mobile.png")), 0, this, SLOT(slotMobileInfo()), actionCollection(),"mobile_info");
 
   fileNew = KStdAction::openNew(this, SLOT(slotFileNew()), actionCollection());
@@ -116,6 +110,9 @@ void KAlcatelApp::initActions()
   editPaste = KStdAction::paste(this, SLOT(slotEditPaste()), actionCollection());
   viewToolBar = KStdAction::showToolbar(this, SLOT(slotViewToolBar()), actionCollection());
   viewStatusBar = KStdAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
+
+  preferencesEdit = KStdAction::preferences(this, SLOT(slotPreferencesEdit()), actionCollection());
+  preferencesSave = KStdAction::saveOptions(this, SLOT(slotPreferencesSave()), actionCollection());
 
 //  fileNewWindow->setStatusText(i18n("Opens a new application window"));
   fileNew->setStatusText(i18n("Creates a new document"));
@@ -734,4 +731,10 @@ void KAlcatelApp::slotDefaultDetailMsg()
 //  statusBar()->message(text);
 }
 
+void KAlcatelApp::slotPreferencesEdit() {
+    preferencesDialog->exec();
+}
 
+void KAlcatelApp::slotPreferencesSave() {
+    saveOptions();
+}

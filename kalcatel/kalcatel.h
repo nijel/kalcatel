@@ -269,9 +269,18 @@ class KAlcatelApp : public KMainWindow
     /** opens toolbar configuration dialog
      */
     void slotPreferencesToolbars();
-    /** opens key configuration dialog
+    /** opens message editing dialog
      */
     void slotNewMessage();
+    /** opens message editing dialog
+     */
+    void slotNewTodo();
+    /** opens todo editing dialog
+     */
+    void slotNewContact();
+    /** opens event editing dialog
+     */
+    void slotNewEvent();
     /** connects to modem
      */
     bool modemConnect();
@@ -317,6 +326,9 @@ class KAlcatelApp : public KMainWindow
     KAction *fileReadMobileContactsSim;
     KAction *fileReadMobileContactsMobile;
     KAction *newMessage;
+    KAction *newEvent;
+    KAction *newContact;
+    KAction *newTodo;
     KAction *mobileInfo;
     KAction *mobileManualDisconnect;
     KAction *mobileManualConnect;

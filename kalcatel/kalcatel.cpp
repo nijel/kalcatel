@@ -66,6 +66,8 @@
 #include "signallabel.h"
 #include "signalled.h"
 
+#include "editcontactdialog.h"
+
 KAlcatelApp::KAlcatelApp(QWidget* , const char* name):KMainWindow(0, name) {
     config=kapp->config();
 
@@ -137,6 +139,9 @@ void KAlcatelApp::initActions() {
     fileReadMobileContactsMobile = new KAction(i18n("Contacts from &mobile"), QIconSet(SmallIcon("kalcatel-contact-mobile.png"), BarIcon("kalcatel-contact-mobile.png")), 0, this, SLOT(slotFileReadMobileContactsMobile()), actionCollection(),"file_read_mobile_contacts_mobile");
 
     newMessage = new KAction(i18n("&Message"), QIconSet(SmallIcon("kalcatel-message.png"), BarIcon("kalcatel-message.png")), 0, this, SLOT(slotNewMessage()), actionCollection(),"new_message");
+    newTodo = new KAction(i18n("&Todo"), QIconSet(SmallIcon("kalcatel-todo.png"), BarIcon("kalcatel-todo.png")), 0, this, SLOT(slotNewTodo()), actionCollection(),"new_todo");
+    newContact = new KAction(i18n("&Contact"), QIconSet(SmallIcon("kalcatel-contact.png"), BarIcon("kalcatel-contact.png")), 0, this, SLOT(slotNewContact()), actionCollection(),"new_contact");
+    newEvent = new KAction(i18n("&Event"), QIconSet(SmallIcon("kalcatel-calendar.png"), BarIcon("kalcatel-calendar.png")), 0, this, SLOT(slotNewEvent()), actionCollection(),"new_event");
 
     mobileInfo = new KAction(i18n("&Information"), QIconSet(SmallIcon("kalcatel-mobile.png"), BarIcon("kalcatel-mobile.png")), 0, this, SLOT(slotMobileInfo()), actionCollection(),"mobile_info");
 
@@ -636,13 +641,6 @@ void KAlcatelApp::slotFileReadMobileMessages() {
 }
 
 
-void KAlcatelApp::slotNewMessage() {
-    EditMessageDialog dialog(this);
-    dialog.reread = reread_messages;
-    if (dialog.exec() && dialog.reread)
-        slotFileReadMobileMessages();
-}
-
 void KAlcatelApp::slotMobileInfo() {
     char manuf[128], model[128], rev[128], sn[128], imsi[128], *s;
     int bat_percent, bat_state, sign_strength, sign_err;
@@ -1013,4 +1011,22 @@ AlcatelCategory *KAlcatelApp::solveConflict(AlcatelCategory &c1, AlcatelCategory
 
 void KAlcatelApp::timerEvent( QTimerEvent *e ) {
     statusUpdate();
+}
+
+void KAlcatelApp::slotNewMessage() {
+    EditMessageDialog dialog(this);
+    dialog.reread = reread_messages;
+    if (dialog.exec() && dialog.reread)
+        slotFileReadMobileMessages();
+}
+
+void KAlcatelApp::slotNewTodo() {
+}
+
+void KAlcatelApp::slotNewContact() {
+    EditContactDialog dialog(NULL, this);
+    dialog.exec();
+}
+
+void KAlcatelApp::slotNewEvent() {
 }

@@ -141,9 +141,6 @@ class KAlcatelApp : public KMainWindow
 
 
   public slots:
-    /** open a new application window by creating a new instance of KAlcatelApp
-     */
-    void slotFileNewWindow();
     /** reads all data from mobile
       */
     void slotFileReadMobileAll();
@@ -244,8 +241,6 @@ class KAlcatelApp : public KMainWindow
     QString detailText;
 
     // KAction pointers to enable/disable actions
-    KAction* fileNewWindow;
-
     KAction* fileReadMobileAll;
     KAction* fileReadMobileTodo;
     KAction* fileReadMobileSms;
@@ -253,7 +248,7 @@ class KAlcatelApp : public KMainWindow
     KAction* fileReadMobileCalls;
     KAction* fileReadMobileContactsSim;
     KAction* fileReadMobileContactsMobile;
-    KAction *mobileInfo;
+    KAction* mobileInfo;
 
     KAction* fileNew;
     KAction* fileOpen;

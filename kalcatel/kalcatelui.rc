@@ -1,9 +1,6 @@
 <!DOCTYPE kpartgui>
 <kpartgui name="kalcatel" version="0.2">
 <MenuBar>
-  <Menu name="file"><text>&amp;File</text>
-    <Action name="file_new_window"/>
-  </Menu>
   <Menu name="read_mobile"><text>&amp;Read mobile</text>
     <Action name="file_read_mobile"/>
     <Separator/>

@@ -178,6 +178,7 @@ class KAlcatelDoc : public QObject
     void readDomTodo(QDomElement el);
     void readDomContact(QDomElement el);
     void readDomCategory(QDomElement el, AlcatelCategoryList *list);
+    void readDomCall(QDomElement el);
 
     QString readDomString(QDomElement el);
     int readDomInt(QDomElement el);

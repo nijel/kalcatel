@@ -7,6 +7,10 @@ $Id$
 2002-03-15 Michal Cihar <cihar@email.cz>
         * changed modem connecting to allow persistent connection and connecting on start
         * added detection of broken names when reading calls
+        * added saving/loading of calls
+        * added calls merging
+        * added saving/loading configuration
+        * configuration a bit reorganised
 
 2002-03-13 Michal Cihar <cihar@email.cz>
         * fixed some typos

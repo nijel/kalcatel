@@ -460,6 +460,35 @@ void KAlcatelDoc::readDomTodo(QDomElement el) {
     todos->append(Cal);
 }
 
+void KAlcatelDoc::readDomCall(QDomElement el) {
+    QDomNode n = el.firstChild();
+    AlcatelCall Call;
+    Call.Storage = StoragePC;
+    Call.Id = pcStorageCounter++;
+
+    while( !n.isNull() ) {
+        QDomElement l = n.toElement();
+        if( !l.isNull() ) {
+            if (l.tagName() == "id") {
+                Call.PrevId = readDomInt(l);
+            } else if (l.tagName() == "storage") {
+                Call.PrevStorage = (AlcatelStorage)readDomInt(l);
+            } else if (l.tagName() == "name") {
+                Call.Name = readDomString(l);
+            } else if (l.tagName() == "number") {
+                Call.Number = readDomString(l);
+            } else if (l.tagName() == "type") {
+                Call.Type = (CallType)readDomInt(l);
+            } else {
+                ::message(MSG_WARNING, "Unknown tag in document: %s", l.tagName().latin1());
+            }
+        }
+        n = n.nextSibling();
+    }
+    ::message(MSG_DEBUG2, "Read call %d", Call.Id);
+    calls->append(Call);
+}
+
 void KAlcatelDoc::readDomCategory(QDomElement el, AlcatelCategoryList *list) {
     QDomNode n = el.firstChild();
     AlcatelCategory Cat;
@@ -486,6 +515,7 @@ void KAlcatelDoc::readDomCategory(QDomElement el, AlcatelCategoryList *list) {
 }
 
 bool KAlcatelDoc::openDocument(const KURL& url, const char *format /*=0*/) {
+    KAlcatelApp *theApp=(KAlcatelApp *) parent();
     QString tmpfile;
     deleteContents();
     if (KIO::NetAccess::download( url, tmpfile )) {
@@ -529,101 +559,131 @@ bool KAlcatelDoc::openDocument(const KURL& url, const char *format /*=0*/) {
                         m = m.nextSibling();
                     }
                 } else if (e.tagName() == "messages") {
-                    ::message(MSG_DEBUG, "Parsing messages");
-                    chk_doc_ver
-                    QDomNode m = e.firstChild();
-                    while( !m.isNull() ) {
-                        QDomElement l = m.toElement(); // try to convert the node to an element.
-                        if( !l.isNull() ) { // the node was really an element.
-                            if (l.tagName() == "message") {
-                                readDomMessage(l);
-                            } else {
-                                ::message(MSG_WARNING, "Unknown tag in document: %s", e.tagName().latin1());
+                    if (theApp->loadMessages){
+                        ::message(MSG_DEBUG, "Parsing messages");
+                        chk_doc_ver
+                        QDomNode m = e.firstChild();
+                        while( !m.isNull() ) {
+                            QDomElement l = m.toElement(); // try to convert the node to an element.
+                            if( !l.isNull() ) { // the node was really an element.
+                                if (l.tagName() == "message") {
+                                    readDomMessage(l);
+                                } else {
+                                    ::message(MSG_WARNING, "Unknown tag in document: %s", e.tagName().latin1());
+                                }
                             }
+                            m = m.nextSibling();
                         }
-                        m = m.nextSibling();
+                        messagesVersion++;
                     }
-                    messagesVersion++;
                 } else if (e.tagName() == "contacts") {
-                    ::message(MSG_DEBUG, "Parsing contacts");
-                    chk_doc_ver
-                    QDomNode m = e.firstChild();
-                    while( !m.isNull() ) {
-                        QDomElement l = m.toElement(); // try to convert the node to an element.
-                        if( !l.isNull() ) { // the node was really an element.
-                            if (l.tagName() == "contact") {
-                                readDomContact(l);
-                            } else {
-                                ::message(MSG_WARNING, "Unknown tag in document: %s", e.tagName().latin1());
+                    if (theApp->loadContacts){
+                        ::message(MSG_DEBUG, "Parsing contacts");
+                        chk_doc_ver
+                        QDomNode m = e.firstChild();
+                        while( !m.isNull() ) {
+                            QDomElement l = m.toElement(); // try to convert the node to an element.
+                            if( !l.isNull() ) { // the node was really an element.
+                                if (l.tagName() == "contact") {
+                                    readDomContact(l);
+                                } else {
+                                    ::message(MSG_WARNING, "Unknown tag in document: %s", e.tagName().latin1());
+                                }
                             }
+                            m = m.nextSibling();
                         }
-                        m = m.nextSibling();
+                        contactsVersion++;
                     }
-                    contactsVersion++;
                 } else if (e.tagName() == "calendar") {
-                    ::message(MSG_DEBUG, "Parsing calendar");
-                    chk_doc_ver
-                    QDomNode m = e.firstChild();
-                    while( !m.isNull() ) {
-                        QDomElement l = m.toElement(); // try to convert the node to an element.
-                        if( !l.isNull() ) { // the node was really an element.
-                            if (l.tagName() == "event") {
-                                readDomEvent(l);
-                            } else {
-                                ::message(MSG_WARNING, "Unknown tag in document: %s", e.tagName().latin1());
+                    if (theApp->loadEvents){
+                        ::message(MSG_DEBUG, "Parsing calendar");
+                        chk_doc_ver
+                        QDomNode m = e.firstChild();
+                        while( !m.isNull() ) {
+                            QDomElement l = m.toElement(); // try to convert the node to an element.
+                            if( !l.isNull() ) { // the node was really an element.
+                                if (l.tagName() == "event") {
+                                    readDomEvent(l);
+                                } else {
+                                    ::message(MSG_WARNING, "Unknown tag in document: %s", e.tagName().latin1());
+                                }
                             }
+                            m = m.nextSibling();
                         }
-                        m = m.nextSibling();
+                        calendarVersion++;
                     }
-                    calendarVersion++;
                 } else if (e.tagName() == "todos") {
-                    ::message(MSG_DEBUG, "Parsing todos");
-                    chk_doc_ver
-                    QDomNode m = e.firstChild();
-                    while( !m.isNull() ) {
-                        QDomElement l = m.toElement(); // try to convert the node to an element.
-                        if( !l.isNull() ) { // the node was really an element.
-                            if (l.tagName() == "todo") {
-                                readDomTodo(l);
-                            } else {
-                                ::message(MSG_WARNING, "Unknown tag in document: %s", e.tagName().latin1());
+                    if (theApp->loadTodos){
+                        ::message(MSG_DEBUG, "Parsing todos");
+                        chk_doc_ver
+                        QDomNode m = e.firstChild();
+                        while( !m.isNull() ) {
+                            QDomElement l = m.toElement(); // try to convert the node to an element.
+                            if( !l.isNull() ) { // the node was really an element.
+                                if (l.tagName() == "todo") {
+                                    readDomTodo(l);
+                                } else {
+                                    ::message(MSG_WARNING, "Unknown tag in document: %s", e.tagName().latin1());
+                                }
                             }
+                            m = m.nextSibling();
                         }
-                        m = m.nextSibling();
+                        todosVersion++;
                     }
-                    todosVersion++;
+                } else if (e.tagName() == "calls") {
+                    if (theApp->loadCalls){
+                        ::message(MSG_DEBUG, "Parsing calls");
+                        chk_doc_ver
+                        QDomNode m = e.firstChild();
+                        while( !m.isNull() ) {
+                            QDomElement l = m.toElement(); // try to convert the node to an element.
+                            if( !l.isNull() ) { // the node was really an element.
+                                if (l.tagName() == "call") {
+                                    readDomCall(l);
+                                } else {
+                                    ::message(MSG_WARNING, "Unknown tag in document: %s", e.tagName().latin1());
+                                }
+                            }
+                            m = m.nextSibling();
+                        }
+                        callsVersion++;
+                    }
                 } else if (e.tagName() == "todocategories") {
-                    ::message(MSG_DEBUG, "Parsing todocategories");
-                    chk_doc_ver
-                    QDomNode m = e.firstChild();
-                    while( !m.isNull() ) {
-                        QDomElement l = m.toElement(); // try to convert the node to an element.
-                        if( !l.isNull() ) { // the node was really an element.
-                            if (l.tagName() == "category") {
-                                readDomCategory(l, todo_cats);
-                            } else {
-                                ::message(MSG_WARNING, "Unknown tag in document: %s", e.tagName().latin1());
+                    if (theApp->loadTodos){
+                        ::message(MSG_DEBUG, "Parsing todocategories");
+                        chk_doc_ver
+                        QDomNode m = e.firstChild();
+                        while( !m.isNull() ) {
+                            QDomElement l = m.toElement(); // try to convert the node to an element.
+                            if( !l.isNull() ) { // the node was really an element.
+                                if (l.tagName() == "category") {
+                                    readDomCategory(l, todo_cats);
+                                } else {
+                                    ::message(MSG_WARNING, "Unknown tag in document: %s", e.tagName().latin1());
+                                }
                             }
+                            m = m.nextSibling();
                         }
-                        m = m.nextSibling();
+                        todosVersion++;
                     }
-                    todosVersion++;
                 } else if (e.tagName() == "contactcategories") {
-                    ::message(MSG_DEBUG, "Parsing contactcategories");
-                    chk_doc_ver
-                    QDomNode m = e.firstChild();
-                    while( !m.isNull() ) {
-                        QDomElement l = m.toElement(); // try to convert the node to an element.
-                        if( !l.isNull() ) { // the node was really an element.
-                            if (l.tagName() == "category") {
-                                readDomCategory(l, contact_cats);
-                            } else {
-                                ::message(MSG_WARNING, "Unknown tag in document: %s", e.tagName().latin1());
+                    if (theApp->loadContacts){
+                        ::message(MSG_DEBUG, "Parsing contactcategories");
+                        chk_doc_ver
+                        QDomNode m = e.firstChild();
+                        while( !m.isNull() ) {
+                            QDomElement l = m.toElement(); // try to convert the node to an element.
+                            if( !l.isNull() ) { // the node was really an element.
+                                if (l.tagName() == "category") {
+                                    readDomCategory(l, contact_cats);
+                                } else {
+                                    ::message(MSG_WARNING, "Unknown tag in document: %s", e.tagName().latin1());
+                                }
                             }
+                            m = m.nextSibling();
                         }
-                        m = m.nextSibling();
+                        contactsVersion++;
                     }
-                    contactsVersion++;
                 } else {
                     ::message(MSG_WARNING, "Unknown tag in document: %s", e.tagName().latin1());
                 }
@@ -649,6 +709,7 @@ bool KAlcatelDoc::openDocument(const KURL& url, const char *format /*=0*/) {
 }
 
 bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
+    KAlcatelApp *theApp=(KAlcatelApp *) parent();
     KTempFile tmp;
     QRegExp rlt("<");
     QRegExp rgt(">");
@@ -662,335 +723,368 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
     *strm << " <info>" << endl;
     *strm << "  <version>" << CURRENT_DOC_VERSION << "</version>" << endl;
     *strm << " </info>" << endl;
-    *strm << " <messages>" << endl;
-    AlcatelMessageList::Iterator messagesit;
-    for( messagesit = messages->begin(); messagesit != messages->end(); ++messagesit ) {
-        *strm << "  <message>" << endl;
-        if ((*messagesit).Storage != StoragePC) {
-            *strm << "   <id>" << (*messagesit).Id << "</id>" << endl;
-            *strm << "   <storage>" << (*messagesit).Storage << "</storage>" << endl;
-            (*messagesit).PrevId = (*messagesit).Id;
-            (*messagesit).Id = pcStorageCounter++;
-            (*messagesit).PrevStorage = (*messagesit).Storage;
-            (*messagesit).Storage = StoragePC;
-        } else {
-            *strm << "   <id>" << (*messagesit).PrevId << "</id>" << endl;
-            *strm << "   <storage>" << (*messagesit).PrevStorage << "</storage>" << endl;
-        }
-        *strm << "   <status>" << (*messagesit).Status << "</status>" << endl;
-        *strm << "   <length>" << (*messagesit).Length << "</length>" << endl;
-        *strm << "   <raw>" << (*messagesit).Raw << "</raw>" << endl;
-        *strm << "   <sender>" << (*messagesit).Sender.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</sender>" << endl;
-        *strm << "   <date>" << endl;
-        *strm << "    <date>" << endl;
-        *strm << "     <day>" << (*messagesit).Date.date().day() << "</day>" << endl;
-        *strm << "     <month>" << (*messagesit).Date.date().month() << "</month>" << endl;
-        *strm << "     <year>" << (*messagesit).Date.date().year() << "</year>" << endl;
-        *strm << "    </date>" << endl;
-        *strm << "    <time>" << endl;
-        *strm << "     <hour>" << (*messagesit).Date.time().hour() << "</hour>" << endl;
-        *strm << "     <minute>" << (*messagesit).Date.time().minute() << "</minute>" << endl;
-        *strm << "     <second>" << (*messagesit).Date.time().second() << "</second>" << endl;
-        *strm << "    </time>" << endl;
-        *strm << "   </date>" << endl;
-        *strm << "   <text>" << (*messagesit).Text.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</text>" << endl;
-        *strm << "   <smsc>" << (*messagesit).SMSC.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</smsc>" << endl;
-        *strm << "  </message>" << endl;
-    }
-    *strm << " </messages>" << endl;
-
-    *strm << " <contacts>" << endl;
-    AlcatelContactList::Iterator cit;
-    for( cit = contacts->begin(); cit != contacts->end(); ++cit ) {
-        *strm << "  <contact>" << endl;
-        if ((*cit).Storage != StoragePC) {
-            *strm << "   <id>" << (*cit).Id << "</id>" << endl;
-            *strm << "   <storage>" << (*cit).Storage << "</storage>" << endl;
-            (*cit).PrevId = (*cit).Id;
-            (*cit).PrevStorage = (*cit).Storage;
-            (*cit).Storage = StoragePC;
-        } else {
-            *strm << "   <id>" << (*cit).PrevId << "</id>" << endl;
-            *strm << "   <storage>" << (*cit).PrevStorage << "</storage>" << endl;
-        }
-        if (!(*cit).LastName.isEmpty()) {
-            *strm << "   <lastname>" << (*cit).LastName.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</lastname>" << endl;
-        }
-        if (!(*cit).FirstName.isEmpty()) {
-            *strm << "   <firstname>" << (*cit).FirstName.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</firstname>" << endl;
-        }
-        if (!(*cit).Company.isEmpty()) {
-            *strm << "   <company>" << (*cit).Company.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</company>" << endl;
-        }
-        if (!(*cit).JobTitle.isEmpty()) {
-            *strm << "   <jobtitle>" << (*cit).JobTitle.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</jobtitle>" << endl;
-        }
-        if (!(*cit).Note.isEmpty()) {
-            *strm << "   <note>" << (*cit).Note.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</note>" << endl;
-        }
-        if ((*cit).Category != -1) {
-            *strm << "   <category>" << (*cit).Category << "</category>" << endl;
-        }
-        if ((*cit).Private != -1) {
-            *strm << "   <private>" << (*cit).Private << "</private>" << endl;
-        }
-        if (!(*cit).WorkNumber.isEmpty()) {
-            *strm << "   <worknumber>" << (*cit).WorkNumber.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</worknumber>" << endl;
-        }
-        if (!(*cit).MainNumber.isEmpty()) {
-            *strm << "   <mainnumber>" << (*cit).MainNumber.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</mainnumber>" << endl;
-        }
-        if (!(*cit).FaxNumber.isEmpty()) {
-            *strm << "   <faxnumber>" << (*cit).FaxNumber.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</faxnumber>" << endl;
-        }
-        if (!(*cit).OtherNumber.isEmpty()) {
-            *strm << "   <othernumber>" << (*cit).OtherNumber.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</othernumber>" << endl;
-        }
-        if (!(*cit).PagerNumber.isEmpty()) {
-            *strm << "   <pagernumber>" << (*cit).PagerNumber.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</pagernumber>" << endl;
-        }
-        if (!(*cit).MobileNumber.isEmpty()) {
-            *strm << "   <mobilenumber>" << (*cit).MobileNumber.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</mobilenumber>" << endl;
-        }
-        if (!(*cit).HomeNumber.isEmpty()) {
-            *strm << "   <homenumber>" << (*cit).HomeNumber.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</homenumber>" << endl;
-        }
-        if (!(*cit).Email1.isEmpty()) {
-            *strm << "   <email1>" << (*cit).Email1.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</email1>" << endl;
-        }
-        if (!(*cit).Email2.isEmpty()) {
-            *strm << "   <email2>" << (*cit).Email2.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</email2>" << endl;
-        }
-        if (!(*cit).Address.isEmpty()) {
-            *strm << "   <address>" << (*cit).Address.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</address>" << endl;
-        }
-        if (!(*cit).City.isEmpty()) {
-            *strm << "   <city>" << (*cit).City.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</city>" << endl;
-        }
-        if (!(*cit).State.isEmpty()) {
-            *strm << "   <state>" << (*cit).State.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</state>" << endl;
-        }
-        if (!(*cit).Zip.isEmpty()) {
-            *strm << "   <zip>" << (*cit).Zip.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</zip>" << endl;
-        }
-        if (!(*cit).Country.isEmpty()) {
-            *strm << "   <country>" << (*cit).Country.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</country>" << endl;
-        }
-        if (!(*cit).Custom1.isEmpty()) {
-            *strm << "   <custom1>" << (*cit).Custom1.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</custom1>" << endl;
-        }
-        if (!(*cit).Custom2.isEmpty()) {
-            *strm << "   <custom2>" << (*cit).Custom2.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</custom2>" << endl;
-        }
-        if (!(*cit).Custom3.isEmpty()) {
-            *strm << "   <custom3>" << (*cit).Custom3.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</custom3>" << endl;
-        }
-        if (!(*cit).Custom4.isEmpty()) {
-            *strm << "   <custom4>" << (*cit).Custom4.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</custom4>" << endl;
-        }
-        *strm << "  </contact>" << endl;
-    }
-    *strm << " </contacts>" << endl;
-
-    *strm << " <calendar>" << endl;
-    AlcatelCalendarList::Iterator calit;
-    for( calit = calendar->begin(); calit != calendar->end(); ++calit ) {
-        *strm << "  <event>" << endl;
-        if ((*calit).Storage != StoragePC) {
-            *strm << "   <id>" << (*calit).Id << "</id>" << endl;
-            *strm << "   <storage>" << (*calit).Storage << "</storage>" << endl;
-            (*calit).PrevId = (*calit).Id;
-            (*calit).Id = pcStorageCounter++;
-            (*calit).PrevStorage = (*calit).Storage;
-            (*calit).Storage = StoragePC;
-        } else {
-            *strm << "   <id>" << (*calit).PrevId << "</id>" << endl;
-            *strm << "   <storage>" << (*calit).PrevStorage << "</storage>" << endl;
-        }
-        if (!(*calit).Date.isNull()){
+    if (theApp->saveMessages) {
+        *strm << " <messages>" << endl;
+        AlcatelMessageList::Iterator messagesit;
+        for( messagesit = messages->begin(); messagesit != messages->end(); ++messagesit ) {
+            *strm << "  <message>" << endl;
+            if ((*messagesit).Storage != StoragePC) {
+                *strm << "   <id>" << (*messagesit).Id << "</id>" << endl;
+                *strm << "   <storage>" << (*messagesit).Storage << "</storage>" << endl;
+                (*messagesit).PrevId = (*messagesit).Id;
+                (*messagesit).Id = pcStorageCounter++;
+                (*messagesit).PrevStorage = (*messagesit).Storage;
+                (*messagesit).Storage = StoragePC;
+            } else {
+                *strm << "   <id>" << (*messagesit).PrevId << "</id>" << endl;
+                *strm << "   <storage>" << (*messagesit).PrevStorage << "</storage>" << endl;
+            }
+            *strm << "   <status>" << (*messagesit).Status << "</status>" << endl;
+            *strm << "   <length>" << (*messagesit).Length << "</length>" << endl;
+            *strm << "   <raw>" << (*messagesit).Raw << "</raw>" << endl;
+            *strm << "   <sender>" << (*messagesit).Sender.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</sender>" << endl;
             *strm << "   <date>" << endl;
-            *strm << "    <day>" << (*calit).Date.day() << "</day>" << endl;
-            *strm << "    <month>" << (*calit).Date.month() << "</month>" << endl;
-            *strm << "    <year>" << (*calit).Date.year() << "</year>" << endl;
+            *strm << "    <date>" << endl;
+            *strm << "     <day>" << (*messagesit).Date.date().day() << "</day>" << endl;
+            *strm << "     <month>" << (*messagesit).Date.date().month() << "</month>" << endl;
+            *strm << "     <year>" << (*messagesit).Date.date().year() << "</year>" << endl;
+            *strm << "    </date>" << endl;
+            *strm << "    <time>" << endl;
+            *strm << "     <hour>" << (*messagesit).Date.time().hour() << "</hour>" << endl;
+            *strm << "     <minute>" << (*messagesit).Date.time().minute() << "</minute>" << endl;
+            *strm << "     <second>" << (*messagesit).Date.time().second() << "</second>" << endl;
+            *strm << "    </time>" << endl;
             *strm << "   </date>" << endl;
+            *strm << "   <text>" << (*messagesit).Text.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</text>" << endl;
+            *strm << "   <smsc>" << (*messagesit).SMSC.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</smsc>" << endl;
+            *strm << "  </message>" << endl;
         }
-        if (!(*calit).StartTime.isNull()) {
-            *strm << "   <starttime>" << endl;
-            *strm << "    <hour>" << (*calit).StartTime.hour() << "</hour>" << endl;
-            *strm << "    <minute>" << (*calit).StartTime.minute() << "</minute>" << endl;
-            *strm << "    <second>" << (*calit).StartTime.second() << "</second>" << endl;
-            *strm << "   </starttime>" << endl;
-        }
-        if (!(*calit).EndTime.isNull()) {
-            *strm << "   <endtime>" << endl;
-            *strm << "    <hour>" << (*calit).EndTime.hour() << "</hour>" << endl;
-            *strm << "    <minute>" << (*calit).EndTime.minute() << "</minute>" << endl;
-            *strm << "    <second>" << (*calit).EndTime.second() << "</second>" << endl;
-            *strm << "   </endtime>" << endl;
-        }
-        if (!(*calit).Alarm.isNull()) {
-            *strm << "   <alarm>" << endl;
-            *strm << "    <date>" << endl;
-            *strm << "     <day>" << (*calit).Alarm.date().day() << "</day>" << endl;
-            *strm << "     <month>" << (*calit).Alarm.date().month() << "</month>" << endl;
-            *strm << "     <year>" << (*calit).Alarm.date().year() << "</year>" << endl;
-            *strm << "    </date>" << endl;
-            *strm << "    <time>" << endl;
-            *strm << "     <hour>" << (*calit).Alarm.time().hour() << "</hour>" << endl;
-            *strm << "     <minute>" << (*calit).Alarm.time().minute() << "</minute>" << endl;
-            *strm << "     <second>" << (*calit).Alarm.time().second() << "</second>" << endl;
-            *strm << "    </time>" << endl;
-            *strm << "   </alarm>" << endl;
-        }
-        if (!(*calit).Alarm2.isNull()) {
-            *strm << "   <alarm2>" << endl;
-            *strm << "    <date>" << endl;
-            *strm << "     <day>" << (*calit).Alarm2.date().day() << "</day>" << endl;
-            *strm << "     <month>" << (*calit).Alarm2.date().month() << "</month>" << endl;
-            *strm << "     <year>" << (*calit).Alarm2.date().year() << "</year>" << endl;
-            *strm << "    </date>" << endl;
-            *strm << "    <time>" << endl;
-            *strm << "     <hour>" << (*calit).Alarm2.time().hour() << "</hour>" << endl;
-            *strm << "     <minute>" << (*calit).Alarm2.time().minute() << "</minute>" << endl;
-            *strm << "     <second>" << (*calit).Alarm2.time().second() << "</second>" << endl;
-            *strm << "    </time>" << endl;
-            *strm << "   </alarm2>" << endl;
-        }
-        if (!(*calit).Subject.isEmpty()) {
-            *strm << "   <subject>" << (*calit).Subject.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</subject>" << endl;
-        }
-        if ((*calit).Private != -1) {
-            *strm << "   <private>" << (*calit).Private << "</private>" << endl;
-        }
-        if ((*calit).EventType != -1) {
-            *strm << "   <eventtype>" << (*calit).EventType << "</eventtype>" << endl;
-        }
-        if ((*calit).ContactID != -1) {
-            *strm << "   <contactid>" << (*calit).ContactID << "</contactid>" << endl;
-        }
-        if ((*calit).DayOfWeek != -1) {
-            *strm << "   <dayofweek>" << (*calit).DayOfWeek << "</dayofweek>" << endl;
-        }
-         if ((*calit).Day != -1) {
-            *strm << "   <day>" << (*calit).Day << "</day>" << endl;
-        }
-        if ((*calit).WeekOfMonth != -1) {
-            *strm << "   <weekofmonth>" << (*calit).WeekOfMonth << "</weekofmonth>" << endl;
-        }
-        if ((*calit).Month != -1) {
-            *strm << "   <month>" << (*calit).Month << "</month>" << endl;
-        }
-        if ((*calit).Frequency != -1) {
-            *strm << "   <frequency>" << (*calit).Frequency << "</frequency>" << endl;
-        }
-        if (!((*calit).StopDate.isNull())) {
-            *strm << "   <stopdate>" << endl;
-            *strm << "    <day>" << (*calit).StopDate.day() << "</day>" << endl;
-            *strm << "    <month>" << (*calit).StopDate.month() << "</month>" << endl;
-            *strm << "    <year>" << (*calit).StopDate.year() << "</year>" << endl;
-            *strm << "   </stopdate>" << endl;
-        }
-        if (!((*calit).StartDate.isNull())) {
-            *strm << "   <startdate>" << endl;
-            *strm << "    <day>" << (*calit).StartDate.day() << "</day>" << endl;
-            *strm << "    <month>" << (*calit).StartDate.month() << "</month>" << endl;
-            *strm << "    <year>" << (*calit).StartDate.year() << "</year>" << endl;
-            *strm << "   </startdate>" << endl;
-        }
-        *strm << "  </event>" << endl;
+        *strm << " </messages>" << endl;
     }
-    *strm << " </calendar>" << endl;
 
-    *strm << " <todos>" << endl;
-    AlcatelTodoList::Iterator tit;
-    for( tit = todos->begin(); tit != todos->end(); ++tit ) {
-        *strm << "  <todo>" << endl;
-        if ((*tit).Storage != StoragePC) {
-            *strm << "   <id>" << (*tit).Id << "</id>" << endl;
-            *strm << "   <storage>" << (*tit).Storage << "</storage>" << endl;
-            (*tit).PrevId = (*tit).Id;
-            (*tit).Id = pcStorageCounter++;
-            (*tit).PrevStorage = (*tit).Storage;
-            (*tit).Storage = StoragePC;
-        } else {
-            *strm << "   <id>" << (*tit).PrevId << "</id>" << endl;
-            *strm << "   <storage>" << (*tit).PrevStorage << "</storage>" << endl;
+    if (theApp->saveContacts) {
+        *strm << " <contacts>" << endl;
+        AlcatelContactList::Iterator cit;
+        for( cit = contacts->begin(); cit != contacts->end(); ++cit ) {
+            *strm << "  <contact>" << endl;
+            if ((*cit).Storage != StoragePC) {
+                *strm << "   <id>" << (*cit).Id << "</id>" << endl;
+                *strm << "   <storage>" << (*cit).Storage << "</storage>" << endl;
+                (*cit).PrevId = (*cit).Id;
+                (*cit).PrevStorage = (*cit).Storage;
+                (*cit).Storage = StoragePC;
+            } else {
+                *strm << "   <id>" << (*cit).PrevId << "</id>" << endl;
+                *strm << "   <storage>" << (*cit).PrevStorage << "</storage>" << endl;
+            }
+            if (!(*cit).LastName.isEmpty()) {
+                *strm << "   <lastname>" << (*cit).LastName.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</lastname>" << endl;
+            }
+            if (!(*cit).FirstName.isEmpty()) {
+                *strm << "   <firstname>" << (*cit).FirstName.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</firstname>" << endl;
+            }
+            if (!(*cit).Company.isEmpty()) {
+                *strm << "   <company>" << (*cit).Company.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</company>" << endl;
+            }
+            if (!(*cit).JobTitle.isEmpty()) {
+                *strm << "   <jobtitle>" << (*cit).JobTitle.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</jobtitle>" << endl;
+            }
+            if (!(*cit).Note.isEmpty()) {
+                *strm << "   <note>" << (*cit).Note.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</note>" << endl;
+            }
+            if ((*cit).Category != -1) {
+                *strm << "   <category>" << (*cit).Category << "</category>" << endl;
+            }
+            if ((*cit).Private != -1) {
+                *strm << "   <private>" << (*cit).Private << "</private>" << endl;
+            }
+            if (!(*cit).WorkNumber.isEmpty()) {
+                *strm << "   <worknumber>" << (*cit).WorkNumber.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</worknumber>" << endl;
+            }
+            if (!(*cit).MainNumber.isEmpty()) {
+                *strm << "   <mainnumber>" << (*cit).MainNumber.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</mainnumber>" << endl;
+            }
+            if (!(*cit).FaxNumber.isEmpty()) {
+                *strm << "   <faxnumber>" << (*cit).FaxNumber.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</faxnumber>" << endl;
+            }
+            if (!(*cit).OtherNumber.isEmpty()) {
+                *strm << "   <othernumber>" << (*cit).OtherNumber.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</othernumber>" << endl;
+            }
+            if (!(*cit).PagerNumber.isEmpty()) {
+                *strm << "   <pagernumber>" << (*cit).PagerNumber.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</pagernumber>" << endl;
+            }
+            if (!(*cit).MobileNumber.isEmpty()) {
+                *strm << "   <mobilenumber>" << (*cit).MobileNumber.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</mobilenumber>" << endl;
+            }
+            if (!(*cit).HomeNumber.isEmpty()) {
+                *strm << "   <homenumber>" << (*cit).HomeNumber.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</homenumber>" << endl;
+            }
+            if (!(*cit).Email1.isEmpty()) {
+                *strm << "   <email1>" << (*cit).Email1.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</email1>" << endl;
+            }
+            if (!(*cit).Email2.isEmpty()) {
+                *strm << "   <email2>" << (*cit).Email2.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</email2>" << endl;
+            }
+            if (!(*cit).Address.isEmpty()) {
+                *strm << "   <address>" << (*cit).Address.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</address>" << endl;
+            }
+            if (!(*cit).City.isEmpty()) {
+                *strm << "   <city>" << (*cit).City.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</city>" << endl;
+            }
+            if (!(*cit).State.isEmpty()) {
+                *strm << "   <state>" << (*cit).State.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</state>" << endl;
+            }
+            if (!(*cit).Zip.isEmpty()) {
+                *strm << "   <zip>" << (*cit).Zip.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</zip>" << endl;
+            }
+            if (!(*cit).Country.isEmpty()) {
+                *strm << "   <country>" << (*cit).Country.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</country>" << endl;
+            }
+            if (!(*cit).Custom1.isEmpty()) {
+                *strm << "   <custom1>" << (*cit).Custom1.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</custom1>" << endl;
+            }
+            if (!(*cit).Custom2.isEmpty()) {
+                *strm << "   <custom2>" << (*cit).Custom2.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</custom2>" << endl;
+            }
+            if (!(*cit).Custom3.isEmpty()) {
+                *strm << "   <custom3>" << (*cit).Custom3.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</custom3>" << endl;
+            }
+            if (!(*cit).Custom4.isEmpty()) {
+                *strm << "   <custom4>" << (*cit).Custom4.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</custom4>" << endl;
+            }
+            *strm << "  </contact>" << endl;
         }
-
-        if (!(*tit).Subject.isEmpty()) {
-            *strm << "   <subject>" << (*tit).Subject.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</subject>" << endl;
-        }
-        if ((*tit).Completed != -1) {
-            *strm << "   <completed>" << (*tit).Completed << "</completed>" << endl;
-        }
-        if ((*tit).Private != -1) {
-            *strm << "   <private>" << (*tit).Private << "</private>" << endl;
-        }
-        if ((*tit).Category != -1) {
-            *strm << "   <category>" << (*tit).Category << "</category>" << endl;
-        }
-        if ((*tit).Priority != -1) {
-            *strm << "   <priority>" << (*tit).Priority << "</priority>" << endl;
-        }
-        if ((*tit).ContactID != -1) {
-            *strm << "   <contactid>" << (*tit).ContactID << "</contactid>" << endl;
-        }
-        if (!(*tit).DueDate.isNull()) {
-            *strm << "   <duedate>" << endl;
-            *strm << "    <day>" << (*tit).DueDate.day() << "</day>" << endl;
-            *strm << "    <month>" << (*tit).DueDate.month() << "</month>" << endl;
-            *strm << "    <year>" << (*tit).DueDate.year() << "</year>" << endl;
-            *strm << "   </duedate>" << endl;
-        }
-
-        if (!(*tit).Alarm.isNull()) {
-            *strm << "   <alarm>" << endl;
-            *strm << "    <date>" << endl;
-            *strm << "     <day>" << (*tit).Alarm.date().day() << "</day>" << endl;
-            *strm << "     <month>" << (*tit).Alarm.date().month() << "</month>" << endl;
-            *strm << "     <year>" << (*tit).Alarm.date().year() << "</year>" << endl;
-            *strm << "    </date>" << endl;
-            *strm << "    <time>" << endl;
-            *strm << "     <hour>" << (*tit).Alarm.time().hour() << "</hour>" << endl;
-            *strm << "     <minute>" << (*tit).Alarm.time().minute() << "</minute>" << endl;
-            *strm << "     <second>" << (*tit).Alarm.time().second() << "</second>" << endl;
-            *strm << "    </time>" << endl;
-            *strm << "   </alarm>" << endl;
-        }
-        *strm << "  </todo>" << endl;
+        *strm << " </contacts>" << endl;
     }
-    *strm << " </todos>" << endl;
 
-    AlcatelCategoryList::Iterator catit;
-    *strm << " <todocategories>" << endl;
-    for( catit = todo_cats->begin(); catit != todo_cats->end(); ++catit ) {
-        *strm << "  <category>" << endl;
-        if ((*catit).Storage != StoragePC) {
-            *strm << "   <id>" << (*catit).Id << "</id>" << endl;
-            *strm << "   <storage>" << (*catit).Storage << "</storage>" << endl;
-        } else {
-            *strm << "   <id>" << (*catit).PrevId << "</id>" << endl;
-            *strm << "   <storage>" << (*catit).PrevStorage << "</storage>" << endl;
+    if (theApp->saveEvents) {
+        *strm << " <calendar>" << endl;
+        AlcatelCalendarList::Iterator calit;
+        for( calit = calendar->begin(); calit != calendar->end(); ++calit ) {
+            *strm << "  <event>" << endl;
+            if ((*calit).Storage != StoragePC) {
+                *strm << "   <id>" << (*calit).Id << "</id>" << endl;
+                *strm << "   <storage>" << (*calit).Storage << "</storage>" << endl;
+                (*calit).PrevId = (*calit).Id;
+                (*calit).Id = pcStorageCounter++;
+                (*calit).PrevStorage = (*calit).Storage;
+                (*calit).Storage = StoragePC;
+            } else {
+                *strm << "   <id>" << (*calit).PrevId << "</id>" << endl;
+                *strm << "   <storage>" << (*calit).PrevStorage << "</storage>" << endl;
+            }
+            if (!(*calit).Date.isNull()){
+                *strm << "   <date>" << endl;
+                *strm << "    <day>" << (*calit).Date.day() << "</day>" << endl;
+                *strm << "    <month>" << (*calit).Date.month() << "</month>" << endl;
+                *strm << "    <year>" << (*calit).Date.year() << "</year>" << endl;
+                *strm << "   </date>" << endl;
+            }
+            if (!(*calit).StartTime.isNull()) {
+                *strm << "   <starttime>" << endl;
+                *strm << "    <hour>" << (*calit).StartTime.hour() << "</hour>" << endl;
+                *strm << "    <minute>" << (*calit).StartTime.minute() << "</minute>" << endl;
+                *strm << "    <second>" << (*calit).StartTime.second() << "</second>" << endl;
+                *strm << "   </starttime>" << endl;
+            }
+            if (!(*calit).EndTime.isNull()) {
+                *strm << "   <endtime>" << endl;
+                *strm << "    <hour>" << (*calit).EndTime.hour() << "</hour>" << endl;
+                *strm << "    <minute>" << (*calit).EndTime.minute() << "</minute>" << endl;
+                *strm << "    <second>" << (*calit).EndTime.second() << "</second>" << endl;
+                *strm << "   </endtime>" << endl;
+            }
+            if (!(*calit).Alarm.isNull()) {
+                *strm << "   <alarm>" << endl;
+                *strm << "    <date>" << endl;
+                *strm << "     <day>" << (*calit).Alarm.date().day() << "</day>" << endl;
+                *strm << "     <month>" << (*calit).Alarm.date().month() << "</month>" << endl;
+                *strm << "     <year>" << (*calit).Alarm.date().year() << "</year>" << endl;
+                *strm << "    </date>" << endl;
+                *strm << "    <time>" << endl;
+                *strm << "     <hour>" << (*calit).Alarm.time().hour() << "</hour>" << endl;
+                *strm << "     <minute>" << (*calit).Alarm.time().minute() << "</minute>" << endl;
+                *strm << "     <second>" << (*calit).Alarm.time().second() << "</second>" << endl;
+                *strm << "    </time>" << endl;
+                *strm << "   </alarm>" << endl;
+            }
+            if (!(*calit).Alarm2.isNull()) {
+                *strm << "   <alarm2>" << endl;
+                *strm << "    <date>" << endl;
+                *strm << "     <day>" << (*calit).Alarm2.date().day() << "</day>" << endl;
+                *strm << "     <month>" << (*calit).Alarm2.date().month() << "</month>" << endl;
+                *strm << "     <year>" << (*calit).Alarm2.date().year() << "</year>" << endl;
+                *strm << "    </date>" << endl;
+                *strm << "    <time>" << endl;
+                *strm << "     <hour>" << (*calit).Alarm2.time().hour() << "</hour>" << endl;
+                *strm << "     <minute>" << (*calit).Alarm2.time().minute() << "</minute>" << endl;
+                *strm << "     <second>" << (*calit).Alarm2.time().second() << "</second>" << endl;
+                *strm << "    </time>" << endl;
+                *strm << "   </alarm2>" << endl;
+            }
+            if (!(*calit).Subject.isEmpty()) {
+                *strm << "   <subject>" << (*calit).Subject.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</subject>" << endl;
+            }
+            if ((*calit).Private != -1) {
+                *strm << "   <private>" << (*calit).Private << "</private>" << endl;
+            }
+            if ((*calit).EventType != -1) {
+                *strm << "   <eventtype>" << (*calit).EventType << "</eventtype>" << endl;
+            }
+            if ((*calit).ContactID != -1) {
+                *strm << "   <contactid>" << (*calit).ContactID << "</contactid>" << endl;
+            }
+            if ((*calit).DayOfWeek != -1) {
+                *strm << "   <dayofweek>" << (*calit).DayOfWeek << "</dayofweek>" << endl;
+            }
+             if ((*calit).Day != -1) {
+                *strm << "   <day>" << (*calit).Day << "</day>" << endl;
+            }
+            if ((*calit).WeekOfMonth != -1) {
+                *strm << "   <weekofmonth>" << (*calit).WeekOfMonth << "</weekofmonth>" << endl;
+            }
+            if ((*calit).Month != -1) {
+                *strm << "   <month>" << (*calit).Month << "</month>" << endl;
+            }
+            if ((*calit).Frequency != -1) {
+                *strm << "   <frequency>" << (*calit).Frequency << "</frequency>" << endl;
+            }
+            if (!((*calit).StopDate.isNull())) {
+                *strm << "   <stopdate>" << endl;
+                *strm << "    <day>" << (*calit).StopDate.day() << "</day>" << endl;
+                *strm << "    <month>" << (*calit).StopDate.month() << "</month>" << endl;
+                *strm << "    <year>" << (*calit).StopDate.year() << "</year>" << endl;
+                *strm << "   </stopdate>" << endl;
+            }
+            if (!((*calit).StartDate.isNull())) {
+                *strm << "   <startdate>" << endl;
+                *strm << "    <day>" << (*calit).StartDate.day() << "</day>" << endl;
+                *strm << "    <month>" << (*calit).StartDate.month() << "</month>" << endl;
+                *strm << "    <year>" << (*calit).StartDate.year() << "</year>" << endl;
+                *strm << "   </startdate>" << endl;
+            }
+            *strm << "  </event>" << endl;
         }
-        *strm << "   <name>" << (*catit).Name.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</name>" << endl;
-        *strm << "  </category>" << endl;
+        *strm << " </calendar>" << endl;
     }
-    *strm << " </todocategories>" << endl;
 
-    *strm << " <contactcategories>" << endl;
-    for( catit = contact_cats->begin(); catit != contact_cats->end(); ++catit ) {
-        *strm << "  <category>" << endl;
-        if ((*catit).Storage != StoragePC) {
-            *strm << "   <id>" << (*catit).Id << "</id>" << endl;
-            *strm << "   <storage>" << (*catit).Storage << "</storage>" << endl;
-        } else {
-            *strm << "   <id>" << (*catit).PrevId << "</id>" << endl;
-            *strm << "   <storage>" << (*catit).PrevStorage << "</storage>" << endl;
+    if (theApp->saveTodos) {
+        *strm << " <todos>" << endl;
+        AlcatelTodoList::Iterator tit;
+        for( tit = todos->begin(); tit != todos->end(); ++tit ) {
+            *strm << "  <todo>" << endl;
+            if ((*tit).Storage != StoragePC) {
+                *strm << "   <id>" << (*tit).Id << "</id>" << endl;
+                *strm << "   <storage>" << (*tit).Storage << "</storage>" << endl;
+                (*tit).PrevId = (*tit).Id;
+                (*tit).Id = pcStorageCounter++;
+                (*tit).PrevStorage = (*tit).Storage;
+                (*tit).Storage = StoragePC;
+            } else {
+                *strm << "   <id>" << (*tit).PrevId << "</id>" << endl;
+                *strm << "   <storage>" << (*tit).PrevStorage << "</storage>" << endl;
+            }
+
+            if (!(*tit).Subject.isEmpty()) {
+                *strm << "   <subject>" << (*tit).Subject.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</subject>" << endl;
+            }
+            if ((*tit).Completed != -1) {
+                *strm << "   <completed>" << (*tit).Completed << "</completed>" << endl;
+            }
+            if ((*tit).Private != -1) {
+                *strm << "   <private>" << (*tit).Private << "</private>" << endl;
+            }
+            if ((*tit).Category != -1) {
+                *strm << "   <category>" << (*tit).Category << "</category>" << endl;
+            }
+            if ((*tit).Priority != -1) {
+                *strm << "   <priority>" << (*tit).Priority << "</priority>" << endl;
+            }
+            if ((*tit).ContactID != -1) {
+                *strm << "   <contactid>" << (*tit).ContactID << "</contactid>" << endl;
+            }
+            if (!(*tit).DueDate.isNull()) {
+                *strm << "   <duedate>" << endl;
+                *strm << "    <day>" << (*tit).DueDate.day() << "</day>" << endl;
+                *strm << "    <month>" << (*tit).DueDate.month() << "</month>" << endl;
+                *strm << "    <year>" << (*tit).DueDate.year() << "</year>" << endl;
+                *strm << "   </duedate>" << endl;
+            }
+
+            if (!(*tit).Alarm.isNull()) {
+                *strm << "   <alarm>" << endl;
+                *strm << "    <date>" << endl;
+                *strm << "     <day>" << (*tit).Alarm.date().day() << "</day>" << endl;
+                *strm << "     <month>" << (*tit).Alarm.date().month() << "</month>" << endl;
+                *strm << "     <year>" << (*tit).Alarm.date().year() << "</year>" << endl;
+                *strm << "    </date>" << endl;
+                *strm << "    <time>" << endl;
+                *strm << "     <hour>" << (*tit).Alarm.time().hour() << "</hour>" << endl;
+                *strm << "     <minute>" << (*tit).Alarm.time().minute() << "</minute>" << endl;
+                *strm << "     <second>" << (*tit).Alarm.time().second() << "</second>" << endl;
+                *strm << "    </time>" << endl;
+                *strm << "   </alarm>" << endl;
+            }
+            *strm << "  </todo>" << endl;
         }
-        *strm << "   <name>" << (*catit).Name.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</name>" << endl;
-        *strm << "  </category>" << endl;
+        *strm << " </todos>" << endl;
     }
-    *strm << " </contactcategories>" << endl;
+
+    if (theApp->saveCalls) {
+        AlcatelCallList::Iterator callit;
+        *strm << " <calls>" << endl;
+        for( callit = calls->begin(); callit != calls->end(); ++callit ) {
+            *strm << "  <call>" << endl;
+            if ((*callit).Storage != StoragePC) {
+                *strm << "   <id>" << (*callit).Id << "</id>" << endl;
+                *strm << "   <storage>" << (*callit).Storage << "</storage>" << endl;
+            } else {
+                *strm << "   <id>" << (*callit).PrevId << "</id>" << endl;
+                *strm << "   <storage>" << (*callit).PrevStorage << "</storage>" << endl;
+            }
+            *strm << "   <name>" << (*callit).Name.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</name>" << endl;
+            *strm << "   <number>" << (*callit).Number.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</number>" << endl;
+            *strm << "   <type>" << (*callit).Type << "</type>" << endl;
+            *strm << "  </call>" << endl;
+        }
+        *strm << " </calls>" << endl;
+    }
+
+    if (theApp->saveTodos) {
+        AlcatelCategoryList::Iterator catit;
+        *strm << " <todocategories>" << endl;
+        for( catit = todo_cats->begin(); catit != todo_cats->end(); ++catit ) {
+            *strm << "  <category>" << endl;
+            if ((*catit).Storage != StoragePC) {
+                *strm << "   <id>" << (*catit).Id << "</id>" << endl;
+                *strm << "   <storage>" << (*catit).Storage << "</storage>" << endl;
+            } else {
+                *strm << "   <id>" << (*catit).PrevId << "</id>" << endl;
+                *strm << "   <storage>" << (*catit).PrevStorage << "</storage>" << endl;
+            }
+            *strm << "   <name>" << (*catit).Name.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</name>" << endl;
+            *strm << "  </category>" << endl;
+        }
+        *strm << " </todocategories>" << endl;
+    }
+
+    if (theApp->saveContacts) {
+        AlcatelCategoryList::Iterator catit;
+        *strm << " <contactcategories>" << endl;
+        for( catit = contact_cats->begin(); catit != contact_cats->end(); ++catit ) {
+            *strm << "  <category>" << endl;
+            if ((*catit).Storage != StoragePC) {
+                *strm << "   <id>" << (*catit).Id << "</id>" << endl;
+                *strm << "   <storage>" << (*catit).Storage << "</storage>" << endl;
+            } else {
+                *strm << "   <id>" << (*catit).PrevId << "</id>" << endl;
+                *strm << "   <storage>" << (*catit).PrevStorage << "</storage>" << endl;
+            }
+            *strm << "   <name>" << (*catit).Name.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</name>" << endl;
+            *strm << "  </category>" << endl;
+        }
+        *strm << " </contactcategories>" << endl;
+    }
 
     *strm << "</document>" << endl;
 
@@ -1462,7 +1556,40 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
             delete cont[i].name;
             Call.Number = cont[i].number;
             free(cont[i].number);
-            calls->append(Call);
+            AlcatelCall *item;
+            if ((item = getCallByPrevId(calls, Call.Id, StorageMobile, Call.Type))) {
+                if (!(item->isSame(Call))) {
+                    ::message(MSG_DEBUG, "MERGE:Something different -> merging (%s)", item->getName().latin1());
+                    if (win->conflictAction == 0) {
+                        calls->remove(*item);
+                        calls->append(Call);
+                    } else if (win->conflictAction == 1) {
+                        /* nothing to do here ... */
+                    } else if (win->conflictAction == 2) {
+                        AlcatelCall *cont = win->solveConflict(Call, *item);
+                        if (cont == NULL) {
+                            AlcatelCall old(*item);
+                            calls->remove(*item);
+                            old.PrevStorage = StorageNone;
+                            old.PrevId = -1;
+                            old.Modified = true;
+                            calls->append(old);
+                            calls->append(Call);
+                        } else {
+                            calls->remove(*item);
+                            calls->append(*cont);
+                            delete cont;
+                        }
+                    }
+                } else {
+                    ::message(MSG_DEBUG, "MERGE:Same records (%s)", item->getName().latin1());
+                    calls->remove(*item);
+                    calls->append(Call);
+                }
+            } else {
+                ::message(MSG_DEBUG, "MERGE:None correspondent record found (%s)", Call.getName().latin1());
+                calls->append(Call);
+            }
             i++;
         }
         free(cont);
@@ -1479,7 +1606,40 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
             delete cont[i].name;
             Call.Number = cont[i].number;
             free(cont[i].number);
-            calls->append(Call);
+            AlcatelCall *item;
+            if ((item = getCallByPrevId(calls, Call.Id, StorageMobile, Call.Type))) {
+                if (!(item->isSame(Call))) {
+                    ::message(MSG_DEBUG, "MERGE:Something different -> merging (%s)", item->getName().latin1());
+                    if (win->conflictAction == 0) {
+                        calls->remove(*item);
+                        calls->append(Call);
+                    } else if (win->conflictAction == 1) {
+                        /* nothing to do here ... */
+                    } else if (win->conflictAction == 2) {
+                        AlcatelCall *cont = win->solveConflict(Call, *item);
+                        if (cont == NULL) {
+                            AlcatelCall old(*item);
+                            calls->remove(*item);
+                            old.PrevStorage = StorageNone;
+                            old.PrevId = -1;
+                            old.Modified = true;
+                            calls->append(old);
+                            calls->append(Call);
+                        } else {
+                            calls->remove(*item);
+                            calls->append(*cont);
+                            delete cont;
+                        }
+                    }
+                } else {
+                    ::message(MSG_DEBUG, "MERGE:Same records (%s)", item->getName().latin1());
+                    calls->remove(*item);
+                    calls->append(Call);
+                }
+            } else {
+                ::message(MSG_DEBUG, "MERGE:None correspondent record found (%s)", Call.getName().latin1());
+                calls->append(Call);
+            }
             i++;
         }
         free(cont);
@@ -1496,7 +1656,42 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
             delete cont[i].name;
             Call.Number = cont[i].number;
             free(cont[i].number);
-            calls->append(Call);
+
+            AlcatelCall *item;
+            if ((item = getCallByPrevId(calls, Call.Id, StorageMobile, Call.Type))) {
+                if (!(item->isSame(Call))) {
+                    ::message(MSG_DEBUG, "MERGE:Something different -> merging (%s)", item->getName().latin1());
+                    if (win->conflictAction == 0) {
+                        calls->remove(*item);
+                        calls->append(Call);
+                    } else if (win->conflictAction == 1) {
+                        /* nothing to do here ... */
+                    } else if (win->conflictAction == 2) {
+                        AlcatelCall *cont = win->solveConflict(Call, *item);
+                        if (cont == NULL) {
+                            AlcatelCall old(*item);
+                            calls->remove(*item);
+                            old.PrevStorage = StorageNone;
+                            old.PrevId = -1;
+                            old.Modified = true;
+                            calls->append(old);
+                            calls->append(Call);
+                        } else {
+                            calls->remove(*item);
+                            calls->append(*cont);
+                            delete cont;
+                        }
+                    }
+                } else {
+                    ::message(MSG_DEBUG, "MERGE:Same records (%s)", item->getName().latin1());
+                    calls->remove(*item);
+                    calls->append(Call);
+                }
+            } else {
+                ::message(MSG_DEBUG, "MERGE:None correspondent record found (%s)", Call.getName().latin1());
+                calls->append(Call);
+            }
+
             i++;
         }
         free(cont);
@@ -1653,6 +1848,7 @@ void KAlcatelDoc::deleteContents() {
 
     contacts->clear();
     calendar->clear();
+    calls->clear();
     todos->clear();
     messages->clear();
 

@@ -33,6 +33,7 @@ class AlcatelContact;
 class AlcatelCalendar;
 class AlcatelTodo;
 class AlcatelCategory;
+class AlcatelCall;
 class AlcatelClass;
 
 class QPushButton;
@@ -95,6 +96,7 @@ public:
     AlcatelMessage *exec(AlcatelMessage &c1, AlcatelMessage &c2);
     AlcatelCalendar *exec(AlcatelCalendar &c1, AlcatelCalendar &c2);
     AlcatelTodo *exec(AlcatelTodo &c1, AlcatelTodo &c2);
+    AlcatelCall *exec(AlcatelCall &c1, AlcatelCall &c2);
     AlcatelCategory *exec(AlcatelCategory &c1, AlcatelCategory &c2);
 public slots:
     /** called when cancel pressed

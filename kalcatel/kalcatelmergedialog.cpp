@@ -322,6 +322,25 @@ AlcatelCategory *KAlcatelMergeDialog::exec(AlcatelCategory &c1, AlcatelCategory 
     return (AlcatelCategory *)result;
 }
 
+AlcatelCall *KAlcatelMergeDialog::exec(AlcatelCall &c1, AlcatelCall &c2) {
+    data1 = &c1;
+    data2 = &c2;
+    slotClear();
+
+    deleteButton->setDisabled(true);
+//    buttonBoth->setDisabled(true);
+
+    titleLabel->setText(i18n("Field type: <b>%1</b><br/>Field name: <b>%2</b>").arg(i18n("Call")).arg(c1.getName()));
+
+    if (((c1.Name.isEmpty() ^ c2.Name.isEmpty())) || (c1.Name != c2.Name))  { itemList.append(MergeItem(conflictGrid, i18n("Name"), c1.Name, c2.Name, true)); }
+    if (((c1.Number.isEmpty() ^ c2.Number.isEmpty())) || (c1.Number != c2.Number))  { itemList.append(MergeItem(conflictGrid, i18n("Number"), c1.Number, c2.Number, true)); }
+    if (c1.Type != c2.Type)  { itemList.append(MergeItem(conflictGrid, i18n("Type"), CallTypes[c1.Type], CallTypes[c2.Type], true)); }
+
+    exec();
+    slotClear();
+    return (AlcatelCall *)result;
+}
+
 void KAlcatelMergeDialog::slotBoth() {
     accept();
 }
@@ -554,6 +573,37 @@ void KAlcatelMergeDialog::slotOK() {
                 case PC: c->Custom4 = ((AlcatelContact *)data2)->Custom4; break;
                 case Delete: c->Custom4 = (char *)NULL; break;
                 case Mobile: break;
+            }
+            itemList.remove(it);
+        }
+        result = c;
+    } else if (strcmp(data1->getClassName(), "AlcatelCall") == 0) {
+        AlcatelCall *c = new AlcatelCall(*((AlcatelCall *)data1));
+        c->Modified = true;
+        if (((((AlcatelCall *)data1)->Name.isEmpty() ^ ((AlcatelCall *)data2)->Name.isEmpty())) || (((AlcatelCall *)data1)->Name != ((AlcatelCall *)data2)->Name)) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->Name = ((AlcatelCall *)data2)->Name; break;
+                case Delete: c->Name = (char *)NULL; break;
+                case Mobile: break;
+            }
+            itemList.remove(it);
+        }
+        if (((((AlcatelCall *)data1)->Number.isEmpty() ^ ((AlcatelCall *)data2)->Number.isEmpty())) || (((AlcatelCall *)data1)->Number != ((AlcatelCall *)data2)->Number)) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->Number = ((AlcatelCall *)data2)->Number; break;
+                case Delete: c->Number = (char *)NULL; break;
+                case Mobile: break;
+            }
+            itemList.remove(it);
+        }
+        if (((AlcatelCall *)data1)->Type != ((AlcatelCall *)data2)->Type) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->Type = ((AlcatelCall *)data2)->Type; break;
+                case Mobile: break;
+                case Delete: break;
             }
             itemList.remove(it);
         }

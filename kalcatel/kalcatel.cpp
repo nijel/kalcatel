@@ -246,6 +246,19 @@ void KAlcatelApp::saveOptions() {
     config->writeEntry("Use RTSCTS", mobile_rtscts);
     config->writeEntry("Persistent connection", persistent_modem);
     config->writeEntry("Auto connection", auto_modem);
+
+    config->setGroup("Saving and loading");
+    config->writeEntry("Save Todos", saveTodos);
+    config->writeEntry("Load Todos", loadTodos);
+    config->writeEntry("Save Events", saveEvents);
+    config->writeEntry("Load Events", loadEvents);
+    config->writeEntry("Save Contacts", saveContacts);
+    config->writeEntry("Load Contacts", loadContacts);
+    config->writeEntry("Save Messages", saveMessages);
+    config->writeEntry("Load Messages", loadMessages);
+    config->writeEntry("Save Calls", saveCalls);
+    config->writeEntry("Load Calls", loadCalls);
+
 }
 
 
@@ -300,6 +313,18 @@ void KAlcatelApp::readOptions(){
     persistent_modem = config->readBoolEntry("Persistent connection", true);
     auto_modem = config->readBoolEntry("Auto connection", false);
     msg_level = mobile_debug;
+
+    config->setGroup("Saving and loading");
+    saveTodos = config->readBoolEntry("Save Todos", true);
+    loadTodos = config->readBoolEntry("Load Todos", true);
+    saveEvents = config->readBoolEntry("Save Events", true);
+    loadEvents = config->readBoolEntry("Load Events", true);
+    saveContacts = config->readBoolEntry("Save Contacts", true);
+    loadContacts = config->readBoolEntry("Load Contacts", true);
+    saveMessages = config->readBoolEntry("Save Messages", true);
+    loadMessages = config->readBoolEntry("Load Messages", true);
+    saveCalls = config->readBoolEntry("Save Calls", true);
+    loadCalls = config->readBoolEntry("Load Calls", true);
 }
 
 void KAlcatelApp::saveProperties(KConfig *_cfg)
@@ -906,6 +931,10 @@ void KAlcatelApp::slotPreferencesToolbars() {
 }
 
 AlcatelContact *KAlcatelApp::solveConflict(AlcatelContact &c1, AlcatelContact &c2) {
+    return KAlcatelMergeDialog(this).exec(c1,c2);
+}
+
+AlcatelCall *KAlcatelApp::solveConflict(AlcatelCall &c1, AlcatelCall &c2) {
     return KAlcatelMergeDialog(this).exec(c1,c2);
 }
 

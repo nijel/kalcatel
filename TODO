@@ -19,10 +19,10 @@ for 0.3-beta:
  - sending/writing messages
  - write to mobile
 change category behavior in contacts - tree should look like:
- - SIM
+ - SIM (include previous sim)
  - general
  - category names...
-reorganise config dialog
+
 
 for 0.4:
  - fix majority of reported bugs, this should be first "stable" release

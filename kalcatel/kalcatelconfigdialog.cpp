@@ -139,7 +139,47 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
 
     QWhatsThis::add(editConnect ,i18n("<b>Connect on start</b><br>Conect to modem automatically after program starts."));
 
-    mergePage = janus->addPage (i18n("Merging"), i18n("Merging configuration"), DesktopIcon("kalcatel-configure.png"));
+    savePage = janus->addPage (i18n("Saving"), i18n("Saving and loading configuration"), DesktopIcon("filesave.png"));
+    QGridLayout *saveLayout = new QGridLayout(savePage);
+
+    saveLayout->setSpacing( 6 );
+    saveLayout->setMargin( 8 );
+
+    saveLayout->addWidget(new QLabel(i18n("Save"), savePage), 0, 1);
+    saveLayout->addWidget(new QLabel(i18n("Load"), savePage), 0, 2);
+
+    saveLayout->addWidget(new QLabel(i18n("Todos"), savePage), 1, 0);
+    saveLayout->addWidget(new QLabel(i18n("Events"), savePage), 2, 0);
+    saveLayout->addWidget(new QLabel(i18n("Contacts"), savePage), 3, 0);
+    saveLayout->addWidget(new QLabel(i18n("Messages"), savePage), 4, 0);
+    saveLayout->addWidget(new QLabel(i18n("Calls"), savePage), 5, 0);
+
+    editSaveTodos = new QCheckBox(savePage);
+    saveLayout->addWidget(editSaveTodos, 1,1);
+    editLoadTodos = new QCheckBox(savePage);
+    saveLayout->addWidget(editLoadTodos, 1,2);
+
+    editSaveEvents = new QCheckBox(savePage);
+    saveLayout->addWidget(editSaveEvents, 2,1);
+    editLoadEvents = new QCheckBox(savePage);
+    saveLayout->addWidget(editLoadEvents, 2,2);
+
+    editSaveContacts = new QCheckBox(savePage);
+    saveLayout->addWidget(editSaveContacts, 3,1);
+    editLoadContacts = new QCheckBox(savePage);
+    saveLayout->addWidget(editLoadContacts, 3,2);
+
+    editSaveMessages = new QCheckBox(savePage);
+    saveLayout->addWidget(editSaveMessages, 4,1);
+    editLoadMessages = new QCheckBox(savePage);
+    saveLayout->addWidget(editLoadMessages, 4,2);
+
+    editSaveCalls = new QCheckBox(savePage);
+    saveLayout->addWidget(editSaveCalls, 5,1);
+    editLoadCalls = new QCheckBox(savePage);
+    saveLayout->addWidget(editLoadCalls, 5,2);
+
+    mergePage = janus->addPage (i18n("Merging"), i18n("Merging configuration"), DesktopIcon("kalcatel-merge.png"));
     QGridLayout *mergeLayout = new QGridLayout(mergePage);
 
     mergeLayout->setSpacing( 6 );
@@ -285,6 +325,17 @@ void KAlcatelConfigDialog::slotOK() {
     msg_level = theApp->mobile_debug;
     theApp->contact_url = contactUrlEdit->currentItem() - 1;
 
+    theApp->saveTodos = editSaveTodos->isChecked();
+    theApp->loadTodos = editLoadTodos->isChecked();
+    theApp->saveEvents = editSaveEvents->isChecked();
+    theApp->loadEvents = editLoadEvents->isChecked();
+    theApp->saveContacts = editSaveContacts->isChecked();
+    theApp->loadContacts = editLoadContacts->isChecked();
+    theApp->saveMessages = editSaveMessages->isChecked();
+    theApp->loadMessages = editLoadMessages->isChecked();
+    theApp->saveCalls = editSaveCalls->isChecked();
+    theApp->loadCalls = editLoadCalls->isChecked();
+
     accept();
 }
 
@@ -315,6 +366,17 @@ int KAlcatelConfigDialog::exec () {
 
     debugEdit->setCurrentItem(theApp->mobile_debug);
     contactUrlEdit->setCurrentItem(theApp->contact_url + 1);
+
+    editSaveTodos->setChecked(theApp->saveTodos);
+    editLoadTodos->setChecked(theApp->loadTodos);
+    editSaveEvents->setChecked(theApp->saveEvents);
+    editLoadEvents->setChecked(theApp->loadEvents);
+    editSaveContacts->setChecked(theApp->saveContacts);
+    editLoadContacts->setChecked(theApp->loadContacts);
+    editSaveMessages->setChecked(theApp->saveMessages);
+    editLoadMessages->setChecked(theApp->loadMessages);
+    editSaveCalls->setChecked(theApp->saveCalls);
+    editLoadCalls->setChecked(theApp->loadCalls);
 
     return KDialog::exec();
 }

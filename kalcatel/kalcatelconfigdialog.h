@@ -71,6 +71,7 @@ private:
     /** other configuration frame
       */
     QFrame *otherPage;
+    QFrame *savePage;
     /** device edit
       */
     KURLRequester *editDevice;
@@ -104,6 +105,17 @@ private:
     QCheckBox *editConnect;
     QCheckBox *editPersistent;
     QCheckBox *editReread;
+
+    QCheckBox *editSaveTodos;
+    QCheckBox *editLoadTodos;
+    QCheckBox *editSaveEvents;
+    QCheckBox *editLoadEvents;
+    QCheckBox *editSaveContacts;
+    QCheckBox *editLoadContacts;
+    QCheckBox *editSaveMessages;
+    QCheckBox *editLoadMessages;
+    QCheckBox *editSaveCalls;
+    QCheckBox *editLoadCalls;
 };
 
 #endif

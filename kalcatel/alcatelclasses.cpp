@@ -391,10 +391,10 @@ AlcatelCalendar *getCalendarById(AlcatelCalendarList *list, int id, AlcatelStora
     return NULL;
 }
 
-AlcatelCall *getCallById(AlcatelCallList *list, int id, CallType type) {
+AlcatelCall *getCallById(AlcatelCallList *list, int id, AlcatelStorage stype, CallType type) {
     AlcatelCallList::Iterator it;
     for( it = list->begin(); it != list->end(); ++it ) {
-        if ((* it).Id == id && (* it).Type == type)
+        if ((* it).Id == id && (* it).Type == type && (stype == StorageAny || stype == (*it).Storage))
             return &(*it);
     }
     return NULL;
@@ -506,6 +506,15 @@ AlcatelCalendar *getCalendarByPrevId(AlcatelCalendarList *list, int id, AlcatelS
     AlcatelCalendarList::Iterator it;
     for( it = list->begin(); it != list->end(); ++it ) {
         if ((* it).PrevId == id && (type == StorageAny || (* it).PrevStorage == type))
+            return &(*it);
+    }
+    return NULL;
+}
+
+AlcatelCall *getCallByPrevId(AlcatelCallList *list, int id, AlcatelStorage stype, CallType type) {
+    AlcatelCallList::Iterator it;
+    for( it = list->begin(); it != list->end(); ++it ) {
+        if ((* it).PrevId == id &&  (* it).Type == type && (stype == StorageAny || (* it).PrevStorage == stype))
             return &(*it);
     }
     return NULL;

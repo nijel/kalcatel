@@ -480,14 +480,16 @@ void KAlcatelView::repaint() {
                         (* it).Name,
                         cont == NULL? QString("") : cont->getName(),
                         CallTypes[(* it).Type],
-                        QString("%1").arg((* it).Id));
+                        QString("%1 %2").
+                            arg(StorageTypes[(* it).Storage]).arg((* it).Id));
                 switch ((* it).Type) {
                     case CallDialled:
                         new KAlcatelCallCatViewItem (calls_outgoing_list, &(* it),
                                 (* it).Number,
                                 (* it).Name,
                                 cont == NULL? QString("") : cont->getName(),
-                                QString("%1").arg((* it).Id));
+                                QString("%1 %2").
+                                    arg(StorageTypes[(* it).Storage]).arg((* it).Id));
                         break;
                     case CallMissed:
                         missed++;
@@ -495,14 +497,16 @@ void KAlcatelView::repaint() {
                                 (* it).Number,
                                 (* it).Name,
                                 cont == NULL? QString("") : cont->getName(),
-                                QString("%1").arg((* it).Id));
+                                QString("%1 %2").
+                                    arg(StorageTypes[(* it).Storage]).arg((* it).Id));
                         break;
                     case CallReceived:
                         new KAlcatelCallCatViewItem (calls_received_list, &(* it),
                                 (* it).Number,
                                 (* it).Name,
                                 cont == NULL? QString("") : cont->getName(),
-                                QString("%1").arg((* it).Id));
+                                QString("%1 %2").
+                                    arg(StorageTypes[(* it).Storage]).arg((* it).Id));
                         break;
                 }
             } /* for cycle over calls */
@@ -971,7 +975,13 @@ void KAlcatelView::slotShowCall(AlcatelCall *what) {
         QString("<a href=\"contact:%1/%2\">%3</a>").arg(cont->Storage==StoragePC ? 'P' : cont->Storage==StorageMobile ? 'M' : 'S').
         arg(cont->Id).arg(cont->getName())
             ));
-    text.append(i18n( "<b>Type:</b> %4<br><b>Position:</b> %6").arg(CallTypes[what->Type]).arg(what->Id));
+    text.append(i18n( "<b>Type:</b> %4<br>").arg(CallTypes[what->Type]));
+    text.append(i18n("<b>Storage:</b> %1<br>").arg(StorageTypes[what->Storage]));
+    text.append(i18n("<b>Position:</b> %1").arg(what->Id));
+    if (what->Storage == StoragePC) {
+        text.append(i18n("<br><b>Previous storage:</b> %1<br>").arg(StorageTypes[what->PrevStorage]));
+        text.append(i18n("<b>Previous position:</b> %1").arg(what->PrevId));
+    }
     textview->setText(text);
     textview->setMinimumHeight(textview->contentsHeight()); /* resize to show all contents*/
     vsplitter->setResizeMode( textview, QSplitter::FollowSizeHint );

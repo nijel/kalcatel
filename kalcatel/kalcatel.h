@@ -51,6 +51,7 @@ class AlcatelMessage;
 class AlcatelContact;
 class AlcatelCalendar;
 class AlcatelTodo;
+class AlcatelCall;
 class AlcatelCategory;
 
 /**
@@ -106,10 +107,22 @@ class KAlcatelApp : public KMainWindow
     bool persistent_modem;
     bool auto_modem;
 
+    bool saveTodos;
+    bool loadTodos;
+    bool saveEvents;
+    bool loadEvents;
+    bool saveContacts;
+    bool loadContacts;
+    bool saveMessages;
+    bool loadMessages;
+    bool saveCalls;
+    bool loadCalls;
+
     AlcatelContact *solveConflict(AlcatelContact &c1, AlcatelContact &c2);
     AlcatelMessage *solveConflict(AlcatelMessage &c1, AlcatelMessage &c2);
     AlcatelCalendar *solveConflict(AlcatelCalendar &c1, AlcatelCalendar &c2);
     AlcatelTodo *solveConflict(AlcatelTodo &c1, AlcatelTodo &c2);
+    AlcatelCall *solveConflict(AlcatelCall &c1, AlcatelCall &c2);
     AlcatelCategory *solveConflict(AlcatelCategory &c1, AlcatelCategory &c2);
 
   protected:

@@ -296,7 +296,7 @@ AlcatelCalendar *getCalendarById(AlcatelCalendarList *list, int id, AlcatelStora
 
 /** find call by id
   */
-AlcatelCall *getCallById(AlcatelCallList *list, int id, CallType type);
+AlcatelCall *getCallById(AlcatelCallList *list, int id, AlcatelStorage stype, CallType type);
 
 /** clears contacts of selected type
   */
@@ -332,4 +332,7 @@ AlcatelTodo *getTodoByPrevId(AlcatelTodoList *list, int id, AlcatelStorage type)
 /** find calendar item by previous id
   */
 AlcatelCalendar *getCalendarByPrevId(AlcatelCalendarList *list, int id, AlcatelStorage type);
+/** find call by previous id
+  */
+AlcatelCall *getCallByPrevId(AlcatelCallList *list, int id, AlcatelStorage stype, CallType type);
 #endif

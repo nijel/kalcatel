@@ -523,7 +523,7 @@ install_location=$$(kde_icondir)/hicolor/22x22/actions/kalcatel-todo.png
 type=DATA
 
 [kalcatel/images/items-32x32/Makefile.am]
-files=kalcatel/images/items-32x32/configure.png,kalcatel/images/items-32x32/mobile.png
+files=kalcatel/images/items-32x32/configure.png,kalcatel/images/items-32x32/mobile.png,kalcatel/images/items-32x32/merge.png
 sub_dirs=
 type=normal
 
@@ -531,6 +531,12 @@ type=normal
 dist=true
 install=true
 install_location=$$(kde_icondir)/hicolor/32x32/actions/kalcatel-configure.png
+type=DATA
+
+[kalcatel/images/items-32x32/merge.png]
+dist=true
+install=true
+install_location=$$(kde_icondir)/hicolor/32x32/actions/kalcatel-merge.png
 type=DATA
 
 [kalcatel/images/items-32x32/mobile.png]

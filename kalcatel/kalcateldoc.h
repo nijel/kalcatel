@@ -44,8 +44,8 @@
   */
 enum AlcDataType {
     alcatel_all,
-    alcatel_todo,
-    alcatel_sms,
+    alcatel_todos,
+    alcatel_messages,
     alcatel_calendar,
     alcatel_calls,
     alcatel_contacts_sim,
@@ -119,19 +119,19 @@ class KAlcatelDoc : public QObject
 	int getVersion();
     /** returns messages version
      */
-	int getSMSVersion();
+	int getMessagesVersion();
     /** returns calls version
      */
-	int getCallVersion();
+	int getCallsVersion();
     /** returns calendar version
      */
 	int getCalendarVersion();
     /** returns todos version
      */
-	int getTodoVersion();
+	int getTodosVersion();
     /** returns contacts version
      */
-	int getContactVersion();
+	int getContactsVersion();
 	
   public slots:
     /** calls repaint() on all views connected to the document object and is called by the view by which the document has been changed.
@@ -159,10 +159,10 @@ class KAlcatelDoc : public QObject
     AlcatelCalendarList *calendar;
     /** todos
       */
-    AlcatelTodoList *todo;
+    AlcatelTodoList *todos;
     /** messages
       */
-    AlcatelMessageList *sms;
+    AlcatelMessageList *messages;
     /** calls
       */
     AlcatelCallList *calls;
@@ -185,19 +185,19 @@ class KAlcatelDoc : public QObject
     int version;
     /** messages version
       */
-    int smsVersion;
+    int messagesVersion;
     /** calls version
       */
-    int callVersion;
+    int callsVersion;
     /** contacts version
       */
-    int contactVersion;
+    int contactsVersion;
     /** calendar version
       */
     int calendarVersion;
     /** todos version
       */
-    int todoVersion;
+    int todosVersion;
 };
 
 #endif // KALCATELDOC_H

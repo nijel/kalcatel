@@ -59,6 +59,7 @@ class AlcatelMessage;
 class AlcatelContact;
 class AlcatelCalendar;
 class AlcatelTodo;
+class AlcatelCall;
 
 class QListViewItem;
 class QSplitter;
@@ -68,6 +69,8 @@ class QVBox;
 
 class KListView;
 class KTextBrowser;
+
+class KHTMLPart;
 
 class QGridLayout;
 
@@ -136,6 +139,9 @@ class KAlcatelView : public QWidget {
     void slotContactSimChanged(QListViewItem *item);
     void slotContactMobileChanged(QListViewItem *item);
     void slotContactMobileCatChanged(QListViewItem *item);
+    void slotCallCatChanged(QListViewItem *item);
+    void slotCallChanged(QListViewItem *item);
+    void slotShowCall(AlcatelCall *what);
     void slotShowMessage(AlcatelMessage *what);
     void slotShowContact(AlcatelContact *what);
     void slotShowTodo(AlcatelTodo *what);
@@ -148,6 +154,9 @@ class KAlcatelView : public QWidget {
     QLabel *titlelabel;
     KListView *tree;
     KTextBrowser *textview;
+
+    KHTMLPart *kalcatel_html;
+    QString *html_text;
     KTextBrowser *kalcatelview;
 
     KAlcatelTreeViewItem *kalcatel_item,
@@ -167,11 +176,11 @@ class KAlcatelView : public QWidget {
     KListView *createListView(QWidget *parent, AlcListType type);
 
     int docVersion;
-    int smsVersion;
-    int callVersion;
-    int contactVersion;
+    int messagesVersion;
+    int callsVersion;
+    int contactsVersion;
     int calendarVersion;
-    int todoVersion;
+    int todosVersion;
 };
 
 #endif // KALCATELVIEW_H

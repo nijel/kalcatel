@@ -331,7 +331,7 @@ void KAlcatelApp::slotFileReadMobileAll()
 void KAlcatelApp::slotFileReadMobileTodo()
 {
   slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
-  doc->readMobile(alcatel_todo,-1);
+  doc->readMobile(alcatel_todos,-1);
   slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
@@ -366,7 +366,7 @@ void KAlcatelApp::slotFileReadMobileCalls()
 void KAlcatelApp::slotFileReadMobileSms()
 {
   slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
-  doc->readMobile(alcatel_sms,-1);
+  doc->readMobile(alcatel_messages,-1);
   slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 

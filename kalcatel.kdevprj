@@ -24,14 +24,14 @@ ldadd=\s$(LIB_KFILE) $(LIB_KHTML) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
 ldflags=
 
 [General]
-AMChanged=true
+AMChanged=false
 author=Michal Cihar
 configure_args=--prefix=/usr
 email=cihar@email.cz
 kdevprj_version=1.3
 lfv_open_groups=
 make_options=\s-w -j1
-makefiles=Makefile.am,kalcatel/Makefile.am,doc/Makefile.am,doc/en/Makefile.am,po/Makefile.am,kalcatel/alcatool/Makefile.am,kalcatel/images/Makefile.am,kalcatel/images/items-16x16/Makefile.am,kalcatel/images/items-22x22/Makefile.am,kalcatel/images/items-32x32/Makefile.am,debian/Makefile.am
+makefiles=Makefile.am,kalcatel/Makefile.am,doc/Makefile.am,doc/en/Makefile.am,po/Makefile.am,kalcatel/alcatool/Makefile.am,kalcatel/images/Makefile.am,kalcatel/images/items-16x16/Makefile.am,kalcatel/images/items-22x22/Makefile.am,kalcatel/images/items-32x32/Makefile.am,debian/Makefile.am,kalcatel/info/Makefile.am
 modifyMakefiles=true
 project_name=KAlcatel
 project_type=normal_kde2
@@ -183,8 +183,8 @@ install_location=
 type=DATA
 
 [kalcatel/Makefile.am]
-files=kalcatel/main.cpp,kalcatel/kalcatel.cpp,kalcatel/kalcatel.h,kalcatel/kalcateldoc.cpp,kalcatel/kalcateldoc.h,kalcatel/kalcatelview.cpp,kalcatel/kalcatelview.h,kalcatel/kalcatelui.rc,kalcatel/kalcatel.desktop,kalcatel/alcatelclasses.cpp,kalcatel/alcatelclasses.h,kalcatel/kalcatelconfigdialog.cpp,kalcatel/kalcatelconfigdialog.h,kalcatel/kalcateltreeviewitem.cpp,kalcatel/kalcateltreeviewitem.h
-sub_dirs=alcatool,images
+files=kalcatel/main.cpp,kalcatel/kalcatel.cpp,kalcatel/kalcatel.h,kalcatel/kalcateldoc.cpp,kalcatel/kalcateldoc.h,kalcatel/kalcatelview.cpp,kalcatel/kalcatelview.h,kalcatel/kalcatelui.rc,kalcatel/kalcatel.desktop,kalcatel/alcatelclasses.cpp,kalcatel/alcatelclasses.h,kalcatel/kalcatelconfigdialog.cpp,kalcatel/kalcatelconfigdialog.h,kalcatel/kalcateltreeviewitem.cpp,kalcatel/kalcateltreeviewitem.h,kalcatel/kalcatelviewitem.cpp,kalcatel/kalcatelviewitem.h
+sub_dirs=alcatool,images,info
 type=prog_main
 
 [kalcatel/alcatelclasses.cpp]
@@ -520,6 +520,65 @@ install=true
 install_location=$$(kde_icondir)/hicolor/32x32/actions/kalcatel-mobile.png
 type=DATA
 
+[kalcatel/info/Makefile.am]
+files=kalcatel/info/background.png,kalcatel/info/index.html,kalcatel/info/kdelogo2.png,kalcatel/info/lines.png,kalcatel/info/lines2.png,kalcatel/info/pointers.png,kalcatel/info/shadow1.png,kalcatel/info/tablebg.png,kalcatel/info/title.png
+sub_dirs=
+type=normal
+
+[kalcatel/info/background.png]
+dist=true
+install=true
+install_location=$$(kde_datadir)/kalcatel/info/background.png
+type=DATA
+
+[kalcatel/info/index.html]
+dist=true
+install=true
+install_location=$$(kde_datadir)/kalcatel/info/index.html
+type=DATA
+
+[kalcatel/info/kdelogo2.png]
+dist=true
+install=true
+install_location=$$(kde_datadir)/kalcatel/info/kdelogo2.png
+type=DATA
+
+[kalcatel/info/lines.png]
+dist=true
+install=true
+install_location=$$(kde_datadir)/kalcatel/info/lines.png
+type=DATA
+
+[kalcatel/info/lines2.png]
+dist=true
+install=true
+install_location=$$(kde_datadir)/kalcatel/info/lines2.png
+type=DATA
+
+[kalcatel/info/pointers.png]
+dist=true
+install=true
+install_location=$$(kde_datadir)/kalcatel/info/pointers.png
+type=DATA
+
+[kalcatel/info/shadow1.png]
+dist=true
+install=true
+install_location=$$(kde_datadir)/kalcatel/info/shadow1.png
+type=DATA
+
+[kalcatel/info/tablebg.png]
+dist=true
+install=true
+install_location=$$(kde_datadir)/kalcatel/info/tablebg.png
+type=DATA
+
+[kalcatel/info/title.png]
+dist=true
+install=true
+install_location=$$(kde_datadir)/kalcatel/info/title.png
+type=DATA
+
 [kalcatel/kalcatel.cpp]
 dist=true
 install=false
@@ -587,6 +646,18 @@ install_location=
 type=SOURCE
 
 [kalcatel/kalcatelview.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[kalcatel/kalcatelviewitem.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[kalcatel/kalcatelviewitem.h]
 dist=true
 install=false
 install_location=

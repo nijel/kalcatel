@@ -74,8 +74,8 @@ KAlcatelDoc::KAlcatelDoc(QWidget *parent, const char *name) : QObject(parent, na
 
   contacts = new AlcatelContactList();
   calendar = new AlcatelCalendarList();
-  todo = new AlcatelTodoList();
-  sms = new AlcatelMessageList();
+  todos = new AlcatelTodoList();
+  messages = new AlcatelMessageList();
 
   calls = new AlcatelCallList();
 }
@@ -200,60 +200,60 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
     *strm << "  <version>1</version>\n";
     *strm << " </info>\n";
     *strm << " <messages>\n";
-    AlcatelMessageList::Iterator smsit;
-    for( smsit = sms->begin(); smsit != sms->end(); ++smsit ) {
+    AlcatelMessageList::Iterator messagesit;
+    for( messagesit = messages->begin(); messagesit != messages->end(); ++messagesit ) {
         *strm << "  <message>\n";
         *strm << "   <id>";
-        *strm << (*smsit).Id;
+        *strm << (*messagesit).Id;
         *strm << "</id>\n";
         *strm << "   <storage>";
-        *strm << (*smsit).Storage;
+        *strm << (*messagesit).Storage;
         *strm << "</storage>\n";
         *strm << "   <pid>";
-        *strm << (*smsit).PrevId;
+        *strm << (*messagesit).PrevId;
         *strm << "</pid>\n";
         *strm << "   <pstorage>";
-        *strm << (*smsit).PrevStorage;
+        *strm << (*messagesit).PrevStorage;
         *strm << "</pstorage>\n";
         *strm << "   <status>";
-        *strm << (*smsit).Status;
+        *strm << (*messagesit).Status;
         *strm << "</status>\n";
         *strm << "   <length>";
-        *strm << (*smsit).Length;
+        *strm << (*messagesit).Length;
         *strm << "</length>\n";
         *strm << "   <raw>";
-        *strm << (*smsit).Raw;
+        *strm << (*messagesit).Raw;
         *strm << "</raw>\n";
         *strm << "   <sender>";
-        *strm << (*smsit).Sender;
+        *strm << (*messagesit).Sender;
         *strm << "</sender>\n";
         *strm << "   <date>\n";
         *strm << "    <day>";
-        *strm << (*smsit).Date.date().day();
+        *strm << (*messagesit).Date.date().day();
         *strm << "</day>\n";
         *strm << "    <month>";
-        *strm << (*smsit).Date.date().month();
+        *strm << (*messagesit).Date.date().month();
         *strm << "</month>\n";
         *strm << "    <year>";
-        *strm << (*smsit).Date.date().year();
+        *strm << (*messagesit).Date.date().year();
         *strm << "</year>\n";
         *strm << "   </date>\n";
         *strm << "   <time>\n";
         *strm << "    <hour>";
-        *strm << (*smsit).Date.time().hour();
+        *strm << (*messagesit).Date.time().hour();
         *strm << "</hour>\n";
         *strm << "    <minute>";
-        *strm << (*smsit).Date.time().minute();
+        *strm << (*messagesit).Date.time().minute();
         *strm << "</minute>\n";
         *strm << "    <second>";
-        *strm << (*smsit).Date.time().second();
+        *strm << (*messagesit).Date.time().second();
         *strm << "</second>\n";
         *strm << "   </time>\n";
         *strm << "   <text>";
-        *strm << (*smsit).Text;
+        *strm << (*messagesit).Text;
         *strm << "</text>\n";
-        *strm << "   <smsc>";
-        *strm << (*smsit).SMSC;
+        *strm << "   <messagesc>";
+        *strm << (*messagesit).SMSC;
         *strm << "</smsc>\n";
         *strm << "  </message>\n";
     }
@@ -600,7 +600,7 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
     *strm << " <todos>\n";
     AlcatelTodoList::Iterator tit;
 
-    for( tit = todo->begin(); tit != todo->end(); ++tit ) {
+    for( tit = todos->begin(); tit != todos->end(); ++tit ) {
         *strm << "  <todo>\n";
         *strm << "   <id>";
         *strm << (*tit).Id;
@@ -771,7 +771,7 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
             break;
         case ALC_SYNC_TODO:
             count = ALC_TODO_FIELDS;
-            clearTodos(todo, StorageMobile);
+            clearTodos(todos, StorageMobile);
             break;
         case ALC_SYNC_CONTACTS:
             count = ALC_CONTACTS_FIELDS;
@@ -865,7 +865,7 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
                     calendar->append(*Calendar);
                     break;
                 case ALC_SYNC_TODO:
-                    todo->append(*Todo);
+                    todos->append(*Todo);
                     break;
                 case ALC_SYNC_CONTACTS:
                     contacts->append(*Contact);
@@ -1007,11 +1007,11 @@ bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1)
          return false;
      }
 
-    if (what == alcatel_sms || what == alcatel_all) {
+    if (what == alcatel_messages || what == alcatel_all) {
         MessageData *msg;
         win->slotStatusMsg(i18n("Reading messages"),ID_DETAIL_MSG);
-        clearMessages(sms, StorageSIM);
-        msg = get_smss();
+        clearMessages(messages, StorageSIM);
+        msg = get_messages();
 
         i = 0;
         while (msg[i].pos != -1) {
@@ -1030,13 +1030,13 @@ bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1)
             Msg->Status = msg[i].stat;
             Msg->Text = QString(msg[i].ascii);
             free(msg[i].ascii);
-            sms->append(*Msg);
+            messages->append(*Msg);
             i++;
         }
         free(msg);
 
         win->slotStatusMsg(i18n("SMS messages read"),ID_DETAIL_MSG);
-        smsVersion++;
+        messagesVersion++;
     }
 
     if (what == alcatel_calls || what == alcatel_all) {
@@ -1090,7 +1090,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1)
         free(cont);
 
         win->slotStatusMsg(i18n("Calls read"),ID_DETAIL_MSG);
-        callVersion++;
+        callsVersion++;
     }
 
     if (what == alcatel_contacts_sim || what == alcatel_all) {
@@ -1113,10 +1113,10 @@ bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1)
         free(cont);
 
         win->slotStatusMsg(i18n("SIM contacts read"),ID_DETAIL_MSG);
-        contactVersion++;
+        contactsVersion++;
     }
 
-    if (what == alcatel_todo || what == alcatel_calendar || what == alcatel_contacts_mobile || what == alcatel_all) {
+    if (what == alcatel_todos || what == alcatel_calendar || what == alcatel_contacts_mobile || what == alcatel_all) {
         win->slotStatusMsg(i18n("Opening binary mode"),ID_DETAIL_MSG);
         alcatel_init();
 
@@ -1142,7 +1142,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1)
                 return false;
             }
 
-            contactVersion++;
+            contactsVersion++;
         }
 
         if (what == alcatel_calendar || what == alcatel_all) {
@@ -1158,7 +1158,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1)
             calendarVersion++;
         }
 
-        if (what == alcatel_todo || what == alcatel_all) {
+        if (what == alcatel_todos || what == alcatel_all) {
             /* at first read categories */
             win->slotStatusMsg(i18n("Reading todo categories"),ID_DETAIL_MSG);
             if (!readMobileCategories(todo_cats, ALC_SYNC_TODO, ALC_SYNC_TYPE_TODO, ALC_LIST_TODO_CAT)) {
@@ -1180,7 +1180,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1)
                 return false;
             }
 
-            todoVersion++;
+            todosVersion++;
         }
 
         win->slotStatusMsg(i18n("Closing binary mode"),ID_DETAIL_MSG);
@@ -1202,16 +1202,16 @@ void KAlcatelDoc::deleteContents() {
 
     contacts->clear();
     calendar->clear();
-    todo->clear();
-    sms->clear();
+    todos->clear();
+    messages->clear();
 
     modified=true;
     version++;
-    todoVersion++;
-    callVersion++;
+    todosVersion++;
+    callsVersion++;
     calendarVersion++;
-    contactVersion++;
-    smsVersion++;
+    contactsVersion++;
+    messagesVersion++;
     slotUpdateAllViews(NULL);
     /* TODO here is maybe something missing.. */
 }
@@ -1220,22 +1220,22 @@ int KAlcatelDoc::getVersion() {
     return version;
 }
 
-int KAlcatelDoc::getSMSVersion() {
-    return smsVersion;
+int KAlcatelDoc::getMessagesVersion() {
+    return messagesVersion;
 }
 
-int KAlcatelDoc::getCallVersion() {
-    return callVersion;
+int KAlcatelDoc::getCallsVersion() {
+    return callsVersion;
 }
 
-int KAlcatelDoc::getContactVersion() {
-    return contactVersion;
+int KAlcatelDoc::getContactsVersion() {
+    return contactsVersion;
 }
 
 int KAlcatelDoc::getCalendarVersion() {
     return calendarVersion;
 }
 
-int KAlcatelDoc::getTodoVersion() {
-    return todoVersion;
+int KAlcatelDoc::getTodosVersion() {
+    return todosVersion;
 }

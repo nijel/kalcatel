@@ -176,6 +176,9 @@ class KAlcatelView : public QWidget {
     int contactsVersion;
     int calendarVersion;
     int todosVersion;
+
+    QString KAlcatelView::makeURL(QString which);
+
 };
 
 #endif // KALCATELVIEW_H

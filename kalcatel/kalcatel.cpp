@@ -248,7 +248,7 @@ void KAlcatelApp::readOptions(){
 
     config->setGroup("Contacts");
     phone_prefix = config->readEntry("Phone Prefix", "+420");
-    contact_url = config->readNumEntry("Use Custom Field as URL", 1);
+    contact_url = config->readNumEntry("Use Custom Field as URL", -1);
 
     config->setGroup("Mobile");
     mobile_device = config->readPathEntry("Device", "/dev/ttyS1");

@@ -152,6 +152,7 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
     otherLayout->addWidget(label, 1, 0);
 
     contactUrlEdit = new QComboBox(otherPage);
+    contactUrlEdit->insertItem(i18n("Autodetect"));
     contactUrlEdit->insertItem(i18n("None"));
     contactUrlEdit->insertItem(i18n("Custom1"));
     contactUrlEdit->insertItem(i18n("Custom2"));
@@ -225,7 +226,7 @@ void KAlcatelConfigDialog::slotOK() {
     }
 
     theApp->mobile_debug = debugEdit->currentItem();
-    theApp->contact_url = contactUrlEdit->currentItem();
+    theApp->contact_url = contactUrlEdit->currentItem() - 1;
 
     accept();
 }
@@ -250,7 +251,7 @@ int KAlcatelConfigDialog::exec () {
     }
 
     debugEdit->setCurrentItem(theApp->mobile_debug);
-    contactUrlEdit->setCurrentItem(theApp->contact_url);
+    contactUrlEdit->setCurrentItem(theApp->contact_url + 1);
 
     return KDialog::exec();
 }

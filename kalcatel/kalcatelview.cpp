@@ -824,6 +824,12 @@ void KAlcatelView::slotContactChanged(QListViewItem *item) {
     if (item != NULL) slotShowContact((AlcatelContact *)(((KAlcatelDataItem *) item)->alcatelData));
 }
 
+QString KAlcatelView::makeURL(QString which) {
+    if (which.contains(QRegExp("^http://")))
+        return which;
+    else return which.prepend("http://");
+}
+
 void KAlcatelView::slotShowContact(AlcatelContact *what) {
     QString text;
     if (what == NULL) {
@@ -864,17 +870,37 @@ void KAlcatelView::slotShowContact(AlcatelContact *what) {
         if (!what->Country.isEmpty()) text.append(i18n("<b>Country:</b> %1<br>").arg(what->Country));
         QString custom;
         KAlcatelApp *theApp=(KAlcatelApp *) parentWidget();
-        if (theApp->contact_url == 1) custom = i18n("<a href=\"%1\">%2</a>").arg(what->Custom1).arg(what->Custom1);
+        if (theApp->contact_url == 1) custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom1)).arg(what->Custom1);
+        else if (theApp->contact_url == -1 &&
+            (what->Custom1.contains("http://") ||
+                what->Custom1.contains("www.") ||
+                what->Custom1.contains(QRegExp("\\.[a-z]{2,3}$" , false))))
+                    custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom1)).arg(what->Custom1);
         else custom = what->Custom1;
         if (!what->Custom1.isEmpty()) text.append(i18n("<b>Custom1:</b> %1<br>").arg(custom));
-        if (theApp->contact_url == 2) custom = i18n("<a href=\"%1\">%2</a>").arg(what->Custom1).arg(what->Custom1);
-        else custom = what->Custom1;
+        if (theApp->contact_url == 2) custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom2)).arg(what->Custom2);
+        else if (theApp->contact_url == -1 &&
+            (what->Custom2.contains("http://") ||
+                what->Custom2.contains("www.") ||
+                what->Custom2.contains(QRegExp("\\.[a-z]{2,3}$" , false))))
+                    custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom2)).arg(what->Custom2);
+        else custom = what->Custom2;
         if (!what->Custom2.isEmpty()) text.append(i18n("<b>Custom2:</b> %1<br>").arg(custom));
-        if (theApp->contact_url == 3) custom = i18n("<a href=\"%1\">%2</a>").arg(what->Custom1).arg(what->Custom1);
-        else custom = what->Custom1;
+        if (theApp->contact_url == 3) custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom3)).arg(what->Custom3);
+        else if (theApp->contact_url == -1 &&
+            (what->Custom3.contains("http://") ||
+                what->Custom3.contains("www.") ||
+                what->Custom3.contains(QRegExp("\\.[a-z]{2,3}$" , false))))
+                    custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom3)).arg(what->Custom3);
+        else custom = what->Custom3;
         if (!what->Custom3.isEmpty()) text.append(i18n("<b>Custom3:</b> %1<br>").arg(custom));
-        if (theApp->contact_url == 4) custom = i18n("<a href=\"%1\">%2</a>").arg(what->Custom1).arg(what->Custom1);
-        else custom = what->Custom1;
+        if (theApp->contact_url == 4) custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom4)).arg(what->Custom4);
+        else if (theApp->contact_url == -1 &&
+            (what->Custom4.contains("http://") ||
+                what->Custom4.contains("www.") ||
+                what->Custom4.contains(QRegExp("\\.[a-z]{2,3}$" , false))))
+                    custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom4)).arg(what->Custom4);
+        else custom = what->Custom4;
         if (!what->Custom4.isEmpty()) text.append(i18n("<b>Custom4:</b> %1<br>").arg(custom));
         if (!what->Note.isEmpty()) text.append(i18n("<b>Note:</b> %1<br>").arg(what->Note));
         if (what->Private != -1) text.append(i18n("<b>Private:</b> %1<br>").arg(what->Private == 1?i18n("Yes"):i18n("No")));

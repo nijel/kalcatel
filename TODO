@@ -16,7 +16,7 @@ for 0.2-alpha:
 
 for 0.3-beta:
  - editing of calendar/contacts/...
- - sending/writing messages
+ - (DONE) sending/writing messages
  - write to mobile
  - (DONE) signal and battery monitoring
  - change category behavior in contacts - tree should look like:

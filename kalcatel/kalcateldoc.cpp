@@ -1488,7 +1488,7 @@ bool KAlcatelDoc::readMobile(AlcDataType what) {
             AlcatelMessage Msg;
             Msg.Date = QDateTime();
             Msg.Storage = StorageSIM;
-            Msg.Date.setTime_t(msg[i].date);
+            if (msg[i].date != -1) Msg.Date.setTime_t(msg[i].date);
             Msg.Length = msg[i].len;
             Msg.Id = msg[i].pos;
             Msg.Raw = msg[i].raw;

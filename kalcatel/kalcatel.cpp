@@ -219,11 +219,11 @@ void KAlcatelApp::statusUpdate() {
 
         if (bat_percent == -1)
             fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/battery-__.png");
-        else if (bat_percent >= 61)
+        else if (bat_percent >= 60)
             fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/battery-99.png");
-        else if (bat_percent >= 41) 
+        else if (bat_percent >= 40)
             fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/battery-66.png");
-        else if (bat_percent >= 21) 
+        else if (bat_percent >= 20)
             fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/battery-33.png");
         else
             fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/battery-00.png");
@@ -636,7 +636,7 @@ void KAlcatelApp::slotFileReadMobileMessages() {
 
 
 void KAlcatelApp::slotNewMessage() {
-    EditMessageDialog dialog;
+    EditMessageDialog dialog(this);
     dialog.reread = reread_messages;
     if (dialog.exec() && dialog.reread)
         slotFileReadMobileMessages();

@@ -669,22 +669,20 @@ void KAlcatelView::slotShowMessage(AlcatelMessage *what) {
         return;
     }
     AlcatelContact *cont = getContactByPhone(getDocument()->contacts, &(what->Sender), &(((KAlcatelApp *)parent())->phone_prefix));
-    text = i18n(
-        "<b>From:</b> %1 (%2)<br>"
-        "<b>Date:</b> %3<br>"
-        "<b>Time:</b> %4<br>"
-        "<b>SMSC:</b> %5<br>"
-        "<b>Status:</b> %7<br>").
+
+    text = ((what->Status == MESSAGE_UNREAD || what->Status == MESSAGE_READ) ? i18n("<b>From:</b> %1 (%2)<br>") : i18n("<b>To:</b> %1 (%2)<br>")).
         arg(cont == NULL? QString("") : //cont->Name()
             QString("<a href=\"contact:%1/%2\">%3</a>").arg(cont->Storage==StoragePC ? 'P' : cont->Storage==StorageMobile ? 'M' : 'S').
             arg(cont->Id).arg(cont->getName())).
+        arg(what->Sender);
 
-        arg(what->Sender).
-        arg(what->Date.date().toString()).
-        arg(what->Date.time().toString()).
-        arg(what->SMSC).
-        arg(MessageTypes[what->Status]);
+    if (!what->Date.isNull())
+        text.append(i18n("<b>Date:</b> %1<br><b>Time:</b> %2<br>").
+            arg(what->Date.date().toString()).
+            arg(what->Date.time().toString()));
 
+    text.append(i18n("<b>SMSC:</b> %3<br>").arg(what->SMSC));
+    text.append(i18n("<b>Status:</b> %4<br>").arg(MessageTypes[what->Status]));
     text.append(i18n("<b>Storage:</b> %1<br>").arg(StorageTypes[what->Storage]));
     text.append(i18n("<b>Position:</b> %1").arg(what->Id));
     if (what->Storage == StoragePC) {

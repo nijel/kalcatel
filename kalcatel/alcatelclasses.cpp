@@ -101,7 +101,7 @@ QString AlcatelContact::getName(void) {
                                 QString(LastName)):
                             ((LastName.isEmpty())?
                                 QString(FirstName):
-                                QString("%1, %2").arg(LastName).arg(FirstName));
+                                QString("%1, %2").arg(LastName).arg(FirstName)); /* TODO: configure how will be name shown ... */
 }
 
 
@@ -350,6 +350,7 @@ int phoneCmp(QString *number1, QString *number2, QString *prefix) {
 
 AlcatelContact *getContactByPhone(AlcatelContactList *list, QString *number, QString *prefix) {
     AlcatelContactList::Iterator it;
+    if (number->isEmpty()) return NULL;
     for( it = list->begin(); it != list->end(); ++it ) {
         if (phoneCmp(&((* it).MainNumber), number, prefix) ||
             phoneCmp(&((* it).WorkNumber), number, prefix) ||

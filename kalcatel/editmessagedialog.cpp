@@ -34,12 +34,19 @@
 #include <qwhatsthis.h>
 #include <qtooltip.h>
 #include <qmultilineedit.h>
+#include <qstringlist.h>
+#include <qregexp.h>
 
 #include <kdialog.h>
 #include <klocale.h>
 #include <kcombobox.h>
+#include <kmessagebox.h>
 
 #include "editmessagedialog.h"
+#include "kalcatel.h"
+
+#include "alcatool/pdu.h"
+#include "alcatool/sms.h"
 
 EditMessageDialog::EditMessageDialog(QWidget *parent, const char *name ) : KDialog(parent,name, true) {
     QLabel *label;
@@ -115,11 +122,13 @@ EditMessageDialog::EditMessageDialog(QWidget *parent, const char *name ) : KDial
     mainLayout->addWidget(new QLabel( i18n("Class of message"),this),5,3);
     classCombo = new QComboBox(this);
     classCombo->insertItem(i18n("0 - flash"));
-    classCombo->insertItem(i18n("1 - normal"));
+    classCombo->insertItem(i18n("1 - mobile"));
+    classCombo->insertItem(i18n("2 - sim"));
+    classCombo->insertItem(i18n("3 - terminal"));
     classCombo->setCurrentItem(1);
     mainLayout->addWidget(classCombo, 5,4);
 
-    QWhatsThis::add( classCombo,i18n("<b>Class of message</b><br>Class 0 message just shows on display imediately after receiving. Class 1 message is normal message."));
+    QWhatsThis::add( classCombo,i18n("<b>Class of message</b><br>Class 0 message just shows on display imediately after receiving. Class 1 and 2 message are normal messages, 1 should be preferably stored into mobile while 2 on SIM card. Class 3 should go to terminal equipment which most mobiles doesn't support."));
 
     QHBoxLayout *layout = new QHBoxLayout;
 
@@ -153,8 +162,115 @@ void EditMessageDialog::slotCancel() {
 }
 
 void EditMessageDialog::slotOK() {
-//    KAlcatelApp *theApp=(KAlcatelApp *) parentWidget();
-    accept();
+    KAlcatelApp *theApp=(KAlcatelApp *) parentWidget();
+    int sent = 0, written = 0;
+    int failed = 0, s_failed = 0, w_failed = 0;
+    int i;
+    QString msg;
+    char pdu[1024];
+    QRegExp numbertest("^\\+?[0-9]*$");
+    QStringList list = QStringList::split(QRegExp("[; ,]"), sendToCombo->currentText(), false);
+
+    if (list.count() == 0 && sendCheck->isChecked()) {
+        KMessageBox::error(this, i18n("You must enter at least one phone number to send message!"), i18n("Error"));
+        return;
+    }
+
+    if(messageEdit->text().isEmpty()) {
+        KMessageBox::error(this, i18n("You must enter at least one character of text!"), i18n("Error"));
+        return;
+    }
+
+
+    if (theApp->modemConnect()) {
+
+        if (list.count() == 0) {
+            make_pdu("", messageEdit->text().latin1(), 1, classCombo->currentItem(), pdu);
+            i = put_message(pdu, (typeCombo->currentItem() == 0) ? MESSAGE_SENT : MESSAGE_UNSENT);
+            if (i == -1) {
+                msg.append(i18n("Writing message failed!<br>"));
+                w_failed++;
+                failed++;
+            } else {
+                msg.append(i18n("Message written, position=%2<br>").arg(i));
+                written++;
+            }
+        } else {
+            for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it ) {
+                if (numbertest.find(*it, 0) == -1) {
+                    KMessageBox::error(this, i18n("%1 doesn't look like phone number!").arg(*it), i18n("Error"));
+                    msg.append(i18n("%1 desn't look like phone number!").arg(*it).append("<br>"));
+                    failed++;
+                } else {
+                    make_pdu((*it).latin1(), messageEdit->text().latin1(), 1, classCombo->currentItem(), pdu);
+
+                    if (sendCheck->isChecked() && writeCheck->isChecked()){
+                        i = put_message(pdu, (typeCombo->currentItem() == 0) ? MESSAGE_SENT : MESSAGE_UNSENT);
+                        if (i == -1) {
+                            msg.append(i18n("Writing message for number %1 failed!<br>").arg(*it));
+                            w_failed++;
+                            failed++;
+                        } else {
+                            msg.append(i18n("Message written for number %1, position=%2<br>").arg(*it).arg(i));
+                            written++;
+                        }
+                        i = send_message(i);
+                        if (i == -1) {
+                            msg.append(i18n("Sending to number %1 failed!<br>").arg(*it));
+                            s_failed++;
+                            failed++;
+                        } else {
+                            msg.append(i18n("Message sent to number %1, reference id=%2<br>").arg(*it).arg(i));
+                            sent++;
+                        }
+                    } else if (writeCheck->isChecked()){
+                        i = put_message(pdu, (typeCombo->currentItem() == 0) ? MESSAGE_SENT : MESSAGE_UNSENT);
+                        if (i == -1) {
+                            msg.append(i18n("Writing message for number %1 failed!<br>").arg(*it));
+                            w_failed++;
+                            failed++;
+                        } else {
+                            msg.append(i18n("Message written for number %1, position=%2<br>").arg(*it).arg(i));
+                            written++;
+                        }
+                    } else if (sendCheck->isChecked()){
+                        i = send_message(pdu);
+                        if (i == -1) {
+                            msg.append(i18n("Sending to number %1 failed!<br>").arg(*it));
+                            s_failed++;
+                            failed++;
+                        } else {
+                            msg.append(i18n("Message sent to number %1, reference id=%2<br>").arg(*it).arg(i));
+                            sent++;
+                        }
+                    }
+                }
+            }
+        }
+        theApp->modemDisconnect();
+
+
+        msg.prepend(i18n("<br><b>Detailed list:</b><br>"));
+        if (failed == 0) {
+            if (sendCheck->isChecked()){
+                msg.prepend(i18n("Sent all %1 message(s).<br>").arg(sent));
+            }
+            if (writeCheck->isChecked()){
+                msg.prepend(i18n("Written all %1 message(s).<br>").arg(written));
+            }
+            KMessageBox::information(this,msg);
+            accept();
+        } else {
+            if (sendCheck->isChecked()){
+                msg.prepend(i18n("Sent %1 message(s), %2 failed.<br>").arg(sent).arg(s_failed));
+            }
+            if (writeCheck->isChecked()){
+                msg.prepend(i18n("Written %1 message(s), %2 failed.<br>").arg(written).arg(w_failed));
+            }
+            if (KMessageBox::questionYesNo(this,msg.append(i18n("<br>Do you want to edit that message again?"))) == KMessageBox::No)
+                accept();
+        }
+    }
 }
 
 void EditMessageDialog::slotWriteChanged(bool on) {

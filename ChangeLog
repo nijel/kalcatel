@@ -8,6 +8,8 @@ $Id$
         * modem now should be opened exclusively (if available)
         * added signal strength and battery status display + monitoring
         * modem status shown in statusbar
+        * support for writing/sending messages
+        * some fixes in decoding PDU messages
 
 2002-03-15 Michal Cihar <cihar@email.cz>
         * changed modem connecting to allow persistent connection and connecting on start

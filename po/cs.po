@@ -1,18 +1,705 @@
+# translation of cs.po to Czech
 # KAlcatel Czech translation.
 # Copyright (C) 2002 Michal Čihař
-# Michal Čihař <cihar@email.cz>, 2002.
+# Michal Čihař <cihar@email.cz>, 2002,2003.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.3.1\n"
-"POT-Creation-Date: 2002-05-31 21:02+0200\n"
-"PO-Revision-Date: 2002-05-31 21:04GMT\n"
+"Project-Id-Version: cs\n"
+"POT-Creation-Date: 2003-05-09 18:29+0200\n"
+"PO-Revision-Date: 2003-05-09 18:33GMT\n"
 "Last-Translator: Michal Čihař <cihar@email.cz>\n"
 "Language-Team: Czech <C@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 0.9.5\n"
+"X-Generator: KBabel 1.0.1\n"
+
+#: alcatelclasses.cpp:45 kalcatelview.cpp:156
+msgid "Unread"
+msgstr "Nepřečtené"
+
+#: alcatelclasses.cpp:45 kalcatelview.cpp:153
+msgid "Read"
+msgstr "Přečtené"
+
+#: alcatelclasses.cpp:45 editmessagedialog.cpp:92 kalcatelview.cpp:147
+msgid "Unsent"
+msgstr "Neodeslané"
+
+#: alcatelclasses.cpp:45 editmessagedialog.cpp:91 kalcatelview.cpp:150
+msgid "Sent"
+msgstr "Odeslané"
+
+#: alcatelclasses.cpp:46 editcontactdialog.cpp:200 editeventdialog.cpp:218
+msgid "none_storage"
+msgstr "Žádné"
+
+#: alcatelclasses.cpp:46 editcontactdialog.cpp:201 editeventdialog.cpp:219
+#: edittododialog.cpp:164 kalcatelview.cpp:585
+msgid "PC"
+msgstr "PC"
+
+#: alcatelclasses.cpp:46 editcontactdialog.cpp:202 editeventdialog.cpp:220
+#: edittododialog.cpp:165 kalcatelview.cpp:178 kalcatelview.cpp:587
+msgid "SIM"
+msgstr "SIM"
+
+#: alcatelclasses.cpp:46 editcontactdialog.cpp:203 editeventdialog.cpp:221
+#: edittododialog.cpp:166 kalcatelconfigdialog.cpp:62 kalcatelview.cpp:223
+#: kalcatelview.cpp:237 kalcatelview.cpp:586 selectcontactdialog.cpp:81
+msgid "Mobile"
+msgstr "Mobil"
+
+#: alcatelclasses.cpp:47
+msgid "Missed"
+msgstr "Zmeškané"
+
+#: alcatelclasses.cpp:47
+msgid "Received"
+msgstr "Příchozí"
+
+#: alcatelclasses.cpp:47
+msgid "Outgoing"
+msgstr "Odchozí"
+
+#: alcatelclasses.cpp:48
+msgid "High"
+msgstr "Vysoká"
+
+#: alcatelclasses.cpp:48
+msgid "Normal"
+msgstr "Normální"
+
+#: alcatelclasses.cpp:48
+msgid "Low"
+msgstr "Nízká"
+
+#: alcatelclasses.cpp:50
+msgid "Appointment"
+msgstr "Schůzka"
+
+#: alcatelclasses.cpp:51
+msgid "Unknown(1)"
+msgstr "Neznámý(1)"
+
+#: alcatelclasses.cpp:52
+msgid "Birthday"
+msgstr "Narozeniny"
+
+#: alcatelclasses.cpp:53 kalcatelmergedialog.cpp:348
+msgid "Call"
+msgstr "Hovor"
+
+#: alcatelclasses.cpp:54 kalcatelmergedialog.cpp:221
+#: kalcatelmergedialog.cpp:276 kalcatelview.cpp:279 kalcatelview.cpp:711
+#: kalcatelview.cpp:767
+msgid "Alarm"
+msgstr "Budík"
+
+#: alcatelclasses.cpp:55
+msgid "Daily alarm"
+msgstr "Denní budík"
+
+#: alcatelclasses.cpp:56
+msgid "Unknown(6)"
+msgstr "Neznámý(6)"
+
+#: alcatelclasses.cpp:57
+msgid "Unknown(7)"
+msgstr "Neznámý(7)"
+
+#: alcatelclasses.cpp:58
+msgid "Unknown(8)"
+msgstr "Neznámý(8)"
+
+#: alcatelclasses.cpp:59 kalcatelview.cpp:765
+msgid "Repeating"
+msgstr "Opakování"
+
+#: alcatelclasses.cpp:72
+msgid "none_month"
+msgstr "Žádný"
+
+#: alcatelclasses.cpp:73
+msgid "January"
+msgstr "Leden"
+
+#: alcatelclasses.cpp:74
+msgid "February"
+msgstr "Únor"
+
+#: alcatelclasses.cpp:75
+msgid "March"
+msgstr "Březen"
+
+#: alcatelclasses.cpp:76
+msgid "April"
+msgstr "Duben"
+
+#: alcatelclasses.cpp:77
+msgid "May"
+msgstr "Květen"
+
+#: alcatelclasses.cpp:78
+msgid "June"
+msgstr "Červen"
+
+#: alcatelclasses.cpp:79
+msgid "July"
+msgstr "Červenec"
+
+#: alcatelclasses.cpp:80
+msgid "August"
+msgstr "Srpen"
+
+#: alcatelclasses.cpp:81
+msgid "September"
+msgstr "Září"
+
+#: alcatelclasses.cpp:82
+msgid "October"
+msgstr "Říjen"
+
+#: alcatelclasses.cpp:83
+msgid "November"
+msgstr "Listopad"
+
+#: alcatelclasses.cpp:84
+msgid "December"
+msgstr "Prosinec"
+
+#: alcatelclasses.cpp:315 alcatelclasses.cpp:341
+msgid "Each year (birthday)"
+msgstr "Každý rok (narozeniny)"
+
+#: alcatelclasses.cpp:316 alcatelclasses.cpp:342
+msgid "none_repeating"
+msgstr "Žádné"
+
+#: alcatelclasses.cpp:317 alcatelclasses.cpp:343 kalcatel.cpp:771
+#: kalcatel.cpp:776 kalcatel.cpp:777 kalcatelmergedialog.cpp:156
+#: kalcatelmergedialog.cpp:157 kalcatelmergedialog.cpp:236
+#: kalcatelmergedialog.cpp:245 kalcatelmergedialog.cpp:284
+#: kalcatelmergedialog.cpp:285 kalcatelmergedialog.cpp:300
+#: kalcatelmergedialog.cpp:309 kalcatelview.cpp:764 kalcatelviewitem.cpp:88
+#: kalcatelviewitem.cpp:140 kalcatelviewitem.cpp:192 kalcatelviewitem.cpp:237
+#: kalcatelviewitem.cpp:542
+msgid "Unknown"
+msgstr "Neznámý"
+
+#: alcatelclasses.cpp:318 alcatelclasses.cpp:344
+msgid "Forever"
+msgstr "Navždy"
+
+#: alcatelclasses.cpp:330 alcatelclasses.cpp:357
+msgid "Till %1"
+msgstr "Do %1"
+
+#: alcatelclasses.cpp:332 alcatelclasses.cpp:359
+msgid "From %1"
+msgstr "Od %1"
+
+#: alcatelclasses.cpp:334 alcatelclasses.cpp:361
+msgid "From %1 till %2"
+msgstr "Od %1 do %2"
+
+#: alcatelclasses.cpp:364
+msgid " on each"
+msgstr " každý"
+
+#: alcatelclasses.cpp:366
+msgid " on each %1."
+msgstr " každý %1"
+
+#: alcatelclasses.cpp:371 alcatelclasses.cpp:375 alcatelclasses.cpp:381
+msgid " %1"
+msgstr " %1"
+
+#: alcatelclasses.cpp:373
+msgid " in %1. week of"
+msgstr " v %1. týdnu"
+
+#: alcatelclasses.cpp:377
+msgid " month"
+msgstr " měsíce"
+
+#: alcatelclasses.cpp:379
+msgid " %1. day of"
+msgstr " %1. den"
+
+#: alcatelclasses.cpp:383
+msgid " each month"
+msgstr " každého měsíce"
+
+#: editcontactdialog.cpp:56 kalcatel.cpp:155
+msgid "New contact"
+msgstr "Nový kontakt"
+
+#: editcontactdialog.cpp:57
+msgid "Edit contact"
+msgstr "Úprava kontaktu"
+
+#: editcontactdialog.cpp:63
+msgid "<b>New contact</b>"
+msgstr "<b>Nový kontakt</b>"
+
+#: editcontactdialog.cpp:64
+msgid "<b>Edit contact</b>"
+msgstr "<b>Úprava kontaktu</b>"
+
+#: editcontactdialog.cpp:75 kalcatelmergedialog.cpp:147 kalcatelview.cpp:221
+#: kalcatelview.cpp:236 kalcatelview.cpp:807
+msgid "First name"
+msgstr "Jméno"
+
+#: editcontactdialog.cpp:78 kalcatelmergedialog.cpp:146 kalcatelview.cpp:220
+#: kalcatelview.cpp:235 kalcatelview.cpp:808
+msgid "Last name"
+msgstr "Příjmení"
+
+#: editcontactdialog.cpp:86 kalcatelmergedialog.cpp:148 kalcatelview.cpp:823
+msgid "Company"
+msgstr "Firma"
+
+#: editcontactdialog.cpp:89 kalcatelmergedialog.cpp:149 kalcatelview.cpp:824
+msgid "Job title"
+msgstr "Funkce"
+
+#: editcontactdialog.cpp:92 edittododialog.cpp:84 kalcatelmergedialog.cpp:158
+#: kalcatelmergedialog.cpp:286 kalcatelmergedialog.cpp:328
+#: kalcatelview.cpp:222 kalcatelview.cpp:253 kalcatelview.cpp:721
+#: kalcatelview.cpp:725 kalcatelview.cpp:727 kalcatelview.cpp:812
+#: kalcatelview.cpp:816 kalcatelview.cpp:818
+msgid "Category"
+msgstr "Kategorie"
+
+#: editcontactdialog.cpp:95 editcontactdialog.cpp:369 editeventdialog.cpp:168
+#: editeventdialog.cpp:174 editeventdialog.cpp:180 editeventdialog.cpp:186
+#: editeventdialog.cpp:192 edittododialog.cpp:87 edittododialog.cpp:338
+#: kalcatelmergedialog.cpp:233 kalcatelmergedialog.cpp:242
+#: kalcatelmergedialog.cpp:297 kalcatelmergedialog.cpp:306
+#: kalcatelmergedialog.cpp:1205 kalcatelmergedialog.cpp:1210
+#: kalcatelmergedialog.cpp:1218 kalcatelmergedialog.cpp:1219
+msgid "Not set"
+msgstr "Nenastaveno"
+
+#: editcontactdialog.cpp:96 editcontactdialog.cpp:370 edittododialog.cpp:88
+#: edittododialog.cpp:163 edittododialog.cpp:339 kalcatelmergedialog.cpp:156
+#: kalcatelmergedialog.cpp:157 kalcatelmergedialog.cpp:284
+#: kalcatelmergedialog.cpp:285 kalcatelview.cpp:441 kalcatelview.cpp:550
+#: kalcatelview.cpp:721 kalcatelview.cpp:812
+msgid "none_category"
+msgstr "Žádná"
+
+#: editcontactdialog.cpp:102 editeventdialog.cpp:88 edittododialog.cpp:93
+#: kalcatelmergedialog.cpp:160 kalcatelmergedialog.cpp:223
+#: kalcatelmergedialog.cpp:278 kalcatelview.cpp:712 kalcatelview.cpp:769
+#: kalcatelview.cpp:874
+msgid "Private"
+msgstr "Soukromé"
+
+#: editcontactdialog.cpp:105 kalcatelmergedialog.cpp:150 kalcatelview.cpp:873
+msgid "Note"
+msgstr "Poznámka"
+
+#: editcontactdialog.cpp:113 kalcatelmergedialog.cpp:161 kalcatelview.cpp:825
+msgid "Work number"
+msgstr "Do práce"
+
+#: editcontactdialog.cpp:117 kalcatelmergedialog.cpp:162 kalcatelview.cpp:826
+msgid "Main number"
+msgstr "Hlavní"
+
+#: editcontactdialog.cpp:121 kalcatelmergedialog.cpp:163 kalcatelview.cpp:827
+msgid "Fax number"
+msgstr "Fax"
+
+#: editcontactdialog.cpp:125 kalcatelmergedialog.cpp:164 kalcatelview.cpp:828
+msgid "Other number"
+msgstr "Další číslo"
+
+#: editcontactdialog.cpp:129 kalcatelmergedialog.cpp:165 kalcatelview.cpp:829
+msgid "Pager number"
+msgstr "Pager"
+
+#: editcontactdialog.cpp:133 kalcatelmergedialog.cpp:166 kalcatelview.cpp:830
+msgid "Mobile number"
+msgstr "Mobil"
+
+#: editcontactdialog.cpp:137 kalcatelmergedialog.cpp:167 kalcatelview.cpp:831
+msgid "Home number"
+msgstr "Domů"
+
+#: editcontactdialog.cpp:149 kalcatelmergedialog.cpp:168 kalcatelview.cpp:832
+msgid "Email 1"
+msgstr "Email 1"
+
+#: editcontactdialog.cpp:152 kalcatelmergedialog.cpp:169 kalcatelview.cpp:833
+msgid "Email 2"
+msgstr "Email 2"
+
+#: editcontactdialog.cpp:160 kalcatelmergedialog.cpp:170 kalcatelview.cpp:834
+msgid "Address"
+msgstr "Adresa"
+
+#: editcontactdialog.cpp:163 kalcatelmergedialog.cpp:171 kalcatelview.cpp:835
+msgid "City"
+msgstr "Město"
+
+#: editcontactdialog.cpp:166 kalcatelmergedialog.cpp:173 kalcatelview.cpp:837
+msgid "Zip"
+msgstr "PSČ"
+
+#: editcontactdialog.cpp:169 kalcatelmergedialog.cpp:172 kalcatelview.cpp:836
+msgid "State"
+msgstr "Stát"
+
+#: editcontactdialog.cpp:172 kalcatelmergedialog.cpp:174 kalcatelview.cpp:838
+msgid "Country"
+msgstr "Země"
+
+#: editcontactdialog.cpp:180 kalcatelconfigdialog.cpp:224
+#: kalcatelmergedialog.cpp:175 kalcatelview.cpp:848
+msgid "Custom 1"
+msgstr "Info č. 1"
+
+#: editcontactdialog.cpp:183 kalcatelconfigdialog.cpp:225
+#: kalcatelmergedialog.cpp:176 kalcatelview.cpp:856
+msgid "Custom 2"
+msgstr "Info č. 2"
+
+#: editcontactdialog.cpp:186 kalcatelconfigdialog.cpp:226
+#: kalcatelmergedialog.cpp:177 kalcatelview.cpp:864
+msgid "Custom 3"
+msgstr "Info č. 3"
+
+#: editcontactdialog.cpp:189 kalcatelconfigdialog.cpp:227
+#: kalcatelmergedialog.cpp:178 kalcatelview.cpp:872
+msgid "Custom 4"
+msgstr "Info č. 4"
+
+#: editcontactdialog.cpp:197 editeventdialog.cpp:215 edittododialog.cpp:160
+#: kalcatelview.cpp:682 kalcatelview.cpp:732 kalcatelview.cpp:775
+#: kalcatelview.cpp:876 kalcatelview.cpp:982
+msgid "Storage"
+msgstr "Uložení"
+
+#: editcontactdialog.cpp:208 editeventdialog.cpp:226 edittododialog.cpp:171
+#: kalcatelview.cpp:212 kalcatelview.cpp:227 kalcatelview.cpp:241
+#: kalcatelview.cpp:254 kalcatelview.cpp:266 kalcatelview.cpp:281
+#: kalcatelview.cpp:292 kalcatelview.cpp:300 kalcatelview.cpp:310
+#: kalcatelview.cpp:321 kalcatelview.cpp:332 kalcatelview.cpp:683
+#: kalcatelview.cpp:733 kalcatelview.cpp:776 kalcatelview.cpp:877
+#: kalcatelview.cpp:983
+msgid "Position"
+msgstr "Pozice"
+
+#: editcontactdialog.cpp:212 editeventdialog.cpp:230 edittododialog.cpp:175
+msgid "Auto"
+msgstr "Automatické"
+
+#: editeventdialog.cpp:60 kalcatel.cpp:157
+msgid "New event"
+msgstr "Nová událost"
+
+#: editeventdialog.cpp:61
+msgid "Edit event"
+msgstr "Upravit událost"
+
+#: editeventdialog.cpp:67
+msgid "<b>New event</b>"
+msgstr "<b>Nová událost</b>"
+
+#: editeventdialog.cpp:68
+msgid "<b>Edit event</b>"
+msgstr "<b>Upravit událost</b>"
+
+#: editeventdialog.cpp:79 kalcatelmergedialog.cpp:355 kalcatelview.cpp:277
+#: kalcatelview.cpp:299 kalcatelview.cpp:981
+msgid "Type"
+msgstr "Typ"
+
+#: editeventdialog.cpp:96 edittododialog.cpp:111 kalcatelmergedialog.cpp:222
+#: kalcatelmergedialog.cpp:277 kalcatelview.cpp:252 kalcatelview.cpp:265
+#: kalcatelview.cpp:278 kalcatelview.cpp:709 kalcatelview.cpp:757
+msgid "Subject"
+msgstr "Název"
+
+#: editeventdialog.cpp:101 kalcatelmergedialog.cpp:199
+#: kalcatelmergedialog.cpp:218 kalcatelview.cpp:274 kalcatelview.cpp:307
+#: kalcatelview.cpp:318 kalcatelview.cpp:329 kalcatelview.cpp:674
+#: kalcatelview.cpp:758
+msgid "Date"
+msgstr "Datum"
+
+#: editeventdialog.cpp:104 editeventdialog.cpp:126 editeventdialog.cpp:199
+#: editeventdialog.cpp:206 edittododialog.cpp:119 edittododialog.cpp:141
+msgid "Enabled"
+msgstr "Povoleno"
+
+#: editeventdialog.cpp:108 edittododialog.cpp:123 kalcatelmergedialog.cpp:141
+#: kalcatelmergedialog.cpp:248 kalcatelmergedialog.cpp:312
+#: kalcatelview.cpp:291 kalcatelview.cpp:298 kalcatelview.cpp:715
+#: kalcatelview.cpp:770 kalcatelview.cpp:977
+msgid "Contact"
+msgstr "Kontakt"
+
+#: editeventdialog.cpp:111 editeventdialog.cpp:300 editeventdialog.cpp:361
+#: editeventdialog.cpp:764 edittododialog.cpp:126 edittododialog.cpp:222
+#: edittododialog.cpp:283 edittododialog.cpp:400 kalcatelmergedialog.cpp:231
+#: kalcatelmergedialog.cpp:240 kalcatelmergedialog.cpp:295
+#: kalcatelmergedialog.cpp:304
+msgid "none_contact"
+msgstr "Žádný"
+
+#: editeventdialog.cpp:113 editmessagedialog.cpp:108 edittododialog.cpp:128
+msgid "Contacts..."
+msgstr "Kontakty..."
+
+#: editeventdialog.cpp:123 edittododialog.cpp:138
+msgid "Alarm date"
+msgstr "Datum upozorněni"
+
+#: editeventdialog.cpp:129 edittododialog.cpp:144
+msgid "Alarm time"
+msgstr "Čas upozornění"
+
+#: editeventdialog.cpp:138 kalcatelmergedialog.cpp:219 kalcatelview.cpp:760
+msgid "Start time"
+msgstr "Začátek"
+
+#: editeventdialog.cpp:142 kalcatelmergedialog.cpp:220 kalcatelview.cpp:761
+msgid "End time"
+msgstr "Konec"
+
+#: editeventdialog.cpp:163
+msgid "<b>Repeating:</b>"
+msgstr "<b>Opakování:</b>"
+
+#: editeventdialog.cpp:165 kalcatelmergedialog.cpp:254
+msgid "Frequency"
+msgstr "Frekvence"
+
+#: editeventdialog.cpp:171 kalcatelmergedialog.cpp:250
+msgid "Day of week"
+msgstr "Den v týdnu"
+
+#: editeventdialog.cpp:177 kalcatelmergedialog.cpp:251
+msgid "Day"
+msgstr "Den"
+
+#: editeventdialog.cpp:183 kalcatelmergedialog.cpp:252
+msgid "Week of month"
+msgstr "Týden v měsíci"
+
+#: editeventdialog.cpp:189 kalcatelmergedialog.cpp:253
+msgid "Month"
+msgstr "Měsíc"
+
+#: editeventdialog.cpp:195 kalcatelmergedialog.cpp:255
+msgid "Start date"
+msgstr "Začátek"
+
+#: editeventdialog.cpp:202
+msgid "End date"
+msgstr "Konec"
+
+#: editeventdialog.cpp:295 editeventdialog.cpp:759 edittododialog.cpp:278
+#: edittododialog.cpp:395 kalcatelview.cpp:436 kalcatelview.cpp:545
+#: kalcatelview.cpp:725 kalcatelview.cpp:816
+msgid "Unknown (id=%1)"
+msgstr "Neznámé (id=%1)"
+
+#: editmessagedialog.cpp:61 kalcatel.cpp:151
+msgid "New message"
+msgstr "Nová zpráva"
+
+#: editmessagedialog.cpp:67
+msgid "<b>New message</b>"
+msgstr "<b>Nová zpráva</b>"
+
+#: editmessagedialog.cpp:78
+msgid "Send message"
+msgstr "Poslat zprávu"
+
+#: editmessagedialog.cpp:82
+msgid ""
+"<b>Send message</b><br>When checked message will be sent as you press OK "
+"button."
+msgstr "<b>Poslat zprávu</b><br>Pokud je zaškrtnuto, zpráva bude odeslána."
+
+#: editmessagedialog.cpp:84
+msgid "Store to mobile as"
+msgstr "Uložit to mobilu jako"
+
+#: editmessagedialog.cpp:88
+msgid ""
+"<b>Store to mobile</b><br>When checked, message will be written to mobile "
+"(SIM) as sent or unsent just as you press OK button."
+msgstr ""
+"<b>Uložit to mobilu</b><br>Pokud je zaškrtnuto, zpráva bude zapsána do "
+"mobilu (SIM) jako odeslaná nebo neodeslaná."
+
+#: editmessagedialog.cpp:95
+msgid "<b>Type of message</b><br>Which will be type of message stored in mobile?"
+msgstr "<b>Typ zprávy</b><br>Jaký je typ zprávy uložené v mobilu?"
+
+#: editmessagedialog.cpp:100
+msgid "Send to:"
+msgstr "Adresát(i):"
+
+#: editmessagedialog.cpp:106
+msgid ""
+"<b>Send to number(s)</b><br>Enter here number(s) of receivers of this "
+"message, more numbers should be separated with space, comma or semicolon."
+msgstr ""
+"<b>Adresát(i)</b><br>Sem zapište čísla adresátů této zprávy. Více čísel "
+"oddělte mezerou, středníkem nebo čáskou."
+
+#: editmessagedialog.cpp:111
+msgid "<b>Contacts</b><br>Use this button to add number from your contacts."
+msgstr "<b>Kontakty</b><br>Použijte toto tlačítko pro přidání čísla z kontaktů."
+
+#: editmessagedialog.cpp:122
+msgid ""
+"<b>Message text</b><br>Write here message text, note that characters with "
+"accents will be very probably interpreted another way that you wanted, just "
+"few pass correctly."
+msgstr ""
+"<b>Text zprávy</b><br> Sem zapište text zprávy. Znaky s háčkami a čárkami "
+"budou pravděpodobně zobrazeny špatně, proto je radši nepoužívejte."
+
+#: editmessagedialog.cpp:124 editmessagedialog.cpp:303
+msgid "Used %1 of %2 characters"
+msgstr "Použito %1 ze %2 znaků"
+
+#: editmessagedialog.cpp:127
+msgid "Class of message"
+msgstr "Druh zprávy"
+
+#: editmessagedialog.cpp:129
+msgid "0 - flash"
+msgstr "0 - flash"
+
+#: editmessagedialog.cpp:130
+msgid "1 - mobile"
+msgstr "1 - mobil"
+
+#: editmessagedialog.cpp:131
+msgid "2 - sim"
+msgstr "2 - sim"
+
+#: editmessagedialog.cpp:132
+msgid "3 - terminal"
+msgstr "3 - terminal"
+
+#: editmessagedialog.cpp:136
+msgid ""
+"<b>Class of message</b><br>Class 0 message just shows on display imediately "
+"after receiving. Class 1 and 2 message are normal messages, 1 should be "
+"preferably stored into mobile while 2 on SIM card. Class 3 should go to "
+"terminal equipment which most mobiles doesn't support."
+msgstr ""
+"<b>Druh zprávy</b><br>Class 0 se jen zobrazí na displeji ihned po přijetí. "
+"Class 1 a 2 jsou normální zprávy, 1 by mělo být přednostně ukládáno do "
+"telefonu a 2 na SIM kartu. Class 3 by měla být přesměrována do koncového "
+"zařízení, které většina telefonů nepodporuje."
+
+#: editmessagedialog.cpp:179
+msgid "You must enter at least one phone number to send message!"
+msgstr "Musíte zapsat alespoň jedno číslo kam odeslat zprávu!"
+
+#: editmessagedialog.cpp:184
+msgid "You must enter at least one character of text!"
+msgstr "Musíte napsat alespoň jeden znak textu!"
+
+#: editmessagedialog.cpp:195
+msgid "Writing message failed!<br>"
+msgstr "Zapisování zprávy selhalo!<br>"
+
+#: editmessagedialog.cpp:199
+msgid "Message written, position=%1<br>"
+msgstr "Zpráva zapsána, pozice=%1<br>"
+
+#: editmessagedialog.cpp:205 editmessagedialog.cpp:206
+msgid "%1 doesn't look like phone number!"
+msgstr "%1 nevypadá jako telefonní číslo!"
+
+#: editmessagedialog.cpp:214 editmessagedialog.cpp:233
+msgid "Writing message for number %1 failed!<br>"
+msgstr "Zapisování zprávy pro číslo %1 selhalo!<br>"
+
+#: editmessagedialog.cpp:218 editmessagedialog.cpp:237
+msgid "Message written for number %1, position=%2<br>"
+msgstr "Zpráva pro číslo %1 zapsána na pozici %2<br>"
+
+#: editmessagedialog.cpp:223 editmessagedialog.cpp:243
+msgid "Sending to number %1 failed!<br>"
+msgstr "Posílání pro číslo %1 selhalo!<br>"
+
+#: editmessagedialog.cpp:227 editmessagedialog.cpp:247
+msgid "Message sent to number %1, reference id=%2<br>"
+msgstr "Zpráva pro číslo %1 odeslána její reference id je %2<br>"
+
+#: editmessagedialog.cpp:257
+msgid "<br><b>Detailed list:</b><br>"
+msgstr "<br><b>Podrobný výpis:</b><br>"
+
+#: editmessagedialog.cpp:260
+msgid "Sent all %1 message(s).<br>"
+msgstr "Odeslány všechny %1 zprávy.<br>"
+
+#: editmessagedialog.cpp:263
+msgid "Written all %1 message(s).<br>"
+msgstr "Zapsány všechny %1 zprávy.<br>"
+
+#: editmessagedialog.cpp:269
+msgid "Sent %1 message(s), %2 failed during sending.<br>"
+msgstr "Odeslnány %1 zprávy, odesílání selhalo u %2.<br>"
+
+#: editmessagedialog.cpp:272
+msgid "Written %1 message(s), %2 failed during writing.<br>"
+msgstr "Zpsány %1 zprávy, u %2 zpráv selhal zápis.<br>"
+
+#: editmessagedialog.cpp:274
+msgid "%1 message(s) failed!<br>"
+msgstr "%1 zpráv selhalo!<br>"
+
+#: editmessagedialog.cpp:275
+msgid "<br>Do you want to edit that message again?"
+msgstr "<br>Chcete zprávu znova upravit?"
+
+#: edittododialog.cpp:65 kalcatel.cpp:153
+msgid "New todo"
+msgstr "Nový úkol"
+
+#: edittododialog.cpp:66
+msgid "Edit todo"
+msgstr "Úprava úkolu"
+
+#: edittododialog.cpp:72
+msgid "<b>New todo</b>"
+msgstr "<b>Nový úkol</b>"
+
+#: edittododialog.cpp:73
+msgid "<b>Edit todo</b>"
+msgstr "<b>Úprava úkolu</b>"
+
+#: edittododialog.cpp:96 kalcatelmergedialog.cpp:288 kalcatelview.cpp:250
+#: kalcatelview.cpp:263 kalcatelview.cpp:714
+msgid "Priority"
+msgstr "Priorita"
+
+#: edittododialog.cpp:103 kalcatelmergedialog.cpp:275 kalcatelview.cpp:249
+#: kalcatelview.cpp:262 kalcatelview.cpp:713
+msgid "Completed"
+msgstr "Hotovo"
+
+#: edittododialog.cpp:116 kalcatelmergedialog.cpp:274 kalcatelview.cpp:251
+#: kalcatelview.cpp:264 kalcatelview.cpp:710
+msgid "Due date"
+msgstr "Poslední termín"
 
 #: kalcatel.cpp:87
 msgid ""
@@ -87,33 +774,17 @@ msgstr "Stáhnout kontakty z telefonu"
 msgid "&Message"
 msgstr "&Zpráva"
 
-#: editmessagedialog.cpp:61 kalcatel.cpp:151
-msgid "New message"
-msgstr "Nová zpráva"
-
 #: kalcatel.cpp:152
 msgid "&Todo"
 msgstr "Ú&kol"
-
-#: edittododialog.cpp:65 kalcatel.cpp:153
-msgid "New todo"
-msgstr "Nový úkol"
 
 #: kalcatel.cpp:154
 msgid "&Contact"
 msgstr "&Kontakt"
 
-#: editcontactdialog.cpp:56 kalcatel.cpp:155
-msgid "New contact"
-msgstr "Nový kontakt"
-
 #: kalcatel.cpp:156
 msgid "&Event"
 msgstr "&Událost"
-
-#: editeventdialog.cpp:60 kalcatel.cpp:157
-msgid "New event"
-msgstr "Nová událost"
 
 #: kalcatel.cpp:159
 msgid "Todo category"
@@ -135,7 +806,7 @@ msgstr "Nová kategorie kontaktů"
 msgid "&Information"
 msgstr "&Informace"
 
-#: kalcatel.cpp:165 kalcatel.cpp:783
+#: kalcatel.cpp:165 kalcatel.cpp:787
 msgid "Mobile information"
 msgstr "Informace o telefonu"
 
@@ -211,12 +882,12 @@ msgstr "Vypne/zapne toolbar"
 msgid "Enables/disables the statusbar"
 msgstr "Vypne/zapne statusbar"
 
-#: kalcatel.cpp:217 kalcatel.cpp:320 kalcatel.cpp:632 kalcatel.cpp:638
-#: kalcatel.cpp:644 kalcatel.cpp:650 kalcatel.cpp:656 kalcatel.cpp:662
-#: kalcatel.cpp:668 kalcatel.cpp:786 kalcatel.cpp:799 kalcatel.cpp:816
-#: kalcatel.cpp:828 kalcatel.cpp:840 kalcatel.cpp:882 kalcatel.cpp:898
-#: kalcatel.cpp:920 kalcatel.cpp:926 kalcatel.cpp:932 kalcatel.cpp:945
-#: kalcatel.cpp:958 kalcatel.cpp:1072
+#: kalcatel.cpp:217 kalcatel.cpp:320 kalcatel.cpp:636 kalcatel.cpp:642
+#: kalcatel.cpp:648 kalcatel.cpp:654 kalcatel.cpp:660 kalcatel.cpp:666
+#: kalcatel.cpp:672 kalcatel.cpp:790 kalcatel.cpp:803 kalcatel.cpp:820
+#: kalcatel.cpp:832 kalcatel.cpp:844 kalcatel.cpp:886 kalcatel.cpp:902
+#: kalcatel.cpp:924 kalcatel.cpp:930 kalcatel.cpp:936 kalcatel.cpp:949
+#: kalcatel.cpp:962 kalcatel.cpp:1076
 msgid "Ready."
 msgstr "Připraveno"
 
@@ -228,7 +899,7 @@ msgstr "Neznámá síla signálu, klikněte pro obnovení"
 msgid "Unknown battery status, click to refresh"
 msgstr "Neznámý stav baterie, klikněte pro obnovení"
 
-#: kalcatel.cpp:238 kalcatel.cpp:609 kalcatel.cpp:622
+#: kalcatel.cpp:238 kalcatel.cpp:613 kalcatel.cpp:626
 msgid "Not connected, click to connect"
 msgstr "Nepřipojeno, klikněte pro připojení"
 
@@ -241,7 +912,7 @@ msgstr "Baterie nabita na %1%, klikněte pro obnovení"
 msgid "Signal stregth is %1, click to refresh"
 msgstr "Síla signálu je %1, klikněte pro obnovení"
 
-#: kalcatel.cpp:316 kalcatel.cpp:803 kalcatel.cpp:820
+#: kalcatel.cpp:316 kalcatel.cpp:807 kalcatel.cpp:824
 msgid "Opening file..."
 msgstr "Otevírám soubor..."
 
@@ -258,6 +929,10 @@ msgid "Modem locked."
 msgstr "Modem uzamčen."
 
 #: kalcatel.cpp:555
+msgid "Can not create modem lock. Try disabling locking in configuration."
+msgstr "Nelze vytvořit zámek modemu. Zkuste vypnout zamykání v nastaveních."
+
+#: kalcatel.cpp:559
 msgid ""
 "Failed opening modem.\n"
 "Unknown error (%1)."
@@ -265,27 +940,27 @@ msgstr ""
 "Chyba při otevírání modemu.\n"
 "Neznámá chyba (%1)."
 
-#: kalcatel.cpp:561
+#: kalcatel.cpp:565
 msgid "Setting serial port"
 msgstr "Nastavuji sériový port"
 
-#: kalcatel.cpp:563
+#: kalcatel.cpp:567
 msgid "Initializing modem"
 msgstr "Inicializuji modem"
 
-#: kalcatel.cpp:572
+#: kalcatel.cpp:576
 msgid "Modem doesn't react on AT command."
 msgstr "Modem nereaguje na AT příkazy."
 
-#: kalcatel.cpp:576
+#: kalcatel.cpp:580
 msgid "Failed selecting PDU mode."
 msgstr "Chyba při vybírání PDU režimu."
 
-#: kalcatel.cpp:580
+#: kalcatel.cpp:584
 msgid "Can not write to selected device."
 msgstr "Nelze zapisovat na zvolené zařízení."
 
-#: kalcatel.cpp:584
+#: kalcatel.cpp:588
 msgid ""
 "Failed initializing modem.\n"
 "Unknown error (%1)."
@@ -293,24 +968,24 @@ msgstr ""
 "Chyba při inicializaci modemu.\n"
 "Neznámá chyba (%1)."
 
-#: kalcatel.cpp:593
+#: kalcatel.cpp:597
 msgid "Modem initialized"
 msgstr "Modem inicializován"
 
-#: kalcatel.cpp:597
+#: kalcatel.cpp:601
 msgid "Connected, click to disconnect"
 msgstr "Připojeno, klikněte pro odpojení"
 
-#: kalcatel.cpp:630 kalcatel.cpp:636 kalcatel.cpp:642 kalcatel.cpp:648
-#: kalcatel.cpp:654 kalcatel.cpp:660 kalcatel.cpp:666 kalcatel.cpp:676
+#: kalcatel.cpp:634 kalcatel.cpp:640 kalcatel.cpp:646 kalcatel.cpp:652
+#: kalcatel.cpp:658 kalcatel.cpp:664 kalcatel.cpp:670 kalcatel.cpp:680
 msgid "Reading data from mobile..."
 msgstr "Načítám data z mobilu..."
 
-#: kalcatel.cpp:680
+#: kalcatel.cpp:684
 msgid "Reading information"
 msgstr "Načítám informace"
 
-#: kalcatel.cpp:704
+#: kalcatel.cpp:708
 msgid ""
 "<table border=\"0\"><tr><td><b>Manufacturer:</b></td><td>%0</td></"
 "tr><tr><td><b>Model:</b></td><td>%1</td></tr><tr><td><b>Revision:</b></"
@@ -329,42 +1004,31 @@ msgstr ""
 "signálu:</b></td><td>%7</td></tr><tr><td><b>Četnost chyb v signálu: </b></"
 "td><td>%8</td></tr><tr><td><b>SMS centrum:</b></td><td>%9</td></tr>"
 
-#: kalcatel.cpp:763
+#: kalcatel.cpp:767
 msgid "Supplied from battery"
 msgstr "Provoz na baterii"
 
-#: kalcatel.cpp:764
+#: kalcatel.cpp:768
 msgid "Battery connected but not used"
 msgstr "Baterie připojena, ale nepoužita"
 
-#: kalcatel.cpp:765
+#: kalcatel.cpp:769
 msgid "Battery not connected"
 msgstr "Baterie nepřipojena"
 
-#: alcatelclasses.cpp:312 alcatelclasses.cpp:338 kalcatel.cpp:767
-#: kalcatel.cpp:772 kalcatel.cpp:773 kalcatelmergedialog.cpp:156
-#: kalcatelmergedialog.cpp:157 kalcatelmergedialog.cpp:236
-#: kalcatelmergedialog.cpp:245 kalcatelmergedialog.cpp:284
-#: kalcatelmergedialog.cpp:285 kalcatelmergedialog.cpp:300
-#: kalcatelmergedialog.cpp:309 kalcatelview.cpp:763 kalcatelviewitem.cpp:88
-#: kalcatelviewitem.cpp:140 kalcatelviewitem.cpp:192 kalcatelviewitem.cpp:237
-#: kalcatelviewitem.cpp:542
-msgid "Unknown"
-msgstr "Neznámý"
-
-#: kalcatel.cpp:775
+#: kalcatel.cpp:779
 msgid "<tr><td><b>Own number:</b></td><td>%1</td></tr>"
 msgstr "<tr><td><b>Vlastní číslo:</b></td><td>%1</td></tr>"
 
-#: kalcatel.cpp:781
+#: kalcatel.cpp:785
 msgid "</table>"
 msgstr "</table>"
 
-#: kalcatel.cpp:790
+#: kalcatel.cpp:794
 msgid "Creating new document..."
 msgstr "Vytvářím nový dokument...."
 
-#: kalcatel.cpp:808 kalcatel.cpp:847
+#: kalcatel.cpp:812 kalcatel.cpp:851
 msgid ""
 "*.kalc|KAlcatel files (*.kalc)\n"
 "*|All files"
@@ -372,19 +1036,23 @@ msgstr ""
 "*.kalc|Soubory KAlcatelu (*.kalc)\n"
 "*|Všechny soubory"
 
-#: kalcatel.cpp:808
+#: kalcatel.cpp:812
 msgid "Open File..."
 msgstr "Otevřít soubor..."
 
-#: kalcatel.cpp:832
+#: kalcatel.cpp:836
 msgid "Saving file..."
 msgstr "Ukládám soubor..."
 
-#: kalcatel.cpp:844
+#: kalcatel.cpp:848
 msgid "Saving file with a new filename..."
 msgstr "Ukládám soubor pod jiným jménem..."
 
-#: kalcatel.cpp:856
+#: kalcatel.cpp:851
+msgid "Save as..."
+msgstr "Uložit jako..."
+
+#: kalcatel.cpp:860
 msgid ""
 "The selected file exists.\n"
 "Do you want to overwrite it?"
@@ -392,1100 +1060,61 @@ msgstr ""
 "Zvolený soubor existuje.\n"
 "Přejete si ho přepsat?"
 
-#: kalcatel.cpp:867
+#: kalcatel.cpp:871
 msgid "Canceled."
 msgstr "Zrušeno."
 
-#: kalcatel.cpp:886
+#: kalcatel.cpp:890
 msgid "Closing file..."
 msgstr "Zavírám soubor..."
 
-#: kalcatel.cpp:891
+#: kalcatel.cpp:895
 msgid "Printing..."
 msgstr "Tisknu..."
 
-#: kalcatel.cpp:902
+#: kalcatel.cpp:906
 msgid "Exiting..."
 msgstr "Ukončuji program..."
 
-#: kalcatel.cpp:918
+#: kalcatel.cpp:922
 msgid "Cutting selection..."
 msgstr "Vyjímám označené..."
 
-#: kalcatel.cpp:924
+#: kalcatel.cpp:928
 msgid "Copying selection to clipboard..."
 msgstr "Kopíruji do schránky..."
 
-#: kalcatel.cpp:930
+#: kalcatel.cpp:934
 msgid "Inserting clipboard contents..."
 msgstr "Vkládám obsah schránky..."
 
-#: kalcatel.cpp:936
+#: kalcatel.cpp:940
 msgid "Toggling toolbar..."
 msgstr "Přpínám toolbar..."
 
-#: kalcatel.cpp:949
+#: kalcatel.cpp:953
 msgid "Toggle the statusbar..."
 msgstr "Přepnout stavovou řádku..."
 
-#: kalcatel.cpp:973 kalcatel.cpp:980
+#: kalcatel.cpp:977 kalcatel.cpp:984
 msgid "("
 msgstr "("
 
-#: kalcatel.cpp:975 kalcatel.cpp:982
+#: kalcatel.cpp:979 kalcatel.cpp:986
 msgid ")"
 msgstr ")"
 
-#: kalcatel.cpp:1068
+#: kalcatel.cpp:1072
 msgid "Commiting changes..."
 msgstr "Zapisuji změny..."
 
-#: kalcatel.cpp:1077
+#: kalcatel.cpp:1081
 msgid "Enter new todo category name"
 msgstr "Zadejte jméno nové kategorie úkolů"
 
-#: kalcatel.cpp:1086
+#: kalcatel.cpp:1090
 msgid "Enter new contact category name"
 msgstr "Zadejte jméno nové kategorie kontaktů"
-
-#: kalcateldoc.cpp:127
-msgid ""
-"The current file has been modified.\n"
-"Do you want to save it?"
-msgstr ""
-"Otevřený soubor byl změněn.\n"
-"Přejete si ho uložit?"
-
-#: kalcateldoc.cpp:621 kalcateldoc.cpp:625 kalcateldoc.cpp:806
-msgid "Opening of selected document (%1) failed."
-msgstr "Otevírání zvoleného souboru (%1) selhalo."
-
-#: kalcateldoc.cpp:621
-msgid "File can not be opened for reading."
-msgstr "Soubor nelze otevřít pro čtení."
-
-#: kalcateldoc.cpp:625
-msgid "File can not be parsed as XML."
-msgstr "Soubor není platný XML soubor."
-
-#: kalcateldoc.cpp:806
-msgid "Document not found."
-msgstr "Soubor nenalezen."
-
-#: kalcateldoc.cpp:1351
-msgid "Reading item %1 of %2"
-msgstr "Načítám položku %1 z %2"
-
-#: kalcateldoc.cpp:1679
-msgid "Reading messages"
-msgstr "Načítám zprávy"
-
-#: kalcateldoc.cpp:1745
-msgid "SMS messages read"
-msgstr "SMS zprávy načteny"
-
-#: kalcateldoc.cpp:1751
-msgid "Reading calls"
-msgstr "Načítám hovory"
-
-#: kalcateldoc.cpp:1918
-msgid "Calls read"
-msgstr "Hovory načteny"
-
-#: kalcateldoc.cpp:1923
-msgid "Reading SIM contacts"
-msgstr "Načítám kontakty ze SIM"
-
-#: kalcateldoc.cpp:1983
-msgid "SIM contacts read"
-msgstr "Kontakty ze SIM načteny"
-
-#: kalcateldoc.cpp:1987
-msgid "Opening binary mode"
-msgstr "Otevírám binární mód"
-
-#: kalcateldoc.cpp:1992
-msgid "Reading contact categories"
-msgstr "Načítám kategorie kontaktů"
-
-#: kalcateldoc.cpp:1994
-msgid "Reading contacts categories failed!"
-msgstr "Načítání kategorií kontaktů selhalo"
-
-#: kalcateldoc.cpp:2002
-msgid "Reading contact items"
-msgstr "Načítám kontakty"
-
-#: kalcateldoc.cpp:2004
-msgid "Reading contacts failed!"
-msgstr "Načítání kontaktů selhalo!"
-
-#: kalcateldoc.cpp:2017
-msgid "Reading calendar items"
-msgstr "Načítám kalendář"
-
-#: kalcateldoc.cpp:2019
-msgid "Reading calendar items failed!"
-msgstr "Načítání kalendáře selhalo!"
-
-#: kalcateldoc.cpp:2032
-msgid "Reading todo categories"
-msgstr "Načítám kategorie úkolů"
-
-#: kalcateldoc.cpp:2034
-msgid "Reading todo categories failed!"
-msgstr "Načítání kategorie úkolů selhalo!"
-
-#: kalcateldoc.cpp:2042
-msgid "Reading todo items"
-msgstr "Načítám úkoly"
-
-#: kalcateldoc.cpp:2044
-msgid "Reading todos failed!"
-msgstr "Načítání úkolů selhalo!"
-
-#: kalcateldoc.cpp:2056
-msgid "Closing binary mode"
-msgstr "Ukončuji binární režim"
-
-#: kalcateldoc.cpp:2062
-msgid "Items read"
-msgstr "Položky načteny"
-
-#: kalcateldoc.cpp:2221
-msgid "Deleting of todos is not yet implemented."
-msgstr "Mazaní úkolů není implementováno."
-
-#: kalcateldoc.cpp:2226 kalcateldoc.cpp:2243
-msgid "Creating of todo failed!"
-msgstr "Vytváření úkolu selhalo!"
-
-#: kalcateldoc.cpp:2258
-msgid "Updating of todo failed!"
-msgstr "Změna úkolu selhala!"
-
-#: kalcateldoc.cpp:2293
-msgid "Deleting of events is not yet implemented."
-msgstr "Mazaní událostí není implementováno."
-
-#: kalcateldoc.cpp:2298 kalcateldoc.cpp:2315
-msgid "Creating of event failed!"
-msgstr "Vytváření události selhalo!"
-
-#: kalcateldoc.cpp:2330
-msgid "Updating of event failed!"
-msgstr "Změna události selhala!"
-
-#: kalcateldoc.cpp:2367
-msgid "Deleting of contacts is not yet implemented."
-msgstr "Mazaní kontaktů není implementováno."
-
-#: kalcateldoc.cpp:2372 kalcateldoc.cpp:2389
-msgid "Creating of contact failed!"
-msgstr "Vytváření kontaktu selhalo!"
-
-#: kalcateldoc.cpp:2404
-msgid "Updating of contact failed!"
-msgstr "Změna kontaktu selhala!"
-
-#: kalcateldoc.cpp:2441
-msgid "Items commited"
-msgstr "Položky zapsány"
-
-#: kalcateldoc.cpp:2457 kalcateldoc.cpp:2470
-msgid "Creating of category failed!"
-msgstr "Vytváření kategorie selhalo!"
-
-#: kalcatelview.cpp:118 main.cpp:40
-msgid "KAlcatel"
-msgstr "KAlcatel"
-
-#: kalcatelview.cpp:126
-msgid "Template for document info view not found, please reinstall KAlcatel!"
-msgstr ""
-"Vzor pro informace o dokumenty nebyl nalezen, prosím přeinstalujte KAlcatel!"
-
-#: kalcatelconfigdialog.cpp:155 kalcatelview.cpp:142 kalcatelview.cpp:624
-msgid "Messages"
-msgstr "Zprávy"
-
-#: alcatelclasses.cpp:40 editmessagedialog.cpp:92 kalcatelview.cpp:145
-msgid "Unsent"
-msgstr "Neodeslané"
-
-#: alcatelclasses.cpp:40 editmessagedialog.cpp:91 kalcatelview.cpp:148
-msgid "Sent"
-msgstr "Odeslané"
-
-#: alcatelclasses.cpp:40 kalcatelview.cpp:151
-msgid "Read"
-msgstr "Přečtené"
-
-#: alcatelclasses.cpp:40 kalcatelview.cpp:154
-msgid "Unread"
-msgstr "Nepřečtené"
-
-#: kalcatelconfigdialog.cpp:156 kalcatelview.cpp:157 kalcatelview.cpp:634
-msgid "Calls"
-msgstr "Hovory"
-
-#: kalcatelconfigdialog.cpp:154 kalcatelview.cpp:169 kalcatelview.cpp:614
-msgid "Contacts"
-msgstr "Kontakty"
-
-#: kalcatelview.cpp:173
-msgid "General"
-msgstr "Hlavní"
-
-#: alcatelclasses.cpp:41 editcontactdialog.cpp:202 editeventdialog.cpp:220
-#: edittododialog.cpp:165 kalcatelview.cpp:176 kalcatelview.cpp:585
-msgid "SIM"
-msgstr "SIM"
-
-#: kalcatelmergedialog.cpp:213 kalcatelview.cpp:179
-msgid "Calendar"
-msgstr "Kalendář"
-
-#: kalcatelconfigdialog.cpp:152 kalcatelview.cpp:182 kalcatelview.cpp:594
-msgid "Todos"
-msgstr "Úkoly"
-
-#: kalcatelmergedialog.cpp:333 kalcatelmergedialog.cpp:353
-#: kalcatelview.cpp:208 kalcatelview.cpp:288 kalcatelview.cpp:295
-#: kalcatelview.cpp:303 kalcatelview.cpp:803
-msgid "Name"
-msgstr "Jméno"
-
-#: kalcatelview.cpp:209 kalcatelview.cpp:804
-msgid "Phone"
-msgstr "Telefon"
-
-#: editcontactdialog.cpp:208 editeventdialog.cpp:226 edittododialog.cpp:171
-#: kalcatelview.cpp:210 kalcatelview.cpp:225 kalcatelview.cpp:239
-#: kalcatelview.cpp:252 kalcatelview.cpp:264 kalcatelview.cpp:279
-#: kalcatelview.cpp:290 kalcatelview.cpp:298 kalcatelview.cpp:308
-#: kalcatelview.cpp:319 kalcatelview.cpp:330 kalcatelview.cpp:681
-#: kalcatelview.cpp:732 kalcatelview.cpp:775 kalcatelview.cpp:876
-#: kalcatelview.cpp:982
-msgid "Position"
-msgstr "Pozice"
-
-#: editcontactdialog.cpp:78 kalcatelmergedialog.cpp:146 kalcatelview.cpp:218
-#: kalcatelview.cpp:233 kalcatelview.cpp:807
-msgid "Last name"
-msgstr "Příjmení"
-
-#: editcontactdialog.cpp:75 kalcatelmergedialog.cpp:147 kalcatelview.cpp:219
-#: kalcatelview.cpp:234 kalcatelview.cpp:806
-msgid "First name"
-msgstr "Jméno"
-
-#: editcontactdialog.cpp:92 edittododialog.cpp:84 kalcatelmergedialog.cpp:158
-#: kalcatelmergedialog.cpp:286 kalcatelmergedialog.cpp:328
-#: kalcatelview.cpp:220 kalcatelview.cpp:251 kalcatelview.cpp:720
-#: kalcatelview.cpp:724 kalcatelview.cpp:726 kalcatelview.cpp:811
-#: kalcatelview.cpp:815 kalcatelview.cpp:817
-msgid "Category"
-msgstr "Kategorie"
-
-#: alcatelclasses.cpp:41 editcontactdialog.cpp:203 editeventdialog.cpp:221
-#: edittododialog.cpp:166 kalcatelconfigdialog.cpp:62 kalcatelview.cpp:221
-#: kalcatelview.cpp:235 kalcatelview.cpp:584 selectcontactdialog.cpp:81
-msgid "Mobile"
-msgstr "Mobil"
-
-#: kalcatelview.cpp:222 kalcatelview.cpp:236 selectcontactdialog.cpp:79
-msgid "Work"
-msgstr "Do práce"
-
-#: kalcatelview.cpp:223 kalcatelview.cpp:237 selectcontactdialog.cpp:78
-msgid "Main"
-msgstr "Hlavní"
-
-#: kalcatelview.cpp:224 kalcatelview.cpp:238
-msgid "Email"
-msgstr "Email"
-
-#: edittododialog.cpp:103 kalcatelmergedialog.cpp:275 kalcatelview.cpp:247
-#: kalcatelview.cpp:260 kalcatelview.cpp:712
-msgid "Completed"
-msgstr "Hotovo"
-
-#: edittododialog.cpp:96 kalcatelmergedialog.cpp:288 kalcatelview.cpp:248
-#: kalcatelview.cpp:261 kalcatelview.cpp:713
-msgid "Priority"
-msgstr "Priorita"
-
-#: edittododialog.cpp:116 kalcatelmergedialog.cpp:274 kalcatelview.cpp:249
-#: kalcatelview.cpp:262 kalcatelview.cpp:709
-msgid "Due date"
-msgstr "Poslední termín"
-
-#: editeventdialog.cpp:96 edittododialog.cpp:111 kalcatelmergedialog.cpp:222
-#: kalcatelmergedialog.cpp:277 kalcatelview.cpp:250 kalcatelview.cpp:263
-#: kalcatelview.cpp:276 kalcatelview.cpp:708 kalcatelview.cpp:756
-msgid "Subject"
-msgstr "Název"
-
-#: editeventdialog.cpp:101 kalcatelmergedialog.cpp:199
-#: kalcatelmergedialog.cpp:218 kalcatelview.cpp:272 kalcatelview.cpp:305
-#: kalcatelview.cpp:316 kalcatelview.cpp:327 kalcatelview.cpp:672
-#: kalcatelview.cpp:757
-msgid "Date"
-msgstr "Datum"
-
-#: kalcatelview.cpp:273
-msgid "Start"
-msgstr "Začátek"
-
-#: kalcatelview.cpp:274
-msgid "End"
-msgstr "Konec"
-
-#: editeventdialog.cpp:79 kalcatelmergedialog.cpp:355 kalcatelview.cpp:275
-#: kalcatelview.cpp:297 kalcatelview.cpp:980
-msgid "Type"
-msgstr "Typ"
-
-#: alcatelclasses.cpp:49 kalcatelmergedialog.cpp:221
-#: kalcatelmergedialog.cpp:276 kalcatelview.cpp:277 kalcatelview.cpp:710
-#: kalcatelview.cpp:766
-msgid "Alarm"
-msgstr "Budík"
-
-#: kalcatelview.cpp:278
-msgid "Repeat"
-msgstr "Opakování"
-
-#: kalcatelmergedialog.cpp:354 kalcatelview.cpp:287 kalcatelview.cpp:294
-#: kalcatelview.cpp:302
-msgid "Number"
-msgstr "Číslo"
-
-#: editeventdialog.cpp:108 edittododialog.cpp:123 kalcatelmergedialog.cpp:141
-#: kalcatelmergedialog.cpp:248 kalcatelmergedialog.cpp:312
-#: kalcatelview.cpp:289 kalcatelview.cpp:296 kalcatelview.cpp:714
-#: kalcatelview.cpp:769 kalcatelview.cpp:976
-msgid "Contact"
-msgstr "Kontakt"
-
-#: kalcatelmergedialog.cpp:195 kalcatelview.cpp:304 kalcatelview.cpp:679
-msgid "Status"
-msgstr "Stav"
-
-#: kalcatelview.cpp:306 kalcatelview.cpp:317 kalcatelview.cpp:328
-#: kalcatelview.cpp:674
-msgid "Time"
-msgstr "Čas"
-
-#: kalcatelmergedialog.cpp:200 kalcatelview.cpp:307 kalcatelview.cpp:318
-#: kalcatelview.cpp:329
-msgid "Text"
-msgstr "Text"
-
-#: kalcatelview.cpp:314 kalcatelview.cpp:665 kalcatelview.cpp:975
-msgid "From"
-msgstr "Od"
-
-#: kalcatelview.cpp:315
-msgid "From (name)"
-msgstr "Od (jméno)"
-
-#: kalcatelview.cpp:325 kalcatelview.cpp:665 kalcatelview.cpp:975
-msgid "To"
-msgstr "Pro"
-
-#: kalcatelview.cpp:326
-msgid "To (name)"
-msgstr "Pro (jméno)"
-
-#: editeventdialog.cpp:295 editeventdialog.cpp:759 edittododialog.cpp:278
-#: edittododialog.cpp:395 kalcatelview.cpp:434 kalcatelview.cpp:543
-#: kalcatelview.cpp:724 kalcatelview.cpp:815
-msgid "Unknown (id=%1)"
-msgstr "Neznámé (id=%1)"
-
-#: editcontactdialog.cpp:96 editcontactdialog.cpp:370 edittododialog.cpp:88
-#: edittododialog.cpp:163 edittododialog.cpp:339 kalcatelmergedialog.cpp:156
-#: kalcatelmergedialog.cpp:157 kalcatelmergedialog.cpp:284
-#: kalcatelmergedialog.cpp:285 kalcatelview.cpp:439 kalcatelview.cpp:548
-#: kalcatelview.cpp:720 kalcatelview.cpp:811
-msgid "none_category"
-msgstr "Žádná"
-
-#: kalcatelview.cpp:581
-msgid "Document statistics"
-msgstr "Informace o dokumentu"
-
-#: kalcatelview.cpp:582
-msgid "All"
-msgstr "Vše"
-
-#: alcatelclasses.cpp:41 editcontactdialog.cpp:201 editeventdialog.cpp:219
-#: edittododialog.cpp:164 kalcatelview.cpp:583
-msgid "PC"
-msgstr "PC"
-
-#: kalcatelmergedialog.cpp:144 kalcatelmergedialog.cpp:193
-#: kalcatelmergedialog.cpp:216 kalcatelmergedialog.cpp:272
-#: kalcatelmergedialog.cpp:331 kalcatelmergedialog.cpp:351
-#: kalcatelview.cpp:586
-msgid "Deleted"
-msgstr "Smazané"
-
-#: kalcatelmergedialog.cpp:143 kalcatelmergedialog.cpp:192
-#: kalcatelmergedialog.cpp:215 kalcatelmergedialog.cpp:271
-#: kalcatelmergedialog.cpp:330 kalcatelmergedialog.cpp:350
-#: kalcatelview.cpp:587
-msgid "Modified"
-msgstr "Změněné"
-
-#: kalcatelmergedialog.cpp:145 kalcatelmergedialog.cpp:194
-#: kalcatelmergedialog.cpp:217 kalcatelmergedialog.cpp:273
-#: kalcatelmergedialog.cpp:332 kalcatelmergedialog.cpp:352
-#: kalcatelview.cpp:588
-msgid "Created"
-msgstr "Vytvořené"
-
-#: kalcatelconfigdialog.cpp:153 kalcatelview.cpp:604
-msgid "Events"
-msgstr "Události"
-
-#: kalcatelview.cpp:645
-msgid "Application to manage Alcatel One Touch 501 & 701 mobile"
-msgstr "Aplikace pro správu mobilu Alcatel One Touch 501 & 701"
-
-#: kalcatelview.cpp:660
-msgid "Failed reading message!"
-msgstr "Selhalo načítání zprávy!"
-
-#: kalcatelmergedialog.cpp:201 kalcatelview.cpp:678
-msgid "SMSC"
-msgstr "SMSC"
-
-#: editcontactdialog.cpp:197 editeventdialog.cpp:215 edittododialog.cpp:160
-#: kalcatelview.cpp:680 kalcatelview.cpp:731 kalcatelview.cpp:774
-#: kalcatelview.cpp:875 kalcatelview.cpp:981
-msgid "Storage"
-msgstr "Uložení"
-
-#: kalcatelview.cpp:683 kalcatelview.cpp:734 kalcatelview.cpp:777
-#: kalcatelview.cpp:878 kalcatelview.cpp:984
-msgid "Previous storage"
-msgstr "Předchozí uložení"
-
-#: kalcatelview.cpp:684 kalcatelview.cpp:735 kalcatelview.cpp:778
-#: kalcatelview.cpp:879 kalcatelview.cpp:985
-msgid "Previous position"
-msgstr "Předchozí pozice"
-
-#: kalcatelview.cpp:703
-msgid "Failed reading todo!"
-msgstr "Selhalo načítání úkolu!"
-
-#: editcontactdialog.cpp:102 editeventdialog.cpp:88 edittododialog.cpp:93
-#: kalcatelmergedialog.cpp:160 kalcatelmergedialog.cpp:223
-#: kalcatelmergedialog.cpp:278 kalcatelview.cpp:711 kalcatelview.cpp:768
-#: kalcatelview.cpp:873
-msgid "Private"
-msgstr "Soukromé"
-
-#: kalcatelview.cpp:714
-#, c-format
-msgid "id=%1"
-msgstr "id=%1"
-
-#: kalcatelview.cpp:750
-msgid "Failed reading calendar item!"
-msgstr "Selhalo načítání událostí!"
-
-#: editeventdialog.cpp:138 kalcatelmergedialog.cpp:219 kalcatelview.cpp:759
-msgid "Start time"
-msgstr "Začátek"
-
-#: editeventdialog.cpp:142 kalcatelmergedialog.cpp:220 kalcatelview.cpp:760
-msgid "End time"
-msgstr "Konec"
-
-#: kalcatelmergedialog.cpp:224 kalcatelview.cpp:763
-msgid "Event type"
-msgstr "Typ události"
-
-#: alcatelclasses.cpp:54 kalcatelview.cpp:764
-msgid "Repeating"
-msgstr "Opakování"
-
-#: kalcatelmergedialog.cpp:257 kalcatelview.cpp:767
-msgid "Alarm 2"
-msgstr "Upozornění 2"
-
-#: kalcatelview.cpp:799
-msgid "Failed reading contact!"
-msgstr "Selhalo načítání kontaktu!"
-
-#: editcontactdialog.cpp:86 kalcatelmergedialog.cpp:148 kalcatelview.cpp:822
-msgid "Company"
-msgstr "Firma"
-
-#: editcontactdialog.cpp:89 kalcatelmergedialog.cpp:149 kalcatelview.cpp:823
-msgid "Job title"
-msgstr "Funkce"
-
-#: editcontactdialog.cpp:113 kalcatelmergedialog.cpp:161 kalcatelview.cpp:824
-msgid "Work number"
-msgstr "Do práce"
-
-#: editcontactdialog.cpp:117 kalcatelmergedialog.cpp:162 kalcatelview.cpp:825
-msgid "Main number"
-msgstr "Hlavní"
-
-#: editcontactdialog.cpp:121 kalcatelmergedialog.cpp:163 kalcatelview.cpp:826
-msgid "Fax number"
-msgstr "Fax"
-
-#: editcontactdialog.cpp:125 kalcatelmergedialog.cpp:164 kalcatelview.cpp:827
-msgid "Other number"
-msgstr "Další číslo"
-
-#: editcontactdialog.cpp:129 kalcatelmergedialog.cpp:165 kalcatelview.cpp:828
-msgid "Pager number"
-msgstr "Pager"
-
-#: editcontactdialog.cpp:133 kalcatelmergedialog.cpp:166 kalcatelview.cpp:829
-msgid "Mobile number"
-msgstr "Mobil"
-
-#: editcontactdialog.cpp:137 kalcatelmergedialog.cpp:167 kalcatelview.cpp:830
-msgid "Home number"
-msgstr "Domů"
-
-#: editcontactdialog.cpp:149 kalcatelmergedialog.cpp:168 kalcatelview.cpp:831
-msgid "Email 1"
-msgstr "Email 1"
-
-#: editcontactdialog.cpp:152 kalcatelmergedialog.cpp:169 kalcatelview.cpp:832
-msgid "Email 2"
-msgstr "Email 2"
-
-#: editcontactdialog.cpp:160 kalcatelmergedialog.cpp:170 kalcatelview.cpp:833
-msgid "Address"
-msgstr "Adresa"
-
-#: editcontactdialog.cpp:163 kalcatelmergedialog.cpp:171 kalcatelview.cpp:834
-msgid "City"
-msgstr "Město"
-
-#: editcontactdialog.cpp:169 kalcatelmergedialog.cpp:172 kalcatelview.cpp:835
-msgid "State"
-msgstr "Stát"
-
-#: editcontactdialog.cpp:166 kalcatelmergedialog.cpp:173 kalcatelview.cpp:836
-msgid "Zip"
-msgstr "PSČ"
-
-#: editcontactdialog.cpp:172 kalcatelmergedialog.cpp:174 kalcatelview.cpp:837
-msgid "Country"
-msgstr "Země"
-
-#: kalcatelview.cpp:840 kalcatelview.cpp:845 kalcatelview.cpp:848
-#: kalcatelview.cpp:853 kalcatelview.cpp:856 kalcatelview.cpp:861
-#: kalcatelview.cpp:864 kalcatelview.cpp:869
-msgid "<a href=\"%1\">%2</a>"
-msgstr "<a href=\"%1\">%2</a>"
-
-#: editcontactdialog.cpp:180 kalcatelconfigdialog.cpp:224
-#: kalcatelmergedialog.cpp:175 kalcatelview.cpp:847
-msgid "Custom 1"
-msgstr "Info č. 1"
-
-#: editcontactdialog.cpp:183 kalcatelconfigdialog.cpp:225
-#: kalcatelmergedialog.cpp:176 kalcatelview.cpp:855
-msgid "Custom 2"
-msgstr "Info č. 2"
-
-#: editcontactdialog.cpp:186 kalcatelconfigdialog.cpp:226
-#: kalcatelmergedialog.cpp:177 kalcatelview.cpp:863
-msgid "Custom 3"
-msgstr "Info č. 3"
-
-#: editcontactdialog.cpp:189 kalcatelconfigdialog.cpp:227
-#: kalcatelmergedialog.cpp:178 kalcatelview.cpp:871
-msgid "Custom 4"
-msgstr "Info č. 4"
-
-#: editcontactdialog.cpp:105 kalcatelmergedialog.cpp:150 kalcatelview.cpp:872
-msgid "Note"
-msgstr "Poznámka"
-
-#: kalcatelview.cpp:887
-msgid "Printing not implemented yet..."
-msgstr "Tisk není implementován..."
-
-#: kalcatelview.cpp:928
-msgid "All todos"
-msgstr "Všechny úkoly"
-
-#: kalcatelview.cpp:929
-msgid "All events"
-msgstr "Všechny události"
-
-#: kalcatelview.cpp:930
-msgid "All contacts"
-msgstr "Všechny kontakty"
-
-#: kalcatelview.cpp:931
-msgid "Contacts stored on SIM card"
-msgstr "Kontakty uložené na SIM"
-
-#: kalcatelview.cpp:932
-msgid "Contacts stored in mobile or PC"
-msgstr "Kontakty uložené v mobilu nebo PC"
-
-#: kalcatelview.cpp:933
-msgid "All calls"
-msgstr "Všechny hovory"
-
-#: kalcatelview.cpp:934
-msgid "Outgoing calls"
-msgstr "Odchozí hovory"
-
-#: kalcatelview.cpp:935
-msgid "Missed calls"
-msgstr "Zmeškané hovory"
-
-#: kalcatelview.cpp:936
-msgid "Received calls"
-msgstr "Přijaté hovory"
-
-#: kalcatelview.cpp:937
-msgid "All messages"
-msgstr "Všechny zprávy"
-
-#: kalcatelview.cpp:938
-msgid "Sent messages"
-msgstr "Odeslané zprávy"
-
-#: kalcatelview.cpp:939
-msgid "Unsent messages"
-msgstr "Neodeslané zprávy"
-
-#: kalcatelview.cpp:940
-msgid "Read messages"
-msgstr "Přečtené zprávy"
-
-#: kalcatelview.cpp:941
-msgid "Unread messages"
-msgstr "Nepřečtené zprávy"
-
-#: kalcatelview.cpp:945
-msgid "Contacts in unknown category"
-msgstr "Kontakty v neznámé kategorii"
-
-#: kalcatelview.cpp:947
-#, c-format
-msgid "Contacts in category %1"
-msgstr "Kontakty v kategorii %1"
-
-#: kalcatelview.cpp:952
-msgid "Todos in unknown category"
-msgstr "Úkoly v neznémé kategorii"
-
-#: kalcatelview.cpp:954
-#, c-format
-msgid "Todos in category %1"
-msgstr "Úkoly v kategorii %1"
-
-#: kalcatelview.cpp:957
-msgid "KAlcatel document statistics"
-msgstr "Informace o dokumentu KAlcatelu"
-
-#: kalcatelview.cpp:960
-msgid "KAlcatel - something wrong has happen (%1)"
-msgstr "KAlcatel - stalo se něco špatně (%1)"
-
-#: kalcatelview.cpp:970
-msgid "Failed reading call!"
-msgstr "Selhalo načítání hovoru!"
-
-#: kalcatelview.cpp:1016
-msgid "Item was not found (%1)"
-msgstr "Položka nebyla nelezena (%1)"
-
-#: main.cpp:31
-msgid "KAlcatel - Application to work with Alcatel 50x and 70x mobile phone."
-msgstr "KAlcatel - Aplikace pro práci s telefony Alcatel One Touch 50x a 70x"
-
-#: main.cpp:34
-msgid "file to open"
-msgstr "jméno souboru"
-
-#: main.cpp:43
-msgid ""
-"This application allows you to manage messages, calls, contacts, todos\n"
-"and calendar in your Alcatel One Touch 50x and 70x mobile.\n"
-"\n"
-"Protocol used by this phone is binary and not documented, so this\n"
-"program could not guarantee any functionality in your case, but it works "
-"well for me."
-msgstr ""
-"Tato aplikace vám umožní spravovat zprávy, hovory, kontakty, \n"
-"úkoly a kalendář v telefonu Alcatel One Touch 50x a 70x.\n"
-"\n"
-"Protokol používaný tímto telefonem je binární a nedokumentovaný,\n"
-"takže program nemůže zaručit fukčnost, ale mě funguje dobře."
-
-#: main.cpp:49
-msgid ""
-"for NOT publishing specification of protocol\n"
-"Their only answer was:\n"
-"\"Your piece of advice will be helpful enough for us to deliberate\n"
-"and  get the best service for all our customers.\"\n"
-"\n"
-"However they probably like this program because they write about it\n"
-"in their news (HTTP Referer can contain many information) and they\n"
-"downloaded few copies of it (from alcatel.de and alcatel.be) ;-)."
-msgstr ""
-"za neuveřejnění specifikace protokolu.\n"
-"Jejich jediná odpověď byla:\n"
-"\"Your piece of advice will be helpful enough for us to deliberate\n"
-"and  get the best service for all our customers.\"\n"
-"\n"
-"Ale pravděpodobně se jim program líbí, protože si o něm píší na \n"
-"newsech (HTTP Referer může obsahovat mnoho informací) a stáhlí\n"
-"si pár kopií (z alcatel.de a alcatel.be) ;-)."
-
-#: main.cpp:57
-msgid "for initial KDE/Qt 3 porting"
-msgstr "za začátek portace na KDE-Qt 3"
-
-#: alcatelclasses.cpp:41 editcontactdialog.cpp:200 editeventdialog.cpp:218
-msgid "none_storage"
-msgstr "Žádné"
-
-#: alcatelclasses.cpp:42
-msgid "Missed"
-msgstr "Zmeškané"
-
-#: alcatelclasses.cpp:42
-msgid "Received"
-msgstr "Příchozí"
-
-#: alcatelclasses.cpp:42
-msgid "Outgoing"
-msgstr "Odchozí"
-
-#: alcatelclasses.cpp:43
-msgid "High"
-msgstr "Vysoká"
-
-#: alcatelclasses.cpp:43
-msgid "Normal"
-msgstr "Normální"
-
-#: alcatelclasses.cpp:43
-msgid "Low"
-msgstr "Nízká"
-
-#: alcatelclasses.cpp:45
-msgid "Appointment"
-msgstr "Schůzka"
-
-#: alcatelclasses.cpp:46
-msgid "Unknown(1)"
-msgstr "Neznámý(1)"
-
-#: alcatelclasses.cpp:47
-msgid "Birthday"
-msgstr "Narozeniny"
-
-#: alcatelclasses.cpp:48 kalcatelmergedialog.cpp:348
-msgid "Call"
-msgstr "Hovor"
-
-#: alcatelclasses.cpp:50
-msgid "Daily alarm"
-msgstr "Denní budík"
-
-#: alcatelclasses.cpp:51
-msgid "Unknown(6)"
-msgstr "Neznámý(6)"
-
-#: alcatelclasses.cpp:52
-msgid "Unknown(7)"
-msgstr "Neznámý(7)"
-
-#: alcatelclasses.cpp:53
-msgid "Unknown(8)"
-msgstr "Neznámý(8)"
-
-#: alcatelclasses.cpp:67
-msgid "none_month"
-msgstr "Žádný"
-
-#: alcatelclasses.cpp:68
-msgid "January"
-msgstr "Leden"
-
-#: alcatelclasses.cpp:69
-msgid "February"
-msgstr "Únor"
-
-#: alcatelclasses.cpp:70
-msgid "March"
-msgstr "Březen"
-
-#: alcatelclasses.cpp:71
-msgid "April"
-msgstr "Duben"
-
-#: alcatelclasses.cpp:72
-msgid "May"
-msgstr "Květen"
-
-#: alcatelclasses.cpp:73
-msgid "June"
-msgstr "Červen"
-
-#: alcatelclasses.cpp:74
-msgid "July"
-msgstr "Červenec"
-
-#: alcatelclasses.cpp:75
-msgid "August"
-msgstr "Srpen"
-
-#: alcatelclasses.cpp:76
-msgid "September"
-msgstr "Září"
-
-#: alcatelclasses.cpp:77
-msgid "October"
-msgstr "Říjen"
-
-#: alcatelclasses.cpp:78
-msgid "November"
-msgstr "Listopad"
-
-#: alcatelclasses.cpp:79
-msgid "December"
-msgstr "Prosinec"
-
-#: alcatelclasses.cpp:310 alcatelclasses.cpp:336
-msgid "Each year (birthday)"
-msgstr "Každý rok (narozeniny)"
-
-#: alcatelclasses.cpp:311 alcatelclasses.cpp:337
-msgid "none_repeating"
-msgstr "Žádné"
-
-#: alcatelclasses.cpp:313 alcatelclasses.cpp:339
-msgid "Forever"
-msgstr "Navždy"
-
-#: alcatelclasses.cpp:325 alcatelclasses.cpp:352
-#, c-format
-msgid "Till %1"
-msgstr "Do %1"
-
-#: alcatelclasses.cpp:327 alcatelclasses.cpp:354
-#, c-format
-msgid "From %1"
-msgstr "Od %1"
-
-#: alcatelclasses.cpp:329 alcatelclasses.cpp:356
-msgid "From %1 till %2"
-msgstr "Od %1 do %2"
-
-#: alcatelclasses.cpp:359
-msgid " on each"
-msgstr " každý"
-
-#: alcatelclasses.cpp:361
-#, c-format
-msgid " on each %1."
-msgstr " každý %1"
-
-#: alcatelclasses.cpp:366 alcatelclasses.cpp:370 alcatelclasses.cpp:376
-#, c-format
-msgid " %1"
-msgstr " %1"
-
-#: alcatelclasses.cpp:368
-msgid " in %1. week of"
-msgstr " v %1. týdnu"
-
-#: alcatelclasses.cpp:372
-msgid " month"
-msgstr " měsíce"
-
-#: alcatelclasses.cpp:374
-msgid " %1. day of"
-msgstr " %1. den"
-
-#: alcatelclasses.cpp:378
-msgid " each month"
-msgstr " každého měsíce"
-
-#: editmessagedialog.cpp:67
-msgid "<b>New message</b>"
-msgstr "<b>Nová zpráva</b>"
-
-#: editmessagedialog.cpp:78
-msgid "Send message"
-msgstr "Poslat zprávu"
-
-#: editmessagedialog.cpp:82
-msgid ""
-"<b>Send message</b><br>When checked message will be sent as you press OK "
-"button."
-msgstr "<b>Poslat zprávu</b><br>Pokud je zaškrtnuto, zpráva bude odeslána."
-
-#: editmessagedialog.cpp:84
-msgid "Store to mobile as"
-msgstr "Uložit to mobilu jako"
-
-#: editmessagedialog.cpp:88
-msgid ""
-"<b>Store to mobile</b><br>When checked, message will be written to mobile "
-"(SIM) as sent or unsent just as you press OK button."
-msgstr ""
-"<b>Uložit to mobilu</b><br>Pokud je zaškrtnuto, zpráva bude zapsána do "
-"mobilu (SIM) jako odeslaná nebo neodeslaná."
-
-#: editmessagedialog.cpp:95
-msgid ""
-"<b>Type of message</b><br>Which will be type of message stored in mobile?"
-msgstr "<b>Typ zprávy</b><br>Jaký je typ zprávy uložené v mobilu?"
-
-#: editmessagedialog.cpp:100
-msgid "Send to:"
-msgstr "Adresát(i):"
-
-#: editmessagedialog.cpp:106
-msgid ""
-"<b>Send to number(s)</b><br>Enter here number(s) of receivers of this "
-"message, more numbers should be separated with space, comma or semicolon."
-msgstr ""
-"<b>Adresát(i)</b><br>Sem zapište čísla adresátů této zprávy. Více čísel "
-"oddělte mezerou, středníkem nebo čáskou."
-
-#: editeventdialog.cpp:113 editmessagedialog.cpp:108 edittododialog.cpp:128
-msgid "Contacts..."
-msgstr "Kontakty..."
-
-#: editmessagedialog.cpp:111
-msgid "<b>Contacts</b><br>Use this button to add number from your contacts."
-msgstr ""
-"<b>Kontakty</b><br>Použijte toto tlačítko pro přidání čísla z kontaktů."
-
-#: editmessagedialog.cpp:124
-msgid ""
-"<b>Message text</b><br>Write here message text, note that characters with "
-"accents will be very probably interpreted another way that you wanted, just "
-"few pass correctly."
-msgstr ""
-"<b>Text zprávy</b><br> Sem zapište text zprávy. Znaky s háčkami a čárkami "
-"budou pravděpodobně zobrazeny špatně, proto je radši nepoužívejte."
-
-#: editmessagedialog.cpp:126 editmessagedialog.cpp:293
-msgid "Used %1 of %2 characters"
-msgstr "Použito %1 ze %2 znaků"
-
-#: editmessagedialog.cpp:129
-msgid "Class of message"
-msgstr "Druh zprávy"
-
-#: editmessagedialog.cpp:131
-msgid "0 - flash"
-msgstr "0 - flash"
-
-#: editmessagedialog.cpp:132
-msgid "1 - mobile"
-msgstr "1 - mobil"
-
-#: editmessagedialog.cpp:133
-msgid "2 - sim"
-msgstr "2 - sim"
-
-#: editmessagedialog.cpp:134
-msgid "3 - terminal"
-msgstr "3 - terminal"
-
-#: editmessagedialog.cpp:138
-msgid ""
-"<b>Class of message</b><br>Class 0 message just shows on display imediately "
-"after receiving. Class 1 and 2 message are normal messages, 1 should be "
-"preferably stored into mobile while 2 on SIM card. Class 3 should go to "
-"terminal equipment which most mobiles doesn't support."
-msgstr ""
-"<b>Druh zprávy</b><br>Class 0 se jen zobrazí na displeji ihned po přijetí. "
-"Class 1 a 2 jsou normální zprávy, 1 by mělo být přednostně ukládáno do "
-"telefonu a 2 na SIM kartu. Class 3 by měla být přesměrována do koncového "
-"zařízení, které většina telefonů nepodporuje."
-
-#: editmessagedialog.cpp:181
-msgid "You must enter at least one phone number to send message!"
-msgstr "Musíte zapsat alespoň jedno číslo kam odeslat zprávu!"
-
-#: editmessagedialog.cpp:186
-msgid "You must enter at least one character of text!"
-msgstr "Musíte napsat alespoň jeden znak textu!"
-
-#: editmessagedialog.cpp:197
-msgid "Writing message failed!<br>"
-msgstr "Zapisování zprávy selhalo!<br>"
-
-#: editmessagedialog.cpp:201
-msgid "Message written, position=%1<br>"
-msgstr "Zpráva zapsána, pozice=%1<br>"
-
-#: editmessagedialog.cpp:207 editmessagedialog.cpp:208
-msgid "%1 doesn't look like phone number!"
-msgstr "%1 nevypadá jako telefonní číslo!"
-
-#: editmessagedialog.cpp:216 editmessagedialog.cpp:235
-msgid "Writing message for number %1 failed!<br>"
-msgstr "Zapisování zprávy pro číslo %1 selhalo!<br>"
-
-#: editmessagedialog.cpp:220 editmessagedialog.cpp:239
-msgid "Message written for number %1, position=%2<br>"
-msgstr "Zpráva pro číslo %1 zapsána na pozici %2<br>"
-
-#: editmessagedialog.cpp:225 editmessagedialog.cpp:245
-msgid "Sending to number %1 failed!<br>"
-msgstr "Posílání pro číslo %1 selhalo!<br>"
-
-#: editmessagedialog.cpp:229 editmessagedialog.cpp:249
-msgid "Message sent to number %1, reference id=%2<br>"
-msgstr "Zpráva pro číslo %1 odeslána její reference id je %2<br>"
-
-#: editmessagedialog.cpp:259
-msgid "<br><b>Detailed list:</b><br>"
-msgstr "<br><b>Podrobný výpis:</b><br>"
-
-#: editmessagedialog.cpp:262
-msgid "Sent all %1 message(s).<br>"
-msgstr "Odeslány všechny %1 zprávy.<br>"
-
-#: editmessagedialog.cpp:265
-msgid "Written all %1 message(s).<br>"
-msgstr "Zapsány všechny %1 zprávy.<br>"
-
-#: editmessagedialog.cpp:271
-msgid "Sent %1 message(s), %2 failed during sending.<br>"
-msgstr "Odeslnány %1 zprávy, odesílání selhalo u %2.<br>"
-
-#: editmessagedialog.cpp:274
-msgid "Written %1 message(s), %2 failed during writing.<br>"
-msgstr "Zpsány %1 zprávy, u %2 zpráv selhal zápis.<br>"
-
-#: editmessagedialog.cpp:276
-msgid "%1 message(s) failed!<br>"
-msgstr "%1 zpráv selhalo!<br>"
-
-#: editmessagedialog.cpp:277
-msgid "<br>Do you want to edit that message again?"
-msgstr "<br>Chcete zprávu znova upravit?"
 
 #: kalcatelconfigdialog.cpp:54
 msgid "KAlcatel configuration"
@@ -1517,12 +1146,12 @@ msgid ""
 "<b>Lock filename</b><br>Filename of lock that will be used for locking "
 "device, %s will be replaced by device basename (for example: when device is /"
 "dev/ttyS1 and lock filename is /var/lock/LCK..%s, then lock used will be /"
-"var/lock/LCK..ttyS1)."
+"var/lock/LCK..ttyS1).<br>If kept empty, no locking will be used."
 msgstr ""
 "<b>Jméno zámku</b><br>Jméno souboru, který má být použit pro zamykání "
 "zařízení, %s bude nahrazeno jménem zařízení (např. pokud je zařízení /dev/"
 "ttyS1 a jméno zámku je /var/lock/LCK..%s, pak bude použit zámek /var/lock/"
-"LCK..ttyS1)."
+"LCK..ttyS1).<br>Pokud ponecháte prázdné, nebude se zamykání používat."
 
 #: kalcatelconfigdialog.cpp:92
 #, c-format
@@ -1611,6 +1240,26 @@ msgstr "Nastevaní ukládání a nahrávání"
 #: kalcatelconfigdialog.cpp:150
 msgid "Load"
 msgstr "Nahrávání"
+
+#: kalcatelconfigdialog.cpp:152 kalcatelview.cpp:184 kalcatelview.cpp:596
+msgid "Todos"
+msgstr "Úkoly"
+
+#: kalcatelconfigdialog.cpp:153 kalcatelview.cpp:606
+msgid "Events"
+msgstr "Události"
+
+#: kalcatelconfigdialog.cpp:154 kalcatelview.cpp:171 kalcatelview.cpp:616
+msgid "Contacts"
+msgstr "Kontakty"
+
+#: kalcatelconfigdialog.cpp:155 kalcatelview.cpp:144 kalcatelview.cpp:626
+msgid "Messages"
+msgstr "Zprávy"
+
+#: kalcatelconfigdialog.cpp:156 kalcatelview.cpp:159 kalcatelview.cpp:636
+msgid "Calls"
+msgstr "Hovory"
 
 #: kalcatelconfigdialog.cpp:183
 msgid "Merging"
@@ -1806,22 +1455,153 @@ msgstr ""
 msgid "Do not display messages with lower priority than"
 msgstr "Nezobrazovat zprávy s prioritou menší než"
 
-#: kalcatelviewitem.cpp:277 kalcatelviewitem.cpp:327 kalcatelviewitem.cpp:539
-msgid "none_date"
-msgstr "Žádné"
+#: kalcateldoc.cpp:127
+msgid ""
+"The current file has been modified.\n"
+"Do you want to save it?"
+msgstr ""
+"Otevřený soubor byl změněn.\n"
+"Přejete si ho uložit?"
 
-#: kalcatelviewitem.cpp:278 kalcatelviewitem.cpp:328 kalcatelviewitem.cpp:543
-#, c-format
-msgid "Call to %1"
-msgstr "Zavolat %1"
+#: kalcateldoc.cpp:621 kalcateldoc.cpp:625 kalcateldoc.cpp:806
+msgid "Opening of selected document (%1) failed."
+msgstr "Otevírání zvoleného souboru (%1) selhalo."
 
-#: kalcatelviewitem.cpp:539 kalcatelviewitem.cpp:540 kalcatelviewitem.cpp:541
-msgid "N/A"
-msgstr "N/A"
+#: kalcateldoc.cpp:621
+msgid "File can not be opened for reading."
+msgstr "Soubor nelze otevřít pro čtení."
 
-#: kalcatelviewitem.cpp:544
-msgid "none_alarm"
-msgstr "Žádný"
+#: kalcateldoc.cpp:625
+msgid "File can not be parsed as XML."
+msgstr "Soubor není platný XML soubor."
+
+#: kalcateldoc.cpp:806
+msgid "Document not found."
+msgstr "Soubor nenalezen."
+
+#: kalcateldoc.cpp:1351
+msgid "Reading item %1 of %2"
+msgstr "Načítám položku %1 z %2"
+
+#: kalcateldoc.cpp:1679
+msgid "Reading messages"
+msgstr "Načítám zprávy"
+
+#: kalcateldoc.cpp:1745
+msgid "SMS messages read"
+msgstr "SMS zprávy načteny"
+
+#: kalcateldoc.cpp:1751
+msgid "Reading calls"
+msgstr "Načítám hovory"
+
+#: kalcateldoc.cpp:1918
+msgid "Calls read"
+msgstr "Hovory načteny"
+
+#: kalcateldoc.cpp:1923
+msgid "Reading SIM contacts"
+msgstr "Načítám kontakty ze SIM"
+
+#: kalcateldoc.cpp:1983
+msgid "SIM contacts read"
+msgstr "Kontakty ze SIM načteny"
+
+#: kalcateldoc.cpp:1987
+msgid "Opening binary mode"
+msgstr "Otevírám binární mód"
+
+#: kalcateldoc.cpp:1992
+msgid "Reading contact categories"
+msgstr "Načítám kategorie kontaktů"
+
+#: kalcateldoc.cpp:1994
+msgid "Reading contacts categories failed!"
+msgstr "Načítání kategorií kontaktů selhalo"
+
+#: kalcateldoc.cpp:2002
+msgid "Reading contact items"
+msgstr "Načítám kontakty"
+
+#: kalcateldoc.cpp:2004
+msgid "Reading contacts failed!"
+msgstr "Načítání kontaktů selhalo!"
+
+#: kalcateldoc.cpp:2017
+msgid "Reading calendar items"
+msgstr "Načítám kalendář"
+
+#: kalcateldoc.cpp:2019
+msgid "Reading calendar items failed!"
+msgstr "Načítání kalendáře selhalo!"
+
+#: kalcateldoc.cpp:2032
+msgid "Reading todo categories"
+msgstr "Načítám kategorie úkolů"
+
+#: kalcateldoc.cpp:2034
+msgid "Reading todo categories failed!"
+msgstr "Načítání kategorie úkolů selhalo!"
+
+#: kalcateldoc.cpp:2042
+msgid "Reading todo items"
+msgstr "Načítám úkoly"
+
+#: kalcateldoc.cpp:2044
+msgid "Reading todos failed!"
+msgstr "Načítání úkolů selhalo!"
+
+#: kalcateldoc.cpp:2056
+msgid "Closing binary mode"
+msgstr "Ukončuji binární režim"
+
+#: kalcateldoc.cpp:2062
+msgid "Items read"
+msgstr "Položky načteny"
+
+#: kalcateldoc.cpp:2225
+msgid "Deleting of todo failed!"
+msgstr "Mazání úkolu selhalo!"
+
+#: kalcateldoc.cpp:2242 kalcateldoc.cpp:2259
+msgid "Creating of todo failed!"
+msgstr "Vytváření úkolu selhalo!"
+
+#: kalcateldoc.cpp:2275
+msgid "Updating of todo failed!"
+msgstr "Změna úkolu selhala!"
+
+#: kalcateldoc.cpp:2315
+msgid "Deleting of event failed!"
+msgstr "Mazání události selhalo!"
+
+#: kalcateldoc.cpp:2332 kalcateldoc.cpp:2349
+msgid "Creating of event failed!"
+msgstr "Vytváření události selhalo!"
+
+#: kalcateldoc.cpp:2365
+msgid "Updating of event failed!"
+msgstr "Změna události selhala!"
+
+#: kalcateldoc.cpp:2407
+msgid "Deleting of contact failed!"
+msgstr "Mazání kontaktu selhalo!"
+
+#: kalcateldoc.cpp:2424 kalcateldoc.cpp:2441
+msgid "Creating of contact failed!"
+msgstr "Vytváření kontaktu selhalo!"
+
+#: kalcateldoc.cpp:2457
+msgid "Updating of contact failed!"
+msgstr "Změna kontaktu selhala!"
+
+#: kalcateldoc.cpp:2503
+msgid "Items commited"
+msgstr "Položky zapsány"
+
+#: kalcateldoc.cpp:2519 kalcateldoc.cpp:2532
+msgid "Creating of category failed!"
+msgstr "Vytváření kategorie selhalo!"
 
 #: kalcatelmergedialog.cpp:48
 msgid "Merging conflict"
@@ -1865,9 +1645,34 @@ msgstr "Zachovat &oba"
 msgid "Field type: <b>%1</b><br/>Field name: <b>%2</b>"
 msgstr "Typ položky: <b>%1</b><br/>Jméno položky: <b>%2</b>"
 
+#: kalcatelmergedialog.cpp:143 kalcatelmergedialog.cpp:192
+#: kalcatelmergedialog.cpp:215 kalcatelmergedialog.cpp:271
+#: kalcatelmergedialog.cpp:330 kalcatelmergedialog.cpp:350
+#: kalcatelview.cpp:589
+msgid "Modified"
+msgstr "Změněné"
+
+#: kalcatelmergedialog.cpp:144 kalcatelmergedialog.cpp:193
+#: kalcatelmergedialog.cpp:216 kalcatelmergedialog.cpp:272
+#: kalcatelmergedialog.cpp:331 kalcatelmergedialog.cpp:351
+#: kalcatelview.cpp:588
+msgid "Deleted"
+msgstr "Smazané"
+
+#: kalcatelmergedialog.cpp:145 kalcatelmergedialog.cpp:194
+#: kalcatelmergedialog.cpp:217 kalcatelmergedialog.cpp:273
+#: kalcatelmergedialog.cpp:332 kalcatelmergedialog.cpp:352
+#: kalcatelview.cpp:590
+msgid "Created"
+msgstr "Vytvořené"
+
 #: kalcatelmergedialog.cpp:189
 msgid "Message"
 msgstr "Zpráva"
+
+#: kalcatelmergedialog.cpp:195 kalcatelview.cpp:306 kalcatelview.cpp:681
+msgid "Status"
+msgstr "Stav"
 
 #: kalcatelmergedialog.cpp:196
 msgid "Length"
@@ -1881,157 +1686,314 @@ msgstr "Nazpracovaná"
 msgid "Sender"
 msgstr "Odesílatel"
 
-#: editeventdialog.cpp:111 editeventdialog.cpp:300 editeventdialog.cpp:361
-#: editeventdialog.cpp:764 edittododialog.cpp:126 edittododialog.cpp:222
-#: edittododialog.cpp:283 edittododialog.cpp:400 kalcatelmergedialog.cpp:231
-#: kalcatelmergedialog.cpp:240 kalcatelmergedialog.cpp:295
-#: kalcatelmergedialog.cpp:304
-msgid "none_contact"
-msgstr "Žádný"
+#: kalcatelmergedialog.cpp:200 kalcatelview.cpp:309 kalcatelview.cpp:320
+#: kalcatelview.cpp:331
+msgid "Text"
+msgstr "Text"
 
-#: editcontactdialog.cpp:95 editcontactdialog.cpp:369 editeventdialog.cpp:168
-#: editeventdialog.cpp:174 editeventdialog.cpp:180 editeventdialog.cpp:186
-#: editeventdialog.cpp:192 edittododialog.cpp:87 edittododialog.cpp:338
-#: kalcatelmergedialog.cpp:233 kalcatelmergedialog.cpp:242
-#: kalcatelmergedialog.cpp:297 kalcatelmergedialog.cpp:306
-#: kalcatelmergedialog.cpp:1205 kalcatelmergedialog.cpp:1210
-#: kalcatelmergedialog.cpp:1218 kalcatelmergedialog.cpp:1219
-msgid "Not set"
-msgstr "Nenastaveno"
+#: kalcatelmergedialog.cpp:201 kalcatelview.cpp:680
+msgid "SMSC"
+msgstr "SMSC"
+
+#: kalcatelmergedialog.cpp:213 kalcatelview.cpp:181
+msgid "Calendar"
+msgstr "Kalendář"
+
+#: kalcatelmergedialog.cpp:224 kalcatelview.cpp:764
+msgid "Event type"
+msgstr "Typ události"
 
 #: kalcatelmergedialog.cpp:237 kalcatelmergedialog.cpp:246
 #: kalcatelmergedialog.cpp:301 kalcatelmergedialog.cpp:310
 msgid " (id=%1)"
 msgstr " (id=%1)"
 
-#: editeventdialog.cpp:171 kalcatelmergedialog.cpp:250
-msgid "Day of week"
-msgstr "Den v týdnu"
-
-#: editeventdialog.cpp:177 kalcatelmergedialog.cpp:251
-msgid "Day"
-msgstr "Den"
-
-#: editeventdialog.cpp:183 kalcatelmergedialog.cpp:252
-msgid "Week of month"
-msgstr "Týden v měsíci"
-
-#: editeventdialog.cpp:189 kalcatelmergedialog.cpp:253
-msgid "Month"
-msgstr "Měsíc"
-
-#: editeventdialog.cpp:165 kalcatelmergedialog.cpp:254
-msgid "Frequency"
-msgstr "Frekvence"
-
-#: editeventdialog.cpp:195 kalcatelmergedialog.cpp:255
-msgid "Start date"
-msgstr "Začátek"
-
 #: kalcatelmergedialog.cpp:256
 msgid "Stop date"
 msgstr "Konec"
+
+#: kalcatelmergedialog.cpp:257 kalcatelview.cpp:768
+msgid "Alarm 2"
+msgstr "Upozornění 2"
 
 #: kalcatelmergedialog.cpp:269
 msgid "Todo"
 msgstr "Úkol"
 
-#: kalcatellistview.moc.cpp:42 kalcatellistview.moc.cpp:47
-msgid "KAlcatelListView"
-msgstr "KAlcatelListView"
+#: kalcatelmergedialog.cpp:333 kalcatelmergedialog.cpp:353
+#: kalcatelview.cpp:210 kalcatelview.cpp:290 kalcatelview.cpp:297
+#: kalcatelview.cpp:305 kalcatelview.cpp:804
+msgid "Name"
+msgstr "Jméno"
 
-#: kalcatelmergedialog.moc.cpp:42 kalcatelmergedialog.moc.cpp:47
-msgid "MergeItem"
-msgstr "MergeItem"
+#: kalcatelmergedialog.cpp:354 kalcatelview.cpp:289 kalcatelview.cpp:296
+#: kalcatelview.cpp:304
+msgid "Number"
+msgstr "Číslo"
 
-#: kalcatelmergedialog.moc.cpp:118 kalcatelmergedialog.moc.cpp:123
-msgid "KAlcatelMergeDialog"
-msgstr "KAlcatelMergeDialog"
+#: kalcatelview.cpp:120 main.cpp:40
+msgid "KAlcatel"
+msgstr "KAlcatel"
 
-#: editmessagedialog.moc.cpp:42 editmessagedialog.moc.cpp:47
-msgid "EditMessageDialog"
-msgstr "EditMessageDialog"
+#: kalcatelview.cpp:128
+msgid "Template for document info view not found, please reinstall KAlcatel!"
+msgstr "Vzor pro informace o dokumenty nebyl nalezen, prosím přeinstalujte KAlcatel!"
 
-#: kalcatel.moc.cpp:42 kalcatel.moc.cpp:47
-msgid "KAlcatelApp"
-msgstr "KAlcatelApp"
+#: kalcatelview.cpp:175
+msgid "General"
+msgstr "Hlavní"
 
-#: editeventdialog.moc.cpp:42 editeventdialog.moc.cpp:47
-msgid "EditEventDialog"
-msgstr "EditEventDialog"
+#: kalcatelview.cpp:211 kalcatelview.cpp:805
+msgid "Phone"
+msgstr "Telefon"
 
-#: phonenumbervalidator.moc.cpp:42 phonenumbervalidator.moc.cpp:47
-msgid "PhoneNumberValidator"
-msgstr "PhoneNumberValidator"
+#: kalcatelview.cpp:224 kalcatelview.cpp:238 selectcontactdialog.cpp:79
+msgid "Work"
+msgstr "Do práce"
 
-#: editcontactdialog.cpp:57
-msgid "Edit contact"
-msgstr "Úprava kontaktu"
+#: kalcatelview.cpp:225 kalcatelview.cpp:239 selectcontactdialog.cpp:78
+msgid "Main"
+msgstr "Hlavní"
 
-#: editcontactdialog.cpp:63
-msgid "<b>New contact</b>"
-msgstr "<b>Nový kontakt</b>"
+#: kalcatelview.cpp:226 kalcatelview.cpp:240
+msgid "Email"
+msgstr "Email"
 
-#: editcontactdialog.cpp:64
-msgid "<b>Edit contact</b>"
-msgstr "<b>Úprava kontaktu</b>"
+#: kalcatelview.cpp:275
+msgid "Start"
+msgstr "Začátek"
 
-#: editcontactdialog.cpp:212 editeventdialog.cpp:230 edittododialog.cpp:175
-msgid "Auto"
-msgstr "Automatické"
+#: kalcatelview.cpp:276
+msgid "End"
+msgstr "Konec"
 
-#: timevalidator.moc.cpp:42 timevalidator.moc.cpp:47
-msgid "TimeValidator"
-msgstr "TimeValidator"
+#: kalcatelview.cpp:280
+msgid "Repeat"
+msgstr "Opakování"
 
-#: editcontactdialog.moc.cpp:42 editcontactdialog.moc.cpp:47
-msgid "EditContactDialog"
-msgstr "EditContactDialog"
+#: kalcatelview.cpp:308 kalcatelview.cpp:319 kalcatelview.cpp:330
+#: kalcatelview.cpp:676
+msgid "Time"
+msgstr "Čas"
 
-#: signallabel.moc.cpp:42 signallabel.moc.cpp:47
-msgid "SignalLabel"
-msgstr "SignalLabel"
+#: kalcatelview.cpp:316 kalcatelview.cpp:667 kalcatelview.cpp:976
+msgid "From"
+msgstr "Od"
 
-#: edittododialog.moc.cpp:42 edittododialog.moc.cpp:47
-msgid "EditTodoDialog"
-msgstr "EditTodoDialog"
+#: kalcatelview.cpp:317
+msgid "From (name)"
+msgstr "Od (jméno)"
 
-#: kalcatelview.moc.cpp:42 kalcatelview.moc.cpp:47
-msgid "KAlcatelView"
-msgstr "KAlcatelView"
+#: kalcatelview.cpp:327 kalcatelview.cpp:667 kalcatelview.cpp:976
+msgid "To"
+msgstr "Pro"
 
-#: edittododialog.cpp:66
-msgid "Edit todo"
-msgstr "Úprava úkolu"
+#: kalcatelview.cpp:328
+msgid "To (name)"
+msgstr "Pro (jméno)"
 
-#: edittododialog.cpp:72
-msgid "<b>New todo</b>"
-msgstr "<b>Nový úkol</b>"
+#: kalcatelview.cpp:583
+msgid "Document statistics"
+msgstr "Informace o dokumentu"
 
-#: edittododialog.cpp:73
-msgid "<b>Edit todo</b>"
-msgstr "<b>Úprava úkolu</b>"
+#: kalcatelview.cpp:584
+msgid "All"
+msgstr "Vše"
 
-#: editeventdialog.cpp:104 editeventdialog.cpp:126 editeventdialog.cpp:199
-#: editeventdialog.cpp:206 edittododialog.cpp:119 edittododialog.cpp:141
-msgid "Enabled"
-msgstr "Povoleno"
+#: kalcatelview.cpp:647
+msgid "Application to manage Alcatel One Touch 501 & 701 mobile"
+msgstr "Aplikace pro správu mobilu Alcatel One Touch 501 & 701"
 
-#: editeventdialog.cpp:123 edittododialog.cpp:138
-msgid "Alarm date"
-msgstr "Datum upozorněni"
+#: kalcatelview.cpp:662
+msgid "Failed reading message!"
+msgstr "Selhalo načítání zprávy!"
 
-#: editeventdialog.cpp:129 edittododialog.cpp:144
-msgid "Alarm time"
-msgstr "Čas upozornění"
+#: kalcatelview.cpp:685 kalcatelview.cpp:735 kalcatelview.cpp:778
+#: kalcatelview.cpp:879 kalcatelview.cpp:985
+msgid "Previous storage"
+msgstr "Předchozí uložení"
 
-#: signalled.moc.cpp:42 signalled.moc.cpp:47
-msgid "SignalLed"
-msgstr "SignalLed"
+#: kalcatelview.cpp:686 kalcatelview.cpp:736 kalcatelview.cpp:779
+#: kalcatelview.cpp:880 kalcatelview.cpp:986
+msgid "Previous position"
+msgstr "Předchozí pozice"
 
-#: selectcontactdialog.moc.cpp:42 selectcontactdialog.moc.cpp:47
-msgid "SelectContactDialog"
-msgstr "SelectContactDialog"
+#: kalcatelview.cpp:704
+msgid "Failed reading todo!"
+msgstr "Selhalo načítání úkolu!"
+
+#: kalcatelview.cpp:715
+msgid "id=%1"
+msgstr "id=%1"
+
+#: kalcatelview.cpp:751
+msgid "Failed reading calendar item!"
+msgstr "Selhalo načítání událostí!"
+
+#: kalcatelview.cpp:800
+msgid "Failed reading contact!"
+msgstr "Selhalo načítání kontaktu!"
+
+#: kalcatelview.cpp:841 kalcatelview.cpp:846 kalcatelview.cpp:849
+#: kalcatelview.cpp:854 kalcatelview.cpp:857 kalcatelview.cpp:862
+#: kalcatelview.cpp:865 kalcatelview.cpp:870
+msgid "<a href=\"%1\">%2</a>"
+msgstr "<a href=\"%1\">%2</a>"
+
+#: kalcatelview.cpp:888
+msgid "Printing not implemented yet..."
+msgstr "Tisk není implementován..."
+
+#: kalcatelview.cpp:929
+msgid "All todos"
+msgstr "Všechny úkoly"
+
+#: kalcatelview.cpp:930
+msgid "All events"
+msgstr "Všechny události"
+
+#: kalcatelview.cpp:931
+msgid "All contacts"
+msgstr "Všechny kontakty"
+
+#: kalcatelview.cpp:932
+msgid "Contacts stored on SIM card"
+msgstr "Kontakty uložené na SIM"
+
+#: kalcatelview.cpp:933
+msgid "Contacts stored in mobile or PC"
+msgstr "Kontakty uložené v mobilu nebo PC"
+
+#: kalcatelview.cpp:934
+msgid "All calls"
+msgstr "Všechny hovory"
+
+#: kalcatelview.cpp:935
+msgid "Outgoing calls"
+msgstr "Odchozí hovory"
+
+#: kalcatelview.cpp:936
+msgid "Missed calls"
+msgstr "Zmeškané hovory"
+
+#: kalcatelview.cpp:937
+msgid "Received calls"
+msgstr "Přijaté hovory"
+
+#: kalcatelview.cpp:938
+msgid "All messages"
+msgstr "Všechny zprávy"
+
+#: kalcatelview.cpp:939
+msgid "Sent messages"
+msgstr "Odeslané zprávy"
+
+#: kalcatelview.cpp:940
+msgid "Unsent messages"
+msgstr "Neodeslané zprávy"
+
+#: kalcatelview.cpp:941
+msgid "Read messages"
+msgstr "Přečtené zprávy"
+
+#: kalcatelview.cpp:942
+msgid "Unread messages"
+msgstr "Nepřečtené zprávy"
+
+#: kalcatelview.cpp:946
+msgid "Contacts in unknown category"
+msgstr "Kontakty v neznámé kategorii"
+
+#: kalcatelview.cpp:948
+msgid "Contacts in category %1"
+msgstr "Kontakty v kategorii %1"
+
+#: kalcatelview.cpp:953
+msgid "Todos in unknown category"
+msgstr "Úkoly v neznémé kategorii"
+
+#: kalcatelview.cpp:955
+msgid "Todos in category %1"
+msgstr "Úkoly v kategorii %1"
+
+#: kalcatelview.cpp:958
+msgid "KAlcatel document statistics"
+msgstr "Informace o dokumentu KAlcatelu"
+
+#: kalcatelview.cpp:961
+msgid "KAlcatel - something wrong has happen (%1)"
+msgstr "KAlcatel - stalo se něco špatně (%1)"
+
+#: kalcatelview.cpp:971
+msgid "Failed reading call!"
+msgstr "Selhalo načítání hovoru!"
+
+#: kalcatelview.cpp:1017
+msgid "Item was not found (%1)"
+msgstr "Položka nebyla nelezena (%1)"
+
+#: kalcatelviewitem.cpp:277 kalcatelviewitem.cpp:327 kalcatelviewitem.cpp:539
+msgid "none_date"
+msgstr "Žádné"
+
+#: kalcatelviewitem.cpp:278 kalcatelviewitem.cpp:328 kalcatelviewitem.cpp:543
+msgid "Call to %1"
+msgstr "Zavolat %1"
+
+#: kalcatelviewitem.cpp:539 kalcatelviewitem.cpp:540 kalcatelviewitem.cpp:541
+msgid "N/A"
+msgstr "N/A"
+
+#: kalcatelviewitem.cpp:544
+msgid "none_alarm"
+msgstr "Žádný"
+
+#: main.cpp:31
+msgid "KAlcatel - Application to work with Alcatel 50x and 70x mobile phone."
+msgstr "KAlcatel - Aplikace pro práci s telefony Alcatel One Touch 50x a 70x"
+
+#: main.cpp:34
+msgid "file to open"
+msgstr "jméno souboru"
+
+#: main.cpp:43
+msgid ""
+"This application allows you to manage messages, calls, contacts, todos\n"
+"and calendar in your Alcatel One Touch 50x and 70x mobile.\n"
+"\n"
+"Protocol used by this phone is binary and not documented, so this\n"
+"program could not guarantee any functionality in your case, but it works "
+"well for me."
+msgstr ""
+"Tato aplikace vám umožní spravovat zprávy, hovory, kontakty, \n"
+"úkoly a kalendář v telefonu Alcatel One Touch 50x a 70x.\n"
+"\n"
+"Protokol používaný tímto telefonem je binární a nedokumentovaný,\n"
+"takže program nemůže zaručit fukčnost, ale mě funguje dobře."
+
+#: main.cpp:49
+msgid ""
+"for NOT publishing specification of protocol\n"
+"Their only answer was:\n"
+"\"Your piece of advice will be helpful enough for us to deliberate\n"
+"and  get the best service for all our customers.\"\n"
+"\n"
+"However they probably like this program because they write about it\n"
+"in their news (HTTP Referer can contain many information) and they\n"
+"downloaded few copies of it (from alcatel.de and alcatel.be) ;-)."
+msgstr ""
+"za neuveřejnění specifikace protokolu.\n"
+"Jejich jediná odpověď byla:\n"
+"\"Your piece of advice will be helpful enough for us to deliberate\n"
+"and  get the best service for all our customers.\"\n"
+"\n"
+"Ale pravděpodobně se jim program líbí, protože si o něm píší na \n"
+"newsech (HTTP Referer může obsahovat mnoho informací) a stáhlí\n"
+"si pár kopií (z alcatel.de a alcatel.be) ;-)."
+
+#: main.cpp:57
+msgid "for initial KDE/Qt 3 porting"
+msgstr "za začátek portace na KDE-Qt 3"
 
 #: selectcontactdialog.cpp:44
 msgid "Select phone number(s)"
@@ -2061,33 +2023,69 @@ msgstr "Domů"
 msgid "Pager"
 msgstr "Pager"
 
-#: kalcateldoc.moc.cpp:42 kalcateldoc.moc.cpp:47
+#: kalcateldoc.moc.cpp:34 kalcateldoc.moc.cpp:42
 msgid "KAlcatelDoc"
 msgstr "KAlcatelDoc"
 
-#: kalcatelconfigdialog.moc.cpp:42 kalcatelconfigdialog.moc.cpp:47
+#: editeventdialog.moc.cpp:34 editeventdialog.moc.cpp:42
+msgid "EditEventDialog"
+msgstr "EditEventDialog"
+
+#: edittododialog.moc.cpp:34 edittododialog.moc.cpp:42
+msgid "EditTodoDialog"
+msgstr "EditTodoDialog"
+
+#: kalcatellistview.moc.cpp:34 kalcatellistview.moc.cpp:42
+msgid "KAlcatelListView"
+msgstr "KAlcatelListView"
+
+#: signalled.moc.cpp:34 signalled.moc.cpp:42
+msgid "SignalLed"
+msgstr "SignalLed"
+
+#: signallabel.moc.cpp:34 signallabel.moc.cpp:42
+msgid "SignalLabel"
+msgstr "SignalLabel"
+
+#: kalcatelconfigdialog.moc.cpp:34 kalcatelconfigdialog.moc.cpp:42
 msgid "KAlcatelConfigDialog"
 msgstr "KAlcatelConfigDialog"
 
-#: editeventdialog.cpp:61
-msgid "Edit event"
-msgstr "Upravit událost"
+#: kalcatel.moc.cpp:34 kalcatel.moc.cpp:42
+msgid "KAlcatelApp"
+msgstr "KAlcatelApp"
 
-#: editeventdialog.cpp:67
-msgid "<b>New event</b>"
-msgstr "<b>Nová událost</b>"
+#: phonenumbervalidator.moc.cpp:34 phonenumbervalidator.moc.cpp:42
+msgid "PhoneNumberValidator"
+msgstr "PhoneNumberValidator"
 
-#: editeventdialog.cpp:68
-msgid "<b>Edit event</b>"
-msgstr "<b>Upravit událost</b>"
+#: kalcatelmergedialog.moc.cpp:34 kalcatelmergedialog.moc.cpp:42
+msgid "MergeItem"
+msgstr "MergeItem"
 
-#: editeventdialog.cpp:163
-msgid "<b>Repeating:</b>"
-msgstr "<b>Opakování:</b>"
+#: kalcatelmergedialog.moc.cpp:131 kalcatelmergedialog.moc.cpp:139
+msgid "KAlcatelMergeDialog"
+msgstr "KAlcatelMergeDialog"
 
-#: editeventdialog.cpp:202
-msgid "End date"
-msgstr "Konec"
+#: editmessagedialog.moc.cpp:34 editmessagedialog.moc.cpp:42
+msgid "EditMessageDialog"
+msgstr "EditMessageDialog"
+
+#: timevalidator.moc.cpp:34 timevalidator.moc.cpp:42
+msgid "TimeValidator"
+msgstr "TimeValidator"
+
+#: selectcontactdialog.moc.cpp:34 selectcontactdialog.moc.cpp:42
+msgid "SelectContactDialog"
+msgstr "SelectContactDialog"
+
+#: kalcatelview.moc.cpp:34 kalcatelview.moc.cpp:42
+msgid "KAlcatelView"
+msgstr "KAlcatelView"
+
+#: editcontactdialog.moc.cpp:34 editcontactdialog.moc.cpp:42
+msgid "EditContactDialog"
+msgstr "EditContactDialog"
 
 #: rc.cpp:1
 msgid "Fe&tch"
@@ -2116,3 +2114,13 @@ msgid ""
 "_: EMAIL OF TRANSLATORS\n"
 "Your emails"
 msgstr "cihar@email.cz"
+
+#~ msgid "Deleting of todos is not yet implemented."
+#~ msgstr "Mazaní úkolů není implementováno."
+
+#~ msgid "Deleting of events is not yet implemented."
+#~ msgstr "Mazaní událostí není implementováno."
+
+#~ msgid "Deleting of contacts is not yet implemented."
+#~ msgstr "Mazaní kontaktů není implementováno."
+

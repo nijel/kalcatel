@@ -1,7 +1,7 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = kalcatel
 kalcatel_SOURCES = kalcateltreeviewitem.cpp kalcatelconfigdialog.cpp alcatelclasses.cpp kalcatelview.cpp kalcateldoc.cpp kalcatel.cpp main.cpp 
-kalcatel_LDADD   = ./alcatool/libalcatool.a  $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBSOCKET)
+kalcatel_LDADD   = ./alcatool/libalcatool.a  $(LIB_KFILE) $(LIB_KHTML) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBSOCKET)
 
 SUBDIRS = alcatool images 
 

@@ -69,8 +69,11 @@ class QVBox;
 class KListView;
 class KTextBrowser;
 
+class QGridLayout;
+
 class KAlcatelTreeViewItem;
 
+#define ID_KALCATEL         0
 #define ID_TODOS            1
 #define ID_CALENDAR         2
 #define ID_CONTACTS         3
@@ -145,8 +148,10 @@ class KAlcatelView : public QWidget {
     QLabel *titlelabel;
     KListView *tree;
     KTextBrowser *textview;
+    KTextBrowser *kalcatelview;
 
-    KAlcatelTreeViewItem *todo_item,
+    KAlcatelTreeViewItem *kalcatel_item,
+        *todo_item,
         *calendar_item,
         *contacts_item, *contacts_sim_item, *contacts_mobile_item,
         *calls_item, *calls_outgoing_item, *calls_missed_item, *calls_received_item,

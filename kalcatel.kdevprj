@@ -20,7 +20,7 @@ type=DATA
 addcxxflags=
 bin_program=kalcatel
 cxxflags=\s-O0 -g3 -Wall
-ldadd=\s$(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
+ldadd=\s$(LIB_KFILE) $(LIB_KHTML) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
 ldflags=
 
 [General]
@@ -142,14 +142,20 @@ sub_dirs=en
 type=normal
 
 [doc/en/Makefile.am]
-files=doc/en/index.docbook
+files=doc/en/index.docbook,doc/en/index.cache.bz2
 sub_dirs=
 type=normal
 
+[doc/en/index.cache.bz2]
+dist=true
+install=true
+install_location=$$(kde_docdir)/en/kalcatel/index.cache.bz2
+type=DATA
+
 [doc/en/index.docbook]
 dist=true
-install=false
-install_location=$$(kde_icondir)/locolor/16x16/apps/kalcatel.png
+install=true
+install_location=$$(kde_docdir)/en/kalcatel/index.docbook
 type=DATA
 
 [doc/kalcatel.1]

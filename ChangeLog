@@ -4,6 +4,9 @@ KAlcatel - Changelog
 
 $Id$
 
+2002-03-05 Michal Cihar <cihar@email.cz>
+        * released 0.2
+
 2002-03-04 Michal Cihar <cihar@email.cz>
         * merging functional for all types
         * fixed possible bug when comparing stored data

@@ -16,8 +16,8 @@ BuildRoot: /var/tmp/%{name}-%{version}-%{release}-root
 %description
 This application allows you to manage messages, calls, contacs, todos and
 calendar in your Alcatel One Touch 50x and 70x mobile. In fact currently is in
-this gui supported just reading of some of them but full functionality will be
-coded in future.
+this gui supported just reading, but full functionality will be coded in near
+future.
 
 Protocol used by this phone is binary and not documented, so this program
 could not guarantee any functionality in your case, but it works well for me.

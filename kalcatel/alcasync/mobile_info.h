@@ -55,7 +55,7 @@ void get_model(char *model,int len);
  * @ref get_revision,
  * @ref get_model
  */
-void get_string(char *cmd, char *data, int len);
+void get_string(const char *cmd, char *data, int len);
 
 /** Reads IMSI (Internation Mobile Subscriber Identity)
  */

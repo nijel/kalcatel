@@ -48,7 +48,7 @@ int delete_message(int which) {
 	return 1;
 }
 
-MessageData *get_messages(int state = MESSAGE_ALL) {
+MessageData *get_messages(int state) {
     char buffer[10000];
     char *data;
     int count = 0;

@@ -918,7 +918,7 @@ int KAlcatelMergeDialog::exec () {
     return KDialog::exec();
 }
 
-void MergeItem::MergeItem_init(QWidget *parent, QString name, QString mobileText, QString pcText, bool disableDelete = false) {
+void MergeItem::MergeItem_init(QWidget *parent, QString name, QString mobileText, QString pcText, bool disableDelete) {
     nameLabel = new QLabel(name, parent);
     pcLabel = new QLabel(pcText, parent);
 
@@ -936,29 +936,29 @@ void MergeItem::MergeItem_init(QWidget *parent, QString name, QString mobileText
     mobileLabel = new QLabel(mobileText, parent);
 }
 
-MergeItem::MergeItem(QWidget *parent, QString name, QString mobileText, QString pcText, bool disableDelete = false) {
+MergeItem::MergeItem(QWidget *parent, QString name, QString mobileText, QString pcText, bool disableDelete) {
     MergeItem_init(parent, name, mobileText, pcText, disableDelete);
 }
 
-MergeItem::MergeItem(QWidget *parent, QString name, QDate mobileData, QDate pcData, bool disableDelete = false) {
+MergeItem::MergeItem(QWidget *parent, QString name, QDate mobileData, QDate pcData, bool disableDelete) {
     QString s1 = mobileData.toString();
     QString s2 = pcData.toString();
     MergeItem_init(parent, name, s1, s2, disableDelete);
 }
 
-MergeItem::MergeItem(QWidget *parent, QString name, QTime mobileData, QTime pcData, bool disableDelete = false) {
+MergeItem::MergeItem(QWidget *parent, QString name, QTime mobileData, QTime pcData, bool disableDelete) {
     QString s1 = mobileData.toString();
     QString s2 = pcData.toString();
     MergeItem_init(parent, name, s1, s2, disableDelete);
 }
 
-MergeItem::MergeItem(QWidget *parent, QString name, QDateTime mobileData, QDateTime pcData, bool disableDelete = false) {
+MergeItem::MergeItem(QWidget *parent, QString name, QDateTime mobileData, QDateTime pcData, bool disableDelete) {
     QString s1 = mobileData.toString();
     QString s2 = pcData.toString();
     MergeItem_init(parent, name, s1, s2, disableDelete);
 }
 
-MergeItem::MergeItem(QWidget *parent, QString name, int mobileData, int pcData, int diff, bool disableDelete = false) {
+MergeItem::MergeItem(QWidget *parent, QString name, int mobileData, int pcData, int diff, bool disableDelete) {
     QString s1, s2;
     if (mobileData==-1) {
         s1 = i18n("Not set");
@@ -973,7 +973,7 @@ MergeItem::MergeItem(QWidget *parent, QString name, int mobileData, int pcData, 
     MergeItem_init(parent, name, s1, s2, disableDelete);
 }
 
-MergeItem::MergeItem(QWidget *parent, QString name, int mobileData, int pcData, bool disableDelete = false) {
+MergeItem::MergeItem(QWidget *parent, QString name, int mobileData, int pcData, bool disableDelete) {
     QString s1 = mobileData==-1 ? i18n("Not set") : mobileData==0 ? i18n("No") : i18n("Yes");
     QString s2 = pcData==-1 ? i18n("Not set") : pcData==0 ? i18n("No") : i18n("Yes");
     MergeItem_init(parent, name, s1, s2, disableDelete);

@@ -82,7 +82,7 @@ void modem_flush(void) {
 }
 
 
-int modem_cmd(char* command,char* answer,int max,int timeout,char* expect) {
+int modem_cmd(const char* command,char* answer,int max,int timeout,const char* expect) {
     int count=0;
     int readcount;
     int toread;

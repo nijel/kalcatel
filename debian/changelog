@@ -1,9 +1,11 @@
 kalcatel (0.2-1) unstable; urgency=low
 
   * New upstream release.
+    - support for saving/loading
+    - support for merging data
   * moved to comm section where it probably should belong
 
- -- Michal Cihar <cihar@email.cz>  Tue, 19 Feb 2002 18:31:45 +0100
+ -- Michal Cihar <cihar@email.cz>  Mon,  4 Mar 2002 18:32:30 +0100
 
 kalcatel (0.1-1) unstable; urgency=low
 

@@ -1019,7 +1019,7 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
     AlcatelCalendarList local_calendar;
     AlcatelTodoList local_todos;
 
-    int count;
+    int count = 0;
 
     KAlcatelApp *win=(KAlcatelApp *) parent();
 
@@ -1368,7 +1368,7 @@ bool KAlcatelDoc::readMobileCategories(AlcatelCategoryList *strList, alc_type sy
     return i;
 }
 
-bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1) {
+bool KAlcatelDoc::readMobile(AlcDataType what, int category) {
     char *devname;
     int i;
 

@@ -41,7 +41,7 @@ thanks ;-).
 as Authors, publish date, the abstract, and Keywords -->
 
 <bookinfo>
-<title>The KAlcatel Handbook</title>
+<title>The &kapp; Handbook</title>
 
 <authorgroup>
 <author>
@@ -73,15 +73,14 @@ Please respect the format of the date (DD/MM/YYYY) and of the version
 (V.MM.LL), it could be used by automation scripts.
 Do NOT change these in the translation. -->
 
-<date>19/02/2002</date>
+<date>05/03/2002</date>
 <releaseinfo>0.2-alpha</releaseinfo>
 
 <!-- Abstract about this handbook -->
 
 <abstract>
 <para>
-&kalcatel; is an application specially designed to do nothing you would
-ever want.
+&kapp; is an application specially designed to work with Alcatel mobile.
 </para>
 </abstract>
 
@@ -117,13 +116,14 @@ problems. Basically a long version of the abstract.  Don't include a
 revision history. (see installation appendix comment) -->
 
 <para>
-&kapp; is a program that lets you do absolutely nothing. Please report
-any problems or feature requests to the KDE mailing lists.
+&kapp; is a program that allows you to manage data stored in Alcatel One Touch 501
+and compatible (any 50x and 70x should be ok) mobiles. Please report
+any problems or feature requests to the author.
 </para>
 </chapter>
 
 <chapter id="using-kapp">
-<title>Using KAlcatel</title>
+<title>Using &kapp;</title>
 
 <!-- This chapter should tell the user how to use your app. You should use as
 many sections (Chapter, Sect1, Sect3, etc...) as is necessary to fully document
@@ -140,9 +140,6 @@ patent issues. -->
 	  <imageobject>
 	    <imagedata fileref="screenshot.png" format="PNG"/>
 	  </imageobject>
-	  <imageobject>
-	    <imagedata fileref="screenshot.eps" format="EPS"/>
-	  </imageobject>
 	  <textobject>
 	    <phrase>Screenshot</phrase>
 	  </textobject>
@@ -152,22 +149,28 @@ patent issues. -->
 
 
 <sect1 id="kapp-features">
-<title>More Kapp features</title>
+<title>More &kapp; features</title>
 
-<para>It slices! It dices! and it comes with a free toaster!</para>
 <para>
-The Squiggle Tool <guiicon><inlinemediaobject>
-	  <imageobject>
-	    <imagedata fileref="squiggle.png" format="PNG"/>
-	  </imageobject>
-	  <imageobject>
-	    <imagedata fileref="squiggle.eps" format="EPS"/>
-	  </imageobject>
-	  <textobject>
-	    <phrase>Squiggle</phrase>
-	  </textobject>
-</inlinemediaobject></guiicon> is used to draw squiggly lines all over
-the &kalcatel; main window. It's not a bug, it's a feature!
+<itemizedlist>
+<listitem><para>Support for reading:
+<itemizedlist>
+<listitem><para>Contacts (from SIM card and mobile)</para>
+</listitem>
+<listitem><para>Calls</para>
+</listitem>
+<listitem><para>Messages (from SIM card)</para>
+</listitem>
+<listitem><para>Todos</para>
+</listitem>
+<listitem><para>Calendar events</para>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem><para>Saving, loading and merging of all items (except calls)</para>
+</listitem>
+</itemizedlist>
 </para>
 
 </sect1>
@@ -183,7 +186,7 @@ menus or toolbars. This may not be necessary for small apps or apps with no tool
 or menu bars. -->
 
 <sect1 id="kapp-mainwindow">
-<title>The main KAlcatel window</title>
+<title>The main &kapp; window</title>
 <para></para>
 
 <sect2>
@@ -229,15 +232,14 @@ or menu bars. -->
 </chapter>
 
 <chapter id="developers">
-<title>Developer's Guide to KAlcatel</title>
+<title>Developer's Guide to &kapp;</title>
 
 <!-- (OPTIONAL) A Programming/Scripting reference chapter should be
 used for apps that use plugins or that provide their own scripting hooks
 and/or development libraries. -->
 
 <para>
-Programming &kalcatel; plugins is a joy to behold. Just read through the next
-66 pages of API's to learn how!
+&kapp; is based on alcatool library which makes all hard work with mobile.
 </para>
 
 <!-- Use refentries to describe APIs.  Refentries are fairly complicated and you
@@ -265,6 +267,30 @@ application work. -->
 <qandaset id="faqlist">
 <qandaentry>
 <question>
+<para>Reading of data failed and when I try it again it also fails. How do
+I force it to read data?</para>
+</question>
+<answer>
+<para>
+At first check settings of application. Is mobile really connected to port that is
+chosen in configuration?
+</para>
+<para>
+If all settings are correct, look at mobile. I hope I don't have to say you to switch
+it on and connect using some WORKING cable to PC. Check whether mobile indicates it is
+connected (icon appears in right bottom corner). If there is message about performing
+synchronisation, press "C", disconnect mobile and connect it again. Disconnecting and
+connecting also mostly helps when there is no visible problem. If it doesn't help, try
+to switch it off and on. If mobile is still refusing to communicate switch it off, remove
+battery, give it back and switch mobile on. If you are still having problems read again
+carrefully this answer.
+</para>
+</answer>
+</qandaentry>
+
+<!--
+<qandaentry>
+<question>
 <para>My Mouse doesn't work. How do I quit &kapp;?</para>
 </question>
 <answer>
@@ -281,6 +307,7 @@ Section</link> for the answer.</para>
 installed.</para>
 </answer>
 </qandaentry>
+-->
 </qandaset>
 </chapter>
 
@@ -297,20 +324,13 @@ distribution. -->
 &kapp;
 </para>
 <para>
-Program copyright 1997 John Q. Hacker <email>jqh@kde.org</email>
+Program copyright 2002 Michal Cihar <email>cihar@email.cz</email>
 </para>
 <para>
-Contributors:
-<itemizedlist>
-<listitem><para>Konqui the KDE Dragon <email>konqui@kde.org</email></para>
-</listitem>
-<listitem><para>Tux the Linux Penguin <email>tux@linux.org</email></para>
-</listitem>
-</itemizedlist>
 </para>
 
 <para>
-Documentation copyright 1999 George N. Ugnacious <email>gnu@kde.org</email>
+Documentation copyright 2002 Michal Cihar <email>cihar@email.cz</email>
 </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
@@ -325,9 +345,6 @@ Documentation copyright 1999 George N. Ugnacious <email>gnu@kde.org</email>
      regardless of what license the application uses) -->
 
 &underGPL;        	 <!-- GPL License -->
-&underBSDLicense;        <!-- BSD License -->
-&underArtisticLicense;   <!-- BSD Artistic License -->
-&underX11License;        <!-- X11 License  -->
 
 </chapter>
 
@@ -335,14 +352,12 @@ Documentation copyright 1999 George N. Ugnacious <email>gnu@kde.org</email>
 <title>Installation</title>
 
 <sect1 id="getting-kalcatel">
-<title>How to obtain KAlcatel</title>
+<title>How to obtain &kapp;</title>
 
 <para>
-&kalcatel; is part of the KDE project
-<ulink url="http://www.kde.org">http://www.kde.org</ulink>.
-&kalcatel; can be found in the kdeutils package on
-<ulink url="ftp://ftp.kde.org/pub/kde/">ftp://ftp.kde.org/pub/kde/</ulink>, the
-main ftp site of the KDE project. </para>
+&kapp; can be downloaded on authors pages at
+<ulink url="http://cihar.liten.cz/alcatel/">cihar.liten.cz/alcatel</ulink>.
+</para>
 </sect1>
 
 <sect1 id="requirements">
@@ -360,31 +375,18 @@ information here.
 -->
 
 <para>
-In order to successfully use &kalcatel;, you need KDE 1.1. Foobar.lib is required
-in order to support the advanced &kalcatel; features. &kalcatel; uses about 5 megs of
-memory to run, but this may vary depending on your platform and
-configuration.
+In order to successfully use &kapp;, you need KDE 2.0 or higher, KDE 3.0
+were not tested yet.
 </para>
 
-<para>
-All required libraries as well as &kalcatel; itself can be found
-on <ulink url="ftp://ftp.kapp.org">The &kalcatel; home page</ulink>.
-</para>
-
-<!-- For a list of updates, you may refer to the application web site
-or the ChangeLog file, or ... -->
-<para>
-You can find a list of changes at <ulink
-url="http://apps.kde.org/kapp">http://apps.kde.org/kapp</ulink>.
-</para>
 </sect1>
 
 <sect1 id="compilation">
 <title>Compilation and Installation</title>
 
 <para>
-In order to compile and install KApp on your system, type the following in the base
-directory of the Icon Editor distribution:
+In order to compile and install &kapp; on your system, type the following in the base
+directory of the &kapp; distribution:
 <screen width="40">
 <prompt>%</prompt> <userinput>./configure</userinput>
 <prompt>%</prompt> <userinput>make</userinput>
@@ -400,8 +402,7 @@ Should you run into problems please report them to the KDE mailing lists.</para>
 <sect1 id="configuration">
 <title>Configuration</title>
 
-<para>Don't forget to tell your system to start the <filename>dtd</filename>
-dicer-toaster daemon first, or KApp won't work !</para>
+<para></para>
 
 </sect1>
 

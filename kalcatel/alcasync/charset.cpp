@@ -27,7 +27,7 @@
 // non existent character
 
 // iso 8859-1
-char charset[128] = {'@' , 163 , '$' , 165 , 232 , 233 , 249 , 236 ,
+unsigned char charset[129] = {'@' , 163 , '$' , 165 , 232 , 233 , 249 , 236 ,
                      242 , 199 ,  10 , 216 , 248 ,  13 , 197 , 229 ,
 					 noc , '_' , noc , noc , noc , noc , noc , noc ,
 					 noc , noc , noc , noc , 198 , 230 , 223 , 201 ,

@@ -33,11 +33,11 @@
 #define secs_time       "%04d"
 #define position_type   "%d-%04d"
 
-KAlcatelDataItem::KAlcatelDataItem ( QListView * parent, AlcatelClass *data, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null ) : QListViewItem ( parent, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
+KAlcatelDataItem::KAlcatelDataItem ( QListView * parent, AlcatelClass *data, QString label1, QString label2, QString label3, QString label4, QString label5, QString label6, QString label7, QString label8 ) : QListViewItem ( parent, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
     alcatelData = data;
 }
 
-KAlcatelMessageViewItem::KAlcatelMessageViewItem ( QListView * parent, AlcatelMessage *data, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
+KAlcatelMessageViewItem::KAlcatelMessageViewItem ( QListView * parent, AlcatelMessage *data, QString label1, QString label2, QString label3, QString label4, QString label5, QString label6, QString label7, QString label8 ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
 }
 
 QString KAlcatelMessageViewItem::key ( int column, bool ascending ) const {
@@ -60,7 +60,7 @@ QString KAlcatelMessageViewItem::key ( int column, bool ascending ) const {
     }
 }
 
-KAlcatelMessageCatViewItem::KAlcatelMessageCatViewItem ( QListView * parent, AlcatelMessage *data, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
+KAlcatelMessageCatViewItem::KAlcatelMessageCatViewItem ( QListView * parent, AlcatelMessage *data, QString label1, QString label2, QString label3, QString label4, QString label5, QString label6, QString label7, QString label8 ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
 }
 
 QString KAlcatelMessageCatViewItem::key ( int column, bool ascending ) const {
@@ -83,7 +83,7 @@ QString KAlcatelMessageCatViewItem::key ( int column, bool ascending ) const {
     }
 }
 
-KAlcatelCallViewItem::KAlcatelCallViewItem ( QListView * parent, AlcatelCall *data, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
+KAlcatelCallViewItem::KAlcatelCallViewItem ( QListView * parent, AlcatelCall *data, QString label1, QString label2, QString label3, QString label4, QString label5, QString label6, QString label7, QString label8 ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
 }
 
 QString KAlcatelCallViewItem::key ( int column, bool ascending ) const {
@@ -101,7 +101,7 @@ QString KAlcatelCallViewItem::key ( int column, bool ascending ) const {
     }
 }
 
-KAlcatelCallCatViewItem::KAlcatelCallCatViewItem ( QListView * parent, AlcatelCall *data, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
+KAlcatelCallCatViewItem::KAlcatelCallCatViewItem ( QListView * parent, AlcatelCall *data, QString label1, QString label2, QString label3, QString label4, QString label5, QString label6, QString label7, QString label8 ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
 }
 
 QString KAlcatelCallCatViewItem::key ( int column, bool ascending ) const {
@@ -114,7 +114,7 @@ QString KAlcatelCallCatViewItem::key ( int column, bool ascending ) const {
     }
 }
 
-KAlcatelTodoViewItem::KAlcatelTodoViewItem ( QListView * parent, AlcatelTodo *data, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
+KAlcatelTodoViewItem::KAlcatelTodoViewItem ( QListView * parent, AlcatelTodo *data, QString label1, QString label2, QString label3, QString label4, QString label5, QString label6, QString label7, QString label8 ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
 }
 
 QString KAlcatelTodoViewItem::key ( int column, bool ascending ) const {
@@ -136,7 +136,7 @@ QString KAlcatelTodoViewItem::key ( int column, bool ascending ) const {
     }
 }
 
-KAlcatelTodoCatViewItem::KAlcatelTodoCatViewItem ( QListView * parent, AlcatelTodo *data, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
+KAlcatelTodoCatViewItem::KAlcatelTodoCatViewItem ( QListView * parent, AlcatelTodo *data, QString label1, QString label2, QString label3, QString label4, QString label5, QString label6, QString label7, QString label8 ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
 }
 
 QString KAlcatelTodoCatViewItem::key ( int column, bool ascending ) const {
@@ -158,7 +158,7 @@ QString KAlcatelTodoCatViewItem::key ( int column, bool ascending ) const {
     }
 }
 
-KAlcatelContactViewItem::KAlcatelContactViewItem ( QListView * parent, AlcatelContact *data, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
+KAlcatelContactViewItem::KAlcatelContactViewItem ( QListView * parent, AlcatelContact *data, QString label1, QString label2, QString label3, QString label4, QString label5, QString label6, QString label7, QString label8 ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
 }
 
 QString KAlcatelContactViewItem::key ( int column, bool ascending ) const {
@@ -171,7 +171,7 @@ QString KAlcatelContactViewItem::key ( int column, bool ascending ) const {
     }
 }
 
-KAlcatelContactMobileViewItem::KAlcatelContactMobileViewItem ( QListView * parent, AlcatelContact *data, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
+KAlcatelContactMobileViewItem::KAlcatelContactMobileViewItem ( QListView * parent, AlcatelContact *data, QString label1, QString label2, QString label3, QString label4, QString label5, QString label6, QString label7, QString label8 ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
 }
 
 QString KAlcatelContactMobileViewItem::key ( int column, bool ascending ) const {
@@ -184,7 +184,7 @@ QString KAlcatelContactMobileViewItem::key ( int column, bool ascending ) const 
     }
 }
 
-KAlcatelContactMobileCatViewItem::KAlcatelContactMobileCatViewItem ( QListView * parent, AlcatelContact *data, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
+KAlcatelContactMobileCatViewItem::KAlcatelContactMobileCatViewItem ( QListView * parent, AlcatelContact *data, QString label1, QString label2, QString label3, QString label4, QString label5, QString label6, QString label7, QString label8 ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
 }
 
 QString KAlcatelContactMobileCatViewItem::key ( int column, bool ascending ) const {
@@ -197,7 +197,7 @@ QString KAlcatelContactMobileCatViewItem::key ( int column, bool ascending ) con
     }
 }
 
-KAlcatelContactSIMViewItem::KAlcatelContactSIMViewItem ( QListView * parent, AlcatelContact *data, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
+KAlcatelContactSIMViewItem::KAlcatelContactSIMViewItem ( QListView * parent, AlcatelContact *data, QString label1, QString label2, QString label3, QString label4, QString label5, QString label6, QString label7, QString label8 ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
 }
 
 QString KAlcatelContactSIMViewItem::key ( int column, bool ascending ) const {
@@ -210,7 +210,7 @@ QString KAlcatelContactSIMViewItem::key ( int column, bool ascending ) const {
     }
 }
 
-KAlcatelCalendarViewItem::KAlcatelCalendarViewItem ( QListView * parent, AlcatelCalendar *data, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
+KAlcatelCalendarViewItem::KAlcatelCalendarViewItem ( QListView * parent, AlcatelCalendar *data, QString label1, QString label2, QString label3, QString label4, QString label5, QString label6, QString label7, QString label8 ) : KAlcatelDataItem ( parent, data, label1, label2 , label3 , label4 , label5 , label6 , label7 , label8 ) {
 }
 
 QString KAlcatelCalendarViewItem::key ( int column, bool ascending ) const {

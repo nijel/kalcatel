@@ -174,7 +174,7 @@ class KAlcatelView : public QWidget {
     int calendarVersion;
     int todosVersion;
 
-    QString KAlcatelView::makeURL(QString which);
+    QString makeURL(QString which);
 
 };
 

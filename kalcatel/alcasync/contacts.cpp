@@ -60,7 +60,7 @@ ushort text2int(char *text) {
     return result;
 }
 
-ContactData *get_contacts(int from=1, int to=200) {
+ContactData *get_contacts(int from, int to) {
     char answer[20000], raw[200], number[100], *data;
     ushort *binary;
     int count=0, i, len;
@@ -113,7 +113,7 @@ ContactData *get_contacts(int from=1, int to=200) {
     return cont;
 }
 
-int select_phonebook(char *pbtype) {
+int select_phonebook(const char *pbtype) {
     char answer[100], cmd[100];
 
     sprintf(cmd, "AT+CPBS=\"%s\"\r\n", pbtype);

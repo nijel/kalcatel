@@ -45,7 +45,7 @@ char msg_level_info[][8] = {
         "ERROR"
 };
 
-void message(int severity,char* format, ...)
+void message(int severity,const char* format, ...)
 {
     va_list argp;
     char text[10000];

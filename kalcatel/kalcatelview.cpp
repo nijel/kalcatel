@@ -317,7 +317,7 @@ void KAlcatelView::repaint() {
             /* we should update this also when contacts change, because there are names of sender */
             messagesVersion = doc->getMessagesVersion();
             AlcatelMessageList::Iterator it;
-            KListView *list;
+            KListView *list = NULL;
             QString type;
 
             messages_list->clear();

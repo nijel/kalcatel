@@ -13,7 +13,6 @@ for 0.2-alpha:
  - (DONE) saving of document
  - (DONE) loading of document
  - (DONE) merging of data
-remove empty pc categories after sync
 
 for 0.3-beta:
  - editing of calendar/contacts/...

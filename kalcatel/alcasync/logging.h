@@ -41,7 +41,7 @@ extern int  msg_level;
 
 /** Prints message to stderr
  */
-void message(int severity,char* format, ...);
+void message(int severity,const char* format, ...);
 
 /** Replace special chars with escape sequences, like new line is replaced by \n
  */

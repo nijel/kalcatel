@@ -57,5 +57,5 @@ ContactData *get_contacts(int from=1, int to=200);
 
 /** Selects currect phonebook.
  */
-int select_phonebook(char *pbtype);
+int select_phonebook(const char *pbtype);
 #endif

@@ -766,8 +766,7 @@ void KAlcatelApp::slotViewStatusBar()
 
 
 //void KAlcatelApp::slotStatusMsg(const QString &text, int which = ID_STATUS_MSG, int clearDetail = true)
-void KAlcatelApp::slotStatusMsg(const QString &text, int which, int clearDetail = true)
-{
+void KAlcatelApp::slotStatusMsg(const QString &text, int which, int clearDetail) {
   ///////////////////////////////////////////////////////////////////
   // change status message permanently
   QString *msg = new QString();

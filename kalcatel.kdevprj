@@ -143,26 +143,32 @@ sub_dirs=en
 type=normal
 
 [doc/en/Makefile.am]
-files=doc/en/index.docbook,doc/en/index.cache.bz2
+files=doc/en/index.docbook,doc/en/index.cache.bz2,doc/en/screenshot.png
 sub_dirs=
 type=normal
 
 [doc/en/index.cache.bz2]
 dist=false
 install=true
-install_location=$$(kde_docdir)/en/kalcatel/index.cache.bz2
+install_location=$$(kde_htmldir)/en/kalcatel/index.cache.bz2
 type=DATA
 
 [doc/en/index.docbook]
 dist=true
 install=true
-install_location=$$(kde_docdir)/en/kalcatel/index.docbook
+install_location=$$(kde_htmldir)/en/kalcatel/index.docbook
+type=DATA
+
+[doc/en/screenshot.png]
+dist=true
+install=true
+install_location=$$(kde_htmldir)/en/kalcatel/screenshot.png
 type=DATA
 
 [doc/kalcatel.1]
 dist=true
-install=false
-install_location=$$(mandir)/1/kalcatel.1
+install=true
+install_location=$$(mandir)/man1/kalcatel.1
 type=DATA
 
 [kalcatel.kdevprj]

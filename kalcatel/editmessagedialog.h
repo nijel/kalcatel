@@ -32,15 +32,7 @@
 class QCheckBox;
 class QComboBox;
 class KComboBox;
-
-#if (QT_VERSION >= 300)
-#define MULTI_LINE_EDIT QtMultiLineEdit
-#else
-#define MULTI_LINE_EDIT QMultiLineEdit
-#endif
-
-class MULTI_LINE_EDIT;
-
+class QTextEdit;
 class QLabel;
 
 /**Dialog for editing message
@@ -70,7 +62,7 @@ private:
     QCheckBox *writeCheck;
     QComboBox *typeCombo;
     KComboBox *sendToCombo;
-    MULTI_LINE_EDIT *messageEdit;
+    QTextEdit *messageEdit;
     QLabel *msgInfoLabel;
     QComboBox *classCombo;
     AlcatelContactList *contacts;

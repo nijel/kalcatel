@@ -31,6 +31,11 @@
 #include "alcasync/logging.h"
 #include "alcasync/alcatel.h"
 
+/* Needed to compile... */
+const unsigned int AlcatelTodo::max_field;
+const unsigned int AlcatelCalendar::max_field;
+const unsigned int AlcatelContact::max_field;
+
 /**
  * used for type checking
  */

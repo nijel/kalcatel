@@ -110,11 +110,9 @@ EditMessageDialog::EditMessageDialog(AlcatelContactList *cont, QWidget *parent, 
     mainLayout->addWidget(buttonContacts,3,4);
     QWhatsThis::add(buttonContacts ,i18n("<b>Contacts</b><br>Use this button to add number from your contacts."));
 
-    messageEdit = new MULTI_LINE_EDIT(this);
-// TODO: this doesn't work fot Qt 3, so port it somehow....
-// If you implement something new with QMultiLineEdit, we suggest using QTextEdit instead and call QTextEdit::setTextFormat(Qt::PlainText)
-    messageEdit->setMaxLength(160);
-    messageEdit->setWordWrap(MULTI_LINE_EDIT::WidgetWidth);
+    messageEdit = new QTextEdit(this);
+    messageEdit->setTextFormat(Qt::PlainText);
+    messageEdit->setWordWrap(QTextEdit::WidgetWidth);
 
     mainLayout->addMultiCellWidget(messageEdit,4,4,0,4);
 
@@ -290,6 +288,15 @@ void EditMessageDialog::slotSendChanged(bool on) {
 }
 
 void EditMessageDialog::slotTextChanged() {
+    static QString prevtext;
+
+    if (messageEdit->length() > 160) {
+        messageEdit->blockSignals(TRUE);
+        messageEdit->setText(prevtext);
+        messageEdit->blockSignals(FALSE);
+    } else {
+        prevtext = messageEdit->text();
+    }
     msgInfoLabel->setText(i18n("Used %1 of %2 characters").arg(messageEdit->length()).arg(160));
 }
 

@@ -24,9 +24,9 @@ ldadd=\s$(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
 ldflags=
 
 [General]
-AMChanged=true
+AMChanged=false
 author=Michal Cihar
-configure_args=
+configure_args=--prefix=/usr
 email=cihar@email.cz
 kdevprj_version=1.3
 lfv_open_groups=
@@ -269,92 +269,98 @@ install_location=$$(kde_icondir)/hicolor/48x48/apps/kalcatel.png
 type=DATA
 
 [kalcatel/images/items/Makefile.am]
-files=kalcatel/images/items/calendar.png,kalcatel/images/items/call-missed.png,kalcatel/images/items/call-outgoing.png,kalcatel/images/items/call-received.png,kalcatel/images/items/call.png,kalcatel/images/items/contact-mobile.png,kalcatel/images/items/contact-sim.png,kalcatel/images/items/contact.png,kalcatel/images/items/message-read.png,kalcatel/images/items/message-sent.png,kalcatel/images/items/message-unread.png,kalcatel/images/items/message-unsent.png,kalcatel/images/items/message.png,kalcatel/images/items/todo.png
+files=kalcatel/images/items/calendar.png,kalcatel/images/items/call-missed.png,kalcatel/images/items/call-outgoing.png,kalcatel/images/items/call-received.png,kalcatel/images/items/call.png,kalcatel/images/items/contact-mobile.png,kalcatel/images/items/contact-sim.png,kalcatel/images/items/contact.png,kalcatel/images/items/message-read.png,kalcatel/images/items/message-sent.png,kalcatel/images/items/message-unread.png,kalcatel/images/items/message-unsent.png,kalcatel/images/items/message.png,kalcatel/images/items/todo.png,kalcatel/images/items/mobile.png
 sub_dirs=
 type=normal
 
 [kalcatel/images/items/calendar.png]
 dist=true
-install=false
-install_location=
+install=true
+install_location=$$(kde_datadir)/kalcatel/pics/calendar.png
 type=DATA
 
 [kalcatel/images/items/call-missed.png]
 dist=true
-install=false
-install_location=
+install=true
+install_location=$$(kde_datadir)/kalcatel/pics/call-missed.png
 type=DATA
 
 [kalcatel/images/items/call-outgoing.png]
 dist=true
-install=false
-install_location=
+install=true
+install_location=$$(kde_datadir)/kalcatel/pics/call-outgoing.png
 type=DATA
 
 [kalcatel/images/items/call-received.png]
 dist=true
-install=false
-install_location=
+install=true
+install_location=$$(kde_datadir)/kalcatel/pics/call-received.png
 type=DATA
 
 [kalcatel/images/items/call.png]
 dist=true
-install=false
-install_location=
+install=true
+install_location=$$(kde_datadir)/kalcatel/pics/call.png
 type=DATA
 
 [kalcatel/images/items/contact-mobile.png]
 dist=true
-install=false
-install_location=
+install=true
+install_location=$$(kde_datadir)/kalcatel/pics/contact-mobile.png
 type=DATA
 
 [kalcatel/images/items/contact-sim.png]
 dist=true
-install=false
-install_location=
+install=true
+install_location=$$(kde_datadir)/kalcatel/pics/contact-sim.png
 type=DATA
 
 [kalcatel/images/items/contact.png]
 dist=true
-install=false
-install_location=
+install=true
+install_location=$$(kde_datadir)/kalcatel/pics/contact.png
 type=DATA
 
 [kalcatel/images/items/message-read.png]
 dist=true
-install=false
-install_location=
+install=true
+install_location=$$(kde_datadir)/kalcatel/pics/message-read.png
 type=DATA
 
 [kalcatel/images/items/message-sent.png]
 dist=true
-install=false
-install_location=
+install=true
+install_location=$$(kde_datadir)/kalcatel/pics/message-sent.png
 type=DATA
 
 [kalcatel/images/items/message-unread.png]
 dist=true
-install=false
-install_location=
+install=true
+install_location=$$(kde_datadir)/kalcatel/pics/message-unread.png
 type=DATA
 
 [kalcatel/images/items/message-unsent.png]
 dist=true
-install=false
-install_location=
+install=true
+install_location=$$(kde_datadir)/kalcatel/pics/message-unsent.png
 type=DATA
 
 [kalcatel/images/items/message.png]
 dist=true
-install=false
-install_location=
+install=true
+install_location=$$(kde_datadir)/kalcatel/pics/message.png
+type=DATA
+
+[kalcatel/images/items/mobile.png]
+dist=true
+install=true
+install_location=$$(kde_datadir)/kalcatel/pics/mobile.png
 type=DATA
 
 [kalcatel/images/items/todo.png]
 dist=true
-install=false
-install_location=
+install=true
+install_location=$$(kde_datadir)/kalcatel/pics/todo.png
 type=DATA
 
 [kalcatel/kalcatel.cpp]

@@ -31,6 +31,7 @@
 #include <kjanuswidget.h>
 #include <klocale.h>
 #include <klistview.h>
+#include <kiconloader.h>
 
 // application specific includes
 #include "kalcatelview.h"
@@ -43,72 +44,72 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : KJanusWidget(par
   setShowIconsInTreeList (true);
   setTreeListAutoResize (true);
 
-  todo = addVBoxPage (i18n("Todos"), i18n("All todos"), QPixmap("images/items/todo.png"));
+  todo = addVBoxPage (i18n("Todos"), i18n("All todos"), UserIcon("todo.png"));
   todo_list = createListView(todo, alc_todos);
 
-  calendar = addVBoxPage (i18n("Calendar"), i18n("Whole calendar"), QPixmap("images/items/calendar.png"));
+  calendar = addVBoxPage (i18n("Calendar"), i18n("Whole calendar"), UserIcon("calendar.png"));
   calendar_list = createListView(calendar, alc_calendar);
 
-  contacts = addVBoxPage (i18n("Contacts"), i18n("All contacts"), QPixmap("images/items/contact.png"));
+  contacts = addVBoxPage (i18n("Contacts"), i18n("All contacts"), UserIcon("contact.png"));
   contacts_list = createListView(contacts, alc_contacts);
 
   list.append(i18n("Contacts"));
   list.append(i18n("SIM"));
-  contacts_sim = addVBoxPage (list, i18n("Contacts on SIM card"), QPixmap("images/items/contact-sim.png"));
+  contacts_sim = addVBoxPage (list, i18n("Contacts on SIM card"), UserIcon("contact-sim.png"));
   contacts_sim_list = createListView(contacts_sim, alc_contacts_sim);
   list.clear();
 
   list.append(i18n("Contacts"));
   list.append(i18n("Mobile"));
-  contacts_mobile = addVBoxPage (list, i18n("Contacts stored in mobile"), QPixmap("images/items/contact-mobile.png"));
+  contacts_mobile = addVBoxPage (list, i18n("Contacts stored in mobile"), UserIcon("contact-mobile.png"));
   contacts_mobile_list = createListView(contacts_mobile, alc_contacts_mobile);
   list.clear();
 
-  calls = addVBoxPage (i18n("Calls"), i18n("All calls"), QPixmap("images/items/call.png"));
+  calls = addVBoxPage (i18n("Calls"), i18n("All calls"), UserIcon("call.png"));
   calls_list = createListView(calls, alc_calls);
 
   list.append(i18n("Calls"));
   list.append(i18n("Missed"));
-  calls_mc = addVBoxPage (list, i18n("Missed calls"), QPixmap("images/items/call-missed.png"));
+  calls_mc = addVBoxPage (list, i18n("Missed calls"), UserIcon("call-missed.png"));
   calls_mc_list = createListView(calls_mc, alc_calls_type);
   list.clear();
 
   list.append(i18n("Calls"));
   list.append(i18n("Received"));
-  calls_rc = addVBoxPage (list, i18n("Received calls"), QPixmap("images/items/call-received.png"));
+  calls_rc = addVBoxPage (list, i18n("Received calls"), UserIcon("call-received.png"));
   calls_rc_list = createListView(calls_rc, alc_calls_type);
   list.clear();
 
   list.append(i18n("Calls"));
   list.append(i18n("Outgoing"));
-  calls_ld = addVBoxPage (list, i18n("Outgoing calls"), QPixmap("images/items/call-outgoing.png"));
+  calls_ld = addVBoxPage (list, i18n("Outgoing calls"), UserIcon("call-outgoing.png"));
   calls_ld_list = createListView(calls_ld, alc_calls_type);
   list.clear();
 
-  messages = addVBoxPage (i18n("Messages"), i18n("All messages"), QPixmap("images/items/message.png"));
+  messages = addVBoxPage (i18n("Messages"), i18n("All messages"), UserIcon("message.png"));
   messages_list = createListView(messages, alc_messages);
 
   list.append(i18n("Messages"));
   list.append(i18n("Unread"));
-  msg_unread = addVBoxPage (list, i18n("Unread messages"), QPixmap("images/items/message-unread.png"));
+  msg_unread = addVBoxPage (list, i18n("Unread messages"), UserIcon("message-unread.png"));
   msg_unread_list = createListView(msg_unread, alc_messages_in);
   list.clear();
 
   list.append(i18n("Messages"));
   list.append(i18n("Read"));
-  msg_read = addVBoxPage (list, i18n("Read messages"), QPixmap("images/items/message-read.png"));
+  msg_read = addVBoxPage (list, i18n("Read messages"), UserIcon("message-read.png"));
   msg_read_list = createListView(msg_read, alc_messages_in);
   list.clear();
 
   list.append(i18n("Messages"));
   list.append(i18n("Sent"));
-  msg_sent = addVBoxPage (list, i18n("Sent messages"), QPixmap("images/items/message-sent.png"));
+  msg_sent = addVBoxPage (list, i18n("Sent messages"), UserIcon("message-sent.png"));
   msg_sent_list = createListView(msg_sent, alc_messages_out);
   list.clear();
 
   list.append(i18n("Messages"));
   list.append(i18n("Unsent"));
-  msg_unsent = addVBoxPage (list, i18n("Unsent messages"), QPixmap("images/items/message-unsent.png"));
+  msg_unsent = addVBoxPage (list, i18n("Unsent messages"), UserIcon("message-unsent.png"));
   msg_unsent_list = createListView(msg_unsent, alc_messages_out);
   list.clear();
 }

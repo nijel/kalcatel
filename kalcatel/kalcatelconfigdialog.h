@@ -1,7 +1,7 @@
 /*
  * kalcatelconfigdialog.h
  *
- * TODO: description
+ * KAlcatel configuation dialog
  *
  * Copyright (c) 2002 by Michal Cihar <cihar@email.cz>
  * 
@@ -33,22 +33,27 @@
 
 class KJanusWidget;
 class QWidget;
-class QVBox;
+class QFrame;
 class QLineEdit;
+class QComboBox;
+class KURLRequester;
 
 class KAlcatelConfigDialog : public KDialog  {
    Q_OBJECT
 public: 
 	KAlcatelConfigDialog(QWidget *parent=0, const char *name=0);
 	~KAlcatelConfigDialog();
+    int exec ();
 public slots:
     void slotCancel();
     void slotOK();
 private:
     KJanusWidget *janus;
-    QVBox *mobilePage;
-    QVBox *otherPage;
-    QLineEdit *editDevice, *editLock, *editInit;
+    QFrame *mobilePage;
+    QFrame *otherPage;
+    KURLRequester *editDevice;
+    QLineEdit *editLock, *editInit, *editPrefix;
+    QComboBox *rateEdit, *debugEdit;
 };
 
 #endif

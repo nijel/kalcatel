@@ -2,14 +2,14 @@ known bugs:
  - sometimes this doesn't connect correctly to mobile at first attempt, trying
    again or connecing before using another program (minicom) fixes it, if you
    know any solution send it pleasee to me
- - currently ony ascii characters work correctly
+ - currently only characters <127 work correctly
 
 for 0.1-prerelease:
- - reading of contacts (mobile), calendar, todo
- - configuration (at least of modem)
+ - (DONE) reading of contacts (mobile), calendar, todo
+ - (DONE) configuration (at least of modem)
 
 for 0.2-alpha:
- - reading of everything
+ - reading of everything - add calls and contacts from SIM
  - saving of document
  - export to csv (and maybe others)
 
@@ -21,9 +21,9 @@ for 0.3-beta:
 
 for 0.4:
  - fix majority of reported bugs, this should be first "stable" release
- - czech translation (maybe sooner)
 
 sometimes (till 1.0):
+ - czech translation
  - move modem initialization (?)
  - synchronisation with kab
  - save and restore positions and size of interface (splitters, list headers, toolbars, ...)

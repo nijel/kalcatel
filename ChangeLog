@@ -4,6 +4,9 @@ KAlcatel - Changelog
 
 $Id$
 
+2002-02-17 Michal Cihar <cihar@email.cz>
+        * added basic configuration
+
 2002-02-16 Michal Cihar <cihar@email.cz>
         * contact, todo and calendar viewing works
 

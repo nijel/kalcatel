@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 		"and calendar in your Alcatel One Touch 50x and 70x mobile.\n\n"
 		"Protocol used by this phone is binary and not documented, so this\n"
 		"program could not guarantee any functionality in your case, but it works well for me."),
-		"http://cihar.TODO", "cihar@email.cz");
+		"http://cihar.liten.cz", "cihar@email.cz");
 	aboutData.addAuthor("Michal Cihar",0, "cihar@email.cz");
 	aboutData.addCredit("Alcatel", I18N_NOOP("for NOT publishing specification of protocol\n"
 	    "Their only answer was:\n"

@@ -55,14 +55,6 @@
 #include "alcatool/pdu.h"
 #include "alcatool/alcatel.h"
 
-/* TODO: this should be in configuration */
-/*
-char default_device[] = "/dev/ttyS1";
-char default_lock[] = "/var/lock/LCK..%s";
-char default_init[] = "AT S7=45 S0=0 L1 V1 X4 &c1 E1 Q0";
-int default_rate = 19200;
-*/
-
 QList<KAlcatelView> *KAlcatelDoc::pViewList = 0L;
 
 KAlcatelDoc::KAlcatelDoc(QWidget *parent, const char *name) : QObject(parent, name)

@@ -44,9 +44,6 @@
 #include "alcatool/sms.h"
 #include "alcatool/logging.h"
 
-/* TODO: move to config */
-//QString prefix = QString("+420");
-
 KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : KJanusWidget(parent, name, TreeList) {
     int i;
     QSplitter *vsplitter;

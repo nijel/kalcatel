@@ -24,7 +24,7 @@ ldadd=\s$(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
 ldflags=
 
 [General]
-AMChanged=true
+AMChanged=false
 author=Michal Cihar
 configure_args=--prefix=/usr
 email=cihar@email.cz
@@ -67,7 +67,7 @@ User Interface=*.kdevdlg,*.ui,*.rc
 groups=Headers,Sources,User Interface,Translations,GNU,Others
 
 [Makefile.am]
-files=kalcatel.kdevprj,admin,AUTHORS,COPYING,ChangeLog,INSTALL,README,TODO,kalcatel.lsm,kalcatel.spec
+files=kalcatel.kdevprj,admin,AUTHORS,COPYING,ChangeLog,INSTALL,README,TODO,kalcatel.lsm,kalcatel.spec,configure.in.in
 sub_dirs=kalcatel,po,doc,debian
 type=normal
 
@@ -84,6 +84,12 @@ install_location=
 type=DATA
 
 [admin]
+dist=true
+install=false
+install_location=
+type=DATA
+
+[configure.in.in]
 dist=true
 install=false
 install_location=

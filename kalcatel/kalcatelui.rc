@@ -1,15 +1,15 @@
 <!DOCTYPE kpartgui>
 <kpartgui name="kalcatel" version="0.3">
 <MenuBar>
-  <Menu name="read_mobile"><text>&amp;Read mobile</text>
-    <Action name="file_read_mobile"/>
+  <Menu name="read_mobile"><text>Fe&amp;tch</text>
+    <Action name="fetch_all"/>
     <Separator/>
-    <Action name="file_read_mobile_contacts_sim"/>
-    <Action name="file_read_mobile_contacts_mobile"/>
-    <Action name="file_read_mobile_calendar"/>
-    <Action name="file_read_mobile_calls"/>
-    <Action name="file_read_mobile_messages"/>
-    <Action name="file_read_mobile_todo"/>
+    <Action name="fetch_contacts_sim"/>
+    <Action name="fetch_contacts_mobile"/>
+    <Action name="fetch_calendar"/>
+    <Action name="fetch_calls"/>
+    <Action name="fetch_messages"/>
+    <Action name="fetch_todo"/>
   </Menu>
   <Menu name="new"><text>&amp;New</text>
     <Action name="new_message"/>
@@ -24,15 +24,15 @@
     <Action name="mobile_disconnect"/>
   </Menu>
 </MenuBar>
-<ToolBar fullWidth="false" name="readToolBar" newline="false"><text>Read from mobile</text>
-    <Action name="file_read_mobile"/>
+<ToolBar fullWidth="false" name="readToolBar" newline="false"><text>Fetch</text>
+    <Action name="fetch_all"/>
     <Separator/>
-    <Action name="file_read_mobile_contacts_sim"/>
-    <Action name="file_read_mobile_contacts_mobile"/>
-    <Action name="file_read_mobile_calendar"/>
-    <Action name="file_read_mobile_calls"/>
-    <Action name="file_read_mobile_messages"/>
-    <Action name="file_read_mobile_todo"/>
+    <Action name="fetch_contacts_sim"/>
+    <Action name="fetch_contacts_mobile"/>
+    <Action name="fetch_calendar"/>
+    <Action name="fetch_calls"/>
+    <Action name="fetch_messages"/>
+    <Action name="fetch_todo"/>
 </ToolBar>
 <ToolBar fullWidth="false" name="newToolBar" newline="false"><text>Create new</text>
     <Action name="new_message"/>

@@ -4,6 +4,12 @@ install=false
 install_location=
 type=DATA
 
+[BUGS]
+dist=true
+install=false
+install_location=
+type=DATA
+
 [COPYING]
 dist=true
 install=false
@@ -24,7 +30,7 @@ ldadd=\s$(LIB_KFILE) $(LIB_KHTML) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
 ldflags=
 
 [General]
-AMChanged=false
+AMChanged=true
 author=Michal Cihar
 configure_args=--prefix=/usr
 debug_args=
@@ -68,7 +74,7 @@ User Interface=*.kdevdlg,*.ui,*.rc
 groups=Headers,Sources,User Interface,Translations,GNU,Others
 
 [Makefile.am]
-files=kalcatel.kdevprj,admin,AUTHORS,COPYING,ChangeLog,INSTALL,README,TODO,kalcatel.lsm,kalcatel.spec,configure.in.in
+files=kalcatel.kdevprj,admin,AUTHORS,COPYING,ChangeLog,INSTALL,README,TODO,kalcatel.lsm,kalcatel.spec,configure.in.in,BUGS
 sub_dirs=kalcatel,po,doc,debian
 type=normal
 

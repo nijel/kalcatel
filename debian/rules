@@ -71,7 +71,7 @@ binary-arch: build
 	done
 	dh_undocumented
 	dh_installman -a
-	dh_installdocs -a ChangeLog README TODO AUTHORS
+	dh_installdocs -a ChangeLog README TODO AUTHORS BUGS
 	dh_installmenu -a
 	dh_installmime -a
 	dh_installchangelogs -pkalcatel

@@ -40,6 +40,7 @@ public:
     virtual void  keyPressEvent (QKeyEvent *event);
 signals:
     void deletePressed(QListViewItem * item);
+    void shiftDeletePressed(QListViewItem * item);
 };
 
 #endif

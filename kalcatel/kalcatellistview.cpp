@@ -31,6 +31,14 @@ KAlcatelListView::~KAlcatelListView(){
 }
 
 void  KAlcatelListView::keyPressEvent (QKeyEvent *event) {
-    if (event->key() == Key_Delete) deletePressed(currentItem());
-    else KListView::keyPressEvent(event);
+    ButtonState stat = event->state();
+    if (event->key() == Key_Delete && ( stat == NoButton )) {
+        deletePressed(currentItem());
+        event->accept ();
+    } else if (event->key() == Key_Delete && ( stat == ShiftButton )) {
+        shiftDeletePressed(currentItem());
+        event->accept ();
+    } else {
+        KListView::keyPressEvent(event);
+    }
 }

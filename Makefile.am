@@ -2,7 +2,7 @@
 
 SUBDIRS = kalcatel po doc debian 
 
-EXTRA_DIST = kalcatel.kdevprj admin AUTHORS COPYING ChangeLog INSTALL README TODO kalcatel.lsm kalcatel.spec configure.in.in 
+EXTRA_DIST = kalcatel.kdevprj admin AUTHORS COPYING ChangeLog INSTALL README TODO kalcatel.lsm kalcatel.spec configure.in.in BUGS 
 
 ####### kdevelop will overwrite this part!!! (end)############
 # not a GNU package. You can remove this line, if 

@@ -1,0 +1,10 @@
+KNOWN BUGS
+ - sometimes this doesn't connect correctly to mobile at first attempt, trying
+   again or connecing before using another program (minicom) fixes it, if you
+   know any solution send it please to me
+ - currently only ASCII characters <127 work correctly
+
+KNOWN INTERFACE FLAWS
+ - icons for new * and fetch * are same
+
+$Id$

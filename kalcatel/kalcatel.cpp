@@ -131,20 +131,32 @@ void KAlcatelApp::initConfig() {
 }
 
 void KAlcatelApp::initActions() {
-    fileReadMobileAll = new KAction(i18n("&Everything"), QIconSet(SmallIcon("kalcatel-mobile.png"), BarIcon("kalcatel-mobile.png")), 0, this, SLOT(slotFileReadMobileAll()), actionCollection(),"file_read_mobile");
-    fileReadMobileTodo = new KAction(i18n("&Todos"), QIconSet(SmallIcon("kalcatel-todo.png"), BarIcon("kalcatel-todo.png")), 0, this, SLOT(slotFileReadMobileTodo()), actionCollection(),"file_read_mobile_todo");
-    fileReadMobileMessages = new KAction(i18n("Messa&ges"), QIconSet(SmallIcon("kalcatel-message.png"), BarIcon("kalcatel-message.png")), 0, this, SLOT(slotFileReadMobileMessages()), actionCollection(),"file_read_mobile_messages");
-    fileReadMobileCalendar = new KAction(i18n("&Calendar"), QIconSet(SmallIcon("kalcatel-calendar.png"), BarIcon("kalcatel-calendar.png")), 0, this, SLOT(slotFileReadMobileCalendar()), actionCollection(),"file_read_mobile_calendar");
-    fileReadMobileCalls = new KAction(i18n("Ca&lls"), QIconSet(SmallIcon("kalcatel-call.png"), BarIcon("kalcatel-call.png")), 0, this, SLOT(slotFileReadMobileCalls()), actionCollection(),"file_read_mobile_calls");
-    fileReadMobileContactsSim = new KAction(i18n("Contacts from &SIM"), QIconSet(SmallIcon("kalcatel-contact-sim.png"), BarIcon("kalcatel-contact-sim.png")), 0, this, SLOT(slotFileReadMobileContactsSim()), actionCollection(),"file_read_mobile_contacts_sim");
-    fileReadMobileContactsMobile = new KAction(i18n("Contacts from &mobile"), QIconSet(SmallIcon("kalcatel-contact-mobile.png"), BarIcon("kalcatel-contact-mobile.png")), 0, this, SLOT(slotFileReadMobileContactsMobile()), actionCollection(),"file_read_mobile_contacts_mobile");
+    fetchAll = new KAction(i18n("&Everything"), QIconSet(SmallIcon("kalcatel-mobile.png"), BarIcon("kalcatel-mobile.png")), 0, this, SLOT(slotFetchAll()), actionCollection(),"fetch_all");
+    fetchAll->setToolTip(i18n("Fetch everything"));
+    fetchTodo = new KAction(i18n("&Todos"), QIconSet(SmallIcon("kalcatel-todo.png"), BarIcon("kalcatel-todo.png")), 0, this, SLOT(slotFetchTodo()), actionCollection(),"fetch_todo");
+    fetchTodo->setToolTip(i18n("Fetch todos"));
+    fetchMessages = new KAction(i18n("Messa&ges"), QIconSet(SmallIcon("kalcatel-message.png"), BarIcon("kalcatel-message.png")), 0, this, SLOT(slotFetchMessages()), actionCollection(),"fetch_messages");
+    fetchMessages->setToolTip(i18n("Fetch messages"));
+    fetchCalendar = new KAction(i18n("&Calendar"), QIconSet(SmallIcon("kalcatel-calendar.png"), BarIcon("kalcatel-calendar.png")), 0, this, SLOT(slotFetchCalendar()), actionCollection(),"fetch_calendar");
+    fetchCalendar->setToolTip(i18n("Fetch calendar"));
+    fetchCalls = new KAction(i18n("Ca&lls"), QIconSet(SmallIcon("kalcatel-call.png"), BarIcon("kalcatel-call.png")), 0, this, SLOT(slotFetchCalls()), actionCollection(),"fetch_calls");
+    fetchCalls->setToolTip(i18n("Fetch calls"));
+    fetchContactsSim = new KAction(i18n("Contacts from &SIM"), QIconSet(SmallIcon("kalcatel-contact-sim.png"), BarIcon("kalcatel-contact-sim.png")), 0, this, SLOT(slotFetchContactsSim()), actionCollection(),"fetch_contacts_sim");
+    fetchContactsSim->setToolTip(i18n("Fetch contacts from SIM"));
+    fetchContactsMobile = new KAction(i18n("Contacts from &mobile"), QIconSet(SmallIcon("kalcatel-contact-mobile.png"), BarIcon("kalcatel-contact-mobile.png")), 0, this, SLOT(slotFetchContactsMobile()), actionCollection(),"fetch_contacts_mobile");
+    fetchContactsMobile->setToolTip(i18n("Fetch contacts from mobile"));
 
     newMessage = new KAction(i18n("&Message"), QIconSet(SmallIcon("kalcatel-message.png"), BarIcon("kalcatel-message.png")), 0, this, SLOT(slotNewMessage()), actionCollection(),"new_message");
+    newMessage->setToolTip(i18n("New message"));
     newTodo = new KAction(i18n("&Todo"), QIconSet(SmallIcon("kalcatel-todo.png"), BarIcon("kalcatel-todo.png")), 0, this, SLOT(slotNewTodo()), actionCollection(),"new_todo");
+    newTodo->setToolTip(i18n("New todo"));
     newContact = new KAction(i18n("&Contact"), QIconSet(SmallIcon("kalcatel-contact.png"), BarIcon("kalcatel-contact.png")), 0, this, SLOT(slotNewContact()), actionCollection(),"new_contact");
+    newContact->setToolTip(i18n("New contact"));
     newEvent = new KAction(i18n("&Event"), QIconSet(SmallIcon("kalcatel-calendar.png"), BarIcon("kalcatel-calendar.png")), 0, this, SLOT(slotNewEvent()), actionCollection(),"new_event");
+    newEvent->setToolTip(i18n("New event"));
 
     mobileInfo = new KAction(i18n("&Information"), QIconSet(SmallIcon("kalcatel-mobile.png"), BarIcon("kalcatel-mobile.png")), 0, this, SLOT(slotMobileInfo()), actionCollection(),"mobile_info");
+    mobileInfo->setToolTip(i18n("Mobile information"));
 
     mobileManualConnect = new KAction(i18n("&Connect"), QIconSet(SmallIcon("connect_established.png"), BarIcon("connect_established.png")), 0, this, SLOT(modemConnect()), actionCollection(),"mobile_connect");
     mobileManualDisconnect = new KAction(i18n("&Disconnect"), QIconSet(SmallIcon("connect_no.png"), BarIcon("connect_no.png")), 0, this, SLOT(slotModemDisconnect()), actionCollection(),"mobile_disconnect");
@@ -246,15 +258,15 @@ void KAlcatelApp::statusUpdate() {
 
         if (sign_strength == 99 || sign_strength == -1)
             fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/signal-_.png");
-        else if (sign_strength >= 15) 
+        else if (sign_strength >= 15)
             fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/signal-5.png");
-        else if (sign_strength >= 11) 
+        else if (sign_strength >= 11)
             fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/signal-4.png");
-        else if (sign_strength >= 8) 
+        else if (sign_strength >= 8)
             fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/signal-3.png");
-        else if (sign_strength >= 5) 
+        else if (sign_strength >= 5)
             fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/signal-2.png");
-        else if (sign_strength >= 1) 
+        else if (sign_strength >= 1)
             fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/signal-1.png");
         else
             fname = KApplication::kApplication()->dirs()->findResource("data", "kalcatel/status/signal-0.png");
@@ -605,43 +617,43 @@ void KAlcatelApp::modemDisconnect() {
     }
 }
 
-void KAlcatelApp::slotFileReadMobileAll() {
+void KAlcatelApp::slotFetchAll() {
     slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
     doc->readMobile(alcatel_all);
     slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
-void KAlcatelApp::slotFileReadMobileTodo() {
+void KAlcatelApp::slotFetchTodo() {
     slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
     doc->readMobile(alcatel_todos);
     slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
-void KAlcatelApp::slotFileReadMobileContactsSim() {
+void KAlcatelApp::slotFetchContactsSim() {
     slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
     doc->readMobile(alcatel_contacts_sim);
     slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
-void KAlcatelApp::slotFileReadMobileContactsMobile() {
+void KAlcatelApp::slotFetchContactsMobile() {
     slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
     doc->readMobile(alcatel_contacts_mobile);
     slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
-void KAlcatelApp::slotFileReadMobileCalendar() {
+void KAlcatelApp::slotFetchCalendar() {
     slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
     doc->readMobile(alcatel_calendar);
     slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
-void KAlcatelApp::slotFileReadMobileCalls() {
+void KAlcatelApp::slotFetchCalls() {
     slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
     doc->readMobile(alcatel_calls);
     slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
 }
 
-void KAlcatelApp::slotFileReadMobileMessages() {
+void KAlcatelApp::slotFetchMessages() {
     slotStatusMsg(i18n("Reading data from mobile..."), ID_STATUS_MSG);
     doc->readMobile(alcatel_messages);
     slotStatusMsg(i18n("Ready."), ID_STATUS_MSG, false);
@@ -1024,7 +1036,7 @@ void KAlcatelApp::slotNewMessage() {
     EditMessageDialog dialog(this);
     dialog.reread = reread_messages;
     if (dialog.exec() && dialog.reread)
-        slotFileReadMobileMessages();
+        slotFetchMessages();
 }
 
 void KAlcatelApp::slotNewTodo() {

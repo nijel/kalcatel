@@ -187,25 +187,25 @@ class KAlcatelApp : public KMainWindow
   public slots:
     /** reads all data from mobile
       */
-    void slotFileReadMobileAll();
+    void slotFetchAll();
     /** reads todo data from mobile
       */
-    void slotFileReadMobileTodo();
+    void slotFetchTodo();
     /** reads message data from mobile
       */
-    void slotFileReadMobileMessages();
+    void slotFetchMessages();
     /** reads calendar data from mobile
       */
-    void slotFileReadMobileCalendar();
+    void slotFetchCalendar();
     /** reads call data from mobile
       */
-    void slotFileReadMobileCalls();
+    void slotFetchCalls();
     /** reads contacts data from SIM
       */
-    void slotFileReadMobileContactsSim();
+    void slotFetchContactsSim();
     /** reads contacts data from mobile
       */
-    void slotFileReadMobileContactsMobile();
+    void slotFetchContactsMobile();
     /** shows mobile information
       */
     void slotMobileInfo();
@@ -318,13 +318,13 @@ class KAlcatelApp : public KMainWindow
     QString detailText;
 
     // KAction pointers to enable/disable actions
-    KAction *fileReadMobileAll;
-    KAction *fileReadMobileTodo;
-    KAction *fileReadMobileMessages;
-    KAction *fileReadMobileCalendar;
-    KAction *fileReadMobileCalls;
-    KAction *fileReadMobileContactsSim;
-    KAction *fileReadMobileContactsMobile;
+    KAction *fetchAll;
+    KAction *fetchTodo;
+    KAction *fetchMessages;
+    KAction *fetchCalendar;
+    KAction *fetchCalls;
+    KAction *fetchContactsSim;
+    KAction *fetchContactsMobile;
     KAction *newMessage;
     KAction *newEvent;
     KAction *newContact;

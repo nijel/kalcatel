@@ -5,9 +5,9 @@ KAlcatel - Changelog
 $Id$
 
 2002-04-08 Michal Cihar <cihar@email.cz>
-        * created todo edit dialog
-        * added time validator
-        * added clearing of contact dialog
+        * todo edit dialog
+        * UI tweaks (Read mobile -> Fetch, tooltips for actions)
+        * undeleting of items
 
 2002-03-27 Michal Cihar <cihar@email.cz>
         * deleting of items

@@ -157,5 +157,8 @@ typedef QValueList<AlcatelSMS> AlcatelSMSList;
 typedef QValueList<AlcatelCategory> AlcatelCategoryList;
 
 AlcatelSMS *findAlcatelSMSById(AlcatelSMSList *list, int id);
+QString *getCategoryName(AlcatelCategoryList *list, int id);
+int phoneCmp(QString *number1, QString *number2, QString *prefix);
+AlcatelContact *getContactByPhone(AlcatelContactList *list, QString *number, QString *prefix);
 
 #endif

@@ -43,6 +43,9 @@
 #include "alcatool/sms.h"
 #include "alcatool/logging.h"
 
+/* TODO: move to config */
+QString prefix = QString("+420");
+
 KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : KJanusWidget(parent, name, TreeList) {
     int i;
     QStringList list = QStringList();
@@ -352,9 +355,16 @@ void KAlcatelView::repaint() {
                         list = msg_sent_list;
                         break;
                 }
+                AlcatelContact *cont = getContactByPhone(doc->contacts, &((* it).Sender), &prefix);
                 QListViewItem *newItem = new QListViewItem (messages_list,
                         QString((* it).Sender),
-                        QString("")/*TODO: get ii from contacts... (* it).Sender*/,
+                        cont == NULL? QString("") : (cont->FirstName.isEmpty())?
+                            ((cont->LastName.isEmpty())?
+                                QString("?"):
+                                QString(cont->LastName)):
+                            ((cont->LastName.isEmpty())?
+                                QString(cont->FirstName):
+                                QString("%1, %2").arg(cont->LastName).arg(cont->FirstName)),
                         type,
                         QString((* it).Date.date().toString()),
                         QString((* it).Date.time().toString()),
@@ -363,7 +373,13 @@ void KAlcatelView::repaint() {
 
                 newItem = new QListViewItem (list,
                         QString((* it).Sender),
-                        QString("")/*TODO: get ii from contacts... (* it).Sender*/,
+                        cont == NULL? QString("") : (cont->FirstName.isEmpty())?
+                            ((cont->LastName.isEmpty())?
+                                QString("?"):
+                                QString(cont->LastName)):
+                            ((cont->LastName.isEmpty())?
+                                QString(cont->FirstName):
+                                QString("%1, %2").arg(cont->LastName).arg(cont->FirstName)),
                         QString((* it).Date.date().toString()),
                         QString((* it).Date.time().toString()),
                         QString((* it).Text),
@@ -438,7 +454,7 @@ void KAlcatelView::repaint() {
                     newItem = new QListViewItem (contacts_mobile_list,
                             QString((* it).LastName),
                             QString((* it).FirstName),
-                            QString("%1").arg((* it).Category),
+                            *(getCategoryName(doc->contact_cats, (* it).Category)),
                             QString((* it).MobileNumber),
                             QString((* it).WorkNumber),
                             QString((* it).MainNumber),
@@ -490,6 +506,11 @@ void KAlcatelView::slotUnsentMessageChanged() {
 }
 
 void KAlcatelView::slotShowMessage(QTextView *where, AlcatelSMS *what) {
+    if (what == NULL) {
+        where->setText( i18n("Failed reading message!"));
+        return;
+    }
+    AlcatelContact *cont = getContactByPhone(getDocument()->contacts, &(what->Sender), &prefix);
     where->setText( i18n(
         "<b>From:</b> %1 (%2)<br>"
         "<b>Date:</b> %3<br>"
@@ -498,7 +519,13 @@ void KAlcatelView::slotShowMessage(QTextView *where, AlcatelSMS *what) {
         "<b>Position:</b> %6<br>"
         "<b>Type:</b> %7<br><br>"
         "%8").
-        arg(""). /*TODO: decode using contacts ...*/
+        arg(cont == NULL? QString("") : (cont->FirstName.isEmpty())?
+                ((cont->LastName.isEmpty())?
+                    QString("?"):
+                    QString(cont->LastName)):
+                ((cont->LastName.isEmpty())?
+                    QString(cont->FirstName):
+                    QString("%1, %2").arg(cont->LastName).arg(cont->FirstName))).
         arg(what->Sender).
         arg(what->Date.date().toString()).
         arg(what->Date.time().toString()).

@@ -186,3 +186,39 @@ AlcatelSMS *findAlcatelSMSById(AlcatelSMSList *list, int id) {
     }
     return NULL;
 }
+
+QString *getCategoryName(AlcatelCategoryList *list, int id) {
+    static QString *str=new QString("");
+    AlcatelCategoryList::Iterator it;
+    for( it = list->begin(); it != list->end(); ++it ) {
+        if ((* it).Id == id)
+            return &((*it).Name);
+    }
+    return str;
+}
+
+int phoneCmp(QString *number1, QString *number2, QString *prefix) {
+    QString n1 = QString(*number1);
+    QString n2 = QString(*number2);
+    if (n1[0] != '+')
+        n1.prepend(*prefix);
+    if (n2[0] != '+')
+        n2.prepend(*prefix);
+    return n1 == n2;
+}
+
+AlcatelContact *getContactByPhone(AlcatelContactList *list, QString *number, QString *prefix) {
+    AlcatelContactList::Iterator it;
+    for( it = list->begin(); it != list->end(); ++it ) {
+        if (phoneCmp(&((* it).MainNumber), number, prefix) ||
+            phoneCmp(&((* it).WorkNumber), number, prefix) ||
+            phoneCmp(&((* it).FaxNumber), number, prefix) ||
+            phoneCmp(&((* it).OtherNumber), number, prefix) ||
+            phoneCmp(&((* it).PagerNumber), number, prefix) ||
+            phoneCmp(&((* it).MobileNumber), number, prefix) ||
+            phoneCmp(&((* it).HomeNumber), number, prefix)
+            )
+            return &(*it);
+    }
+    return NULL;
+}

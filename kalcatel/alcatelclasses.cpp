@@ -104,31 +104,31 @@ QString AlcatelContact::Name(void) {
 
 void AlcatelContact::setField(int number, FIELD *data) {
     switch (number) {
-        case 0: chk_type(_string) LastName = (char *)((*data).data); break;
-        case 1: chk_type(_string) FirstName = (char *)((*data).data); break;
-        case 2: chk_type(_string) Company = (char *)((*data).data); break;
-        case 3: chk_type(_string) JobTitle = (char *)((*data).data); break;
-        case 4: chk_type(_string) Note = (char *)((*data).data); break;
+        case 0: chk_type(_string) LastName.setLatin1((char *)((*data).data)); break;
+        case 1: chk_type(_string) FirstName.setLatin1((char *)((*data).data)); break;
+        case 2: chk_type(_string) Company.setLatin1((char *)((*data).data)); break;
+        case 3: chk_type(_string) JobTitle.setLatin1((char *)((*data).data)); break;
+        case 4: chk_type(_string) Note.setLatin1((char *)((*data).data)); break;
         case 5: chk_type(_byte) Category = *((int *)((*data).data)); break;
         case 6: chk_type(_bool) Private = *((int *)((*data).data)); break;
-        case 7: chk_type(_phone) WorkNumber = (char *)((*data).data); break;
-        case 8: chk_type(_phone) MainNumber = (char *)((*data).data); break;
-        case 9: chk_type(_phone) FaxNumber = (char *)((*data).data); break;
-        case 10: chk_type(_phone) OtherNumber = (char *)((*data).data); break;
-        case 11: chk_type(_phone) PagerNumber = (char *)((*data).data); break;
-        case 12: chk_type(_phone) MobileNumber = (char *)((*data).data); break;
-        case 13: chk_type(_phone) HomeNumber = (char *)((*data).data); break;
-        case 14: chk_type(_string) Email1 = (char *)((*data).data); break;
-        case 15: chk_type(_string) Email2 = (char *)((*data).data); break;
-        case 16: chk_type(_string) Address = (char *)((*data).data); break;
-        case 17: chk_type(_string) City = (char *)((*data).data); break;
-        case 18: chk_type(_string) State = (char *)((*data).data); break;
-        case 19: chk_type(_string) Zip = (char *)((*data).data); break;
-        case 20: chk_type(_string) Country = (char *)((*data).data); break;
-        case 21: chk_type(_string) Custom1 = (char *)((*data).data); break;
-        case 22: chk_type(_string) Custom2 = (char *)((*data).data); break;
-        case 23: chk_type(_string) Custom3 = (char *)((*data).data); break;
-        case 24: chk_type(_string) Custom4 = (char *)((*data).data); break;
+        case 7: chk_type(_phone) WorkNumber.setLatin1((char *)((*data).data)); break;
+        case 8: chk_type(_phone) MainNumber.setLatin1((char *)((*data).data)); break;
+        case 9: chk_type(_phone) FaxNumber.setLatin1((char *)((*data).data)); break;
+        case 10: chk_type(_phone) OtherNumber.setLatin1((char *)((*data).data)); break;
+        case 11: chk_type(_phone) PagerNumber.setLatin1((char *)((*data).data)); break;
+        case 12: chk_type(_phone) MobileNumber.setLatin1((char *)((*data).data)); break;
+        case 13: chk_type(_phone) HomeNumber.setLatin1((char *)((*data).data)); break;
+        case 14: chk_type(_string) Email1.setLatin1((char *)((*data).data)); break;
+        case 15: chk_type(_string) Email2.setLatin1((char *)((*data).data)); break;
+        case 16: chk_type(_string) Address.setLatin1((char *)((*data).data)); break;
+        case 17: chk_type(_string) City.setLatin1((char *)((*data).data)); break;
+        case 18: chk_type(_string) State.setLatin1((char *)((*data).data)); break;
+        case 19: chk_type(_string) Zip.setLatin1((char *)((*data).data)); break;
+        case 20: chk_type(_string) Country.setLatin1((char *)((*data).data)); break;
+        case 21: chk_type(_string) Custom1.setLatin1((char *)((*data).data)); break;
+        case 22: chk_type(_string) Custom2.setLatin1((char *)((*data).data)); break;
+        case 23: chk_type(_string) Custom3.setLatin1((char *)((*data).data)); break;
+        case 24: chk_type(_string) Custom4.setLatin1((char *)((*data).data)); break;
 
         default: message(MSG_WARNING, "Unknown field occured (%02d)!", number); break;
     }
@@ -158,6 +158,7 @@ QString AlcatelCalendar::Repeating(void) {
         case ALC_CALENDAR_BIRTHDAY:
             return birthday;
         case ALC_CALENDAR_APPOINTMENT:
+        case ALC_CALENDAR_ALARM:
         case ALC_CALENDAR_CALL:
             return none;
         case ALC_CALENDAR_REPEATING:
@@ -184,6 +185,7 @@ QString AlcatelCalendar::RepeatingDetail(void) {
         case ALC_CALENDAR_BIRTHDAY:
             return birthday;
         case ALC_CALENDAR_APPOINTMENT:
+        case ALC_CALENDAR_ALARM:
         case ALC_CALENDAR_CALL:
             return none;
         case ALC_CALENDAR_REPEATING:
@@ -230,9 +232,9 @@ void AlcatelCalendar::setField(int number, FIELD *data) {
         case 0: chk_type(_date) Date.setYMD(((DATE *)((*data).data))->year, ((DATE *)((*data).data))->month, ((DATE *)((*data).data))->day); break;
         case 1: chk_type(_time) StartTime.setHMS (((TIME *)((*data).data))->hour, ((TIME *)((*data).data))->minute, ((TIME *)((*data).data))->second); break;
         case 2: chk_type(_time) EndTime.setHMS (((TIME *)((*data).data))->hour, ((TIME *)((*data).data))->minute, ((TIME *)((*data).data))->second); break;
-        case 3: chk_type(_date) Alarm.date().setYMD(((DATE *)((*data).data))->year, ((DATE *)((*data).data))->month, ((DATE *)((*data).data))->day); break;
-        case 4: chk_type(_time) Alarm.time().setHMS (((TIME *)((*data).data))->hour, ((TIME *)((*data).data))->minute, ((TIME *)((*data).data))->second); break;
-        case 5: chk_type(_string) Subject = (char *)((*data).data); break;
+        case 3: chk_type(_date) Alarm.setDate(QDate ( ((DATE *)((*data).data))->year, ((DATE *)((*data).data))->month, ((DATE *)((*data).data))->day)); break;
+        case 4: chk_type(_time) Alarm.setTime(QTime ( ((TIME *)((*data).data))->hour, ((TIME *)((*data).data))->minute, ((TIME *)((*data).data))->second)); break;
+        case 5: chk_type(_string) Subject.setLatin1((char *)((*data).data)); break;
         case 6: chk_type(_bool) Private = *((int *)((*data).data)); break;
         case 7: chk_type(_enum) EventType = *((int *)((*data).data)); break;
         case 8: chk_type(_int) ContactID = *((int *)((*data).data)); break;
@@ -245,8 +247,8 @@ void AlcatelCalendar::setField(int number, FIELD *data) {
         case 17: chk_type(_byte) Frequency = *((int *)((*data).data)); break;
         case 18: chk_type(_date) StartDate.setYMD(((DATE *)((*data).data))->year, ((DATE *)((*data).data))->month, ((DATE *)((*data).data))->day); break;
         case 19: chk_type(_date) StopDate.setYMD(((DATE *)((*data).data))->year, ((DATE *)((*data).data))->month, ((DATE *)((*data).data))->day); break;
-        case 20: chk_type(_date) Alarm2.date().setYMD(((DATE *)((*data).data))->year, ((DATE *)((*data).data))->month, ((DATE *)((*data).data))->day); break;
-        case 21: chk_type(_time) Alarm2.time().setHMS (((TIME *)((*data).data))->hour, ((TIME *)((*data).data))->minute, ((TIME *)((*data).data))->second); break;
+        case 20: chk_type(_date) Alarm2.setDate(QDate ( ((DATE *)((*data).data))->year, ((DATE *)((*data).data))->month, ((DATE *)((*data).data))->day)); break;
+        case 21: chk_type(_time) Alarm2.setTime(QTime ( ((TIME *)((*data).data))->hour, ((TIME *)((*data).data))->minute, ((TIME *)((*data).data))->second)); break;
 
         default: message(MSG_WARNING, "Unknown field occured (%02d)!", number); break;
     }
@@ -267,9 +269,9 @@ void AlcatelTodo::setField(int number, FIELD *data) {
     switch (number) {
         case 0: chk_type(_date) DueDate.setYMD(((DATE *)((*data).data))->year, ((DATE *)((*data).data))->month, ((DATE *)((*data).data))->day); break;
         case 1: chk_type(_bool) Completed = *((int *)((*data).data)); break;
-        case 2: chk_type(_date) Alarm.date().setYMD(((DATE *)((*data).data))->year, ((DATE *)((*data).data))->month, ((DATE *)((*data).data))->day); break;
-        case 3: chk_type(_time) Alarm.time().setHMS (((TIME *)((*data).data))->hour, ((TIME *)((*data).data))->minute, ((TIME *)((*data).data))->second); break;
-        case 4: chk_type(_string) Subject = (char *)((*data).data); break;
+        case 2: chk_type(_date) Alarm.setDate(QDate ( ((DATE *)((*data).data))->year, ((DATE *)((*data).data))->month, ((DATE *)((*data).data))->day)); break;
+        case 3: chk_type(_time) Alarm.setTime(QTime ( ((TIME *)((*data).data))->hour, ((TIME *)((*data).data))->minute, ((TIME *)((*data).data))->second)); break;
+        case 4: chk_type(_string) Subject.setLatin1((char *)((*data).data)); break;
         case 5: chk_type(_bool) Private = *((int *)((*data).data)); break;
         case 6: chk_type(_byte) Category = *((int *)((*data).data)); break;
         case 7: chk_type(_enum) Priority = *((int *)((*data).data)); break;
@@ -294,7 +296,7 @@ AlcatelSMS::~AlcatelSMS() {
 }
 
 AlcatelCategory::AlcatelCategory(char* name, int id) {
-    Name = QString(name);
+    Name = QString().setLatin1(name);
     Id = id;
 }
 

@@ -5,7 +5,7 @@ KAlcatel - Changelog
 $Id$
 
 2002-02-16 Michal Cihar <cihar@email.cz>
-        * contact viewing works
+        * contact, todo and calendar viewing works
 
 2002-02-15 Michal Cihar <cihar@email.cz>
         * added of reading all binary data (shown are only contacts)

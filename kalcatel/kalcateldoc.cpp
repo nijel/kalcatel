@@ -232,7 +232,11 @@ int KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
             win->slotStatusMsg(i18n("Reading item %1 of %2").arg(i).arg(ids[0]),ID_DETAIL_MSG);
             message(MSG_DEBUG, "Reading id[%d] = %d", i-1, ids[i]);
             items = sync_get_fields(type, ids[i]);
-            if (!items) return false;
+            if (!items) {
+                sync_close_session(type);
+                alcatel_detach();
+                return false;
+            }
             message(MSG_INFO, "Receiving data for item %d (%d fields)", ids[i], items[0]);
             printf ("Item %d (fields: %d):\n", ids[i], items[0]);
             AlcatelContact *Contact;
@@ -463,32 +467,62 @@ bool KAlcatelDoc::readMobile(AlcReadType what = alcatel_read_all, int category =
         if (what == alcatel_read_contacts_mobile || what == alcatel_read_all) {
             /* at first read categories */
             win->slotStatusMsg(i18n("Reading contact categories"),ID_DETAIL_MSG);
-            if (!readMobileCategories(contact_cats, ALC_SYNC_CONTACTS, ALC_SYNC_TYPE_CONTACTS, ALC_LIST_CONTACTS_CAT))
+            if (!readMobileCategories(contact_cats, ALC_SYNC_CONTACTS, ALC_SYNC_TYPE_CONTACTS, ALC_LIST_CONTACTS_CAT)) {
                 KMessageBox::error(win, i18n("Reading contacts categories failed!"), i18n("Error"));
+                alcatel_done();
+                version++;
+                modified=true;
+                slotUpdateAllViews(NULL);
+                return false;
+            }
 
             win->slotStatusMsg(i18n("Reading contact items"),ID_DETAIL_MSG);
-            if (!readMobileItems(ALC_SYNC_CONTACTS, ALC_SYNC_TYPE_CONTACTS))
+            if (!readMobileItems(ALC_SYNC_CONTACTS, ALC_SYNC_TYPE_CONTACTS)) {
                 KMessageBox::error(win, i18n("Reading contacts failed!"), i18n("Error"));
+                alcatel_done();
+                version++;
+                modified=true;
+                slotUpdateAllViews(NULL);
+                return false;
+            }
 
             contactVersion++;
         }
 
         if (what == alcatel_read_calendar || what == alcatel_read_all) {
             win->slotStatusMsg(i18n("Reading calendar items"),ID_DETAIL_MSG);
-            if (!readMobileItems(ALC_SYNC_CALENDAR, ALC_SYNC_TYPE_CALENDAR))
+            if (!readMobileItems(ALC_SYNC_CALENDAR, ALC_SYNC_TYPE_CALENDAR)) {
                 KMessageBox::error(win, i18n("Reading calendar items failed!"), i18n("Error"));
+                alcatel_done();
+                version++;
+                modified=true;
+                slotUpdateAllViews(NULL);
+                return false;
+            }
             calendarVersion++;
         }
 
         if (what == alcatel_read_todo || what == alcatel_read_all) {
             /* at first read categories */
             win->slotStatusMsg(i18n("Reading todo categories"),ID_DETAIL_MSG);
-            if (!readMobileCategories(todo_cats, ALC_SYNC_TODO, ALC_SYNC_TYPE_TODO, ALC_LIST_TODO_CAT))
+            if (!readMobileCategories(todo_cats, ALC_SYNC_TODO, ALC_SYNC_TYPE_TODO, ALC_LIST_TODO_CAT)) {
                 KMessageBox::error(win, i18n("Reading todo categories failed!"), i18n("Error"));
+                alcatel_done();
+                version++;
+                modified=true;
+                slotUpdateAllViews(NULL);
+                return false;
+            }
 
             win->slotStatusMsg(i18n("Reading todo items"),ID_DETAIL_MSG);
-            if (!readMobileItems(ALC_SYNC_TODO, ALC_SYNC_TYPE_TODO))
+            if (!readMobileItems(ALC_SYNC_TODO, ALC_SYNC_TYPE_TODO)) {
                 KMessageBox::error(win, i18n("Reading todos failed!"), i18n("Error"));
+                alcatel_done();
+                version++;
+                modified=true;
+                slotUpdateAllViews(NULL);
+                return false;
+            }
 
             todoVersion++;
         }

@@ -418,9 +418,9 @@ void KAlcatelView::repaint() {
             AlcatelCalendarList::Iterator it;
             for( it = doc->calendar->begin(); it != doc->calendar->end(); ++it ) {
                 new QListViewItem (calendar_list,
-                        (* it).Date.isNull()?i18n("None"):(* it).Date.toString(),
-                        (* it).EventType == ALC_CALENDAR_BIRTHDAY ? i18n("N/A") : (* it).StartTime.toString(),
-                        (* it).EventType == ALC_CALENDAR_BIRTHDAY ? i18n("N/A") : (* it).EndTime.toString(),
+                        (* it).EventType == ALC_CALENDAR_ALARM ? i18n("N/A") : (* it).Date.isNull()?i18n("None"):(* it).Date.toString(),
+                        (* it).EventType == ALC_CALENDAR_BIRTHDAY || (* it).EventType == ALC_CALENDAR_ALARM ? i18n("N/A") : (* it).StartTime.toString(),
+                        (* it).EventType == ALC_CALENDAR_BIRTHDAY || (* it).EventType == ALC_CALENDAR_ALARM ? i18n("N/A") : (* it).EndTime.toString(),
                         (* it).EventType!=-1?CalendarTypes[(* it).EventType]:i18n("Unknown"),
                         (* it).Subject,
                         (* it).Alarm.isNull()?i18n("None"):(* it).Alarm.toString(),
@@ -625,7 +625,7 @@ void KAlcatelView::slotShowCalendar(QTextView *where, AlcatelCalendar *what) {
 
     if (!what->Subject.isEmpty()) text.append(i18n("<b>Subject:</b> %1<br>").arg(what->Subject));
     if (!what->Date.isNull()) text.append(i18n("<b>Date:</b> %1<br>").arg(what->Date.toString()));
-    if (what->EventType != ALC_CALENDAR_BIRTHDAY) {
+    if (what->EventType != ALC_CALENDAR_BIRTHDAY && what->EventType != ALC_CALENDAR_ALARM) {
         text.append(i18n("<b>StartTime:</b> %1<br>").arg(what->StartTime.toString()));
         text.append(i18n("<b>EndTime:</b> %1<br>").arg(what->EndTime.toString()));
     }
@@ -634,9 +634,7 @@ void KAlcatelView::slotShowCalendar(QTextView *where, AlcatelCalendar *what) {
     text.append(i18n("<b>Repeating:</b> %1<br>").arg(what->RepeatingDetail()));
 
     if (!what->Alarm.isNull()) text.append(i18n("<b>Alarm:</b> %1<br>").arg(what->Alarm.toString()));
-    text.append(i18n("<b>Alarm-t:</b> %1<br>").arg(what->Alarm.time().toString()));
     if (!what->Alarm2.isNull()) text.append(i18n("<b>Alarm2:</b> %1<br>").arg(what->Alarm2.toString()));
-    text.append(i18n("<b>Alarm2-t:</b> %1<br>").arg(what->Alarm2.time().toString()));
     if (what->Private != -1) text.append(i18n("<b>Private:</b> %1<br>").arg(what->Private == 1?i18n("Yes"):i18n("No")));
     if (what->ContactID != -1 && what->ContactID != 0) text.append(i18n("<b>Contact:</b> %1<br>").arg(cont==NULL?QString("id=%1").arg(what->ContactID):cont->Name()));
 

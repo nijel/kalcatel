@@ -24,7 +24,7 @@ typedef struct {
 int delete_sms(int which);
 
 SMS *get_sms(int which);
-SMS *get_smss(int state);
+SMS *get_smss(int state = SMS_ALL);
 
 int send_sms(char *pdu);
 int put_sms(char *pdu, int state);

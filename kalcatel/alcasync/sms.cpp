@@ -26,7 +26,7 @@ int delete_sms(int which) {
 	return 1;
 }
 
-SMS *get_smss(int state) {
+SMS *get_smss(int state = SMS_ALL) {
     char buffer[10000];
     char *data;
     int count = 0;

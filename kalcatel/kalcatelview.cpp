@@ -135,70 +135,46 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : QWidget(parent, 
     widgetstack->addWidget( kalcatel_html->view(), ID_KALCATEL );
 
     widgetstack->addWidget( messages_list = createListView( widgetstack, alc_messages ), ID_MESSAGES );
-    connect( messages_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotMessageChanged(QListViewItem *) ) );
     messages_item = new KAlcatelTreeViewItem(kalcatel_item, i18n("Messages"), SmallIcon("kalcatel-message.png"), ID_MESSAGES );
 
     widgetstack->addWidget( messages_unsent_list = createListView( widgetstack, alc_messages_out ), ID_MESSAGES_UNSENT );
-    connect( messages_unsent_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotMessageChanged(QListViewItem *) ) );
     messages_unsent_item = new KAlcatelTreeViewItem(messages_item, i18n("Unsent"), SmallIcon("kalcatel-message-unsent.png"), ID_MESSAGES_UNSENT );
 
     widgetstack->addWidget( messages_sent_list = createListView( widgetstack, alc_messages_out ), ID_MESSAGES_SENT );
-    connect( messages_sent_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotMessageChanged(QListViewItem *) ) );
     messages_sent_item = new KAlcatelTreeViewItem(messages_item, i18n("Sent"), SmallIcon("kalcatel-message-sent.png"), ID_MESSAGES_SENT );
 
     widgetstack->addWidget( messages_read_list = createListView( widgetstack, alc_messages_in ), ID_MESSAGES_READ );
-    connect( messages_read_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotMessageChanged(QListViewItem *) ) );
     messages_read_item = new KAlcatelTreeViewItem(messages_item, i18n("Read"), SmallIcon("kalcatel-message-read.png"), ID_MESSAGES_READ );
 
     widgetstack->addWidget( messages_unread_list = createListView( widgetstack, alc_messages_in ), ID_MESSAGES_UNREAD );
-    connect( messages_unread_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotMessageChanged(QListViewItem *) ) );
     messages_unread_item = new KAlcatelTreeViewItem(messages_item, i18n("Unread"), SmallIcon("kalcatel-message-unread.png"), ID_MESSAGES_UNREAD );
 
     widgetstack->addWidget( calls_list = createListView( widgetstack, alc_calls ), ID_CALLS );
-    connect( calls_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotCallChanged(QListViewItem *) ) );
     calls_item = new KAlcatelTreeViewItem(kalcatel_item, i18n("Calls"), SmallIcon("kalcatel-call.png"), ID_CALLS );
 
     widgetstack->addWidget( calls_outgoing_list = createListView( widgetstack, alc_calls_type ), ID_CALLS_OUTGOING );
-    connect( calls_outgoing_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotCallChanged(QListViewItem *) ) );
     calls_outgoing_item = new KAlcatelTreeViewItem(calls_item, i18n("Outgoing"), SmallIcon("kalcatel-call-outgoing.png"), ID_CALLS_OUTGOING );
 
     widgetstack->addWidget( calls_received_list = createListView( widgetstack, alc_calls_type ), ID_CALLS_RECEIVED );
-    connect( calls_received_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotCallChanged(QListViewItem *) ) );
     calls_received_item = new KAlcatelTreeViewItem(calls_item, i18n("Received"), SmallIcon("kalcatel-call-received.png"), ID_CALLS_RECEIVED );
 
     widgetstack->addWidget( calls_missed_list = createListView( widgetstack, alc_calls_type ), ID_CALLS_MISSED );
-    connect( calls_missed_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotCallChanged(QListViewItem *) ) );
     calls_missed_item = new KAlcatelTreeViewItem(calls_item, i18n("Missed"), SmallIcon("kalcatel-call-missed.png"), ID_CALLS_MISSED );
 
     widgetstack->addWidget( contacts_list = createListView( widgetstack, alc_contacts ), ID_CONTACTS );
-    connect( contacts_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
-    connect( contacts_list, SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotContactDoubleClicked(QListViewItem *) ) );
-    connect( contacts_list, SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( slotContactDoubleClicked(QListViewItem *) ) );
     contacts_item = new KAlcatelTreeViewItem(kalcatel_item, i18n("Contacts"), SmallIcon("kalcatel-contact.png"), ID_CONTACTS );
 
     widgetstack->addWidget( contacts_cat_list = createListView( widgetstack, alc_contacts_mobile ), ID_CONTACTS_MOBILE );
-    connect( contacts_cat_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
-    connect( contacts_cat_list, SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotContactDoubleClicked(QListViewItem *) ) );
-    connect( contacts_cat_list, SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( slotContactDoubleClicked(QListViewItem *) ) );
 /* TODO: here should be another icon v*/
     contacts_cat_item = new KAlcatelTreeViewItem(contacts_item, i18n("Categories"), SmallIcon("kalcatel-contact-mobile.png"), ID_CONTACTS_MOBILE );
 
     widgetstack->addWidget( contacts_sim_list = createListView( widgetstack, alc_contacts_sim ), ID_CONTACTS_SIM );
-    connect( contacts_sim_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
-    connect( contacts_sim_list, SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotContactDoubleClicked(QListViewItem *) ) );
-    connect( contacts_sim_list, SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( slotContactDoubleClicked(QListViewItem *) ) );
     contacts_sim_item = new KAlcatelTreeViewItem(contacts_item, i18n("SIM"), SmallIcon("kalcatel-contact-sim.png"), ID_CONTACTS_SIM );
 
     widgetstack->addWidget( calendar_list = createListView( widgetstack, alc_calendar ), ID_CALENDAR );
-    connect( calendar_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotCalendarChanged(QListViewItem *) ) );
-    connect( calendar_list, SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotCalendarDoubleClicked(QListViewItem *) ) );
-    connect( calendar_list, SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( slotCalendarDoubleClicked(QListViewItem *) ) );
     calendar_item = new KAlcatelTreeViewItem(kalcatel_item, i18n("Calendar"), SmallIcon("kalcatel-calendar.png"), ID_CALENDAR );
 
     widgetstack->addWidget( todo_list = createListView( widgetstack, alc_todos ), ID_TODOS );
-    connect( todo_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotTodoChanged(QListViewItem *) ) );
-    connect( todo_list, SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotTodoDoubleClicked(QListViewItem *) ) );
-    connect( todo_list, SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( slotTodoDoubleClicked(QListViewItem *) ) );
     todo_item = new KAlcatelTreeViewItem(kalcatel_item, i18n("Todos"), SmallIcon("kalcatel-todo.png"), ID_TODOS );
 
     repaint();
@@ -213,13 +189,13 @@ KAlcatelView::~KAlcatelView() {
 }
 
 KListView *KAlcatelView::createListView(QWidget *parent, AlcListType type) {
-    KListView *list;
-    list = new KListView(parent);
+    KListView *list = new KListView(parent);
 
     list->setAllColumnsShowFocus(true);
     list->setShowSortIndicator(true);
 
     list->addColumn(""); /* column for icons */
+/* TODO: add context menu on menuShortCutPressed */
 
     switch (type) {
         case alc_contacts:
@@ -227,6 +203,9 @@ KListView *KAlcatelView::createListView(QWidget *parent, AlcListType type) {
             list->addColumn(i18n("Name"));
             list->addColumn(i18n("Phone"));
             list->addColumn(i18n("Position"));
+            connect( list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
+            connect( list, SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotContactDoubleClicked(QListViewItem *) ) );
+            connect( list, SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( slotContactDoubleClicked(QListViewItem *) ) );
             break;
         case alc_contacts_mobile:
             list->addColumn(i18n("Last name"));
@@ -237,6 +216,9 @@ KListView *KAlcatelView::createListView(QWidget *parent, AlcListType type) {
             list->addColumn(i18n("Main"));
             list->addColumn(i18n("Email"));
             list->addColumn(i18n("Position"));
+            connect( list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
+            connect( list, SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotContactDoubleClicked(QListViewItem *) ) );
+            connect( list, SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( slotContactDoubleClicked(QListViewItem *) ) );
             break;
         case alc_contacts_mobile_cat:
             list->addColumn(i18n("Last name"));
@@ -246,6 +228,9 @@ KListView *KAlcatelView::createListView(QWidget *parent, AlcListType type) {
             list->addColumn(i18n("Main"));
             list->addColumn(i18n("Email"));
             list->addColumn(i18n("Position"));
+            connect( list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
+            connect( list, SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotContactDoubleClicked(QListViewItem *) ) );
+            connect( list, SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( slotContactDoubleClicked(QListViewItem *) ) );
             break;
         case alc_todos:
             list->addColumn(i18n("Completed"));
@@ -254,6 +239,9 @@ KListView *KAlcatelView::createListView(QWidget *parent, AlcListType type) {
             list->addColumn(i18n("Subject"));
             list->addColumn(i18n("Category"));
             list->addColumn(i18n("Position"));
+            connect( list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotTodoChanged(QListViewItem *) ) );
+            connect( list, SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotTodoDoubleClicked(QListViewItem *) ) );
+            connect( list, SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( slotTodoDoubleClicked(QListViewItem *) ) );
             break;
         case alc_todos_cat:
             list->addColumn(i18n("Completed"));
@@ -261,6 +249,9 @@ KListView *KAlcatelView::createListView(QWidget *parent, AlcListType type) {
             list->addColumn(i18n("Due date"));
             list->addColumn(i18n("Subject"));
             list->addColumn(i18n("Position"));
+            connect( list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotTodoChanged(QListViewItem *) ) );
+            connect( list, SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotTodoDoubleClicked(QListViewItem *) ) );
+            connect( list, SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( slotTodoDoubleClicked(QListViewItem *) ) );
             break;
         case alc_calendar:
             list->addColumn(i18n("Date"));
@@ -271,12 +262,16 @@ KListView *KAlcatelView::createListView(QWidget *parent, AlcListType type) {
             list->addColumn(i18n("Alarm"));
             list->addColumn(i18n("Repeat"));
             list->addColumn(i18n("Position"));
+            connect( list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotCalendarChanged(QListViewItem *) ) );
+            connect( list, SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotCalendarDoubleClicked(QListViewItem *) ) );
+            connect( list, SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( slotCalendarDoubleClicked(QListViewItem *) ) );
             break;
         case alc_calls_type:
             list->addColumn(i18n("Number"));
             list->addColumn(i18n("Name"));
             list->addColumn(i18n("Contact"));
             list->addColumn(i18n("Position"));
+            connect( list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotCallChanged(QListViewItem *) ) );
             break;
         case alc_calls:
             list->addColumn(i18n("Number"));
@@ -284,6 +279,7 @@ KListView *KAlcatelView::createListView(QWidget *parent, AlcListType type) {
             list->addColumn(i18n("Contact"));
             list->addColumn(i18n("Type"));
             list->addColumn(i18n("Position"));
+            connect( list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotCallChanged(QListViewItem *) ) );
             break;
         case alc_messages:
             list->addColumn(i18n("Number"));
@@ -293,6 +289,7 @@ KListView *KAlcatelView::createListView(QWidget *parent, AlcListType type) {
             list->addColumn(i18n("Time"));
             list->addColumn(i18n("Text"));
             list->addColumn(i18n("Position"));
+            connect( list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotMessageChanged(QListViewItem *) ) );
             break;
         case alc_messages_in:
             list->addColumn(i18n("From"));
@@ -301,6 +298,7 @@ KListView *KAlcatelView::createListView(QWidget *parent, AlcListType type) {
             list->addColumn(i18n("Time"));
             list->addColumn(i18n("Text"));
             list->addColumn(i18n("Position"));
+            connect( list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotMessageChanged(QListViewItem *) ) );
             break;
         case alc_messages_out:
             list->addColumn(i18n("To"));
@@ -309,6 +307,7 @@ KListView *KAlcatelView::createListView(QWidget *parent, AlcListType type) {
             list->addColumn(i18n("Time"));
             list->addColumn(i18n("Text"));
             list->addColumn(i18n("Position"));
+            connect( list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotMessageChanged(QListViewItem *) ) );
             break;
     }
 
@@ -390,9 +389,6 @@ void KAlcatelView::repaint() {
             for( c_it = doc->todo_cats->begin(); c_it != doc->todo_cats->end(); ++c_it ) {
                 widgetstack->addWidget(todo_cat_lists[(*c_it).Id] = createListView(widgetstack, alc_todos_cat), ID_TODOS_CAT + (*c_it).Id );
                 new KAlcatelTreeViewItem(todo_item, (*c_it).Name, SmallIcon("kalcatel-todo.png"), ID_TODOS_CAT + (*c_it).Id );
-                connect( todo_cat_lists[(*c_it).Id], SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotTodoChanged(QListViewItem *) ) );
-                connect( todo_cat_lists[(*c_it).Id], SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotTodoDoubleClicked(QListViewItem *) ) );
-                connect( todo_cat_lists[(*c_it).Id], SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( slotTodoDoubleClicked(QListViewItem *) ) );
             }
 
             AlcatelTodoList::Iterator it;
@@ -502,9 +498,6 @@ void KAlcatelView::repaint() {
             for( c_it = doc->contact_cats->begin(); c_it != doc->contact_cats->end(); ++c_it ) {
                 widgetstack->addWidget(contacts_cat_lists[(*c_it).Id] = createListView(widgetstack, alc_contacts_mobile_cat), ID_CONTACTS_CAT + (*c_it).Id );
                 new KAlcatelTreeViewItem(contacts_cat_item, (*c_it).Name, SmallIcon("kalcatel-contact-mobile.png"), ID_CONTACTS_CAT + (*c_it).Id );
-                connect( contacts_cat_lists[(*c_it).Id], SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
-                connect( contacts_cat_lists[(*c_it).Id], SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotContactDoubleClicked(QListViewItem *) ) );
-                connect( contacts_cat_lists[(*c_it).Id], SIGNAL( returnPressed( QListViewItem * ) ), this, SLOT( slotContactDoubleClicked(QListViewItem *) ) );
             }
 
             AlcatelContactList::Iterator it;

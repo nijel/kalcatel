@@ -80,11 +80,18 @@ KAlcatelDoc::KAlcatelDoc(QWidget *parent, const char *name) : QObject(parent, na
 
     calls = new AlcatelCallList();
 
-/* I hope that phone doesn't support more than 1000 contacts, which should allways have original ID */
+/* I hope that phone doesn't support more than 1000 contact IDs, which should allways have original ID */
     pcStorageCounter = 1000;
 }
 
 KAlcatelDoc::~KAlcatelDoc() {
+    delete todo_cats;
+    delete contact_cats;
+    delete contacts;
+    delete calendar;
+    delete todos;
+    delete messages;
+    delete calls;
 }
 
 void KAlcatelDoc::addView(KAlcatelView *view) {
@@ -989,6 +996,10 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
     int *ids, *items;
     AlcatelFieldStruct *field;
 
+    AlcatelContactList local_contacts;
+    AlcatelCalendarList local_calendar;
+    AlcatelTodoList local_todos;
+
     int count;
 
     KAlcatelApp *win=(KAlcatelApp *) parent();
@@ -997,14 +1008,20 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
         case ALC_SYNC_CALENDAR:
             count = ALC_CALENDAR_FIELDS;
             clearCalendar(calendar, StorageMobile);
+            if (win->mergeData == 1)
+                clearCalendar(calendar, StoragePC);
             break;
         case ALC_SYNC_TODO:
             count = ALC_TODO_FIELDS;
             clearTodos(todos, StorageMobile);
+            if (win->mergeData == 1)
+                clearTodos(todos, StoragePC);
             break;
         case ALC_SYNC_CONTACTS:
             count = ALC_CONTACTS_FIELDS;
             clearContacts(contacts, StorageMobile);
+            if (win->mergeData == 1)
+                clearContacts(contacts, StoragePC);
             break;
     }
 
@@ -1091,13 +1108,22 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
             free(items);
             switch (sync) {
                 case ALC_SYNC_CALENDAR:
-                    calendar->append(*Calendar);
+                    if (win->mergeData == 0)
+                        local_calendar.append(*Calendar);
+                    else
+                        calendar->append(*Calendar);
                     break;
                 case ALC_SYNC_TODO:
-                    todos->append(*Todo);
+                    if (win->mergeData == 0)
+                        local_todos.append(*Todo);
+                    else
+                        todos->append(*Todo);
                     break;
                 case ALC_SYNC_CONTACTS:
-                    contacts->append(*Contact);
+                    if (win->mergeData == 0)
+                        local_contacts.append(*Contact);
+                    else
+                        contacts->append(*Contact);
                     break;
             }
         }
@@ -1111,6 +1137,66 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
 
     alcatel_close_session(type);
     alcatel_detach();
+
+    /* TODO: add merging code here */
+    if (win->mergeData == 0) {
+        switch (sync) {
+            case ALC_SYNC_CALENDAR: {
+                AlcatelCalendarList::Iterator it;
+                AlcatelCalendar *item;
+                for( it = local_calendar.begin(); it != local_calendar.end(); ++it ) {
+                }
+                break; }
+            case ALC_SYNC_TODO: {
+                AlcatelTodoList::Iterator it;
+                AlcatelTodo *item;
+                for( it = local_todos.begin(); it != local_todos.end(); ++it ) {
+                }
+                break; }
+            case ALC_SYNC_CONTACTS: {
+                AlcatelContactList::Iterator it;
+                AlcatelContact *item;
+                for( it = local_contacts.begin(); it != local_contacts.end(); /*++it*/ ) {
+                    if ((item = getContactByPrevId(contacts, (*it).Id, (*it).Storage))) {
+                        if (item == NULL) {
+                            ::message(MSG_DEBUG, "MERGE:None correspondent record found (NULL) (%s)", item->Name().latin1());
+                            contacts->append((*it));
+                            it = local_contacts.remove(it);
+                        } else if (!(*item == *it)) {
+                            ::message(MSG_DEBUG, "MERGE:Something different -> merging (%s)", item->Name().latin1());
+                            if (win->mergeData == 0) {
+                                contacts->append((*it));
+                                it = local_contacts.remove(it);
+                                contacts->remove(*item);
+                            } else if (win->mergeData == 1) {
+                                it = local_contacts.remove(it);
+                            } else if (win->mergeData == 2) {
+                                AlcatelContact *cont = win->solveConflict(*it, *item);
+                                if (cont == NULL) {
+                                    contacts->append((*it));
+                                    it = local_contacts.remove(it);
+                                } else {
+                                    contacts->remove(*item);
+                                    contacts->append(*cont);
+                                    it = local_contacts.remove(it);
+                                }
+                            }
+                        } else {
+                            ::message(MSG_DEBUG, "MERGE:Same records (%s)", item->Name().latin1());
+                            contacts->remove(*item);
+                            contacts->append((*it));
+                            it = local_contacts.remove(it);
+                        }
+                    } else {
+                        ::message(MSG_DEBUG, "MERGE:None correspondent record found (%s)", (*it).Name().latin1());
+                        contacts->append((*it));
+                        it = local_contacts.remove(it);
+                    }
+                }
+                break; }
+        }
+    }
+
     return true;
 }
 

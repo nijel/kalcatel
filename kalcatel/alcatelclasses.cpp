@@ -470,3 +470,131 @@ void clearCategories(AlcatelCategoryList *list, AlcatelStorage type) {
             it++;
     }
 }
+
+AlcatelMessage *getMessageByPrevPrevId(AlcatelMessageList *list, int id, AlcatelStorage type) {
+    AlcatelMessageList::Iterator it;
+    for( it = list->begin(); it != list->end(); ++it ) {
+        if ((* it).PrevId == id && (* it).PrevStorage == type)
+            return &(*it);
+    }
+    return NULL;
+}
+
+AlcatelCategory *getCategoryByPrevId(AlcatelCategoryList *list, int id, AlcatelStorage type) {
+    AlcatelCategoryList::Iterator it;
+    for( it = list->begin(); it != list->end(); ++it ) {
+        if ((* it).PrevId == id && (* it).PrevStorage == type)
+            return &(*it);
+    }
+    return NULL;
+}
+
+AlcatelContact *getContactByPrevId(AlcatelContactList *list, int id, AlcatelStorage type) {
+    AlcatelContactList::Iterator it;
+    for( it = list->begin(); it != list->end(); ++it ) {
+        if ((* it).PrevId == id && (* it).PrevStorage == type)
+            return &(*it);
+    }
+    return NULL;
+}
+
+AlcatelTodo *getTodoByPrevId(AlcatelTodoList *list, int id, AlcatelStorage type) {
+    AlcatelTodoList::Iterator it;
+    for( it = list->begin(); it != list->end(); ++it ) {
+        if ((* it).PrevId == id && (* it).PrevStorage == type)
+            return &(*it);
+    }
+    return NULL;
+}
+	
+AlcatelCalendar *getCalendarByPrevId(AlcatelCalendarList *list, int id, AlcatelStorage type) {
+    AlcatelCalendarList::Iterator it;
+    for( it = list->begin(); it != list->end(); ++it ) {
+        if ((* it).PrevId == id && (* it).PrevStorage == type)
+            return &(*it);
+    }
+    return NULL;
+}
+
+bool AlcatelCalendar::operator==(const AlcatelCalendar &cmp) {
+    return
+        (Date == cmp.Date) &&
+        (StartTime == cmp.StartTime) &&
+        (EndTime == cmp.EndTime) &&
+        (Alarm == cmp.Alarm) &&
+        (Subject == cmp.Subject) &&
+        (Private == cmp.Private) &&
+        (EventType == cmp.EventType) &&
+        (ContactID == cmp.ContactID) &&
+        (DayOfWeek == cmp.DayOfWeek) &&
+        (Day == cmp.Day) &&
+        (WeekOfMonth == cmp.WeekOfMonth) &&
+        (Month == cmp.Month) &&
+        (Frequency == cmp.Frequency) &&
+        (StartDate == cmp.StartDate) &&
+        (StopDate == cmp.StopDate) &&
+        (Alarm2 == cmp.Alarm2);
+}
+
+bool AlcatelTodo::operator==(const AlcatelTodo &cmp) {
+    return
+        (DueDate == cmp.DueDate) &&
+        (Completed == cmp.Completed) &&
+        (Alarm == cmp.Alarm) &&
+        (Subject == cmp.Subject) &&
+        (Private == cmp.Private) &&
+        (Category == cmp.Category) &&
+        (Priority == cmp.Priority) &&
+        (ContactID == cmp.ContactID);
+}
+
+bool AlcatelContact::operator==(const AlcatelContact &cmp) {
+    return
+        (LastName == cmp.LastName) &&
+        (FirstName == cmp.FirstName) &&
+        (Company == cmp.Company) &&
+        (JobTitle == cmp.JobTitle) &&
+        (Note == cmp.Note) &&
+        (Category == cmp.Category) &&
+        (Private == cmp.Private) &&
+        (WorkNumber == cmp.WorkNumber) &&
+        (MainNumber == cmp.MainNumber) &&
+        (FaxNumber == cmp.FaxNumber) &&
+        (OtherNumber == cmp.OtherNumber) &&
+        (PagerNumber == cmp.PagerNumber) &&
+        (MobileNumber == cmp.MobileNumber) &&
+        (HomeNumber == cmp.HomeNumber) &&
+        (Email1 == cmp.Email1) &&
+        (Email2 == cmp.Email2) &&
+        (Address == cmp.Address) &&
+        (City == cmp.City) &&
+        (State == cmp.State) &&
+        (Zip == cmp.Zip) &&
+        (Country == cmp.Country) &&
+        (Custom1 == cmp.Custom1) &&
+        (Custom2 == cmp.Custom2) &&
+        (Custom3 == cmp.Custom3) &&
+        (Custom4 == cmp.Custom4);
+}
+
+bool AlcatelCategory::operator==(const AlcatelCategory &cmp) {
+    return Name==cmp.Name;
+}
+
+bool AlcatelMessage::operator==(const AlcatelMessage &cmp) {
+    return
+        (Status == cmp.Status) &&
+        (Length == cmp.Length) &&
+        (strcmp(Raw, cmp.Raw) == 0) &&
+        (Sender == cmp.Sender) &&
+        (Date == cmp.Date) &&
+        (Text == cmp.Text) &&
+        (SMSC == cmp.SMSC);
+}
+
+bool AlcatelCall::operator==(const AlcatelCall &cmp) {
+    return
+        (Type == cmp.Type) &&
+        (Number == cmp.Number) &&
+        (Name == cmp.Name);
+}

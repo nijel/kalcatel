@@ -92,10 +92,17 @@ class KAlcatelApp : public KMainWindow
     int mobile_debug;
     bool auto_open_last;
     KURL last_file;
+
     int mergeData;
     int conflictAction;
 
     int contact_url;
+
+    AlcatelContact *solveConflict(const AlcatelContact &c1, const AlcatelContact &c2);
+    AlcatelMessage *solveConflict(const AlcatelMessage &c1, const AlcatelMessage &c2);
+    AlcatelCalendar *solveConflict(const AlcatelCalendar &c1, const AlcatelCalendar &c2);
+    AlcatelTodo *solveConflict(const AlcatelTodo &c1, const AlcatelTodo &c2);
+    AlcatelCategory *solveConflict(const AlcatelCategory &c1, const AlcatelCategory &c2);
 
   protected:
     /** save general Options like all bar positions and status as well as the geometry and the recent file list to the configuration

@@ -156,7 +156,8 @@ void KAlcatelApp::initStatusBar()
 void KAlcatelApp::initDocument() {
     doc = new KAlcatelDoc(this);
     if (auto_open_last && !last_file.isEmpty()) {
-        doc->openDocument(last_file);
+        if (!doc->openDocument(last_file))
+            doc->newDocument();
     } else {
         doc->newDocument();
     }
@@ -818,4 +819,24 @@ void KAlcatelApp::slotPreferencesToolbars() {
     if (dlg.exec()){
         createGUI();
     }
+}
+
+AlcatelContact *KAlcatelApp::solveConflict(const AlcatelContact &c1, const AlcatelContact &c2) {
+    return NULL;
+}
+
+AlcatelMessage *KAlcatelApp::solveConflict(const AlcatelMessage &c1, const AlcatelMessage &c2) {
+    return NULL;
+}
+
+AlcatelCalendar *KAlcatelApp::solveConflict(const AlcatelCalendar &c1, const AlcatelCalendar &c2) {
+    return NULL;
+}
+
+AlcatelTodo *KAlcatelApp::solveConflict(const AlcatelTodo &c1, const AlcatelTodo &c2) {
+    return NULL;
+}
+
+AlcatelCategory *KAlcatelApp::solveConflict(const AlcatelCategory &c1, const AlcatelCategory &c2) {
+    return NULL;
 }

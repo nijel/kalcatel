@@ -60,9 +60,6 @@ public:
     /** Previous storage of record (used only for StoragePC)
       */
 	AlcatelStorage PrevStorage;
-    /** Call type (used only for calls)
-      */
-    CallType Type;
     /** Whether record has been modified, used for saving into mobile.
       * Takes affect only fo StorageMobile and StorageSIM.
       */
@@ -86,6 +83,7 @@ public:
       */
 	void setField(int number, AlcatelFieldStruct *data);
 	
+    bool operator==(const AlcatelContact &cmp);
     /** returns formatted name of contact
       */
 	QString Name(void);
@@ -128,6 +126,7 @@ public:
       */
 	void setField(int number, AlcatelFieldStruct *data);
 	
+    bool operator==(const AlcatelCalendar &cmp);
     /** returns string with short information about repeating events
       */
 	QString Repeating(void);
@@ -168,6 +167,8 @@ public:
       */
 	void setField(int number, AlcatelFieldStruct *data);
 	
+    bool operator==(const AlcatelTodo &cmp);
+
     QDate DueDate;
     int Completed;
     QDateTime Alarm;
@@ -185,6 +186,8 @@ public:
 	AlcatelMessage();
 	~AlcatelMessage();
 	
+    bool operator==(const AlcatelMessage &cmp);
+
     int Status;
     int Length;
     char *Raw;
@@ -201,6 +204,9 @@ public:
 	AlcatelCall();
 	~AlcatelCall();
 	
+    bool operator==(const AlcatelCall &cmp);
+
+    CallType Type;
     QString Number;
     QString Name;
 };
@@ -214,6 +220,8 @@ public:
 	AlcatelCategory(char* name, int id, AlcatelStorage storage);
 	AlcatelCategory();
 	
+    bool operator==(const AlcatelCategory &cmp);
+
     QString Name;
 };
 
@@ -281,4 +289,19 @@ void clearCalls(AlcatelCallList *list, AlcatelStorage type);
   */
 void clearCategories(AlcatelCategoryList *list, AlcatelStorage type);
 
+/** find message by previous id
+  */
+AlcatelMessage *getMessageByPrevId(AlcatelMessageList *list, int id, AlcatelStorage type);
+/** returns category name
+  */
+AlcatelCategory *getCategoryByPrevId(AlcatelCategoryList *list, int id, AlcatelStorage type);
+/** find contact by previous id
+  */
+AlcatelContact *getContactByPrevId(AlcatelContactList *list, int id, AlcatelStorage type);
+/** find todo by previous id
+  */
+AlcatelTodo *getTodoByPrevId(AlcatelTodoList *list, int id, AlcatelStorage type);
+/** find calendar item by previous id
+  */
+AlcatelCalendar *getCalendarByPrevId(AlcatelCalendarList *list, int id, AlcatelStorage type);
 #endif

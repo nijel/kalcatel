@@ -526,6 +526,7 @@ void KAlcatelView::repaint() {
             contacts_list->clear();
             contacts_sim_list->clear();
             contacts_mobile_list->clear();
+            contacts_pc_list->clear();
 
             for (i=0; i<ALC_MAX_CATEGORIES; i++)
                 if (contacts_cat_list[i] !=  NULL) {

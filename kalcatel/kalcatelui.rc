@@ -1,8 +1,17 @@
 <!DOCTYPE kpartgui>
 <kpartgui name="kalcatel" version="0.1">
 <MenuBar>
-  <Menu name="file"><text>&amp;File</text>
+<!--  <Menu name="file"><text>&amp;File</text>
     <Action name="file_new_window"/>
+  </Menu>-->
+  <Menu name="mobile"><text>&amp;Mobile</text>
+    <Action name="file_read_mobile"/>
+    <Action name="file_read_mobile_contacts_sim"/>
+    <Action name="file_read_mobile_contacts_mobile"/>
+    <Action name="file_read_mobile_calendar"/>
+    <Action name="file_read_mobile_calls"/>
+    <Action name="file_read_mobile_sms"/>
+    <Action name="file_read_mobile_todo"/>
   </Menu>
 </MenuBar>
 </kpartgui>

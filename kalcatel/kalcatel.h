@@ -41,6 +41,12 @@
 #include <kaction.h>
 #include <kurl.h>
 
+#include "kalcateldoc.h"
+
+
+#define ID_STATUS_MSG 1
+#define ID_DETAIL_MSG 2
+
 // forward declaration of the KAlcatel classes
 class KAlcatelDoc;
 class KAlcatelView;
@@ -125,7 +131,15 @@ class KAlcatelApp : public KMainWindow
 
   public slots:
     /** open a new application window by creating a new instance of KAlcatelApp */
-    void slotFileNewWindow();
+//    void slotFileNewWindow();
+    /** reads data from mobile */
+    void slotFileReadMobileAll();
+    void slotFileReadMobileTodo();
+    void slotFileReadMobileSms();
+    void slotFileReadMobileCalendar();
+    void slotFileReadMobileCalls();
+    void slotFileReadMobileContactsSim();
+    void slotFileReadMobileContactsMobile();
     /** clears the document in the actual view to reuse it as the new document */
     void slotFileNew();
     /** open a file and load it into the document*/
@@ -163,7 +177,10 @@ class KAlcatelApp : public KMainWindow
     /** changes the statusbar contents for the standard label permanently, used to indicate current actions.
      * @param text the text that is displayed in the statusbar
      */
-    void slotStatusMsg(const QString &text);
+    void slotStatusMsg(const QString &text, int which = ID_STATUS_MSG, int clearDetail = true);
+    /** sets default details status message
+     */
+    void slotDefaultDetailMsg();
 
   private:
     /** the configuration object of the application */
@@ -178,9 +195,22 @@ class KAlcatelApp : public KMainWindow
      * information such as filename and does the serialization of your files.
      */
     KAlcatelDoc *doc;
+    /** main status text
+     */
+    QString statusText;
+    QString detailText;
 
     // KAction pointers to enable/disable actions
-    KAction* fileNewWindow;
+//    KAction* fileNewWindow;
+
+    KAction* fileReadMobileAll;
+    KAction* fileReadMobileTodo;
+    KAction* fileReadMobileSms;
+    KAction* fileReadMobileCalendar;
+    KAction* fileReadMobileCalls;
+    KAction* fileReadMobileContactsSim;
+    KAction* fileReadMobileContactsMobile;
+
     KAction* fileNew;
     KAction* fileOpen;
     KRecentFilesAction* fileOpenRecent;

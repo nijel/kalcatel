@@ -1,10 +1,11 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = kalcatel
-kalcatel_SOURCES = kalcatelview.cpp kalcateldoc.cpp kalcatel.cpp main.cpp 
-kalcatel_LDADD   =  $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KFILE)  $(LIBSOCKET)
+kalcatel_SOURCES = alcatelclasses.cpp kalcatelview.cpp kalcateldoc.cpp kalcatel.cpp main.cpp 
+kalcatel_LDADD   = ./alcatool/libalcatool.a  $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBSOCKET)
 
+SUBDIRS = alcatool 
 
-EXTRA_DIST = main.cpp kalcatel.cpp kalcatel.h kalcateldoc.cpp kalcateldoc.h kalcatelview.cpp kalcatelview.h kalcatelui.rc kalcatel.desktop lo32-app-kalcatel.png lo16-app-kalcatel.png 
+EXTRA_DIST = main.cpp kalcatel.cpp kalcatel.h kalcateldoc.cpp kalcateldoc.h kalcatelview.cpp kalcatelview.h kalcatelui.rc kalcatel.desktop lo32-app-kalcatel.png lo16-app-kalcatel.png alcatelclasses.cpp alcatelclasses.h 
 
 install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Applications/

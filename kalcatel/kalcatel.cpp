@@ -24,6 +24,8 @@
  *****************************************************************************/
 /* $Id$ */
 
+#include <unistd.h>
+
 // include files for QT
 #include <qdir.h>
 #include <qprinter.h>
@@ -44,8 +46,6 @@
 #include "kalcatelview.h"
 #include "kalcateldoc.h"
 
-#define ID_STATUS_MSG 1
-
 KAlcatelApp::KAlcatelApp(QWidget* , const char* name):KMainWindow(0, name)
 {
   config=kapp->config();
@@ -56,6 +56,8 @@ KAlcatelApp::KAlcatelApp(QWidget* , const char* name):KMainWindow(0, name)
   initActions();
   initDocument();
   initView();
+
+//  menuBar();
 	
   readOptions();
 
@@ -76,7 +78,16 @@ KAlcatelApp::~KAlcatelApp()
 
 void KAlcatelApp::initActions()
 {
-  fileNewWindow = new KAction(i18n("New &Window"), 0, 0, this, SLOT(slotFileNewWindow()), actionCollection(),"file_new_window");
+//  fileNewWindow = new KAction(i18n("New &Window"), 0, 0, this, SLOT(slotFileNewWindow()), actionCollection(),"file_new_window");
+
+  fileReadMobileAll = new KAction(i18n("&Read everything from mobile"), 0, 0, this, SLOT(slotFileReadMobileAll()), actionCollection(),"file_read_mobile");
+  fileReadMobileTodo = new KAction(i18n("Read &todos from mobile"), 0, 0, this, SLOT(slotFileReadMobileTodo()), actionCollection(),"file_read_mobile_todo");
+  fileReadMobileSms = new KAction(i18n("Read &SMSs from mobile"), 0, 0, this, SLOT(slotFileReadMobileSms()), actionCollection(),"file_read_mobile_sms");
+  fileReadMobileCalendar = new KAction(i18n("Read &calendar from mobile"), 0, 0, this, SLOT(slotFileReadMobileCalendar()), actionCollection(),"file_read_mobile_calendar");
+  fileReadMobileCalls = new KAction(i18n("Read c&alls from mobile"), 0, 0, this, SLOT(slotFileReadMobileCalls()), actionCollection(),"file_read_mobile_calls");
+  fileReadMobileContactsSim = new KAction(i18n("Read contacts (S&IM) from mobile"), 0, 0, this, SLOT(slotFileReadMobileContactsSim()), actionCollection(),"file_read_mobile_contacts_sim");
+  fileReadMobileContactsMobile = new KAction(i18n("Read contacts (m&obile) from mobile"), 0, 0, this, SLOT(slotFileReadMobileContactsMobile()), actionCollection(),"file_read_mobile_contacts_mobile");
+
   fileNew = KStdAction::openNew(this, SLOT(slotFileNew()), actionCollection());
   fileOpen = KStdAction::open(this, SLOT(slotFileOpen()), actionCollection());
   fileOpenRecent = KStdAction::openRecent(this, SLOT(slotFileOpenRecent(const KURL&)), actionCollection());
@@ -91,7 +102,7 @@ void KAlcatelApp::initActions()
   viewToolBar = KStdAction::showToolbar(this, SLOT(slotViewToolBar()), actionCollection());
   viewStatusBar = KStdAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
 
-  fileNewWindow->setStatusText(i18n("Opens a new application window"));
+//  fileNewWindow->setStatusText(i18n("Opens a new application window"));
   fileNew->setStatusText(i18n("Creates a new document"));
   fileOpen->setStatusText(i18n("Opens an existing document"));
   fileOpenRecent->setStatusText(i18n("Opens a recently used file"));
@@ -117,7 +128,11 @@ void KAlcatelApp::initStatusBar()
   ///////////////////////////////////////////////////////////////////
   // STATUSBAR
   // TODO: add your own items you need for displaying current application status.
-  statusBar()->insertItem(i18n("Ready."), ID_STATUS_MSG);
+/*  KStatusBar *bar = statusBar();
+  bar->insertItem(i18n("Ready."), ID_STATUS_MSG, 1);
+  bar->setItemAlignment(ID_STATUS_MSG, AlignLeft);
+  bar->insertItem(I18N_NOOP("KAlcatel"), ID_DETAIL_MSG, 1);
+  bar->setItemAlignment(ID_DETAIL_MSG, AlignLeft);*/
 }
 
 void KAlcatelApp::initDocument()
@@ -259,6 +274,7 @@ bool KAlcatelApp::queryExit()
 // SLOT IMPLEMENTATION
 /////////////////////////////////////////////////////////////////////
 
+/*
 void KAlcatelApp::slotFileNewWindow()
 {
   slotStatusMsg(i18n("Opening a new application window..."));
@@ -266,6 +282,56 @@ void KAlcatelApp::slotFileNewWindow()
   KAlcatelApp *new_window= new KAlcatelApp();
   new_window->show();
 
+  slotStatusMsg(i18n("Ready."));
+}
+*/
+
+void KAlcatelApp::slotFileReadMobileAll()
+{
+  slotStatusMsg(i18n("Reading data from mobile..."));
+  doc->readMobile(alcatel_read_all,-1);
+  slotStatusMsg(i18n("Ready."));
+}
+
+void KAlcatelApp::slotFileReadMobileTodo()
+{
+  slotStatusMsg(i18n("Reading data from mobile..."));
+  doc->readMobile(alcatel_read_todo,-1);
+  slotStatusMsg(i18n("Ready."));
+}
+
+void KAlcatelApp::slotFileReadMobileContactsSim()
+{
+  slotStatusMsg(i18n("Reading data from mobile..."));
+  doc->readMobile(alcatel_read_contacts_sim,-1);
+  slotStatusMsg(i18n("Ready."));
+}
+
+void KAlcatelApp::slotFileReadMobileContactsMobile()
+{
+  slotStatusMsg(i18n("Reading data from mobile..."));
+  doc->readMobile(alcatel_read_contacts_mobile,-1);
+  slotStatusMsg(i18n("Ready."));
+}
+
+void KAlcatelApp::slotFileReadMobileCalendar()
+{
+  slotStatusMsg(i18n("Reading data from mobile..."));
+  doc->readMobile(alcatel_read_calendar,-1);
+  slotStatusMsg(i18n("Ready."));
+}
+
+void KAlcatelApp::slotFileReadMobileCalls()
+{
+  slotStatusMsg(i18n("Reading data from mobile..."));
+  doc->readMobile(alcatel_read_calls,-1);
+  slotStatusMsg(i18n("Ready."));
+}
+
+void KAlcatelApp::slotFileReadMobileSms()
+{
+  slotStatusMsg(i18n("Reading data from mobile..."));
+  doc->readMobile(alcatel_read_sms,-1);
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -299,7 +365,7 @@ void KAlcatelApp::slotFileOpen()
   else
   {	
     KURL url=KFileDialog::getOpenURL(QString::null,
-        i18n("*|All files"), this, i18n("Open File..."));
+        i18n("*.kalc|KAlcatel files\n*|All files"), this, i18n("Open File..."));
     if(!url.isEmpty())
     {
       doc->openDocument(url);
@@ -368,7 +434,7 @@ void KAlcatelApp::slotFilePrint()
   QPrinter printer;
   if (printer.setup(this))
   {
-    view->print(&printer);
+//    view->print(&printer);
   }
 
   slotStatusMsg(i18n("Ready."));
@@ -449,11 +515,45 @@ void KAlcatelApp::slotViewStatusBar()
 }
 
 
-void KAlcatelApp::slotStatusMsg(const QString &text)
+void KAlcatelApp::slotStatusMsg(const QString &text, int which = ID_STATUS_MSG, int clearDetail = true)
+{
+  ///////////////////////////////////////////////////////////////////
+  // change status message permanently
+  QString *msg = new QString();
+  statusBar()->clear();
+  if (which == ID_STATUS_MSG) {
+        statusText = text;
+        msg->append(text);
+        if (!clearDetail) {
+            msg->append(I18N_NOOP("("));
+            msg->append(detailText);
+            msg->append(I18N_NOOP(")"));
+        }
+  } else {
+        detailText = text;
+        msg->append(statusText);
+        msg->append(I18N_NOOP("("));
+        msg->append(text);
+        msg->append(I18N_NOOP(")"));
+  }
+//  statusBar()->changeItem(text, which);
+  setDisabled(true);
+  statusBar()->message(*msg);
+  setUpdatesEnabled(TRUE);
+  statusBar()->repaint();
+  statusBar()->update();
+  repaint();
+  update();
+  setEnabled(true);
+}
+
+void KAlcatelApp::slotDefaultDetailMsg()
 {
   ///////////////////////////////////////////////////////////////////
   // change status message permanently
   statusBar()->clear();
-  statusBar()->changeItem(text, ID_STATUS_MSG);
+//  statusBar()->changeItem(I18N_NOOP("KAlcatel"), ID_DETAIL_MSG);
+//  statusBar()->message(text);
 }
+
 

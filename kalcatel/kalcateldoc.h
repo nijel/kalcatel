@@ -35,12 +35,26 @@
 #include <qobject.h>
 #include <qstring.h>
 #include <qlist.h>
+#include <qstringlist.h>
 
 // include files for KDE
 #include <kurl.h>
 
+#include "alcatelclasses.h"
+
+typedef enum {
+    alcatel_read_all,
+    alcatel_read_todo,
+    alcatel_read_sms,
+    alcatel_read_calendar,
+    alcatel_read_calls,
+    alcatel_read_contacts_sim,
+    alcatel_read_contacts_mobile
+    } AlcReadType;
+
 // forward declaration of the KAlcatel classes
 class KAlcatelView;
+class KAlcatelApp;
 
 /**	KAlcatelDoc provides a document object for a document-view model.
   *
@@ -77,6 +91,8 @@ class KAlcatelDoc : public QObject
     bool newDocument();
     /** closes the acutal document */
     void closeDocument();
+    /** reads content from mobile */
+    bool readMobile(AlcReadType what = alcatel_read_all, int category = -1);
     /** loads the document by filename and format and emits the updateViews() signal */
     bool openDocument(const KURL& url, const char *format=0);
     /** saves the document under filename and format.*/	
@@ -100,6 +116,9 @@ class KAlcatelDoc : public QObject
     /** the modified flag of the current document */
     bool modified;
     KURL doc_url;
+    QStringList todo_cats;
+    QStringList contact_cats;
+    AlcatelContactList contacts;
 };
 
 #endif // KALCATELDOC_H

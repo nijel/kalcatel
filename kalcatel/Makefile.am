@@ -1,5 +1,8 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = kalcatel
+
+## INCLUDES were found outside kdevelop specific part
+
 kalcatel_SOURCES = selectcontactdialog.cpp timevalidator.cpp edittododialog.cpp kalcatellistview.cpp phonenumbervalidator.cpp editcontactdialog.cpp signalled.cpp signallabel.cpp editmessagedialog.cpp kalcatelmergedialog.cpp kalcatelviewitem.cpp kalcateltreeviewitem.cpp kalcatelconfigdialog.cpp alcatelclasses.cpp kalcatelview.cpp kalcateldoc.cpp kalcatel.cpp main.cpp 
 kalcatel_LDADD   = ./alcatool/libalcatool.a  $(LIB_KFILE) $(LIB_KHTML) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBSOCKET)
 

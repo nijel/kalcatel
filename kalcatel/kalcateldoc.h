@@ -145,7 +145,7 @@ class KAlcatelDoc : public QObject
     void updateDocument(AlcDataType which);
     /** commits changes to mobile
      */
-    void commitChanges();
+    bool commitChanges();
 
   public slots:
     /** calls repaint() on all views connected to the document object and is called by the view by which the document has been changed.

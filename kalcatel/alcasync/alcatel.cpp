@@ -737,10 +737,12 @@ int alcatel_create_obj_list_item(alc_type type, alc_type list, char *item) {
 
 int alcatel_commit(alc_type type) {
     alc_type buffer[] = {0x00, 0x04, type, 0x20, 0x01 };
-//                                                      ^^^^
+//                                               ^^^^
 // this is session id, but this software currently supports only one session...
     alc_type *data;
     int result;
+
+    message(MSG_DEBUG, "Commiting record");
 
     alcatel_send_packet(ALC_DATA, buffer, 5); 
     free(alcatel_recv_ack(ALC_ACK));
@@ -860,6 +862,9 @@ bool alcatel_create_field(alc_type type, int field, AlcatelFieldStruct *data) {
     alc_type buffer[180] = {0x00, 0x04, type, 0x25, 0x01, 0x65, 0x00 /* length of remaining part */, (field & 0xff), 0x37 /* here follows data */};
     alc_type *answer;
     bool result;
+
+    if (data->type == _string || data->type == _phone)
+        message(MSG_DEBUG, "Create (%d) %s", field, data->data);
     
     switch (data->type) {
         case _date:

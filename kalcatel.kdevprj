@@ -25,14 +25,16 @@ type=DATA
 [Config for BinMakefileAm]
 addcxxflags=
 bin_program=kalcatel
-cxxflags=\s-O0 -g3 -Wall
+cflags=
+cppflags=
+cxxflags=\s-O0 -pg -g3 -Wall
 ldadd=\s$(LIB_KFILE) $(LIB_KHTML) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
-ldflags=
+ldflags=\s \s
 
 [General]
 AMChanged=false
 author=Michal Cihar
-configure_args=--prefix=/usr
+configure_args=\s--build=i386-linux --host=i386-linux --target=i386-linux --prefix=/usr --disable-debug --enable-debug\s
 debug_args=
 email=cihar@email.cz
 kdevprj_version=1.3
@@ -62,7 +64,7 @@ kpp_icon=0
 kpp_license=5
 kpp_summary=
 kpp_url=http://cihar.liten.cz
-kpp_version=0.1
+kpp_version=0.3
 
 [LFV Groups]
 GNU=AUTHORS,COPYING,ChangeLog,INSTALL,README,TODO,NEWS

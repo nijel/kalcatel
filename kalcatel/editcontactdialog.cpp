@@ -380,8 +380,12 @@ void EditContactDialog::slotOK() {
     if (contact == NULL) {
         // insert new item
         cont.Modified = true;
-        cont.Created = true;
-        if (cont.Storage == StoragePC) cont.Id = theDoc->getPCStorageId();
+        if (cont.Storage == StoragePC) {
+            cont.Id = theDoc->getPCStorageId();
+        } else {
+            // as created are flaged only these which will be commited into mobile
+            cont.Created = true;
+        }
         list->append(cont);
         theDoc->updateDocument(alcatel_contacts);
     } else {

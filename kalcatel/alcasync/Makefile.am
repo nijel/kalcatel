@@ -1,10 +1,9 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
+noinst_LIBRARIES = libalcatool.a
 
 INCLUDES = $(all_includes)
 
 libalcatool_a_METASOURCES = AUTO
-
-noinst_LIBRARIES = libalcatool.a
 
 libalcatool_a_SOURCES = contacts.cpp sms.cpp pdu.cpp modem.cpp mobile_info.cpp logging.cpp common.cpp charset.cpp alcatel.cpp 
 

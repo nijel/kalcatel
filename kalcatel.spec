@@ -1,33 +1,32 @@
 # This spec file was generated using Kpp
 # If you find any problems with this spec file please report
 # the error to ian geiser <geiseri@msoe.edu>
-Summary:   KDE application to manage Alcatel 50x and 70x phone
+Summary:   
 Name:      kalcatel
-Version:   0.2.1
-Release:   1
+Version:   0.3
+Release:   0.1
 Copyright: GPL
 Vendor:    Michal Cihar <cihar@email.cz>
 Url:       http://cihar.liten.cz
+Icon:      icon32x32.png
 Packager:  Michal Cihar <cihar@email.cz>
 Group:     Applications
-Source:    kalcatel-0.2.1.tar.gz
-BuildRoot: /var/tmp/%{name}-%{version}-%{release}-root
+Source:    kalcatel-0.3.tar.gz
+BuildRoot: 
 
 %description
-This application allows you to manage messages, calls, contacts, todos and
-calendar in your Alcatel One Touch 50x and 70x mobile. In fact currently is in
-this gui supported just reading, but full functionality will be coded in near
-future.
+This application allows you to manage calls, messages, contacts,
+todos and calendar in your Alcatel One Touch 50x and 70x mobile.
 
-Protocol used by this phone is binary and not documented, so this program
-could not guarantee any functionality in your case, but it works well for me.
+Protocol used by this phone is binary and not documented
+so this program could not guarantee any functionality in your case
+but it works well for me.
 
 %prep
 %setup
 CFLAGS="$RPM_OPT_FLAGS" CXXFLAGS="$RPM_OPT_FLAGS" ./configure \
-                --prefix=/usr \
+                 --prefix=/usr \
                 $LOCALFLAGS
-
 %build
 # Setup for parallel builds
 numprocs=`egrep -c ^cpu[0-9]+ /proc/stat || :`

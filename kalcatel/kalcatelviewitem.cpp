@@ -69,7 +69,8 @@ QString KAlcatelMessageViewItem::key ( int column, bool ascending ) const {
     if (column == 0) {
         if (alcatelData->Deleted) return "1";
         if (alcatelData->Modified) return "2";
-        return "0";
+        if (alcatelData->Storage == StoragePC) return "3";
+        return "4";
     } else if (column == 4) {
         QString tmpString;
         QDateTime epoch( QDate(1970,1,1), QTime(0,0) );
@@ -117,7 +118,8 @@ QString KAlcatelMessageCatViewItem::key ( int column, bool ascending ) const {
     if (column == 0) {
         if (alcatelData->Deleted) return "1";
         if (alcatelData->Modified) return "2";
-        return "0";
+        if (alcatelData->Storage == StoragePC) return "3";
+        return "4";
     } else if (column == 3) {
         QString tmpString;
         QDateTime epoch( QDate(1970,1,1), QTime(0,0) );
@@ -164,7 +166,8 @@ QString KAlcatelCallViewItem::key ( int column, bool ascending ) const {
     if (column == 0) {
         if (alcatelData->Deleted) return "1";
         if (alcatelData->Modified) return "2";
-        return "0";
+        if (alcatelData->Storage == StoragePC) return "3";
+        return "4";
     } else if (column == 4) {
         QString tmpString;
         tmpString.sprintf( position_type, alcatelData->Storage, alcatelData->Id );
@@ -205,7 +208,8 @@ QString KAlcatelCallCatViewItem::key ( int column, bool ascending ) const {
     if (column == 0) {
         if (alcatelData->Deleted) return "1";
         if (alcatelData->Modified) return "2";
-        return "0";
+        if (alcatelData->Storage == StoragePC) return "3";
+        return "4";
     } else if (column == 4) {
         QString tmpString;
         tmpString.sprintf( position_type, alcatelData->Storage, alcatelData->Id );
@@ -244,7 +248,8 @@ QString KAlcatelTodoViewItem::key ( int column, bool ascending ) const {
     if (column == 0) {
         if (alcatelData->Deleted) return "1";
         if (alcatelData->Modified) return "2";
-        return "0";
+        if (alcatelData->Storage == StoragePC) return "3";
+        return "4";
     } else if (column == 2) {
         QString tmpString;
         tmpString.sprintf( "%d", 3 - ((AlcatelTodo *)alcatelData)->Priority );
@@ -290,7 +295,8 @@ QString KAlcatelTodoCatViewItem::key ( int column, bool ascending ) const {
     if (column == 0) {
         if (alcatelData->Deleted) return "1";
         if (alcatelData->Modified) return "2";
-        return "0";
+        if (alcatelData->Storage == StoragePC) return "3";
+        return "4";
     } else if (column == 2) {
         QString tmpString;
         tmpString.sprintf( "%d", 3 - ((AlcatelTodo *)alcatelData)->Priority );
@@ -340,7 +346,8 @@ QString KAlcatelContactViewItem::key ( int column, bool ascending ) const {
     if (column == 0) {
         if (alcatelData->Deleted) return "1";
         if (alcatelData->Modified) return "2";
-        return "0";
+        if (alcatelData->Storage == StoragePC) return "3";
+        return "4";
     } else if (column == 3) {
         QString tmpString;
         tmpString.sprintf( position_type, alcatelData->Storage, alcatelData->Id );
@@ -380,7 +387,8 @@ QString KAlcatelContactMobileViewItem::key ( int column, bool ascending ) const 
     if (column == 0) {
         if (alcatelData->Deleted) return "1";
         if (alcatelData->Modified) return "2";
-        return "0";
+        if (alcatelData->Storage == StoragePC) return "3";
+        return "4";
     } else if (column == 8) {
         QString tmpString;
         tmpString.sprintf( position_type, alcatelData->Storage, alcatelData->Id );
@@ -418,7 +426,8 @@ QString KAlcatelContactMobileCatViewItem::key ( int column, bool ascending ) con
     if (column == 0) {
         if (alcatelData->Deleted) return "1";
         if (alcatelData->Modified) return "2";
-        return "0";
+        if (alcatelData->Storage == StoragePC) return "3";
+        return "4";
     } else if (column == 7) {
         QString tmpString;
         tmpString.sprintf( position_type, alcatelData->Storage, alcatelData->Id );
@@ -452,7 +461,8 @@ QString KAlcatelContactSIMViewItem::key ( int column, bool ascending ) const {
     if (column == 0) {
         if (alcatelData->Deleted) return "1";
         if (alcatelData->Modified) return "2";
-        return "0";
+        if (alcatelData->Storage == StoragePC) return "3";
+        return "4";
     } else if (column == 3) {
         QString tmpString;
         tmpString.sprintf( position_type, alcatelData->Storage, alcatelData->Id );
@@ -492,7 +502,8 @@ QString KAlcatelCalendarViewItem::key ( int column, bool ascending ) const {
     if (column == 0) {
         if (alcatelData->Deleted) return "1";
         if (alcatelData->Modified) return "2";
-        return "0";
+        if (alcatelData->Storage == StoragePC) return "3";
+        return "4";
     } else if (column == 1) {
         QString tmpString;
         if (((AlcatelCalendar *)alcatelData)->Date.isNull())

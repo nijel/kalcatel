@@ -63,6 +63,8 @@
 #include "alcatool/sms.h"
 #include "alcatool/logging.h"
 
+#include "editcontactdialog.h"
+
 KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : QWidget(parent, name) {
     int i;
 
@@ -170,23 +172,28 @@ KAlcatelView::KAlcatelView(QWidget *parent, const char *name) : QWidget(parent, 
 
     widgetstack->addWidget( contacts_list = createListView( widgetstack, alc_contacts ), ID_CONTACTS );
     connect( contacts_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
+    connect( contacts_list, SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotContactDoubleClicked(QListViewItem *) ) );
     contacts_item = new KAlcatelTreeViewItem(kalcatel_item, i18n("Contacts"), SmallIcon("kalcatel-contact.png"), ID_CONTACTS );
 
     widgetstack->addWidget( contacts_cat_list = createListView( widgetstack, alc_contacts_mobile ), ID_CONTACTS_MOBILE );
     connect( contacts_cat_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
+    connect( contacts_cat_list, SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotContactDoubleClicked(QListViewItem *) ) );
 /* TODO: here should be another icon v*/
     contacts_cat_item = new KAlcatelTreeViewItem(contacts_item, i18n("Categories"), SmallIcon("kalcatel-contact-mobile.png"), ID_CONTACTS_MOBILE );
 
     widgetstack->addWidget( contacts_sim_list = createListView( widgetstack, alc_contacts_sim ), ID_CONTACTS_SIM );
     connect( contacts_sim_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
+    connect( contacts_sim_list, SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotContactDoubleClicked(QListViewItem *) ) );
     contacts_sim_item = new KAlcatelTreeViewItem(contacts_item, i18n("SIM"), SmallIcon("kalcatel-contact-sim.png"), ID_CONTACTS_SIM );
 
     widgetstack->addWidget( calendar_list = createListView( widgetstack, alc_calendar ), ID_CALENDAR );
     connect( calendar_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotCalendarChanged(QListViewItem *) ) );
+    connect( calendar_list, SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotCalendarDoubleClicked(QListViewItem *) ) );
     calendar_item = new KAlcatelTreeViewItem(kalcatel_item, i18n("Calendar"), SmallIcon("kalcatel-calendar.png"), ID_CALENDAR );
 
     widgetstack->addWidget( todo_list = createListView( widgetstack, alc_todos ), ID_TODOS );
     connect( todo_list, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotTodoChanged(QListViewItem *) ) );
+    connect( todo_list, SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotTodoDoubleClicked(QListViewItem *) ) );
     todo_item = new KAlcatelTreeViewItem(kalcatel_item, i18n("Todos"), SmallIcon("kalcatel-todo.png"), ID_TODOS );
 
     repaint();
@@ -379,6 +386,7 @@ void KAlcatelView::repaint() {
                 widgetstack->addWidget(todo_cat_lists[(*c_it).Id] = createListView(widgetstack, alc_todos_cat), ID_TODOS_CAT + (*c_it).Id );
                 new KAlcatelTreeViewItem(todo_item, (*c_it).Name, SmallIcon("kalcatel-todo.png"), ID_TODOS_CAT + (*c_it).Id );
                 connect( todo_cat_lists[(*c_it).Id], SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotTodoChanged(QListViewItem *) ) );
+                connect( todo_cat_lists[(*c_it).Id], SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotTodoDoubleClicked(QListViewItem *) ) );
             }
 
             AlcatelTodoList::Iterator it;
@@ -489,6 +497,7 @@ void KAlcatelView::repaint() {
                 widgetstack->addWidget(contacts_cat_lists[(*c_it).Id] = createListView(widgetstack, alc_contacts_mobile_cat), ID_CONTACTS_CAT + (*c_it).Id );
                 new KAlcatelTreeViewItem(contacts_cat_item, (*c_it).Name, SmallIcon("kalcatel-contact-mobile.png"), ID_CONTACTS_CAT + (*c_it).Id );
                 connect( contacts_cat_lists[(*c_it).Id], SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
+                connect( contacts_cat_lists[(*c_it).Id], SIGNAL( doubleClicked( QListViewItem * ) ), this, SLOT( slotContactDoubleClicked(QListViewItem *) ) );
             }
 
             AlcatelContactList::Iterator it;
@@ -935,3 +944,16 @@ void KAlcatelView::slotMailClick(const QString &name, const QString &address) {
     KApplication::kApplication()->invokeMailer(address);
 }
 
+
+void KAlcatelView::slotTodoDoubleClicked(QListViewItem *item) {
+}
+
+void KAlcatelView::slotCalendarDoubleClicked(QListViewItem *item) {
+}
+
+void KAlcatelView::slotContactDoubleClicked(QListViewItem *item) {
+    if (item != NULL) {
+        EditContactDialog edit((AlcatelContact *)(((KAlcatelDataItem *) item)->alcatelData), this);
+        edit.exec();
+    }
+}

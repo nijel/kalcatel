@@ -1125,7 +1125,9 @@ bool KAlcatelDoc::saveDocument(const KURL& url, const char *format /*=0*/) {
                 *strm << "   <id>" << (*callit).PrevId << "</id>" << endl;
                 *strm << "   <storage>" << (*callit).PrevStorage << "</storage>" << endl;
             }
-            *strm << "   <name>" << (*callit).Name.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</name>" << endl;
+            if (!(*callit).Name.isEmpty()) {
+                *strm << "   <name>" << (*callit).Name.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</name>" << endl;
+            }
             *strm << "   <number>" << (*callit).Number.replace(rlt, "&lt;").replace(rgt, "&gt;") << "</number>" << endl;
             *strm << "   <type>" << (*callit).Type << "</type>" << endl;
             *strm << "  </call>" << endl;

@@ -522,6 +522,7 @@ AlcatelCall *getCallByPrevId(AlcatelCallList *list, int id, AlcatelStorage stype
     return NULL;
 }
 
+/* TODO: add isNull to all date/time comparsion */
 bool AlcatelCalendar::operator==(const AlcatelCalendar &cmp) {
     return
         (Id == cmp.Id) &&

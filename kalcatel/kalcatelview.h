@@ -133,12 +133,16 @@ class KAlcatelView : public QWidget {
     void slotContactChanged(QListViewItem *item);
     void slotCallChanged(QListViewItem *item);
 
+    void slotTodoDoubleClicked(QListViewItem *item);
+    void slotCalendarDoubleClicked(QListViewItem *item);
+    void slotContactDoubleClicked(QListViewItem *item);
+
     void slotShowCall(AlcatelCall *what);
     void slotShowMessage(AlcatelMessage *what);
     void slotShowContact(AlcatelContact *what);
     void slotShowTodo(AlcatelTodo *what);
     void slotShowCalendar( AlcatelCalendar *what);
-	
+
   private:
     QSplitter *vsplitter, *hsplitter;
     QVBox *listwidget;

@@ -43,6 +43,7 @@
 #include <kmessagebox.h>
 
 #include "editmessagedialog.h"
+#include "phonenumbervalidator.h"
 #include "kalcatel.h"
 
 #include "alcatool/pdu.h"
@@ -97,6 +98,7 @@ EditMessageDialog::EditMessageDialog(QWidget *parent, const char *name ) : KDial
     mainLayout->addWidget(label, 3,0);
 
     sendToCombo = new KComboBox(true, this);
+    sendToCombo->setValidator(new PhoneNumberValidator(false, true, sendToCombo));
     mainLayout->addMultiCellWidget(sendToCombo,3,3,1,3);
     QWhatsThis::add(sendToCombo ,i18n("<b>Send to number(s)</b><br>Enter here number(s) of receivers of this message, more numbers should be separated with space, comma or semicolon."));
 
@@ -168,7 +170,6 @@ void EditMessageDialog::slotOK() {
     int i;
     QString msg;
     char pdu[1024];
-    QRegExp numbertest("^\\+?[0-9]*$");
     QStringList list = QStringList::split(QRegExp("[; ,]"), sendToCombo->currentText(), false);
 
     if (list.count() == 0 && sendCheck->isChecked()) {
@@ -197,7 +198,7 @@ void EditMessageDialog::slotOK() {
             }
         } else {
             for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it ) {
-                if (numbertest.find(*it, 0) == -1) {
+                if (PhoneNumberValidator::phoneNumberRegExp.find(*it, 0) == -1) {
                     KMessageBox::error(this, i18n("%1 doesn't look like phone number!").arg(*it), i18n("Error"));
                     msg.append(i18n("%1 desn't look like phone number!").arg(*it).append("<br>"));
                     failed++;
@@ -262,11 +263,12 @@ void EditMessageDialog::slotOK() {
             accept();
         } else {
             if (sendCheck->isChecked()){
-                msg.prepend(i18n("Sent %1 message(s), %2 failed.<br>").arg(sent).arg(s_failed));
+                msg.prepend(i18n("Sent %1 message(s), %2 failed during sending.<br>").arg(sent).arg(s_failed));
             }
             if (writeCheck->isChecked()){
-                msg.prepend(i18n("Written %1 message(s), %2 failed.<br>").arg(written).arg(w_failed));
+                msg.prepend(i18n("Written %1 message(s), %2 failed during writing.<br>").arg(written).arg(w_failed));
             }
+            msg.prepend(i18n("%1 message(s) failed!<br>").arg(failed));
             if (KMessageBox::questionYesNo(this,msg.append(i18n("<br>Do you want to edit that message again?"))) == KMessageBox::No)
                 accept();
         }

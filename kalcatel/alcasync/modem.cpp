@@ -128,7 +128,7 @@ int modem_cmd(const char* command,char* answer,int max,int timeout,const char* e
         readcount=read(modem,tmp,toread);
         if (tmp[0]=='\0' || readcount<0) readcount=0;
         tmp[readcount]=0;
-        strcat(answer,tmp);
+        strncat(answer,tmp,sizeof(answer)-1-strlen(answer) );
         count+=readcount;
         /* check if it's the expected answer */
         if ((strstr(answer,"OK\r")) ||
@@ -138,7 +138,7 @@ int modem_cmd(const char* command,char* answer,int max,int timeout,const char* e
             if (expect[0])
                 if (strstr(answer,expect))
                     found=1;
-		if (found==0) usleep(SLEEP_FAIL);
+        if (found==0) usleep(SLEEP_FAIL);
     }
     while ((found==0) && (counter<timeout));
 
@@ -151,7 +151,7 @@ int modem_cmd(const char* command,char* answer,int max,int timeout,const char* e
     if (readcount<0)
         readcount=0;
     tmp[readcount]=0;
-    strcat(answer,tmp);
+    strncat(answer,tmp,sizeof(answer)-1-strlen(answer));
     count+=readcount;
     message(MSG_DEBUG,"AT RECV: %s",reform(answer,0));
 
@@ -207,7 +207,7 @@ int modem_init(void) {
     if (initstring[0])
     {
         message(MSG_DETAIL,"Sending init: \"%s\"",initstring);
-        sprintf(command,"%s\r\n",initstring);
+        snprintf(command,sizeof(command)-1,"%s\r\n",initstring);
         modem_cmd(command,answer,sizeof(answer),50,NULL);
     }
 

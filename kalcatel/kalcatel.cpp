@@ -498,11 +498,11 @@ bool KAlcatelApp::modemConnect() {
 
     msg_level = mobile_debug;
 
-    strcpy(initstring, mobile_init);
-    strcpy(device, mobile_device);
+    strncpy(initstring, mobile_init, sizeof(initstring)-1);
+    strncpy(device, mobile_device, sizeof(device)-1);
     devname = strrchr(device, '/');
     devname++;
-    sprintf(lockname, mobile_lock, devname);
+    snprintf(lockname, sizeof(lockname)-1, mobile_lock, devname);
     rate = mobile_rate;
     modem_rtscts = mobile_rtscts;
 

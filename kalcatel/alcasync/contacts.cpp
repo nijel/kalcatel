@@ -123,9 +123,9 @@ ContactData *get_contacts(int from, int to) {
 int select_phonebook(const char *pbtype) {
     char answer[100], cmd[100];
 
-    sprintf(cmd, "AT+CPBS=\"%s\"\r\n", pbtype);
+    snprintf(cmd, sizeof(cmd)-1, "AT+CPBS=\"%s\"\r\n", pbtype);
     modem_cmd(cmd, answer, sizeof(answer), 50, NULL);
-	
-	if (strstr(answer, "ERROR") != NULL) return 0;
+
+    if (strstr(answer, "ERROR") != NULL) return 0;
 	return 1;
 }

@@ -14,4 +14,14 @@
     <Action name="file_read_mobile_todo"/>
   </Menu>
 </MenuBar>
+<ToolBar fullWidth="false" name="readToolBar" newline="true"><text>Read Toolbar</text>
+    <Action name="file_read_mobile"/>
+  <Separator/>
+    <Action name="file_read_mobile_contacts_sim"/>
+    <Action name="file_read_mobile_contacts_mobile"/>
+    <Action name="file_read_mobile_calendar"/>
+    <Action name="file_read_mobile_calls"/>
+    <Action name="file_read_mobile_sms"/>
+    <Action name="file_read_mobile_todo"/>
+</ToolBar>
 </kpartgui>

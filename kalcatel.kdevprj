@@ -24,14 +24,14 @@ ldadd=\s$(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
 ldflags=
 
 [General]
-AMChanged=false
+AMChanged=true
 author=Michal Cihar
 configure_args=--prefix=/usr
 email=cihar@email.cz
 kdevprj_version=1.3
 lfv_open_groups=
 make_options=\s-w -j1
-makefiles=Makefile.am,kalcatel/Makefile.am,doc/Makefile.am,doc/en/Makefile.am,po/Makefile.am,kalcatel/alcatool/Makefile.am,kalcatel/images/Makefile.am,kalcatel/images/items/Makefile.am
+makefiles=Makefile.am,kalcatel/Makefile.am,doc/Makefile.am,doc/en/Makefile.am,po/Makefile.am,kalcatel/alcatool/Makefile.am,kalcatel/images/Makefile.am,kalcatel/images/items-16x16/Makefile.am,kalcatel/images/items-22x22/Makefile.am
 modifyMakefiles=true
 project_name=KAlcatel
 project_type=normal_kde2
@@ -241,7 +241,7 @@ type=HEADER
 
 [kalcatel/images/Makefile.am]
 files=kalcatel/images/icon-16x16.png,kalcatel/images/icon-22x22.png,kalcatel/images/icon-32x32.png,kalcatel/images/icon-48x48.png
-sub_dirs=items
+sub_dirs=items-16x16,items-22x22
 type=normal
 
 [kalcatel/images/icon-16x16.png]
@@ -268,99 +268,152 @@ install=true
 install_location=$$(kde_icondir)/hicolor/48x48/apps/kalcatel.png
 type=DATA
 
-[kalcatel/images/items/Makefile.am]
-files=kalcatel/images/items/calendar.png,kalcatel/images/items/call-missed.png,kalcatel/images/items/call-outgoing.png,kalcatel/images/items/call-received.png,kalcatel/images/items/call.png,kalcatel/images/items/contact-mobile.png,kalcatel/images/items/contact-sim.png,kalcatel/images/items/contact.png,kalcatel/images/items/message-read.png,kalcatel/images/items/message-sent.png,kalcatel/images/items/message-unread.png,kalcatel/images/items/message-unsent.png,kalcatel/images/items/message.png,kalcatel/images/items/todo.png,kalcatel/images/items/mobile.png
+[kalcatel/images/items-16x16/Makefile.am]
+files=kalcatel/images/items-16x16/calendar.png,kalcatel/images/items-16x16/call-missed.png,kalcatel/images/items-16x16/call-outgoing.png,kalcatel/images/items-16x16/call-received.png,kalcatel/images/items-16x16/call.png,kalcatel/images/items-16x16/contact-mobile.png,kalcatel/images/items-16x16/contact-sim.png,kalcatel/images/items-16x16/contact.png,kalcatel/images/items-16x16/message-read.png,kalcatel/images/items-16x16/message-sent.png,kalcatel/images/items-16x16/message-unread.png,kalcatel/images/items-16x16/message-unsent.png,kalcatel/images/items-16x16/message.png,kalcatel/images/items-16x16/todo.png,kalcatel/images/items-16x16/mobile.png
 sub_dirs=
 type=normal
 
-[kalcatel/images/items/calendar.png]
+[kalcatel/images/items-16x16/calendar.png]
 dist=true
 install=true
-install_location=$$(kde_datadir)/kalcatel/pics/calendar.png
+install_location=$$(kde_icondir)/hicolor/16x16/actions/kalcatel-calendar.png
 type=DATA
 
-[kalcatel/images/items/call-missed.png]
+[kalcatel/images/items-16x16/call-missed.png]
 dist=true
 install=true
-install_location=$$(kde_datadir)/kalcatel/pics/call-missed.png
+install_location=$$(kde_icondir)/hicolor/16x16/actions/kalcatel-call-missed.png
 type=DATA
 
-[kalcatel/images/items/call-outgoing.png]
+[kalcatel/images/items-16x16/call-outgoing.png]
 dist=true
 install=true
-install_location=$$(kde_datadir)/kalcatel/pics/call-outgoing.png
+install_location=$$(kde_icondir)/hicolor/16x16/actions/kalcatel-call-outgoing.png
 type=DATA
 
-[kalcatel/images/items/call-received.png]
+[kalcatel/images/items-16x16/call-received.png]
 dist=true
 install=true
-install_location=$$(kde_datadir)/kalcatel/pics/call-received.png
+install_location=$$(kde_icondir)/hicolor/16x16/actions/kalcatel-call-received.png
 type=DATA
 
-[kalcatel/images/items/call.png]
+[kalcatel/images/items-16x16/call.png]
 dist=true
 install=true
-install_location=$$(kde_datadir)/kalcatel/pics/call.png
+install_location=$$(kde_icondir)/hicolor/16x16/actions/kalcatel-call.png
 type=DATA
 
-[kalcatel/images/items/contact-mobile.png]
+[kalcatel/images/items-16x16/contact-mobile.png]
 dist=true
 install=true
-install_location=$$(kde_datadir)/kalcatel/pics/contact-mobile.png
+install_location=$$(kde_icondir)/hicolor/16x16/actions/kalcatel-contact-mobile.png
 type=DATA
 
-[kalcatel/images/items/contact-sim.png]
+[kalcatel/images/items-16x16/contact-sim.png]
 dist=true
 install=true
-install_location=$$(kde_datadir)/kalcatel/pics/contact-sim.png
+install_location=$$(kde_icondir)/hicolor/16x16/actions/kalcatel-contact-sim.png
 type=DATA
 
-[kalcatel/images/items/contact.png]
+[kalcatel/images/items-16x16/contact.png]
 dist=true
 install=true
-install_location=$$(kde_datadir)/kalcatel/pics/contact.png
+install_location=$$(kde_icondir)/hicolor/16x16/actions/kalcatel-contact.png
 type=DATA
 
-[kalcatel/images/items/message-read.png]
+[kalcatel/images/items-16x16/message-read.png]
 dist=true
 install=true
-install_location=$$(kde_datadir)/kalcatel/pics/message-read.png
+install_location=$$(kde_icondir)/hicolor/16x16/actions/kalcatel-message-read.png
 type=DATA
 
-[kalcatel/images/items/message-sent.png]
+[kalcatel/images/items-16x16/message-sent.png]
 dist=true
 install=true
-install_location=$$(kde_datadir)/kalcatel/pics/message-sent.png
+install_location=$$(kde_icondir)/hicolor/16x16/actions/kalcatel-message-sent.png
 type=DATA
 
-[kalcatel/images/items/message-unread.png]
+[kalcatel/images/items-16x16/message-unread.png]
 dist=true
 install=true
-install_location=$$(kde_datadir)/kalcatel/pics/message-unread.png
+install_location=$$(kde_icondir)/hicolor/16x16/actions/kalcatel-message-unread.png
 type=DATA
 
-[kalcatel/images/items/message-unsent.png]
+[kalcatel/images/items-16x16/message-unsent.png]
 dist=true
 install=true
-install_location=$$(kde_datadir)/kalcatel/pics/message-unsent.png
+install_location=$$(kde_icondir)/hicolor/16x16/actions/kalcatel-message-unsent.png
 type=DATA
 
-[kalcatel/images/items/message.png]
+[kalcatel/images/items-16x16/message.png]
 dist=true
 install=true
-install_location=$$(kde_datadir)/kalcatel/pics/message.png
+install_location=$$(kde_icondir)/hicolor/16x16/actions/kalcatel-message.png
 type=DATA
 
-[kalcatel/images/items/mobile.png]
+[kalcatel/images/items-16x16/mobile.png]
 dist=true
 install=true
-install_location=$$(kde_datadir)/kalcatel/pics/mobile.png
+install_location=$$(kde_icondir)/hicolor/16x16/actions/kalcatel-mobile.png
 type=DATA
 
-[kalcatel/images/items/todo.png]
+[kalcatel/images/items-16x16/todo.png]
 dist=true
 install=true
-install_location=$$(kde_datadir)/kalcatel/pics/todo.png
+install_location=$$(kde_icondir)/hicolor/16x16/actions/kalcatel-todo.png
+type=DATA
+
+[kalcatel/images/items-22x22/Makefile.am]
+files=kalcatel/images/items-22x22/calendar.png,kalcatel/images/items-22x22/call.png,kalcatel/images/items-22x22/contact.png,kalcatel/images/items-22x22/message.png,kalcatel/images/items-22x22/mobile.png,kalcatel/images/items-22x22/todo.png,kalcatel/images/items-22x22/contact-mobile.png,kalcatel/images/items-22x22/contact-sim.png
+sub_dirs=
+type=normal
+
+[kalcatel/images/items-22x22/calendar.png]
+dist=true
+install=true
+install_location=$$(kde_icondir)/hicolor/22x22/actions/kalcatel-calendar.png
+type=DATA
+
+[kalcatel/images/items-22x22/call.png]
+dist=true
+install=true
+install_location=$$(kde_icondir)/hicolor/22x22/actions/kalcatel-call.png
+type=DATA
+
+[kalcatel/images/items-22x22/contact-mobile.png]
+dist=true
+install=true
+install_location=$$(kde_icondir)/hicolor/22x22/actions/kalcatel-mobile.png
+type=DATA
+
+[kalcatel/images/items-22x22/contact-sim.png]
+dist=true
+install=true
+install_location=$$(kde_icondir)/hicolor/22x22/actions/kalcatel-sim.png
+type=DATA
+
+[kalcatel/images/items-22x22/contact.png]
+dist=true
+install=true
+install_location=$$(kde_icondir)/hicolor/22x22/actions/kalcatel-contact.png
+type=DATA
+
+[kalcatel/images/items-22x22/message.png]
+dist=true
+install=true
+install_location=$$(kde_icondir)/hicolor/22x22/actions/kalcatel-message.png
+type=DATA
+
+[kalcatel/images/items-22x22/mobile.png]
+dist=true
+install=true
+install_location=$$(kde_icondir)/hicolor/22x22/actions/kalcatel-mobile.png
+type=DATA
+
+[kalcatel/images/items-22x22/todo.png]
+dist=true
+install=true
+install_location=$$(kde_icondir)/hicolor/22x22/actions/kalcatel-todo.png
 type=DATA
 
 [kalcatel/kalcatel.cpp]

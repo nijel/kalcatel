@@ -78,7 +78,16 @@ KAlcatelApp::~KAlcatelApp()
 void KAlcatelApp::initActions()
 {
 //  fileNewWindow = new KAction(i18n("New &Window"), 0, 0, this, SLOT(slotFileNewWindow()), actionCollection(),"file_new_window");
+//MainBarIconSet
+  fileReadMobileAll = new KAction(i18n("&Read everything from mobile"), QIconSet(SmallIcon("kalcatel-mobile.png"), BarIcon("kalcatel-mobile.png")), 0, this, SLOT(slotFileReadMobileAll()), actionCollection(),"file_read_mobile");
+  fileReadMobileTodo = new KAction(i18n("Read &todos from mobile"), QIconSet(SmallIcon("kalcatel-todo.png"), BarIcon("kalcatel-todo.png")), 0, this, SLOT(slotFileReadMobileTodo()), actionCollection(),"file_read_mobile_todo");
+  fileReadMobileSms = new KAction(i18n("Read &SMSs from mobile"), QIconSet(SmallIcon("kalcatel-message.png"), BarIcon("kalcatel-message.png")), 0, this, SLOT(slotFileReadMobileSms()), actionCollection(),"file_read_mobile_sms");
+  fileReadMobileCalendar = new KAction(i18n("Read &calendar from mobile"), QIconSet(SmallIcon("kalcatel-calendar.png"), BarIcon("kalcatel-calendar.png")), 0, this, SLOT(slotFileReadMobileCalendar()), actionCollection(),"file_read_mobile_calendar");
+  fileReadMobileCalls = new KAction(i18n("Read c&alls from mobile"), QIconSet(SmallIcon("kalcatel-call.png"), BarIcon("kalcatel-call.png")), 0, this, SLOT(slotFileReadMobileCalls()), actionCollection(),"file_read_mobile_calls");
+  fileReadMobileContactsSim = new KAction(i18n("Read contacts (S&IM) from mobile"), QIconSet(SmallIcon("kalcatel-contact-sim.png"), BarIcon("kalcatel-contact-sim.png")), 0, this, SLOT(slotFileReadMobileContactsSim()), actionCollection(),"file_read_mobile_contacts_sim");
+  fileReadMobileContactsMobile = new KAction(i18n("Read contacts (m&obile) from mobile"), QIconSet(SmallIcon("kalcatel-contact-mobile.png"), BarIcon("kalcatel-contact-mobile.png")), 0, this, SLOT(slotFileReadMobileContactsMobile()), actionCollection(),"file_read_mobile_contacts_mobile");
 
+/*
   fileReadMobileAll = new KAction(i18n("&Read everything from mobile"), QIconSet(UserIcon("mobile.png")), 0, this, SLOT(slotFileReadMobileAll()), actionCollection(),"file_read_mobile");
   fileReadMobileTodo = new KAction(i18n("Read &todos from mobile"), QIconSet(UserIcon("todo.png")), 0, this, SLOT(slotFileReadMobileTodo()), actionCollection(),"file_read_mobile_todo");
   fileReadMobileSms = new KAction(i18n("Read &SMSs from mobile"), QIconSet(UserIcon("message.png")), 0, this, SLOT(slotFileReadMobileSms()), actionCollection(),"file_read_mobile_sms");
@@ -86,6 +95,7 @@ void KAlcatelApp::initActions()
   fileReadMobileCalls = new KAction(i18n("Read c&alls from mobile"), QIconSet(UserIcon("call.png")), 0, this, SLOT(slotFileReadMobileCalls()), actionCollection(),"file_read_mobile_calls");
   fileReadMobileContactsSim = new KAction(i18n("Read contacts (S&IM) from mobile"), QIconSet(UserIcon("contact-sim.png")), 0, this, SLOT(slotFileReadMobileContactsSim()), actionCollection(),"file_read_mobile_contacts_sim");
   fileReadMobileContactsMobile = new KAction(i18n("Read contacts (m&obile) from mobile"), QIconSet(UserIcon("contact-mobile.png")), 0, this, SLOT(slotFileReadMobileContactsMobile()), actionCollection(),"file_read_mobile_contacts_mobile");
+*/
 
   fileNew = KStdAction::openNew(this, SLOT(slotFileNew()), actionCollection());
   fileOpen = KStdAction::open(this, SLOT(slotFileOpen()), actionCollection());

@@ -40,7 +40,6 @@
 
 #include "alcatelclasses.h"
 
-
 #define CURRENT_DOC_VERSION 1
 
 /** Used for selecting which type of mobile data we will work with

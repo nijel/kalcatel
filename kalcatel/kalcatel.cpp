@@ -49,6 +49,8 @@
 #include "kalcatelview.h"
 #include "kalcateldoc.h"
 #include "kalcatelconfigdialog.h"
+#include "kalcatelmergedialog.h"
+#include "alcatelclasses.h"
 
 #include "alcatool/modem.h"
 #include "alcatool/mobile_info.h"
@@ -56,38 +58,38 @@
 #include "alcatool/contacts.h"
 #include "alcatool/logging.h"
 
-KAlcatelApp::KAlcatelApp(QWidget* , const char* name):KMainWindow(0, name)
-{
-  config=kapp->config();
+KAlcatelApp::KAlcatelApp(QWidget* , const char* name):KMainWindow(0, name) {
+    config=kapp->config();
 
-  ///////////////////////////////////////////////////////////////////
-  // call inits to invoke all other construction parts
-  initStatusBar();
-  initActions();
+    ///////////////////////////////////////////////////////////////////
+    // call inits to invoke all other construction parts
+    initStatusBar();
+    initActions();
 
-  readOptions();
+    readOptions();
 
-  initDocument();
-  initView();
+    initDocument();
+    initView();
 
-//  menuBar();
-	
+  //  menuBar();
+  	
 
-  preferencesDialog = new KAlcatelConfigDialog(this);
+    preferencesDialog = new KAlcatelConfigDialog(this);
 
-  ///////////////////////////////////////////////////////////////////
-  // disable actions at startup
-/*
-  fileSave->setEnabled(false);
-  fileSaveAs->setEnabled(false);
-  filePrint->setEnabled(false);
-*/
-  editCut->setEnabled(false);
-  editCopy->setEnabled(false);
-  editPaste->setEnabled(false);
+    ///////////////////////////////////////////////////////////////////
+    // disable actions at startup
+  /*
+    fileSave->setEnabled(false);
+    fileSaveAs->setEnabled(false);
+    filePrint->setEnabled(false);
+  */
+    editCut->setEnabled(false);
+    editCopy->setEnabled(false);
+    editPaste->setEnabled(false);
 }
 
 KAlcatelApp::~KAlcatelApp() {
+    delete preferencesDialog;
 }
 
 void KAlcatelApp::initActions()
@@ -821,22 +823,22 @@ void KAlcatelApp::slotPreferencesToolbars() {
     }
 }
 
-AlcatelContact *KAlcatelApp::solveConflict(const AlcatelContact &c1, const AlcatelContact &c2) {
-    return NULL;
+AlcatelContact *KAlcatelApp::solveConflict(AlcatelContact &c1, AlcatelContact &c2) {
+    return KAlcatelMergeDialog(this).exec(c1,c2);
 }
 
-AlcatelMessage *KAlcatelApp::solveConflict(const AlcatelMessage &c1, const AlcatelMessage &c2) {
-    return NULL;
+AlcatelMessage *KAlcatelApp::solveConflict(AlcatelMessage &c1, AlcatelMessage &c2) {
+    return KAlcatelMergeDialog(this).exec(c1,c2);
 }
 
-AlcatelCalendar *KAlcatelApp::solveConflict(const AlcatelCalendar &c1, const AlcatelCalendar &c2) {
-    return NULL;
+AlcatelCalendar *KAlcatelApp::solveConflict(AlcatelCalendar &c1, AlcatelCalendar &c2) {
+    return KAlcatelMergeDialog(this).exec(c1,c2);
 }
 
-AlcatelTodo *KAlcatelApp::solveConflict(const AlcatelTodo &c1, const AlcatelTodo &c2) {
-    return NULL;
+AlcatelTodo *KAlcatelApp::solveConflict(AlcatelTodo &c1, AlcatelTodo &c2) {
+    return KAlcatelMergeDialog(this).exec(c1,c2);
 }
 
-AlcatelCategory *KAlcatelApp::solveConflict(const AlcatelCategory &c1, const AlcatelCategory &c2) {
-    return NULL;
+AlcatelCategory *KAlcatelApp::solveConflict(AlcatelCategory &c1, AlcatelCategory &c2) {
+    return KAlcatelMergeDialog(this).exec(c1,c2);
 }

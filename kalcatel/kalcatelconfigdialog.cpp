@@ -22,9 +22,9 @@
  */
 /* $Id$ */
 
-
 #include <qpushbutton.h>
 #include <qvbox.h>
+#include <qframe.h>
 #include <qhbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
@@ -64,8 +64,7 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
     mobileLayout->setSpacing( 6 );
     mobileLayout->setMargin( 8 );
 
-    QLabel *label = new QLabel(mobilePage);
-    label->setText(i18n("Device filename:"));
+    QLabel *label = new QLabel(i18n("Device filename:"), mobilePage);
     mobileLayout->addWidget(label, 0, 0);
 
     KComboBox *devCombo = new KComboBox(true, mobilePage);
@@ -81,8 +80,7 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
 
     mobileLayout->addWidget(editDevice, 0, 1);
 
-    label = new QLabel(mobilePage);
-    label->setText(i18n("Lock filename:"));
+    label = new QLabel(i18n("Lock filename:"), mobilePage);
     mobileLayout->addWidget(label, 1, 0);
 
     editLock = new QLineEdit(mobilePage);
@@ -92,8 +90,7 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
 
     mobileLayout->addWidget(editLock, 1, 1);
 
-    label = new QLabel(mobilePage);
-    label->setText(i18n("Init string:"));
+    label = new QLabel(i18n("Init string:"), mobilePage);
     mobileLayout->addWidget(label, 2, 0);
 
     editInit = new QLineEdit(mobilePage);
@@ -102,8 +99,7 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
 
     mobileLayout->addWidget(editInit, 2, 1);
 
-    label = new QLabel(mobilePage);
-    label->setText(i18n("Baud rate:"));
+    label = new QLabel(i18n("Baud rate:"), mobilePage);
     mobileLayout->addWidget(label, 3, 0);
 
     rateEdit = new QComboBox(mobilePage);
@@ -117,8 +113,7 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
 
     mobileLayout->addWidget(rateEdit, 3, 1);
 
-    label = new QLabel(mobilePage);
-    label->setText(i18n("Stderr messages:"));
+    label = new QLabel(i18n("Stderr messages:"), mobilePage);
     mobileLayout->addWidget(label, 4, 0);
 
     debugEdit = new QComboBox(mobilePage);
@@ -161,8 +156,7 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
     otherLayout->setSpacing( 6 );
     otherLayout->setMargin( 8 );
 
-    label = new QLabel(otherPage);
-    label->setText(i18n("Phone prefix:"));
+    label = new QLabel(i18n("Phone prefix:"), otherPage);
     otherLayout->addWidget(label, 0, 0);
 
     editPrefix = new QLineEdit(otherPage);
@@ -171,8 +165,7 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
 
     otherLayout->addWidget(editPrefix, 0, 1);
 
-    label = new QLabel(otherPage);
-    label->setText(i18n("Show custom field as URL:"));
+    label = new QLabel(i18n("Show custom field as URL:"), otherPage);
     otherLayout->addWidget(label, 1, 0);
 
     contactUrlEdit = new QComboBox(otherPage);
@@ -187,8 +180,7 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
 
     otherLayout->addWidget(contactUrlEdit, 1, 1);
 
-    label = new QLabel(otherPage);
-    label->setText(i18n("Open last document on start:"));
+    label = new QLabel(i18n("Open last document on start:"), otherPage);
     otherLayout->addWidget(label, 2, 0);
 
     editAutoOpen = new QCheckBox(otherPage);
@@ -206,13 +198,11 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
     layout->addItem( spacer );
 
-    QPushButton *buttonOK = new QPushButton(this);
-    buttonOK->setText(i18n("&OK"));
+    QPushButton *buttonOK = new QPushButton(i18n("&OK"), this);
     buttonOK->setDefault(true);
     layout->addWidget(buttonOK);
 
-    QPushButton *buttonCancel = new QPushButton(this);
-    buttonCancel->setText(i18n("&Cancel"));
+    QPushButton *buttonCancel = new QPushButton(i18n("&Cancel"), this);
     layout->addWidget(buttonCancel);
 
     mainLayout->addLayout( layout, 2, 0 );

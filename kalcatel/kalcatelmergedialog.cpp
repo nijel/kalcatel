@@ -22,9 +22,561 @@
  */
 /* $Id$ */
 
+#include <typeinfo>
+
+#include <qlayout.h>
+#include <qlabel.h>
+#include <qpushbutton.h>
+#include <qradiobutton.h>
+#include <qwhatsthis.h>
+#include <qtooltip.h>
+#include <qframe.h>
+#include <qgrid.h>
+
+#include <kdialog.h>
+#include <klocale.h>
+
 #include "kalcatelmergedialog.h"
 
-KAlcatelMergeDialog::KAlcatelMergeDialog(QWidget *parent, const char *name ) : KDialog(parent,name) {
+#include "kalcatel.h"
+#include "kalcateldoc.h"
+
+#include "alcatelclasses.h"
+#include "alcatool/logging.h"
+
+KAlcatelMergeDialog::KAlcatelMergeDialog(QWidget *parent, const char *name ) : KDialog(parent,name,true) {
+    QLabel *label;
+    setCaption( i18n( "Merging conflict" ) );
+
+    QGridLayout *mainLayout = new QGridLayout( this );
+    mainLayout->setSpacing( 6 );
+    mainLayout->setMargin( 8 );
+
+    conflictGrid = new QGrid( 6, this );
+    conflictGrid->setSpacing( 6 );
+    conflictGrid->setMargin( 8 );
+
+    new QLabel(i18n("<b>Field</b>"), conflictGrid);
+    new QLabel(i18n("<b>In PC</b>"), conflictGrid);
+
+    pcButton = new QPushButton(i18n("&PC"), conflictGrid);
+    deleteButton = new QPushButton(i18n("&Delete"), conflictGrid);
+    mobileButton = new QPushButton(i18n("&Mobile"), conflictGrid);
+    connect( pcButton, SIGNAL( clicked() ), this, SLOT( slotPC() ) );
+    connect( mobileButton, SIGNAL( clicked() ), this, SLOT( slotMobile() ) );
+    connect( deleteButton, SIGNAL( clicked() ), this, SLOT( slotDelete() ) );
+
+    new QLabel(i18n("<b>In mobile</b>"), conflictGrid);
+
+    mainLayout->addWidget(conflictGrid, 2, 0);
+
+    QFrame *line = new QFrame(this);
+    line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+
+    mainLayout->addWidget( line, 1, 0 );
+
+    label = new QLabel(i18n("<b>During merge occured following conflict(s)</b><br/>Select which solution of this conflict is the best for you."), this);
+    mainLayout->addWidget(label, 0, 0);
+
+    QHBoxLayout *layout = new QHBoxLayout;
+
+    layout->setSpacing( 6 );
+    layout->setMargin( 0 );
+    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    layout->addItem( spacer );
+
+    buttonOK = new QPushButton(i18n("&OK"), this);
+    buttonOK->setDefault(true);
+    layout->addWidget(buttonOK);
+
+    buttonBoth = new QPushButton(i18n("Add &both"), this);
+    layout->addWidget(buttonBoth);
+
+    mainLayout->addLayout( layout, 4, 0 );
+
+    line = new QFrame( this);
+    line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+
+    mainLayout->addWidget( line, 3, 0 );
+
+    connect( buttonOK, SIGNAL( clicked() ), this, SLOT( slotOK() ) );
+    connect( buttonBoth, SIGNAL( clicked() ), this, SLOT( slotBoth() ) );
 }
-KAlcatelMergeDialog::~KAlcatelMergeDialog(){
+
+KAlcatelMergeDialog::~KAlcatelMergeDialog() {
+    slotClear();
+}
+
+void KAlcatelMergeDialog::slotClear() {
+    MergeItemList::Iterator it;
+    for( it = itemList.begin(); it != itemList.end(); ) {
+        conflictGrid->removeChild((*it).mobileCheck);
+        delete (*it).mobileCheck;
+        (*it).mobileCheck = NULL;
+        conflictGrid->removeChild((*it).deleteCheck);
+        delete (*it).deleteCheck;
+        (*it).deleteCheck = NULL;
+        conflictGrid->removeChild((*it).pcCheck);
+        delete (*it).pcCheck;
+        (*it).pcCheck = NULL;
+        conflictGrid->removeChild((*it).mobileLabel);
+        delete (*it).mobileLabel;
+        (*it).mobileLabel = NULL;
+        conflictGrid->removeChild((*it).pcLabel);
+        delete (*it).pcLabel;
+        (*it).pcLabel = NULL;
+        it = itemList.remove(it);
+    }
+    repaint();
+}
+
+AlcatelContact *KAlcatelMergeDialog::exec(AlcatelContact &c1, AlcatelContact &c2) {
+    data1 = &c1;
+    data2 = &c2;
+
+    slotClear();
+
+    if (c1.LastName != c2.LastName) { itemList.append(MergeItem(conflictGrid, i18n("LastName"), c1.LastName, c2.LastName)); }
+    if (c1.FirstName != c2.FirstName) { itemList.append(MergeItem(conflictGrid, i18n("FirstName"), c1.FirstName, c2.FirstName)); }
+    if (c1.Company != c2.Company) { itemList.append(MergeItem(conflictGrid, i18n("Company"), c1.Company, c2.Company)); }
+    if (c1.JobTitle != c2.JobTitle) { itemList.append(MergeItem(conflictGrid, i18n("JobTitle"), c1.JobTitle, c2.JobTitle)); }
+    if (c1.Note != c2.Note) { itemList.append(MergeItem(conflictGrid, i18n("Note"), c1.Note, c2.Note)); }
+    if (c1.Category != c2.Category) {
+        KAlcatelApp *theApp = (KAlcatelApp *) parentWidget();
+        KAlcatelDoc *theDoc = theApp->getDocument();
+        AlcatelCategory *cat1 = getCategoryById(theDoc->contact_cats, c1.Category, c1.Storage);
+        AlcatelCategory *cat2 = getCategoryById(theDoc->contact_cats, c2.Category, c2.Storage);
+        QString s1 = cat1 == NULL ? i18n("Unknown") : cat1->Name;
+        QString s2 = cat2 == NULL ? i18n("Unknown") : cat2->Name;
+        itemList.append(MergeItem(conflictGrid, i18n("Category"), s1, s2));
+    }
+    if (c1.Private != c2.Private) {
+        QString s1 = c1.Private==-1 ? i18n("Not set") : c1.Private==0 ? i18n("No") : i18n("Yes");
+        QString s2 = c2.Private==-1 ? i18n("Not set") : c2.Private==0 ? i18n("No") : i18n("Yes");
+        itemList.append(MergeItem(conflictGrid, i18n("Private"), s1, s2));
+    }
+    if (c1.WorkNumber != c2.WorkNumber) { itemList.append(MergeItem(conflictGrid, i18n("WorkNumber"), c1.WorkNumber, c2.WorkNumber)); }
+    if (c1.MainNumber != c2.MainNumber) { itemList.append(MergeItem(conflictGrid, i18n("MainNumber"), c1.MainNumber, c2.MainNumber)); }
+    if (c1.FaxNumber != c2.FaxNumber) { itemList.append(MergeItem(conflictGrid, i18n("FaxNumber"), c1.FaxNumber, c2.FaxNumber)); }
+    if (c1.OtherNumber != c2.OtherNumber) { itemList.append(MergeItem(conflictGrid, i18n("OtherNumber"), c1.OtherNumber, c2.OtherNumber)); }
+    if (c1.PagerNumber != c2.PagerNumber) { itemList.append(MergeItem(conflictGrid, i18n("PagerNumber"), c1.PagerNumber, c2.PagerNumber)); }
+    if (c1.MobileNumber != c2.MobileNumber) { itemList.append(MergeItem(conflictGrid, i18n("MobileNumber"), c1.MobileNumber, c2.MobileNumber)); }
+    if (c1.HomeNumber != c2.HomeNumber) { itemList.append(MergeItem(conflictGrid, i18n("HomeNumber"), c1.HomeNumber, c2.HomeNumber)); }
+    if (c1.Email1 != c2.Email1) { itemList.append(MergeItem(conflictGrid, i18n("Email1"), c1.Email1, c2.Email1)); }
+    if (c1.Email2 != c2.Email2) { itemList.append(MergeItem(conflictGrid, i18n("Email2"), c1.Email2, c2.Email2)); }
+    if (c1.Address != c2.Address) { itemList.append(MergeItem(conflictGrid, i18n("Address"), c1.Address, c2.Address)); }
+    if (c1.City != c2.City) { itemList.append(MergeItem(conflictGrid, i18n("City"), c1.City, c2.City)); }
+    if (c1.State != c2.State) { itemList.append(MergeItem(conflictGrid, i18n("State"), c1.State, c2.State)); }
+    if (c1.Zip != c2.Zip) { itemList.append(MergeItem(conflictGrid, i18n("Zip"), c1.Zip, c2.Zip)); }
+    if (c1.Country != c2.Country) { itemList.append(MergeItem(conflictGrid, i18n("Country"), c1.Country, c2.Country)); }
+    if (c1.Custom1 != c2.Custom1) { itemList.append(MergeItem(conflictGrid, i18n("Custom1"), c1.Custom1, c2.Custom1)); }
+    if (c1.Custom2 != c2.Custom2) { itemList.append(MergeItem(conflictGrid, i18n("Custom2"), c1.Custom2, c2.Custom2)); }
+    if (c1.Custom3 != c2.Custom3) { itemList.append(MergeItem(conflictGrid, i18n("Custom3"), c1.Custom3, c2.Custom3)); }
+    if (c1.Custom4 != c2.Custom4) { itemList.append(MergeItem(conflictGrid, i18n("Custom4"), c1.Custom4, c2.Custom4)); }
+
+    exec();
+    slotClear();
+    return (AlcatelContact *)result;
+}
+
+AlcatelMessage *KAlcatelMergeDialog::exec(AlcatelMessage &c1, AlcatelMessage &c2) {
+    data1 = &c1;
+    data2 = &c2;
+    exec();
+    return (AlcatelMessage *)result;
+}
+
+AlcatelCalendar *KAlcatelMergeDialog::exec(AlcatelCalendar &c1, AlcatelCalendar &c2) {
+    data1 = &c1;
+    data2 = &c2;
+    exec();
+    return (AlcatelCalendar *)result;
+}
+
+AlcatelTodo *KAlcatelMergeDialog::exec(AlcatelTodo &c1, AlcatelTodo &c2) {
+    data1 = &c1;
+    data2 = &c2;
+    exec();
+    return (AlcatelTodo *)result;
+}
+
+AlcatelCategory *KAlcatelMergeDialog::exec(AlcatelCategory &c1, AlcatelCategory &c2) {
+    data1 = &c1;
+    data2 = &c2;
+    exec();
+    return (AlcatelCategory *)result;
+}
+
+void KAlcatelMergeDialog::slotBoth() {
+    accept();
+}
+
+void KAlcatelMergeDialog::slotOK() {
+    ::message(MSG_DEBUG, "MERGE_DIALOG: Name: %s", data1->getClassName());
+    MergeItemList::Iterator it;
+
+    if (strcmp(data1->getClassName(), "AlcatelContact") == 0) {
+        AlcatelContact *c = new AlcatelContact(*((AlcatelContact *)data1));
+        if (((AlcatelContact *)data1)->LastName != ((AlcatelContact *)data2)->LastName) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->LastName = ((AlcatelContact *)data2)->LastName; break;
+                case Delete: c->LastName = (char *)NULL; break;
+                case Mobile: break;
+            }
+            ::message(MSG_DEBUG, "MERGE: %s", (*it).nameLabel->text().latin1());
+            itemList.remove(it);
+        }
+        if (((AlcatelContact *)data1)->FirstName != ((AlcatelContact *)data2)->FirstName) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->FirstName = ((AlcatelContact *)data2)->FirstName; break;
+                case Delete: c->FirstName = (char *)NULL; break;
+                case Mobile: break;
+            }
+            ::message(MSG_DEBUG, "MERGE: %s", (*it).nameLabel->text().latin1());
+            itemList.remove(it);
+        }
+        if (((AlcatelContact *)data1)->Company != ((AlcatelContact *)data2)->Company) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->Company = ((AlcatelContact *)data2)->Company; break;
+                case Delete: c->Company = (char *)NULL; break;
+                case Mobile: break;
+            }
+            ::message(MSG_DEBUG, "MERGE: %s", (*it).nameLabel->text().latin1());
+            itemList.remove(it);
+        }
+        if (((AlcatelContact *)data1)->JobTitle != ((AlcatelContact *)data2)->JobTitle) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->JobTitle = ((AlcatelContact *)data2)->JobTitle; break;
+                case Delete: c->JobTitle = (char *)NULL; break;
+                case Mobile: break;
+            }
+            ::message(MSG_DEBUG, "MERGE: %s", (*it).nameLabel->text().latin1());
+            itemList.remove(it);
+        }
+        if (((AlcatelContact *)data1)->Note != ((AlcatelContact *)data2)->Note) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->Note = ((AlcatelContact *)data2)->Note; break;
+                case Delete: c->Note = (char *)NULL; break;
+                case Mobile: break;
+            }
+            ::message(MSG_DEBUG, "MERGE: %s", (*it).nameLabel->text().latin1());
+            itemList.remove(it);
+        }
+        if (((AlcatelContact *)data1)->Category != ((AlcatelContact *)data2)->Category) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->Category = ((AlcatelContact *)data2)->Category; break;
+                case Delete: c->Category = -1; break;
+                case Mobile: break;
+            }
+            ::message(MSG_DEBUG, "MERGE: %s", (*it).nameLabel->text().latin1());
+            itemList.remove(it);
+        }
+        if (((AlcatelContact *)data1)->Private != ((AlcatelContact *)data2)->Private) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->Private = ((AlcatelContact *)data2)->Private; break;
+                case Delete: c->Private = -1; break;
+                case Mobile: break;
+            }
+            ::message(MSG_DEBUG, "MERGE: %s", (*it).nameLabel->text().latin1());
+            itemList.remove(it);
+        }
+        if (((AlcatelContact *)data1)->WorkNumber != ((AlcatelContact *)data2)->WorkNumber) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->WorkNumber = ((AlcatelContact *)data2)->WorkNumber; break;
+                case Delete: c->WorkNumber = (char *)NULL; break;
+                case Mobile: break;
+            }
+            ::message(MSG_DEBUG, "MERGE: %s", (*it).nameLabel->text().latin1());
+            itemList.remove(it);
+        }
+        if (((AlcatelContact *)data1)->MainNumber != ((AlcatelContact *)data2)->MainNumber) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->MainNumber = ((AlcatelContact *)data2)->MainNumber; break;
+                case Delete: c->MainNumber = (char *)NULL; break;
+                case Mobile: break;
+            }
+            ::message(MSG_DEBUG, "MERGE: %s", (*it).nameLabel->text().latin1());
+            itemList.remove(it);
+        }
+        if (((AlcatelContact *)data1)->FaxNumber != ((AlcatelContact *)data2)->FaxNumber) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->FaxNumber = ((AlcatelContact *)data2)->FaxNumber; break;
+                case Delete: c->FaxNumber = (char *)NULL; break;
+                case Mobile: break;
+            }
+            ::message(MSG_DEBUG, "MERGE: %s", (*it).nameLabel->text().latin1());
+            itemList.remove(it);
+        }
+        if (((AlcatelContact *)data1)->OtherNumber != ((AlcatelContact *)data2)->OtherNumber) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->OtherNumber = ((AlcatelContact *)data2)->OtherNumber; break;
+                case Delete: c->OtherNumber = (char *)NULL; break;
+                case Mobile: break;
+            }
+            ::message(MSG_DEBUG, "MERGE: %s", (*it).nameLabel->text().latin1());
+            itemList.remove(it);
+        }
+        if (((AlcatelContact *)data1)->PagerNumber != ((AlcatelContact *)data2)->PagerNumber) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->PagerNumber = ((AlcatelContact *)data2)->PagerNumber; break;
+                case Delete: c->PagerNumber = (char *)NULL; break;
+                case Mobile: break;
+            }
+            ::message(MSG_DEBUG, "MERGE: %s", (*it).nameLabel->text().latin1());
+            itemList.remove(it);
+        }
+        if (((AlcatelContact *)data1)->MobileNumber != ((AlcatelContact *)data2)->MobileNumber) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->MobileNumber = ((AlcatelContact *)data2)->MobileNumber; break;
+                case Delete: c->MobileNumber = (char *)NULL; break;
+                case Mobile: break;
+            }
+            ::message(MSG_DEBUG, "MERGE: %s", (*it).nameLabel->text().latin1());
+            itemList.remove(it);
+        }
+        if (((AlcatelContact *)data1)->HomeNumber != ((AlcatelContact *)data2)->HomeNumber) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->HomeNumber = ((AlcatelContact *)data2)->HomeNumber; break;
+                case Delete: c->HomeNumber = (char *)NULL; break;
+                case Mobile: break;
+            }
+            ::message(MSG_DEBUG, "MERGE: %s", (*it).nameLabel->text().latin1());
+            itemList.remove(it);
+        }
+        if (((AlcatelContact *)data1)->Email1 != ((AlcatelContact *)data2)->Email1) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->Email1 = ((AlcatelContact *)data2)->Email1; break;
+                case Delete: c->Email1 = (char *)NULL; break;
+                case Mobile: break;
+            }
+            ::message(MSG_DEBUG, "MERGE: %s", (*it).nameLabel->text().latin1());
+            itemList.remove(it);
+        }
+        if (((AlcatelContact *)data1)->Email2 != ((AlcatelContact *)data2)->Email2) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->Email2 = ((AlcatelContact *)data2)->Email2; break;
+                case Delete: c->Email2 = (char *)NULL; break;
+                case Mobile: break;
+            }
+            ::message(MSG_DEBUG, "MERGE: %s", (*it).nameLabel->text().latin1());
+            itemList.remove(it);
+        }
+        if (((AlcatelContact *)data1)->Address != ((AlcatelContact *)data2)->Address) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->Address = ((AlcatelContact *)data2)->Address; break;
+                case Delete: c->Address = (char *)NULL; break;
+                case Mobile: break;
+            }
+            ::message(MSG_DEBUG, "MERGE: %s", (*it).nameLabel->text().latin1());
+            itemList.remove(it);
+        }
+        if (((AlcatelContact *)data1)->City != ((AlcatelContact *)data2)->City) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->City = ((AlcatelContact *)data2)->City; break;
+                case Delete: c->City = (char *)NULL; break;
+                case Mobile: break;
+            }
+            itemList.remove(it);
+        }
+        if (((AlcatelContact *)data1)->State != ((AlcatelContact *)data2)->State) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->State = ((AlcatelContact *)data2)->State; break;
+                case Delete: c->State = (char *)NULL; break;
+                case Mobile: break;
+            }
+            itemList.remove(it);
+        }
+        if (((AlcatelContact *)data1)->Zip != ((AlcatelContact *)data2)->Zip) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->Zip = ((AlcatelContact *)data2)->Zip; break;
+                case Delete: c->Zip = (char *)NULL; break;
+                case Mobile: break;
+            }
+            itemList.remove(it);
+        }
+        if (((AlcatelContact *)data1)->Country != ((AlcatelContact *)data2)->Country) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->Country = ((AlcatelContact *)data2)->Country; break;
+                case Delete: c->Country = (char *)NULL; break;
+                case Mobile: break;
+            }
+            itemList.remove(it);
+        }
+        if (((AlcatelContact *)data1)->Custom1 != ((AlcatelContact *)data2)->Custom1) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->Custom1 = ((AlcatelContact *)data2)->Custom1; break;
+                case Delete: c->Custom1 = (char *)NULL; break;
+                case Mobile: break;
+            }
+            ::message(MSG_DEBUG, "MERGE: %s", (*it).nameLabel->text().latin1());
+            itemList.remove(it);
+        }
+        if (((AlcatelContact *)data1)->Custom2 != ((AlcatelContact *)data2)->Custom2) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->Custom2 = ((AlcatelContact *)data2)->Custom2; break;
+                case Delete: c->Custom2 = (char *)NULL; break;
+                case Mobile: break;
+            }
+            ::message(MSG_DEBUG, "MERGE: %s", (*it).nameLabel->text().latin1());
+            itemList.remove(it);
+        }
+        if (((AlcatelContact *)data1)->Custom3 != ((AlcatelContact *)data2)->Custom3) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->Custom3 = ((AlcatelContact *)data2)->Custom3; break;
+                case Delete: c->Custom3 = (char *)NULL; break;
+                case Mobile: break;
+            }
+            ::message(MSG_DEBUG, "MERGE: %s", (*it).nameLabel->text().latin1());
+            itemList.remove(it);
+        }
+        if (((AlcatelContact *)data1)->Custom4 != ((AlcatelContact *)data2)->Custom4) {
+            it = itemList.begin();
+            switch ((*it).getStatus()) {
+                case PC: c->Custom4 = ((AlcatelContact *)data2)->Custom4; break;
+                case Delete: c->Custom4 = (char *)NULL; break;
+                case Mobile: break;
+            }
+            ::message(MSG_DEBUG, "MERGE: %s", (*it).nameLabel->text().latin1());
+            itemList.remove(it);
+        }
+        result = c;
+    } else {
+        result = NULL;
+    }
+    accept();
+}
+
+void KAlcatelMergeDialog::slotPC(void) {
+    MergeItemList::Iterator it;
+    for( it = itemList.begin(); it != itemList.end(); ++it ) {
+        (*it).pcCheck->setChecked(true);
+    }
+}
+
+void KAlcatelMergeDialog::slotDelete(void) {
+    MergeItemList::Iterator it;
+    for( it = itemList.begin(); it != itemList.end(); ++it ) {
+        (*it).deleteCheck->setChecked(true);
+    }
+}
+
+void KAlcatelMergeDialog::slotMobile(void) {
+    MergeItemList::Iterator it;
+    for( it = itemList.begin(); it != itemList.end(); ++it ) {
+        (*it).mobileCheck->setChecked(true);
+    }
+}
+
+int KAlcatelMergeDialog::exec () {
+    result = NULL;
+    return KDialog::exec();
+}
+
+MergeItem::MergeItem(QWidget *parent, QString name, QString &mobileText, QString &pcText) {
+    nameLabel = new QLabel(name, parent);
+    pcLabel = new QLabel(pcText, parent);
+
+    pcCheck = new QRadioButton(parent);
+    deleteCheck = new QRadioButton(parent);
+    mobileCheck = new QRadioButton(parent);
+
+    connect(pcCheck, SIGNAL (toggled(bool)), this, SLOT (pcToggle(bool)));
+    connect(deleteCheck, SIGNAL (toggled(bool)), this, SLOT (deleteToggle(bool)));
+    connect(mobileCheck, SIGNAL (toggled(bool)), this, SLOT (mobileToggle(bool)));
+
+    mobileCheck->setChecked(true);
+
+    mobileLabel = new QLabel(mobileText, parent);
+}
+
+MergeItem::MergeItem(const MergeItem  &item) {
+    pcLabel = item.pcLabel;
+
+    nameLabel = item.nameLabel;
+    pcCheck = item.pcCheck;
+    deleteCheck = item.deleteCheck;
+    mobileCheck = item.mobileCheck;
+
+    connect(pcCheck, SIGNAL (toggled(bool)), this, SLOT (pcToggle(bool)));
+    connect(deleteCheck, SIGNAL (toggled(bool)), this, SLOT (deleteToggle(bool)));
+    connect(mobileCheck, SIGNAL (toggled(bool)), this, SLOT (mobileToggle(bool)));
+
+    mobileLabel = item.mobileLabel;
+}
+
+MergeItem::MergeItem() {
+    nameLabel = new QLabel(0);
+    pcLabel = new QLabel(0);
+
+    pcCheck = new QRadioButton(0);
+    deleteCheck = new QRadioButton(0);
+    mobileCheck = new QRadioButton(0);
+
+    connect(pcCheck, SIGNAL (toggled(bool)), this, SLOT (pcToggle(bool)));
+    connect(deleteCheck, SIGNAL (toggled(bool)), this, SLOT (deleteToggle(bool)));
+    connect(mobileCheck, SIGNAL (toggled(bool)), this, SLOT (mobileToggle(bool)));
+
+    mobileCheck->setChecked(true);
+
+    mobileLabel = new QLabel(0);
+}
+
+MergeItem::~MergeItem(void) {
+}
+
+void MergeItem::pcToggle(bool state) {
+    if (state) {
+        mobileCheck->setChecked(false);
+        deleteCheck->setChecked(false);
+    }
+}
+
+void MergeItem::deleteToggle(bool state) {
+    if (state) {
+        pcCheck->setChecked(false);
+        mobileCheck->setChecked(false);
+    }
+}
+
+void MergeItem::mobileToggle(bool state) {
+    if (state) {
+        pcCheck->setChecked(false);
+        deleteCheck->setChecked(false);
+    }
+}
+
+MergeStatus MergeItem::getStatus(void) {
+    if (pcCheck->isChecked()) return PC;
+    else if (mobileCheck->isChecked()) return Mobile;
+    else return Delete;
+}
+
+void MergeItem::setStatus(MergeStatus status) {
+    if (status == PC) pcCheck->setChecked(true);
+    else if (status == Mobile) mobileCheck->setChecked(true);
+    else deleteCheck->setChecked(true);
 }

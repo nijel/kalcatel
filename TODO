@@ -14,6 +14,7 @@ for 0.2-alpha:
  - (DONE) loading of document
 merging
 split all listing of data (pc/mobile/sim)
+remove empty pc categories after sync
 icon for pc storage
 
 for 0.3-beta:

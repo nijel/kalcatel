@@ -77,6 +77,11 @@ int modem_read_raw(unsigned char *buffer,int len) {
     return read(modem, buffer, len);
 }
 
+void modem_flush(void) {
+    tcdrain(modem);
+}
+
+
 int modem_cmd(char* command,char* answer,int max,int timeout,char* expect) {
     int count=0;
     int readcount;

@@ -174,7 +174,7 @@ int alcatel_recv_data(int size) {
             message(MSG_DEBUG2,"Receive failed (%d): %s", result, strerror(errno));
             usleep(SLEEP_FAIL);
             fails ++;
-            if (fails > 100) {
+            if (fails > 200) {
                 message(MSG_ERROR,"Reading failed...");
                 return false;
             }
@@ -297,7 +297,9 @@ bool alcatel_init(void){
     message(MSG_DETAIL,"Entering Alcatel binary mode");
     modem_cmd("AT+IFC=2,2\r",answer,sizeof(answer),100,0);
     modem_cmd("AT+CPROT=16,\"V1.0\",16\r",answer,sizeof(answer),100,"CONNECT");
+    modem_flush();
     message(MSG_DEBUG,"Alcatel binary mode started");
+
     alcatel_send_packet(ALC_CONNECT,0,0);
     data = alcatel_recv_ack(ALC_CONNECT_ACK);
     if (data == NULL) {

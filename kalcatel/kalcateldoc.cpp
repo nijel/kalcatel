@@ -47,8 +47,6 @@
 #include "kalcatel.h"
 #include "kalcatelview.h"
 
-#include "alcatelclasses.h"
-
 // alcatool includes
 #include "alcatool/modem.h"
 #include "alcatool/mobile_info.h"
@@ -256,235 +254,235 @@ int KAlcatelDoc::readDomInt(QDomElement el) {
 
 void KAlcatelDoc::readDomMessage(QDomElement el) {
     QDomNode n = el.firstChild();
-    AlcatelMessage *Msg = new AlcatelMessage();
-    Msg->Id = pcStorageCounter++;
-    Msg->Storage = StoragePC;
+    AlcatelMessage Msg;
+    Msg.Id = pcStorageCounter++;
+    Msg.Storage = StoragePC;
 
     while( !n.isNull() ) {
         QDomElement l = n.toElement();
         if( !l.isNull() ) {
             if (l.tagName() == "id") {
-                Msg->PrevId = readDomInt(l);
+                Msg.PrevId = readDomInt(l);
             } else if (l.tagName() == "storage") {
-                Msg->PrevStorage = (AlcatelStorage)readDomInt(l);
+                Msg.PrevStorage = (AlcatelStorage)readDomInt(l);
             } else if (l.tagName() == "status") {
-                Msg->Status = readDomInt(l);
+                Msg.Status = readDomInt(l);
             } else if (l.tagName() == "length") {
-                Msg->Length = readDomInt(l);
+                Msg.Length = readDomInt(l);
             } else if (l.tagName() == "raw") {
-                Msg->Raw = strdup(readDomString(l).latin1());
+                Msg.Raw = readDomString(l).latin1();
             } else if (l.tagName() == "sender") {
-                Msg->Sender = readDomString(l);
+                Msg.Sender = readDomString(l);
             } else if (l.tagName() == "text") {
-                Msg->Text = readDomString(l);
+                Msg.Text = readDomString(l);
             } else if (l.tagName() == "smsc") {
-                Msg->SMSC = readDomString(l);
+                Msg.SMSC = readDomString(l);
             } else if (l.tagName() == "date") {
-                Msg->Date = readDomDateTime(l);
+                Msg.Date = readDomDateTime(l);
             } else {
                 ::message(MSG_WARNING, "Unknown tag in document: %s", l.tagName().latin1());
             }
         }
         n = n.nextSibling();
     }
-    ::message(MSG_DEBUG2, "Read message %d", Msg->Id);
-    messages->append(*Msg);
+    ::message(MSG_DEBUG2, "Read message %d", Msg.Id);
+    messages->append(Msg);
 }
 
 void KAlcatelDoc::readDomContact(QDomElement el) {
     QDomNode n = el.firstChild();
-    AlcatelContact *Cont = new AlcatelContact();
-    Cont->Storage = StoragePC;
+    AlcatelContact Cont;
+    Cont.Storage = StoragePC;
 
     while( !n.isNull() ) {
         QDomElement l = n.toElement();
         if( !l.isNull() ) {
             if (l.tagName() == "id") {
-                Cont->PrevId = readDomInt(l);
+                Cont.PrevId = readDomInt(l);
             } else if (l.tagName() == "storage") {
-                Cont->PrevStorage = (AlcatelStorage)readDomInt(l);
+                Cont.PrevStorage = (AlcatelStorage)readDomInt(l);
             } else if (l.tagName() == "lastname") {
-                Cont->LastName = readDomString(l);
+                Cont.LastName = readDomString(l);
             } else if (l.tagName() == "firstname") {
-                Cont->FirstName = readDomString(l);
+                Cont.FirstName = readDomString(l);
             } else if (l.tagName() == "company") {
-                Cont->Company = readDomString(l);
+                Cont.Company = readDomString(l);
             } else if (l.tagName() == "jobtitle") {
-                Cont->JobTitle = readDomString(l);
+                Cont.JobTitle = readDomString(l);
             } else if (l.tagName() == "note") {
-                Cont->Note = readDomString(l);
+                Cont.Note = readDomString(l);
             } else if (l.tagName() == "category") {
-                Cont->Category = readDomInt(l);
+                Cont.Category = readDomInt(l);
             } else if (l.tagName() == "private") {
-                Cont->Private = readDomInt(l);
+                Cont.Private = readDomInt(l);
             } else if (l.tagName() == "worknumber") {
-                Cont->WorkNumber = readDomString(l);
+                Cont.WorkNumber = readDomString(l);
             } else if (l.tagName() == "mainnumber") {
-                Cont->MainNumber = readDomString(l);
+                Cont.MainNumber = readDomString(l);
             } else if (l.tagName() == "faxnumber") {
-                Cont->FaxNumber = readDomString(l);
+                Cont.FaxNumber = readDomString(l);
             } else if (l.tagName() == "othernumber") {
-                Cont->OtherNumber = readDomString(l);
+                Cont.OtherNumber = readDomString(l);
             } else if (l.tagName() == "pagernumber") {
-                Cont->PagerNumber = readDomString(l);
+                Cont.PagerNumber = readDomString(l);
             } else if (l.tagName() == "mobilenumber") {
-                Cont->MobileNumber = readDomString(l);
+                Cont.MobileNumber = readDomString(l);
             } else if (l.tagName() == "homenumber") {
-                Cont->HomeNumber = readDomString(l);
+                Cont.HomeNumber = readDomString(l);
             } else if (l.tagName() == "email1") {
-                Cont->Email1 = readDomString(l);
+                Cont.Email1 = readDomString(l);
             } else if (l.tagName() == "email2") {
-                Cont->Email2= readDomString(l);
+                Cont.Email2= readDomString(l);
             } else if (l.tagName() == "address") {
-                Cont->Address = readDomString(l);
+                Cont.Address = readDomString(l);
             } else if (l.tagName() == "city") {
-                Cont->City = readDomString(l);
+                Cont.City = readDomString(l);
             } else if (l.tagName() == "state") {
-                Cont->State = readDomString(l);
+                Cont.State = readDomString(l);
             } else if (l.tagName() == "zip") {
-                Cont->Zip = readDomString(l);
+                Cont.Zip = readDomString(l);
             } else if (l.tagName() == "country") {
-                Cont->Country = readDomString(l);
+                Cont.Country = readDomString(l);
             } else if (l.tagName() == "custom1") {
-                Cont->Custom1 = readDomString(l);
+                Cont.Custom1 = readDomString(l);
             } else if (l.tagName() == "custom2") {
-                Cont->Custom2 = readDomString(l);
+                Cont.Custom2 = readDomString(l);
             } else if (l.tagName() == "custom3") {
-                Cont->Custom3 = readDomString(l);
+                Cont.Custom3 = readDomString(l);
             } else if (l.tagName() == "custom4") {
-                Cont->Custom4 = readDomString(l);
+                Cont.Custom4 = readDomString(l);
             } else {
                 ::message(MSG_WARNING, "Unknown tag in document: %s", l.tagName().latin1());
             }
         }
         n = n.nextSibling();
     }
-    if (Cont->PrevStorage == StorageMobile) {
-        Cont->Id = Cont->PrevId;
+    if (Cont.PrevStorage == StorageMobile) {
+        Cont.Id = Cont.PrevId;
     } else {
-        Cont->Id = pcStorageCounter++;
+        Cont.Id = pcStorageCounter++;
     }
-    ::message(MSG_DEBUG2, "Read contact %d", Cont->Id);
-    contacts->append(*Cont);
+    ::message(MSG_DEBUG2, "Read contact %d", Cont.Id);
+    contacts->append(Cont);
 }
 
 void KAlcatelDoc::readDomEvent(QDomElement el) {
     QDomNode n = el.firstChild();
-    AlcatelCalendar *Cal = new AlcatelCalendar();
-    Cal->Id = pcStorageCounter++;
-    Cal->Storage = StoragePC;
+    AlcatelCalendar Cal;
+    Cal.Id = pcStorageCounter++;
+    Cal.Storage = StoragePC;
 
     while( !n.isNull() ) {
         QDomElement l = n.toElement();
         if( !l.isNull() ) {
             if (l.tagName() == "id") {
-                Cal->PrevId = readDomInt(l);
+                Cal.PrevId = readDomInt(l);
             } else if (l.tagName() == "storage") {
-                Cal->PrevStorage = (AlcatelStorage)readDomInt(l);
+                Cal.PrevStorage = (AlcatelStorage)readDomInt(l);
             } else if (l.tagName() == "date") {
-                Cal->Date = readDomDate(l);
+                Cal.Date = readDomDate(l);
             } else if (l.tagName() == "starttime") {
-                Cal->StartTime = readDomTime(l);
+                Cal.StartTime = readDomTime(l);
             } else if (l.tagName() == "endtime") {
-                Cal->EndTime = readDomTime(l);
+                Cal.EndTime = readDomTime(l);
             } else if (l.tagName() == "alarm") {
-                Cal->Alarm = readDomDateTime(l);
+                Cal.Alarm = readDomDateTime(l);
             } else if (l.tagName() == "alarm2") {
-                Cal->Alarm2 = readDomDateTime(l);
+                Cal.Alarm2 = readDomDateTime(l);
             } else if (l.tagName() == "subject") {
-                Cal->Subject = readDomString(l);
+                Cal.Subject = readDomString(l);
             } else if (l.tagName() == "private") {
-                Cal->Private = readDomInt(l);
+                Cal.Private = readDomInt(l);
             } else if (l.tagName() == "eventtype") {
-                Cal->EventType = readDomInt(l);
+                Cal.EventType = readDomInt(l);
             } else if (l.tagName() == "contactid") {
-                Cal->ContactID = readDomInt(l);
+                Cal.ContactID = readDomInt(l);
             } else if (l.tagName() == "dayofweek") {
-                Cal->DayOfWeek = readDomInt(l);
+                Cal.DayOfWeek = readDomInt(l);
             } else if (l.tagName() == "day") {
-                Cal->Day = readDomInt(l);
+                Cal.Day = readDomInt(l);
             } else if (l.tagName() == "weekofmonth") {
-                Cal->WeekOfMonth = readDomInt(l);
+                Cal.WeekOfMonth = readDomInt(l);
             } else if (l.tagName() == "month") {
-                Cal->Month = readDomInt(l);
+                Cal.Month = readDomInt(l);
             } else if (l.tagName() == "frequency") {
-                Cal->Frequency = readDomInt(l);
+                Cal.Frequency = readDomInt(l);
             } else if (l.tagName() == "stopdate") {
-                Cal->StopDate = readDomDate(l);
+                Cal.StopDate = readDomDate(l);
             } else if (l.tagName() == "startdate") {
-                Cal->StartDate = readDomDate(l);
+                Cal.StartDate = readDomDate(l);
             } else {
                 ::message(MSG_WARNING, "Unknown tag in document: %s", l.tagName().latin1());
             }
         }
         n = n.nextSibling();
     }
-    ::message(MSG_DEBUG2, "Read event %d", Cal->Id);
-    calendar->append(*Cal);
+    ::message(MSG_DEBUG2, "Read event %d", Cal.Id);
+    calendar->append(Cal);
 }
 
 void KAlcatelDoc::readDomTodo(QDomElement el) {
     QDomNode n = el.firstChild();
-    AlcatelTodo *Cal = new AlcatelTodo();
-    Cal->Id = pcStorageCounter++;
-    Cal->Storage = StoragePC;
+    AlcatelTodo Cal;
+    Cal.Id = pcStorageCounter++;
+    Cal.Storage = StoragePC;
 
     while( !n.isNull() ) {
         QDomElement l = n.toElement();
         if( !l.isNull() ) {
             if (l.tagName() == "id") {
-                Cal->PrevId = readDomInt(l);
+                Cal.PrevId = readDomInt(l);
             } else if (l.tagName() == "storage") {
-                Cal->PrevStorage = (AlcatelStorage)readDomInt(l);
+                Cal.PrevStorage = (AlcatelStorage)readDomInt(l);
             } else if (l.tagName() == "alarm") {
-                Cal->Alarm = readDomDateTime(l);
+                Cal.Alarm = readDomDateTime(l);
             } else if (l.tagName() == "subject") {
-                Cal->Subject = readDomString(l);
+                Cal.Subject = readDomString(l);
             } else if (l.tagName() == "duedate") {
-                Cal->DueDate = readDomDate(l);
+                Cal.DueDate = readDomDate(l);
             } else if (l.tagName() == "private") {
-                Cal->Private = readDomInt(l);
+                Cal.Private = readDomInt(l);
             } else if (l.tagName() == "contactid") {
-                Cal->ContactID = readDomInt(l);
+                Cal.ContactID = readDomInt(l);
             } else if (l.tagName() == "completed") {
-                Cal->Completed = readDomInt(l);
+                Cal.Completed = readDomInt(l);
             } else if (l.tagName() == "category") {
-                Cal->Category = readDomInt(l);
+                Cal.Category = readDomInt(l);
             } else if (l.tagName() == "priority") {
-                Cal->Priority = readDomInt(l);
+                Cal.Priority = readDomInt(l);
             } else {
                 ::message(MSG_WARNING, "Unknown tag in document: %s", l.tagName().latin1());
             }
         }
         n = n.nextSibling();
     }
-    ::message(MSG_DEBUG2, "Read todo %d", Cal->Id);
-    todos->append(*Cal);
+    ::message(MSG_DEBUG2, "Read todo %d", Cal.Id);
+    todos->append(Cal);
 }
 
 void KAlcatelDoc::readDomCategory(QDomElement el, AlcatelCategoryList *list) {
     QDomNode n = el.firstChild();
-    AlcatelCategory *Cat = new AlcatelCategory();
-    Cat->Storage = StoragePC;
+    AlcatelCategory Cat;
+    Cat.Storage = StoragePC;
 
     while( !n.isNull() ) {
         QDomElement l = n.toElement();
         if( !l.isNull() ) {
             if (l.tagName() == "id") {
-                Cat->PrevId = readDomInt(l);
-                Cat->Id = Cat->PrevId;
+                Cat.PrevId = readDomInt(l);
+                Cat.Id = Cat.PrevId;
             } else if (l.tagName() == "storage") {
-                Cat->PrevStorage = (AlcatelStorage)readDomInt(l);
+                Cat.PrevStorage = (AlcatelStorage)readDomInt(l);
             } else if (l.tagName() == "name") {
-                Cat->Name = readDomString(l);
+                Cat.Name = readDomString(l);
             } else {
                 ::message(MSG_WARNING, "Unknown tag in document: %s", l.tagName().latin1());
             }
         }
         n = n.nextSibling();
     }
-    ::message(MSG_DEBUG2, "Read category %d", Cat->Id);
-    list->append(*Cat);
+    ::message(MSG_DEBUG2, "Read category %d", Cat.Id);
+    list->append(Cat);
 }
 
 bool KAlcatelDoc::openDocument(const KURL& url, const char *format /*=0*/) {
@@ -1056,24 +1054,21 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
             }
             message(MSG_INFO, "Receiving data for item %d (%d fields)", ids[i], items[0]);
             printf ("Item %d (fields: %d):\n", ids[i], items[0]);
-            AlcatelContact *Contact;
-            AlcatelTodo *Todo;
-            AlcatelCalendar *Calendar;
+            AlcatelContact Contact;
+            AlcatelTodo Todo;
+            AlcatelCalendar Calendar;
             switch (sync) {
                 case ALC_SYNC_CALENDAR:
-                    Calendar = new AlcatelCalendar();
-                    Calendar->Id = ids[i];
-                    Calendar->Storage = StorageMobile;
+                    Calendar.Id = ids[i];
+                    Calendar.Storage = StorageMobile;
                     break;
                 case ALC_SYNC_TODO:
-                    Todo = new AlcatelTodo();
-                    Todo->Id = ids[i];
-                    Todo->Storage = StorageMobile;
+                    Todo.Id = ids[i];
+                    Todo.Storage = StorageMobile;
                     break;
                 case ALC_SYNC_CONTACTS:
-                    Contact = new AlcatelContact();
-                    Contact->Storage = StorageMobile;
-                    Contact->Id = ids[i];
+                    Contact.Storage = StorageMobile;
+                    Contact.Id = ids[i];
                     break;
             }
             for (j = 1; j <= items[0]; j++) {
@@ -1093,13 +1088,13 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
                 } else {
                     switch (sync) {
                         case ALC_SYNC_CALENDAR:
-                            Calendar->setField(items[j], field);
+                            Calendar.setField(items[j], field);
                             break;
                         case ALC_SYNC_TODO:
-                            Todo->setField(items[j], field);
+                            Todo.setField(items[j], field);
                             break;
                         case ALC_SYNC_CONTACTS:
-                            Contact->setField(items[j], field);
+                            Contact.setField(items[j], field);
                             break;
                     }
                 }
@@ -1109,21 +1104,21 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
             switch (sync) {
                 case ALC_SYNC_CALENDAR:
                     if (win->mergeData == 0)
-                        local_calendar.append(*Calendar);
+                        local_calendar.append(Calendar);
                     else
-                        calendar->append(*Calendar);
+                        calendar->append(Calendar);
                     break;
                 case ALC_SYNC_TODO:
                     if (win->mergeData == 0)
-                        local_todos.append(*Todo);
+                        local_todos.append(Todo);
                     else
-                        todos->append(*Todo);
+                        todos->append(Todo);
                     break;
                 case ALC_SYNC_CONTACTS:
                     if (win->mergeData == 0)
-                        local_contacts.append(*Contact);
+                        local_contacts.append(Contact);
                     else
-                        contacts->append(*Contact);
+                        contacts->append(Contact);
                     break;
             }
         }
@@ -1138,19 +1133,81 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
     alcatel_close_session(type);
     alcatel_detach();
 
-    /* TODO: add merging code here */
+    /* TODO: finish merging code here */
     if (win->mergeData == 0) {
         switch (sync) {
             case ALC_SYNC_CALENDAR: {
                 AlcatelCalendarList::Iterator it;
                 AlcatelCalendar *item;
-                for( it = local_calendar.begin(); it != local_calendar.end(); ++it ) {
+                for( it = local_calendar.begin(); it != local_calendar.end(); /*++it*/ ) {
+                    if ((item = getCalendarByPrevId(calendar, (*it).Id, (*it).Storage))) {
+                        if (!(*item == *it)) {
+                            ::message(MSG_DEBUG, "MERGE:Something different -> merging (%s)", item->getName().latin1());
+                            if (win->conflictAction == 0) {
+                                calendar->append((*it));
+                                it = local_calendar.remove(it);
+                                calendar->remove(*item);
+                            } else if (win->conflictAction == 1) {
+                                it = local_calendar.remove(it);
+                            } else if (win->conflictAction == 2) {
+                                AlcatelCalendar *cont = win->solveConflict(*it, *item);
+                                if (cont == NULL) {
+                                    calendar->append((*it));
+                                    it = local_calendar.remove(it);
+                                } else {
+                                    calendar->remove(*item);
+                                    calendar->append(*cont);
+                                    it = local_calendar.remove(it);
+                                }
+                            }
+                        } else {
+                            ::message(MSG_DEBUG, "MERGE:Same records (%s)", item->getName().latin1());
+                            calendar->remove(*item);
+                            calendar->append((*it));
+                            it = local_calendar.remove(it);
+                        }
+                    } else {
+                        ::message(MSG_DEBUG, "MERGE:None correspondent record found (%s)", (*it).getName().latin1());
+                        calendar->append((*it));
+                        it = local_calendar.remove(it);
+                    }
                 }
                 break; }
             case ALC_SYNC_TODO: {
                 AlcatelTodoList::Iterator it;
                 AlcatelTodo *item;
-                for( it = local_todos.begin(); it != local_todos.end(); ++it ) {
+                for( it = local_todos.begin(); it != local_todos.end(); /*++it*/ ) {
+                    if ((item = getTodoByPrevId(todos, (*it).Id, (*it).Storage))) {
+                        if (!(*item == *it)) {
+                            ::message(MSG_DEBUG, "MERGE:Something different -> merging (%s)", item->getName().latin1());
+                            if (win->conflictAction == 0) {
+                                todos->append((*it));
+                                it = local_todos.remove(it);
+                                todos->remove(*item);
+                            } else if (win->conflictAction == 1) {
+                                it = local_todos.remove(it);
+                            } else if (win->conflictAction == 2) {
+                                AlcatelTodo *cont = win->solveConflict(*it, *item);
+                                if (cont == NULL) {
+                                    todos->append((*it));
+                                    it = local_todos.remove(it);
+                                } else {
+                                    todos->remove(*item);
+                                    todos->append(*cont);
+                                    it = local_todos.remove(it);
+                                }
+                            }
+                        } else {
+                            ::message(MSG_DEBUG, "MERGE:Same records (%s)", item->getName().latin1());
+                            todos->remove(*item);
+                            todos->append((*it));
+                            it = local_todos.remove(it);
+                        }
+                    } else {
+                        ::message(MSG_DEBUG, "MERGE:None correspondent record found (%s)", (*it).getName().latin1());
+                        todos->append((*it));
+                        it = local_todos.remove(it);
+                    }
                 }
                 break; }
             case ALC_SYNC_CONTACTS: {
@@ -1158,19 +1215,15 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
                 AlcatelContact *item;
                 for( it = local_contacts.begin(); it != local_contacts.end(); /*++it*/ ) {
                     if ((item = getContactByPrevId(contacts, (*it).Id, (*it).Storage))) {
-                        if (item == NULL) {
-                            ::message(MSG_DEBUG, "MERGE:None correspondent record found (NULL) (%s)", item->Name().latin1());
-                            contacts->append((*it));
-                            it = local_contacts.remove(it);
-                        } else if (!(*item == *it)) {
-                            ::message(MSG_DEBUG, "MERGE:Something different -> merging (%s)", item->Name().latin1());
-                            if (win->mergeData == 0) {
+                        if (!(*item == *it)) {
+                            ::message(MSG_DEBUG, "MERGE:Something different -> merging (%s)", item->getName().latin1());
+                            if (win->conflictAction == 0) {
                                 contacts->append((*it));
                                 it = local_contacts.remove(it);
                                 contacts->remove(*item);
-                            } else if (win->mergeData == 1) {
+                            } else if (win->conflictAction == 1) {
                                 it = local_contacts.remove(it);
-                            } else if (win->mergeData == 2) {
+                            } else if (win->conflictAction == 2) {
                                 AlcatelContact *cont = win->solveConflict(*it, *item);
                                 if (cont == NULL) {
                                     contacts->append((*it));
@@ -1179,16 +1232,17 @@ bool KAlcatelDoc::readMobileItems(alc_type sync, alc_type type) {
                                     contacts->remove(*item);
                                     contacts->append(*cont);
                                     it = local_contacts.remove(it);
+                                    delete cont;
                                 }
                             }
                         } else {
-                            ::message(MSG_DEBUG, "MERGE:Same records (%s)", item->Name().latin1());
+                            ::message(MSG_DEBUG, "MERGE:Same records (%s)", item->getName().latin1());
                             contacts->remove(*item);
                             contacts->append((*it));
                             it = local_contacts.remove(it);
                         }
                     } else {
-                        ::message(MSG_DEBUG, "MERGE:None correspondent record found (%s)", (*it).Name().latin1());
+                        ::message(MSG_DEBUG, "MERGE:None correspondent record found (%s)", (*it).getName().latin1());
                         contacts->append((*it));
                         it = local_contacts.remove(it);
                     }
@@ -1329,22 +1383,22 @@ bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1) 
 
         i = 0;
         while (msg[i].pos != -1) {
-            AlcatelMessage *Msg = new AlcatelMessage();
-            Msg->Date = QDateTime();
-            Msg->Storage = StorageSIM;
-            Msg->Date.setTime_t(msg[i].date);
-            Msg->Length = msg[i].len;
-            Msg->Id = msg[i].pos;
-            Msg->Raw = strdup(msg[i].raw);
+            AlcatelMessage Msg;
+            Msg.Date = QDateTime();
+            Msg.Storage = StorageSIM;
+            Msg.Date.setTime_t(msg[i].date);
+            Msg.Length = msg[i].len;
+            Msg.Id = msg[i].pos;
+            Msg.Raw = msg[i].raw;
             free(msg[i].raw);
-            Msg->SMSC = QString(msg[i].smsc);
+            Msg.SMSC = QString(msg[i].smsc);
             free(msg[i].smsc);
-            Msg->Sender = QString(msg[i].sendr);
+            Msg.Sender = QString(msg[i].sendr);
             free(msg[i].sendr);
-            Msg->Status = msg[i].stat;
-            Msg->Text = QString(msg[i].ascii);
+            Msg.Status = msg[i].stat;
+            Msg.Text = QString(msg[i].ascii);
             free(msg[i].ascii);
-            messages->append(*Msg);
+            messages->append(Msg);
             i++;
         }
         free(msg);
@@ -1362,13 +1416,15 @@ bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1) 
         cont = get_contacts(1, 10);
         i = 0;
         while (cont[i].pos != -1) {
-            AlcatelCall *Call = new AlcatelCall();
-            Call->Storage = StorageMobile;
-            Call->Type = CallDialled;
-            Call->Id = cont[i].pos;
-            Call->Name = *(cont[i].name);
-            Call->Number = strdup(cont[i].number);
-            calls->append(*Call);
+            AlcatelCall Call;
+            Call.Storage = StorageMobile;
+            Call.Type = CallDialled;
+            Call.Id = cont[i].pos;
+            Call.Name = *(cont[i].name);
+            delete cont[i].name;
+            Call.Number = cont[i].number;
+            free(cont[i].number);
+            calls->append(Call);
             i++;
         }
         free(cont);
@@ -1377,13 +1433,15 @@ bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1) 
         cont = get_contacts(1, 10);
         i = 0;
         while (cont[i].pos != -1) {
-            AlcatelCall *Call = new AlcatelCall();
-            Call->Storage = StorageMobile;
-            Call->Type = CallReceived;
-            Call->Id = cont[i].pos;
-            Call->Name = *(cont[i].name);
-            Call->Number = strdup(cont[i].number);
-            calls->append(*Call);
+            AlcatelCall Call;
+            Call.Storage = StorageMobile;
+            Call.Type = CallReceived;
+            Call.Id = cont[i].pos;
+            Call.Name = *(cont[i].name);
+            delete cont[i].name;
+            Call.Number = cont[i].number;
+            free(cont[i].number);
+            calls->append(Call);
             i++;
         }
         free(cont);
@@ -1392,13 +1450,15 @@ bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1) 
         cont = get_contacts(1, 10);
         i = 0;
         while (cont[i].pos != -1) {
-            AlcatelCall *Call = new AlcatelCall();
-            Call->Storage = StorageMobile;
-            Call->Type = CallMissed;
-            Call->Id = cont[i].pos;
-            Call->Name = *(cont[i].name);
-            Call->Number = strdup(cont[i].number);
-            calls->append(*Call);
+            AlcatelCall Call;
+            Call.Storage = StorageMobile;
+            Call.Type = CallMissed;
+            Call.Id = cont[i].pos;
+            Call.Name = *(cont[i].name);
+            delete cont[i].name;
+            Call.Number = cont[i].number;
+            free(cont[i].number);
+            calls->append(Call);
             i++;
         }
         free(cont);
@@ -1416,12 +1476,14 @@ bool KAlcatelDoc::readMobile(AlcDataType what = alcatel_all, int category = -1) 
 
         i = 0;
         while (cont[i].pos != -1) {
-            AlcatelContact *Cont = new AlcatelContact();
-            Cont->Storage = StorageSIM;
-            Cont->Id = cont[i].pos;
-            Cont->LastName = *(cont[i].name);
-            Cont->MainNumber = strdup(cont[i].number);
-            contacts->append(*Cont);
+            AlcatelContact Cont;
+            Cont.Storage = StorageSIM;
+            Cont.Id = cont[i].pos;
+            Cont.LastName = *(cont[i].name);
+            delete cont[i].name;
+            Cont.MainNumber = cont[i].number;
+            free(cont[i].number);
+            contacts->append(Cont);
             i++;
         }
         free(cont);

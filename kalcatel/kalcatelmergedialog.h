@@ -28,15 +28,93 @@
 #include <qwidget.h>
 #include <kdialog.h>
 
+class AlcatelMessage;
+class AlcatelContact;
+class AlcatelCalendar;
+class AlcatelTodo;
+class AlcatelCategory;
+class AlcatelClass;
+
+class QPushButton;
+class QRadioButton;
+class QGrid;
+class QLabel;
+
+class KAlcatelMergeDialog;
+
+enum MergeStatus {
+    Mobile,
+    Delete,
+    PC
+    };
+
+class MergeItem : public QObject {
+   Q_OBJECT
+   friend class KAlcatelMergeDialog;
+public:
+    MergeItem(QWidget *parent, QString name, QString &mobileText, QString &pcText);
+    MergeItem(const MergeItem  &item);
+    MergeItem();
+	~MergeItem(void);
+	MergeStatus getStatus(void);
+	void setStatus(MergeStatus status);
+public slots:
+    void pcToggle(bool state);
+    void deleteToggle(bool state);
+    void mobileToggle(bool state);
+private:
+    QRadioButton *mobileCheck, *deleteCheck, *pcCheck;
+    QLabel *mobileLabel, *pcLabel, *nameLabel;
+};
+
+
+typedef QValueList<MergeItem> MergeItemList;
+
+
 /**dialog to show conflict during merge and allow user to select which fields takes precendence
   *@author Michal Cihar
   */
 
 class KAlcatelMergeDialog : public KDialog  {
    Q_OBJECT
-public: 
+public:
 	KAlcatelMergeDialog(QWidget *parent=0, const char *name=0);
 	~KAlcatelMergeDialog();
+
+    AlcatelContact *exec(AlcatelContact &c1, AlcatelContact &c2);
+    AlcatelMessage *exec(AlcatelMessage &c1, AlcatelMessage &c2);
+    AlcatelCalendar *exec(AlcatelCalendar &c1, AlcatelCalendar &c2);
+    AlcatelTodo *exec(AlcatelTodo &c1, AlcatelTodo &c2);
+    AlcatelCategory *exec(AlcatelCategory &c1, AlcatelCategory &c2);
+public slots:
+    /** called when cancel pressed
+      */
+    void slotBoth();
+    /** called when ok pressed
+      */
+    void slotOK();
+
+    void slotClear();
+    void slotPC(void);
+    void slotDelete(void);
+    void slotMobile(void);
+private:
+    int exec ();
+
+    QGrid *conflictGrid;
+
+    QPushButton *buttonOK;
+    QPushButton *buttonBoth;
+
+    QPushButton *mobileButton;
+    QPushButton *deleteButton;
+    QPushButton *pcButton;
+
+    AlcatelClass *result;
+    AlcatelClass *data1;
+    AlcatelClass *data2;
+
+    MergeItemList itemList;
 };
 
 #endif

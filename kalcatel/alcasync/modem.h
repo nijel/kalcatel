@@ -79,4 +79,7 @@ extern int modem_open(void);
   */
 extern void modem_close(void);
 
+/** Flushes modem I/O
+  */
+extern void modem_flush(void);
 #endif

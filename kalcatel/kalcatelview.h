@@ -30,10 +30,7 @@
 #endif
 
 // include files for Qt
-//#include <qvbox.h>
-
 #include <qwidget.h>
-//#include <kjanuswidget.h>
 
 #include "alcatool/alcatel.h"
 

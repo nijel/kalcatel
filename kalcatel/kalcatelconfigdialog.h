@@ -27,7 +27,6 @@
 
 #include <kdialog.h>
 
-
 class KJanusWidget;
 class QWidget;
 class QFrame;

@@ -39,9 +39,6 @@
 #include <kaction.h>
 #include <kurl.h>
 
-#include "kalcateldoc.h"
-
-
 #define ID_STATUS_MSG 1
 #define ID_DETAIL_MSG 2
 
@@ -49,6 +46,12 @@
 class KAlcatelDoc;
 class KAlcatelView;
 class KAlcatelConfigDialog;
+
+class AlcatelMessage;
+class AlcatelContact;
+class AlcatelCalendar;
+class AlcatelTodo;
+class AlcatelCategory;
 
 /**
   * The base class for KAlcatel application windows. It sets up the main
@@ -98,11 +101,11 @@ class KAlcatelApp : public KMainWindow
 
     int contact_url;
 
-    AlcatelContact *solveConflict(const AlcatelContact &c1, const AlcatelContact &c2);
-    AlcatelMessage *solveConflict(const AlcatelMessage &c1, const AlcatelMessage &c2);
-    AlcatelCalendar *solveConflict(const AlcatelCalendar &c1, const AlcatelCalendar &c2);
-    AlcatelTodo *solveConflict(const AlcatelTodo &c1, const AlcatelTodo &c2);
-    AlcatelCategory *solveConflict(const AlcatelCategory &c1, const AlcatelCategory &c2);
+    AlcatelContact *solveConflict(AlcatelContact &c1, AlcatelContact &c2);
+    AlcatelMessage *solveConflict(AlcatelMessage &c1, AlcatelMessage &c2);
+    AlcatelCalendar *solveConflict(AlcatelCalendar &c1, AlcatelCalendar &c2);
+    AlcatelTodo *solveConflict(AlcatelTodo &c1, AlcatelTodo &c2);
+    AlcatelCategory *solveConflict(AlcatelCategory &c1, AlcatelCategory &c2);
 
   protected:
     /** save general Options like all bar positions and status as well as the geometry and the recent file list to the configuration

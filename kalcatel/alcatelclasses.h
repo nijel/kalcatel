@@ -48,6 +48,7 @@ enum AlcatelStorage {StorageNone, StoragePC, StorageSIM, StorageMobile } ;
 class AlcatelClass {
 public:
     AlcatelClass();
+    virtual ~AlcatelClass() {}
     /** Position of record
       */
     int Id;
@@ -64,6 +65,8 @@ public:
       * Takes affect only fo StorageMobile and StorageSIM.
       */
     bool Modified;
+    virtual const char *getClassName() = 0;
+    virtual QString getName(void) = 0;
 };
 
 extern QString StorageTypes[];
@@ -86,7 +89,7 @@ public:
     bool operator==(const AlcatelContact &cmp);
     /** returns formatted name of contact
       */
-	QString Name(void);
+	QString getName(void);
 	
     QString LastName;
     QString FirstName;
@@ -113,6 +116,8 @@ public:
     QString Custom2;
     QString Custom3;
     QString Custom4;
+
+    const char *getClassName() {static char cn[]="AlcatelContact";return cn;}
 };
 
 /** class for storing calendar
@@ -134,6 +139,8 @@ public:
       */
     QString RepeatingDetail(void);
 	
+    QString getName(void) {return QString("%1 %2-%3 (%4)").arg(Date.toString()).arg(StartTime.toString()).arg(EndTime.toString()).arg(Subject);}
+
     QDate Date;
     QTime StartTime;
     QTime EndTime;
@@ -154,6 +161,8 @@ public:
 
     /* used when EventType is alarm */
     QDateTime Alarm2;
+
+    const char *getClassName() {static char cn[]="AlcatelCalendar";return cn;}
 };
 
 /** class for storing todos
@@ -169,6 +178,8 @@ public:
 	
     bool operator==(const AlcatelTodo &cmp);
 
+    QString getName(void) {return Subject;}
+
     QDate DueDate;
     int Completed;
     QDateTime Alarm;
@@ -177,6 +188,8 @@ public:
     int Category;
     int Priority;
     int ContactID;
+
+    const char *getClassName() {static char cn[]="AlcatelTodo";return cn;}
 };
 
 /** class for storing messages
@@ -187,14 +200,17 @@ public:
 	~AlcatelMessage();
 	
     bool operator==(const AlcatelMessage &cmp);
+    QString getName(void) {return Text;}
 
     int Status;
     int Length;
-    char *Raw;
+    QString Raw;
     QString Sender;
     QDateTime Date;
     QString Text;
     QString SMSC;
+
+    const char *getClassName() {static char cn[]="AlcatelMessage";return cn;}
 };
 
 /** class for storing calls
@@ -205,10 +221,13 @@ public:
 	~AlcatelCall();
 	
     bool operator==(const AlcatelCall &cmp);
+    QString getName(void) {return Name;}
 
     CallType Type;
     QString Number;
     QString Name;
+
+    const char *getClassName() {static char cn[]="AlcatelCall";return cn;}
 };
 
 /** class for storing categories
@@ -221,8 +240,11 @@ public:
 	AlcatelCategory();
 	
     bool operator==(const AlcatelCategory &cmp);
+    QString getName(void) {return Name;}
 
     QString Name;
+
+    const char *getClassName() {static char cn[]="AlcatelCategory";return cn;}
 };
 
 /** list of contacts

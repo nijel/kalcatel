@@ -94,7 +94,7 @@ AlcatelContact::AlcatelContact() {
 AlcatelContact::~AlcatelContact() {
 }
 
-QString AlcatelContact::Name(void) {
+QString AlcatelContact::getName(void) {
     return (FirstName.isEmpty())?
                             ((LastName.isEmpty())?
                                 QString("?"):
@@ -288,14 +288,9 @@ AlcatelMessage::AlcatelMessage() {
     Id = -1;
     Status = -1;
     Length = -1;
-    Raw = NULL;
 }
 
 AlcatelMessage::~AlcatelMessage() {
-    if (Raw != NULL) {
-        free( Raw );
-        Raw = NULL;
-    }
 }
 
 AlcatelCall::AlcatelCall() {
@@ -522,7 +517,8 @@ bool AlcatelCalendar::operator==(const AlcatelCalendar &cmp) {
         (StartTime == cmp.StartTime) &&
         (EndTime == cmp.EndTime) &&
         (Alarm == cmp.Alarm) &&
-        (Subject == cmp.Subject) &&
+//        (Subject == cmp.Subject) &&
+        ((Subject.isEmpty() && cmp.Subject.isEmpty()) || (Subject == cmp.Subject)) &&
         (Private == cmp.Private) &&
         (EventType == cmp.EventType) &&
         (ContactID == cmp.ContactID) &&
@@ -541,7 +537,8 @@ bool AlcatelTodo::operator==(const AlcatelTodo &cmp) {
         (DueDate == cmp.DueDate) &&
         (Completed == cmp.Completed) &&
         (Alarm == cmp.Alarm) &&
-        (Subject == cmp.Subject) &&
+//        (Subject == cmp.Subject) &&
+        ((Subject.isEmpty() && cmp.Subject.isEmpty()) || (Subject == cmp.Subject)) &&
         (Private == cmp.Private) &&
         (Category == cmp.Category) &&
         (Priority == cmp.Priority) &&
@@ -550,51 +547,58 @@ bool AlcatelTodo::operator==(const AlcatelTodo &cmp) {
 
 bool AlcatelContact::operator==(const AlcatelContact &cmp) {
     return
-        (LastName == cmp.LastName) &&
-        (FirstName == cmp.FirstName) &&
-        (Company == cmp.Company) &&
-        (JobTitle == cmp.JobTitle) &&
-        (Note == cmp.Note) &&
+        ((LastName.isEmpty() && cmp.LastName.isEmpty()) || (LastName == cmp.LastName)) &&
+        ((FirstName.isEmpty() && cmp.FirstName.isEmpty()) || (FirstName == cmp.FirstName)) &&
+        ((Company.isEmpty() && cmp.Company.isEmpty()) || (Company == cmp.Company)) &&
+        ((JobTitle.isEmpty() && cmp.JobTitle.isEmpty()) || (JobTitle == cmp.JobTitle)) &&
+        ((Note.isEmpty() && cmp.Note.isEmpty()) || (Note == cmp.Note)) &&
         (Category == cmp.Category) &&
         (Private == cmp.Private) &&
-        (WorkNumber == cmp.WorkNumber) &&
-        (MainNumber == cmp.MainNumber) &&
-        (FaxNumber == cmp.FaxNumber) &&
-        (OtherNumber == cmp.OtherNumber) &&
-        (PagerNumber == cmp.PagerNumber) &&
-        (MobileNumber == cmp.MobileNumber) &&
-        (HomeNumber == cmp.HomeNumber) &&
-        (Email1 == cmp.Email1) &&
-        (Email2 == cmp.Email2) &&
-        (Address == cmp.Address) &&
-        (City == cmp.City) &&
-        (State == cmp.State) &&
-        (Zip == cmp.Zip) &&
-        (Country == cmp.Country) &&
-        (Custom1 == cmp.Custom1) &&
-        (Custom2 == cmp.Custom2) &&
-        (Custom3 == cmp.Custom3) &&
-        (Custom4 == cmp.Custom4);
+        ((WorkNumber.isEmpty() && cmp.WorkNumber.isEmpty()) || (WorkNumber == cmp.WorkNumber)) &&
+        ((MainNumber.isEmpty() && cmp.MainNumber.isEmpty()) || (MainNumber == cmp.MainNumber)) &&
+        ((FaxNumber.isEmpty() && cmp.FaxNumber.isEmpty()) || (FaxNumber == cmp.FaxNumber)) &&
+        ((OtherNumber.isEmpty() && cmp.OtherNumber.isEmpty()) || (OtherNumber == cmp.OtherNumber)) &&
+        ((PagerNumber.isEmpty() && cmp.PagerNumber.isEmpty()) || (PagerNumber == cmp.PagerNumber)) &&
+        ((MobileNumber.isEmpty() && cmp.MobileNumber.isEmpty()) || (MobileNumber == cmp.MobileNumber)) &&
+        ((HomeNumber.isEmpty() && cmp.HomeNumber.isEmpty()) || (HomeNumber == cmp.HomeNumber)) &&
+        ((Email1.isEmpty() && cmp.Email1.isEmpty()) || (Email1 == cmp.Email1)) &&
+        ((Email2.isEmpty() && cmp.Email2.isEmpty()) || (Email2 == cmp.Email2)) &&
+        ((Address.isEmpty() && cmp.Address.isEmpty()) || (Address == cmp.Address)) &&
+        ((City.isEmpty() && cmp.City.isEmpty()) || (City == cmp.City)) &&
+        ((State.isEmpty() && cmp.State.isEmpty()) || (State == cmp.State)) &&
+        ((Zip.isEmpty() && cmp.Zip.isEmpty()) || (Zip == cmp.Zip)) &&
+        ((Country.isEmpty() && cmp.Country.isEmpty()) || (Country == cmp.Country)) &&
+        ((Custom1.isEmpty() && cmp.Custom1.isEmpty()) || (Custom1 == cmp.Custom1)) &&
+        ((Custom2.isEmpty() && cmp.Custom2.isEmpty()) || (Custom2 == cmp.Custom2)) &&
+        ((Custom3.isEmpty() && cmp.Custom3.isEmpty()) || (Custom3 == cmp.Custom3)) &&
+        ((Custom4.isEmpty() && cmp.Custom4.isEmpty()) || (Custom4 == cmp.Custom4));
 }
 
 bool AlcatelCategory::operator==(const AlcatelCategory &cmp) {
-    return Name==cmp.Name;
+    return ((Name.isEmpty() && cmp.Name.isEmpty()) || (Name == cmp.Name));
+//    return Name==cmp.Name;
 }
 
 bool AlcatelMessage::operator==(const AlcatelMessage &cmp) {
     return
         (Status == cmp.Status) &&
         (Length == cmp.Length) &&
-        (strcmp(Raw, cmp.Raw) == 0) &&
-        (Sender == cmp.Sender) &&
         (Date == cmp.Date) &&
+        ((Raw.isEmpty() && cmp.Raw.isEmpty()) || (Raw == cmp.Raw)) &&
+        ((Sender.isEmpty() && cmp.Sender.isEmpty()) || (Sender == cmp.Sender)) &&
+        ((Text.isEmpty() && cmp.Text.isEmpty()) || (Text == cmp.Text)) &&
+        ((SMSC.isEmpty() && cmp.SMSC.isEmpty()) || (SMSC == cmp.SMSC));
+
+/*        (Raw == cmp.Raw) &&
+        (Sender == cmp.Sender) &&
         (Text == cmp.Text) &&
-        (SMSC == cmp.SMSC);
+        (SMSC == cmp.SMSC);*/
 }
 
 bool AlcatelCall::operator==(const AlcatelCall &cmp) {
     return
         (Type == cmp.Type) &&
         (Number == cmp.Number) &&
-        (Name == cmp.Name);
+        ((Name.isEmpty() && cmp.Name.isEmpty()) || (Name == cmp.Name));
+//        (Name == cmp.Name);
 }

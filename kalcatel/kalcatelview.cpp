@@ -53,6 +53,7 @@
 #include <khtmlview.h>
 
 // application specific includes
+#include "alcatelclasses.h"
 #include "kalcatelview.h"
 #include "kalcateldoc.h"
 #include "kalcatel.h"
@@ -349,7 +350,7 @@ void KAlcatelView::repaint() {
                 AlcatelContact *cont = getContactByPhone(doc->contacts, &((* it).Sender), &(((KAlcatelApp *)parent())->phone_prefix));
                 new KAlcatelMessageViewItem (messages_list, &(* it),
                         QString((* it).Sender),
-                        cont == NULL? i18n("Unknown") : cont->Name(),
+                        cont == NULL? i18n("Unknown") : cont->getName(),
                         type,
                         (* it).Date.date().toString(),
                         (* it).Date.time().toString(),
@@ -359,7 +360,7 @@ void KAlcatelView::repaint() {
 
                 new KAlcatelMessageCatViewItem (list, &(* it),
                         QString((* it).Sender),
-                        cont == NULL? i18n("Unknown") : cont->Name(),
+                        cont == NULL? i18n("Unknown") : cont->getName(),
                         (* it).Date.date().toString(),
                         (* it).Date.time().toString(),
                         QString((* it).Text),
@@ -397,7 +398,6 @@ void KAlcatelView::repaint() {
                 widgetstack->addWidget(todo_cat_list[(*c_it).Id] = createListView(widgetstack, alc_todos_cat), ID_TODOS_CAT + (*c_it).Id );
                 new KAlcatelTreeViewItem(todo_item, (*c_it).Name, SmallIcon("kalcatel-todo.png"), ID_TODOS_CAT + (*c_it).Id );
                 connect( todo_cat_list[(*c_it).Id], SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotTodoChanged(QListViewItem *) ) );
-                ::message(MSG_DEBUG, "Created category listview %d", (*c_it).Id);
             }
 
             AlcatelTodoList::Iterator it;
@@ -457,7 +457,7 @@ void KAlcatelView::repaint() {
                         (* it).EventType == ALC_CALENDAR_BIRTHDAY || (* it).EventType == ALC_CALENDAR_ALARM ? i18n("N/A") : (* it).StartTime.toString(),
                         (* it).EventType == ALC_CALENDAR_BIRTHDAY || (* it).EventType == ALC_CALENDAR_ALARM ? i18n("N/A") : (* it).EndTime.toString(),
                         (* it).EventType!=-1?CalendarTypes[(* it).EventType]:i18n("Unknown"),
-                        ((* it).Subject.isNull() && (* it).EventType == ALC_CALENDAR_CALL && cont != NULL) ? i18n("Call to %1").arg(cont->Name()) : (* it).Subject,
+                        ((* it).Subject.isNull() && (* it).EventType == ALC_CALENDAR_CALL && cont != NULL) ? i18n("Call to %1").arg(cont->getName()) : (* it).Subject,
                         (* it).Alarm.isNull()?i18n("None"):(* it).Alarm.toString(),
                         (* it).Repeating(),
                         QString("%1 %2").
@@ -483,7 +483,7 @@ void KAlcatelView::repaint() {
                 new KAlcatelCallViewItem (calls_list, &(* it),
                         (* it).Number,
                         (* it).Name,
-                        cont == NULL? QString("") : cont->Name(),
+                        cont == NULL? QString("") : cont->getName(),
                         CallTypes[(* it).Type],
                         QString("%1").arg((* it).Id));
                 switch ((* it).Type) {
@@ -491,7 +491,7 @@ void KAlcatelView::repaint() {
                         new KAlcatelCallCatViewItem (calls_outgoing_list, &(* it),
                                 (* it).Number,
                                 (* it).Name,
-                                cont == NULL? QString("") : cont->Name(),
+                                cont == NULL? QString("") : cont->getName(),
                                 QString("%1").arg((* it).Id));
                         break;
                     case CallMissed:
@@ -499,14 +499,14 @@ void KAlcatelView::repaint() {
                         new KAlcatelCallCatViewItem (calls_missed_list, &(* it),
                                 (* it).Number,
                                 (* it).Name,
-                                cont == NULL? QString("") : cont->Name(),
+                                cont == NULL? QString("") : cont->getName(),
                                 QString("%1").arg((* it).Id));
                         break;
                     case CallReceived:
                         new KAlcatelCallCatViewItem (calls_received_list, &(* it),
                                 (* it).Number,
                                 (* it).Name,
-                                cont == NULL? QString("") : cont->Name(),
+                                cont == NULL? QString("") : cont->getName(),
                                 QString("%1").arg((* it).Id));
                         break;
                 }
@@ -552,19 +552,17 @@ void KAlcatelView::repaint() {
                     widgetstack->addWidget(contacts_cat_list[(*c_it).Id] = createListView(widgetstack, alc_contacts_mobile_cat), ID_CONTACTS_CAT + (*c_it).Id );
                     new KAlcatelTreeViewItem(contacts_mobile_item, (*c_it).Name, SmallIcon("kalcatel-contact-mobile.png"), ID_CONTACTS_CAT + (*c_it).Id );
                     connect( contacts_cat_list[(*c_it).Id], SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
-                    ::message(MSG_DEBUG, "Created category listview %d", (*c_it).Id);
                 } else {
                     widgetstack->addWidget(contacts_pc_cat_list[(*c_it).Id] = createListView(widgetstack, alc_contacts_mobile_cat), ID_CONTACTS_PC_CAT + (*c_it).Id );
                     new KAlcatelTreeViewItem(contacts_pc_item, (*c_it).Name, SmallIcon("kalcatel-contact-mobile.png"), ID_CONTACTS_PC_CAT + (*c_it).Id );
                     connect( contacts_pc_cat_list[(*c_it).Id], SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( slotContactChanged(QListViewItem *) ) );
-                    ::message(MSG_DEBUG, "Created category listview %d", (*c_it).Id);
                 }
             }
 
             AlcatelContactList::Iterator it;
             for( it = doc->contacts->begin(); it != doc->contacts->end(); ++it ) {
                 new KAlcatelContactViewItem (contacts_list, &(*it),
-                        (* it).Name(),
+                        (* it).getName(),
                         QString(!(* it).MainNumber.isEmpty()?(* it).MainNumber: /* try to find non-empty phone */
                                     !(* it).MobileNumber.isEmpty()?(* it).MobileNumber:
                                         !(* it).WorkNumber.isEmpty()?(* it).WorkNumber:
@@ -721,7 +719,7 @@ void KAlcatelView::slotShowMessage(AlcatelMessage *what) {
         "<b>Status:</b> %7<br>").
         arg(cont == NULL? QString("") : //cont->Name()
             QString("<a href=\"contact:%1/%2\">%3</a>").arg(cont->Storage==StoragePC ? 'P' : cont->Storage==StorageMobile ? 'M' : 'S').
-            arg(cont->Id).arg(cont->Name())).
+            arg(cont->Id).arg(cont->getName())).
 
         arg(what->Sender).
         arg(what->Date.date().toString()).
@@ -765,7 +763,7 @@ void KAlcatelView::slotShowTodo(AlcatelTodo *what) {
     if (what->Priority != -1) text.append(i18n("<b>Priority:</b> %1<br>").arg(Priorities[what->Priority]));
     if (what->ContactID != -1 && what->ContactID != 0) text.append(i18n("<b>Contact:</b> %1<br>").arg(cont==NULL?QString("id=%1").arg(what->ContactID):
         QString("<a href=\"contact:%1/%2\">%3</a>").arg(what->Storage==StoragePC ? 'P' : what->Storage==StorageMobile ? 'M' : 'S').
-        arg(what->ContactID).arg(cont->Name())
+        arg(what->ContactID).arg(cont->getName())
             ));
     if (what->Category != -1) {
         AlcatelCategory *cat = getCategoryById(getDocument()->todo_cats, what->Category, what->Storage);
@@ -816,7 +814,7 @@ void KAlcatelView::slotShowCalendar(AlcatelCalendar *what) {
     if (what->Private != -1) text.append(i18n("<b>Private:</b> %1<br>").arg(what->Private == 1?i18n("Yes"):i18n("No")));
     if (what->ContactID != -1 && what->ContactID != 0) text.append(i18n("<b>Contact:</b> %1<br>").arg(cont==NULL?QString("id=%1").arg(what->ContactID):
         QString("<a href=\"contact:%1/%2\">%3</a>").arg(what->Storage==StoragePC ? 'P' : what->Storage==StorageMobile ? 'M' : 'S').
-        arg(what->ContactID).arg(cont->Name())
+        arg(what->ContactID).arg(cont->getName())
             ));
 
     text.append(i18n("<b>Storage:</b> %1<br>").arg(StorageTypes[what->Storage]));
@@ -885,7 +883,7 @@ void KAlcatelView::slotShowContact(AlcatelContact *what) {
         else if (theApp->contact_url == -1 &&
             (what->Custom1.contains("http://") ||
                 what->Custom1.contains("www.") ||
-                what->Custom1.contains(QRegExp("\\.[a-z]{2,3}$" , false))))
+                what->Custom1.contains(QRegExp("\\.[a-zA-Z1-9][a-zA-Z1-9]+$" , false))))
                     custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom1)).arg(what->Custom1);
         else custom = what->Custom1;
         if (!what->Custom1.isEmpty()) text.append(i18n("<b>Custom1:</b> %1<br>").arg(custom));
@@ -893,7 +891,7 @@ void KAlcatelView::slotShowContact(AlcatelContact *what) {
         else if (theApp->contact_url == -1 &&
             (what->Custom2.contains("http://") ||
                 what->Custom2.contains("www.") ||
-                what->Custom2.contains(QRegExp("\\.[a-z]{2,3}$" , false))))
+                what->Custom2.contains(QRegExp("\\.[a-zA-Z1-9][a-zA-Z1-9]+$" , false))))
                     custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom2)).arg(what->Custom2);
         else custom = what->Custom2;
         if (!what->Custom2.isEmpty()) text.append(i18n("<b>Custom2:</b> %1<br>").arg(custom));
@@ -901,7 +899,7 @@ void KAlcatelView::slotShowContact(AlcatelContact *what) {
         else if (theApp->contact_url == -1 &&
             (what->Custom3.contains("http://") ||
                 what->Custom3.contains("www.") ||
-                what->Custom3.contains(QRegExp("\\.[a-z]{2,3}$" , false))))
+                what->Custom3.contains(QRegExp("\\.[a-zA-Z1-9][a-zA-Z1-9]+$" , false))))
                     custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom3)).arg(what->Custom3);
         else custom = what->Custom3;
         if (!what->Custom3.isEmpty()) text.append(i18n("<b>Custom3:</b> %1<br>").arg(custom));
@@ -909,7 +907,7 @@ void KAlcatelView::slotShowContact(AlcatelContact *what) {
         else if (theApp->contact_url == -1 &&
             (what->Custom4.contains("http://") ||
                 what->Custom4.contains("www.") ||
-                what->Custom4.contains(QRegExp("\\.[a-z]{2,3}$" , false))))
+                what->Custom4.contains(QRegExp("\\.[a-zA-Z1-9][a-zA-Z1-9]+$" , false))))
                     custom = i18n("<a href=\"%1\">%2</a>").arg(makeURL(what->Custom4)).arg(what->Custom4);
         else custom = what->Custom4;
         if (!what->Custom4.isEmpty()) text.append(i18n("<b>Custom4:</b> %1<br>").arg(custom));
@@ -1023,7 +1021,7 @@ void KAlcatelView::slotShowCall(AlcatelCall *what) {
     text.append(i18n("<b>From:</b> %1 (%2)<br>").arg(what->Name).arg(what->Number));
     if (cont != NULL)  text.append(i18n("<b>Contact:</b> %1<br>").arg(
         QString("<a href=\"contact:%1/%2\">%3</a>").arg(cont->Storage==StoragePC ? 'P' : cont->Storage==StorageMobile ? 'M' : 'S').
-        arg(cont->Id).arg(cont->Name())
+        arg(cont->Id).arg(cont->getName())
             ));
     text.append(i18n( "<b>Type:</b> %4<br><b>Position:</b> %6").arg(CallTypes[what->Type]).arg(what->Id));
     textview->setText(text);

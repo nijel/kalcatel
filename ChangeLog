@@ -4,6 +4,10 @@ KAlcatel - Changelog
 
 $Id$
 
+2002-03-03 Michal Cihar <cihar@email.cz>
+        * fixed plenty memory leaks
+        * added merging
+
 2002-02-29 Michal Cihar <cihar@email.cz>
         * added toolbars configuration
         * corrected debug level settings

@@ -2,3 +2,7 @@ Makefile
 Makefile.in
 *.moc.cpp
 *.moc
+.deps
+.libs
+kalcatel
+kalcatel.all_cpp.cpp

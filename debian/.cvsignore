@@ -1,0 +1,8 @@
+Makefile
+Makefile.in
+debiandirs
+files
+kalcatel
+kalcatel.postinst.debhelper
+kalcatel.postrm.debhelper
+kalcatel.substvars

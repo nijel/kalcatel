@@ -8,3 +8,15 @@ configure.in
 subdirs
 configure.files
 stamp-h.in
+autom4te.cache
+build-stamp
+config.h
+config.h.in
+config.log
+config.status
+configure
+kalcatel-api
+kalcatel.doxygen
+kalcatel.kdevses
+libtool
+stamp-h1

@@ -16,7 +16,7 @@
  *  - all string are given in form that works in mobile and also in C
  *  - all magic numbers mean that, what I thing that they mean ;-)
  *
- * Copyright (c) 2002 by Michal Cihar <cihar@email.cz>
+ * Copyright (c) 2002-2003 by Michal Cihar <cihar@email.cz>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the

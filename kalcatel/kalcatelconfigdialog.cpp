@@ -3,7 +3,7 @@
  *
  * KAlcatel configuation dialog
  *
- * Copyright (c) 2002 by Michal Cihar <cihar@email.cz>
+ * Copyright (c) 2002-2003 by Michal Cihar <cihar@email.cz>
  * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -88,7 +88,7 @@ KAlcatelConfigDialog::KAlcatelConfigDialog(QWidget *parent, const char *name ) :
 
     editLock = new QLineEdit(mobilePage);
 
-    QWhatsThis::add(editLock ,i18n("<b>Lock filename</b><br>Filename of lock that will be used for locking device, %s will be replaced by device basename (for example: when device is /dev/ttyS1 and lock filename is /var/lock/LCK..%s, then lock used will be /var/lock/LCK..ttyS1)."));
+    QWhatsThis::add(editLock ,i18n("<b>Lock filename</b><br>Filename of lock that will be used for locking device, %s will be replaced by device basename (for example: when device is /dev/ttyS1 and lock filename is /var/lock/LCK..%s, then lock used will be /var/lock/LCK..ttyS1).<br>If kept empty, no locking will be used."));
     QToolTip::add(editLock ,i18n("%s = device basename"));
 
     mobileLayout->addWidget(editLock, 1, 1);
